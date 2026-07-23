@@ -1823,3 +1823,905 @@ h3 {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Exact homepage interaction layer */
+
+.exact-home .announcement {
+  text-transform: none;
+}
+
+.header-icon-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.header-icon-button .bag-icon,
+.header-icon-button .user-icon {
+  margin: 0;
+}
+
+.exact-home .clinicians-line {
+  grid-template-columns: 145px minmax(250px, 1fr);
+}
+
+.exact-home .clinicians-line span {
+  line-height: 1.35;
+}
+
+.exact-home .clinicians-line a {
+  display: block;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.products-actions {
+  align-items: center;
+  display: flex;
+  gap: 18px;
+}
+
+.carousel-controls {
+  display: none;
+  gap: 8px;
+}
+
+.carousel-controls button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-size: 17px;
+  height: 42px;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+  width: 42px;
+}
+
+.carousel-controls button:hover {
+  background: var(--lime);
+  border-color: var(--lime);
+  color: var(--forest);
+}
+
+.exact-home .products-section {
+  height: 735px;
+  min-height: 735px;
+  padding-bottom: 62px;
+  padding-top: 58px;
+}
+
+.exact-home .product-track {
+  scrollbar-width: thin;
+}
+
+.exact-home .product-track::-webkit-scrollbar {
+  display: none;
+}
+
+.exact-home .products-heading h2 {
+  font-size: 40px;
+  white-space: nowrap;
+}
+
+.exact-home .products-actions .lime-button {
+  min-width: 260px;
+}
+
+.exact-home .product-card {
+  min-height: 400px;
+}
+
+.exact-home .experts-section {
+  background: #fff;
+  min-height: 748px;
+  padding-bottom: 72px;
+  padding-top: 72px;
+}
+
+.exact-home .centered-heading {
+  margin-bottom: 35px;
+}
+
+.exact-home .experts-section .centered-heading {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.exact-home .centered-heading h2 {
+  font-size: clamp(34px, 3vw, 48px);
+  max-width: 780px;
+}
+
+.exact-home .experts-section .centered-heading > p {
+  max-width: 920px;
+}
+
+.exact-home .expert-card {
+  background: #f6f5ef;
+  box-shadow: none;
+  height: 440px;
+  position: relative;
+}
+
+.exact-home .expert-card > img {
+  filter: saturate(0.95);
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: filter 0.25s ease, transform 0.25s ease;
+  width: 100%;
+}
+
+.exact-home .expert-card > div {
+  background: linear-gradient(transparent 48%, rgba(8, 18, 8, 0.88) 100%);
+  display: flex;
+  flex-direction: column;
+  inset: 0;
+  justify-content: flex-end;
+  padding: 18px 16px 18px;
+  position: absolute;
+}
+
+.expert-trigger {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.expert-trigger > span {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+
+.expert-trigger b {
+  color: #fff;
+  font-family: "Adieu", sans-serif;
+  font-size: 24px;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.expert-trigger small {
+  background: var(--lime);
+  border-radius: 999px;
+  color: var(--forest);
+  font-size: 11px;
+  margin-top: 13px;
+  padding: 5px 13px;
+  text-align: center;
+  width: 100%;
+}
+
+.expert-trigger i {
+  display: none;
+}
+
+.exact-home .expert-card .quote {
+  background: rgba(23, 63, 18, 0.94);
+  border-radius: 8px;
+  color: #fff;
+  display: none;
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 16px 0 0;
+  padding: 14px;
+}
+
+.exact-home .expert-card.is-active > img {
+  filter: brightness(0.72);
+  transform: scale(1.02);
+}
+
+.exact-home .expert-card.is-active .quote {
+  display: block;
+}
+
+.exact-home .site-header {
+  position: sticky;
+  top: 0;
+}
+
+.exact-home .science-section {
+  background: #d9edbb url("/catakor/science-bg.webp") center / cover no-repeat;
+  display: block;
+  height: 527px;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.science-live-copy {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  padding: 28px max(7.9vw, 30px);
+  position: relative;
+  width: 80%;
+  z-index: 2;
+}
+
+.science-live-copy h2 {
+  font-size: clamp(38px, 3.65vw, 52px);
+  margin: 0 0 22px;
+}
+
+.science-live-copy > p {
+  font-size: 16px;
+  line-height: 1.55;
+  margin-bottom: 0;
+  max-width: 760px;
+}
+
+.science-benefits {
+  display: flex;
+  gap: clamp(30px, 5vw, 74px);
+  margin: 52px 0 45px;
+}
+
+.science-benefits > div {
+  align-items: center;
+  display: flex;
+  gap: 15px;
+}
+
+.science-benefits img {
+  flex: 0 0 63px;
+  height: 62px;
+  width: 63px;
+}
+
+.science-benefits b {
+  font-size: 16px;
+  line-height: 1.15;
+}
+
+.science-live-copy .primary-button {
+  min-width: 285px;
+}
+
+.science-bottle {
+  height: 440px;
+  object-fit: contain;
+  position: absolute;
+  right: 1.5vw;
+  top: 30px;
+  width: 29%;
+  z-index: 1;
+}
+
+.exact-home .founder-section {
+  background: #f4f5f1;
+  color: var(--forest);
+  display: block;
+  height: 580px;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.founder-live-inner {
+  height: 100%;
+  padding: 38px 20px 89px;
+  position: relative;
+}
+
+.founder-live-inner h2 {
+  font-size: 26px;
+  margin: 0 0 22px;
+}
+
+.founder-live-inner > p {
+  font-size: 15px;
+  line-height: 1.45;
+  margin: 0 0 14px;
+  max-width: 1180px;
+}
+
+.founder-quote-mark {
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 55px;
+  font-style: italic;
+  font-weight: 700;
+  height: 42px;
+  line-height: 1;
+}
+
+.founder-callout {
+  align-items: center;
+  background: #e2fa82;
+  border-radius: 10px;
+  display: flex;
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1.45;
+  margin-top: 23px;
+  min-height: 170px;
+  padding: 35px 20px;
+  position: relative;
+  width: calc(100% - 125px);
+}
+
+.founder-callout p {
+  margin: 0;
+  max-width: 760px;
+}
+
+.founder-callout > span {
+  bottom: 9px;
+  font-family: Georgia, serif;
+  font-size: 55px;
+  font-weight: 700;
+  left: 18px;
+  line-height: 1;
+  position: absolute;
+}
+
+.founder-attribution {
+  align-items: flex-end;
+  background: #405f39;
+  bottom: 0;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 89px;
+  justify-content: center;
+  left: 0;
+  padding: 13px 15px;
+  position: absolute;
+  text-align: right;
+  width: 74%;
+}
+
+.founder-attribution b {
+  font-family: "Adieu", sans-serif;
+  font-size: 20px;
+}
+
+.founder-attribution span {
+  font-size: 13px;
+  line-height: 1.1;
+}
+
+.founder-cutout {
+  bottom: 0;
+  height: 305px;
+  object-fit: contain;
+  object-position: bottom right;
+  position: absolute;
+  right: 0;
+  width: 280px;
+  z-index: 2;
+}
+
+.exact-home .footer {
+  background: #173f12;
+  color: #fff;
+}
+
+.exact-home .footer-logo {
+  filter: brightness(0) saturate(100%) invert(98%) sepia(69%) saturate(638%) hue-rotate(20deg) brightness(103%) contrast(101%);
+}
+
+.exact-home .footer-tagline {
+  color: #fff;
+}
+
+.exact-home .social-links a {
+  align-items: center;
+  background: var(--lime);
+  border-radius: 50%;
+  color: var(--forest);
+  display: flex;
+  font-size: 0;
+  height: 38px;
+  justify-content: center;
+  width: 38px;
+}
+
+.exact-home .social-links a::after {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.exact-home .social-links a:nth-child(1)::after {
+  content: "T";
+}
+
+.exact-home .social-links a:nth-child(2)::after {
+  content: "◎";
+}
+
+.exact-home .social-links a:nth-child(3)::after {
+  content: "✉";
+}
+
+.exact-home .newsletter {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.exact-home .newsletter form {
+  background: #ecebea;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  padding-left: 18px;
+}
+
+.exact-home .newsletter button {
+  background: var(--lime);
+  border-radius: 999px;
+  min-width: 90px;
+}
+
+.payment-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 27px;
+}
+
+.payment-icons span {
+  align-items: center;
+  background: #fff;
+  border-radius: 3px;
+  color: #163b12;
+  display: flex;
+  font-size: 7px;
+  font-weight: 700;
+  height: 24px;
+  justify-content: center;
+  min-width: 38px;
+  padding: 0 4px;
+}
+
+.exact-home .footer-bottom {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.form-success {
+  background: var(--lime);
+  border-radius: 7px;
+  color: var(--forest);
+  font-weight: 700;
+  padding: 15px;
+}
+
+.drawer-layer,
+.dialog-layer {
+  align-items: stretch;
+  background: rgba(12, 30, 11, 0.5);
+  display: flex;
+  inset: 0;
+  justify-content: flex-end;
+  position: fixed;
+  z-index: 200;
+}
+
+.cart-drawer {
+  animation: drawer-in 0.28s ease-out both;
+  background: #f8f7ef;
+  box-shadow: -20px 0 50px rgba(15, 33, 12, 0.2);
+  display: flex;
+  flex-direction: column;
+  max-width: 440px;
+  padding: 35px;
+  width: min(92vw, 440px);
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.drawer-heading {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 22px;
+}
+
+.drawer-heading h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.drawer-heading button,
+.dialog-close {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  font-size: 25px;
+  height: 38px;
+  justify-content: center;
+  line-height: 1;
+  padding: 0 0 3px;
+  width: 38px;
+}
+
+.empty-cart {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.empty-cart > span {
+  align-items: center;
+  border: 1px solid var(--forest);
+  border-radius: 50%;
+  display: flex;
+  font-family: "Adieu", sans-serif;
+  height: 72px;
+  justify-content: center;
+  margin-bottom: 24px;
+  width: 72px;
+}
+
+.empty-cart h3 {
+  font-size: 25px;
+  margin-bottom: 8px;
+}
+
+.empty-cart p {
+  color: #526450;
+  margin-bottom: 28px;
+  max-width: 280px;
+}
+
+.drawer-footnote {
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  margin: 0;
+  padding-top: 18px;
+  text-align: center;
+}
+
+.dialog-layer {
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.account-dialog {
+  background: var(--cream);
+  border-radius: 14px;
+  max-width: 480px;
+  padding: 58px 46px 46px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.account-dialog .dialog-close,
+.promo-dialog .dialog-close {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 2;
+}
+
+.account-dialog > img {
+  height: 44px;
+  margin: 0 auto 35px;
+  width: auto;
+}
+
+.account-dialog h2 {
+  font-size: 31px;
+  margin-bottom: 16px;
+}
+
+.account-dialog p {
+  color: #536351;
+  margin: 0 auto 28px;
+  max-width: 350px;
+}
+
+.promo-layer {
+  background: rgba(12, 30, 11, 0.64);
+}
+
+.promo-dialog {
+  animation: promo-in 0.3s ease-out both;
+  background: #efffbe;
+  border-radius: 16px;
+  display: grid;
+  grid-template-columns: 0.78fr 1.22fr;
+  max-height: min(680px, 92vh);
+  max-width: 860px;
+  overflow: hidden;
+  position: relative;
+  width: min(94vw, 860px);
+}
+
+@keyframes promo-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.promo-orbit {
+  align-items: center;
+  background:
+    radial-gradient(circle at center, transparent 0 23%, rgba(30, 61, 20, 0.22) 23.4% 23.8%, transparent 24.2% 38%, rgba(30, 61, 20, 0.15) 38.4% 38.8%, transparent 39%),
+    linear-gradient(145deg, #c6dcf4, #dff77d);
+  display: flex;
+  justify-content: center;
+  min-height: 480px;
+  overflow: hidden;
+}
+
+.promo-orbit img {
+  filter: drop-shadow(0 22px 20px rgba(35, 65, 25, 0.2));
+  max-height: 320px;
+  object-fit: contain;
+  transform: rotate(-5deg) scale(1.18);
+  width: 82%;
+}
+
+.promo-copy {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 54px;
+}
+
+.promo-copy h2 {
+  font-size: clamp(30px, 3.2vw, 46px);
+  margin: 14px 0 18px;
+}
+
+.promo-copy > p {
+  color: #4e624b;
+  margin-bottom: 24px;
+}
+
+.promo-choices {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+}
+
+.promo-choices button {
+  background: #fff;
+  border: 1px solid rgba(30, 61, 20, 0.34);
+  border-radius: 999px;
+  cursor: pointer;
+  min-height: 48px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.promo-choices button:hover {
+  background: var(--forest);
+  color: #fff;
+}
+
+.promo-skip {
+  align-self: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  margin-top: 20px;
+  text-decoration: underline;
+}
+
+.promo-copy form {
+  width: 100%;
+}
+
+.promo-copy form label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 7px;
+  text-transform: uppercase;
+}
+
+.promo-copy form input {
+  background: #fff;
+  border: 1px solid rgba(30, 61, 20, 0.4);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  min-height: 50px;
+  padding: 0 15px;
+  width: 100%;
+}
+
+.promo-copy form .primary-button {
+  width: 100%;
+}
+
+.promo-code {
+  background: #fff;
+  border: 2px dashed var(--forest);
+  border-radius: 8px;
+  color: var(--forest);
+  cursor: pointer;
+  font-family: "Adieu", sans-serif;
+  font-size: 25px;
+  margin-bottom: 20px;
+  padding: 16px;
+  width: 100%;
+}
+
+.promo-code span {
+  display: block;
+  font-family: "Cata Sans", sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+@media (max-width: 760px) {
+  .exact-home .clinicians-line {
+    display: block;
+  }
+
+  .exact-home .clinicians-line span {
+    display: block;
+    margin-top: 5px;
+    max-width: 320px;
+  }
+
+  .products-actions {
+    align-items: flex-start;
+    flex-direction: column-reverse;
+  }
+
+  .exact-home .products-heading h2 {
+    font-size: 34px;
+    white-space: normal;
+  }
+
+  .carousel-controls {
+    display: flex;
+  }
+
+  .exact-home .products-section {
+    height: auto;
+    min-height: 0;
+  }
+
+  .exact-home .experts-section {
+    min-height: 0;
+  }
+
+  .exact-home .expert-card > img {
+    height: 100%;
+  }
+
+  .exact-home .science-section {
+    height: auto;
+    min-height: 670px;
+  }
+
+  .science-live-copy {
+    justify-content: flex-start;
+    padding: 46px 20px 280px;
+    width: 100%;
+  }
+
+  .science-live-copy h2 {
+    font-size: 38px;
+  }
+
+  .science-benefits {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+    margin: 30px 0;
+  }
+
+  .science-benefits img {
+    height: 48px;
+    width: 49px;
+  }
+
+  .science-bottle {
+    bottom: -20px;
+    height: 300px;
+    right: -10px;
+    top: auto;
+    width: 58%;
+  }
+
+  .exact-home .founder-section {
+    height: auto;
+    min-height: 780px;
+  }
+
+  .founder-live-inner {
+    padding: 40px 18px 170px;
+  }
+
+  .founder-live-inner h2 {
+    font-size: 25px;
+  }
+
+  .founder-callout {
+    min-height: 190px;
+    padding-bottom: 48px;
+    width: 100%;
+  }
+
+  .founder-attribution {
+    align-items: flex-start;
+    height: 120px;
+    padding-left: 18px;
+    text-align: left;
+    width: 100%;
+  }
+
+  .founder-cutout {
+    height: 255px;
+    right: -30px;
+    width: 235px;
+  }
+
+  .promo-dialog {
+    display: block;
+    overflow-y: auto;
+  }
+
+  .promo-orbit {
+    min-height: 210px;
+  }
+
+  .promo-orbit img {
+    max-height: 180px;
+    width: 65%;
+  }
+
+  .promo-copy {
+    padding: 34px 24px 30px;
+  }
+
+  .promo-copy h2 {
+    font-size: 29px;
+  }
+
+  .promo-choices {
+    grid-template-columns: 1fr;
+  }
+
+  .account-dialog {
+    padding: 54px 24px 34px;
+  }
+}

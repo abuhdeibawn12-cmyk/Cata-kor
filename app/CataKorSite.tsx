@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 
 const PRODUCT_PATH = "/products/nad-advanced-500mg";
 
@@ -114,9 +115,9 @@ function Header({ cartCount = 0 }: { cartCount?: number }) {
         <a href={PRODUCT_PATH}>CHRISTMAS IN JULY – UP TO 32% OFF</a>
       </div>
       <header className="site-header">
-        <a className="brand" href="/" aria-label="Cata-Kor home">
+        <Link className="brand" href="/" aria-label="Cata-Kor home">
           <img src="/catakor/logo.svg" alt="Cata-Kor" />
-        </a>
+        </Link>
         <button
           className="mobile-menu-button"
           type="button"
@@ -372,7 +373,7 @@ function ProductPurchase({ onAdded }: { onAdded: () => void }) {
 
   return (
     <section className="product-info" aria-label="Product information">
-      <nav className="breadcrumbs" aria-label="Breadcrumbs"><a href="/">Home</a><span>/</span><b>Liposomal NAD⁺</b></nav>
+      <nav className="breadcrumbs" aria-label="Breadcrumbs"><Link href="/">Home</Link><span>/</span><b>Liposomal NAD⁺</b></nav>
       <div className="review-line"><span className="stars">★★★★★</span><b>4.9/5</b> (2200+ reviews)</div>
       <div className="product-title-row"><h1>LIPOSOMAL NAD⁺</h1><span>500MG</span></div>
       <p className="product-subtitle">Liposomal NAD+ Supplement</p>

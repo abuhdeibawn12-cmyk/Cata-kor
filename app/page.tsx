@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HomePage } from "./CataKorSite";
+import { HomePage } from "./ExactHome";
 
 export const metadata: Metadata = {
   title: "Cata-Kor NAD | Age on your terms",
