@@ -3458,7 +3458,11 @@ h3 {
   padding-bottom: 18px;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+}
+
+.science-review-track::-webkit-scrollbar {
+  display: none;
 }
 
 .science-review-card {
