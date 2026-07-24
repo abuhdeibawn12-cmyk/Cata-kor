@@ -30,6 +30,8 @@ test("server-renders the Cata-Kor homepage", async () => {
   assert.match(html, /expert-card-back/);
   assert.match(html, /href="\/pages\/science-benefits"/);
   assert.match(html, /hero-products-hq\.png/);
+  assert.match(html, /founder-desktop-clear\.png/);
+  assert.match(html, /My goal was never to make another supplement brand/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
   assert.match(html, /Cata-Kor NAD \| Age on your terms/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
@@ -42,7 +44,12 @@ test("server-renders the Liposomal NAD product page", async () => {
   const html = await response.text();
   assert.match(html, /LIPOSOMAL NAD/);
   assert.match(html, /Select Quantity/);
-  assert.match(html, /Subscribe &amp; Save/);
+  assert.match(html, /29\.58/);
+  assert.match(html, /30\.99/);
+  assert.match(html, /35\.24/);
+  assert.match(html, /88\.74/);
+  assert.match(html, /ONE-TIME PURCHASE/);
+  assert.doesNotMatch(html, /Subscribe &amp; Save|Choose Plan|RECOMMENDED DAILY USE/);
   assert.match(html, /PEACE-OF-MIND GUARANTEE/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
 });

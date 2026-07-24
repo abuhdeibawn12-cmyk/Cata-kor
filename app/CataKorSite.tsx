@@ -104,12 +104,20 @@ const galleryImages = [
   "https://catakor.com/cdn/shop/files/3_NAD500_284becb5-a117-43e4-88d0-7ef566cd05c9.jpg?v=1783421258&width=1100",
   "https://catakor.com/cdn/shop/files/4_NAD500_5964a474-23e5-46af-8174-36317bfd56c5.jpg?v=1783421258&width=1100",
   "https://catakor.com/cdn/shop/files/5_NAD500_db73c746-222c-4b71-8b49-e692af53d992.jpg?v=1783421258&width=1100",
+  "https://catakor.com/cdn/shop/files/6_NAD500_0d0e1d1a-b711-4d81-8c41-95cdd9fa436c.jpg?v=1783421258&width=1100",
+  "https://catakor.com/cdn/shop/files/7_NAD500_Manufactured_for.jpg?v=1783421258&width=1100",
+  "https://catakor.com/cdn/shop/files/5_NAD500_a65fca12-ec33-4c89-9817-0919959280a7.jpg?v=1774889169&width=1100",
+  "https://catakor.com/cdn/shop/files/7_NAD500_91bae966-e2fe-499f-9161-0c0f42aca355.jpg?v=1774889169&width=1100",
+  "https://catakor.com/cdn/shop/files/8_NAD500-2.jpg?v=1774889110&width=1100",
+  "https://catakor.com/cdn/shop/files/3_NAD500_8218ca19-959f-4866-9785-0017cff2f5a0.jpg?v=1774889153&width=1100",
+  "https://catakor.com/cdn/shop/files/NAD250_2_jars_5e4c06d5-c927-43b1-9da8-f943028f9ece.jpg?v=1774889110&width=1100",
+  "https://catakor.com/cdn/shop/files/NAD250_3_jars_33cd95d4-1a11-40c4-a248-3e99cbee0e30.jpg?v=1774889110&width=1100",
 ];
 
 const quantityOptions = [
-  { jars: 3, label: "3 Jars", note: "BEST VALUE", each: 32.58, once: 114.99 },
-  { jars: 2, label: "2 Jars", note: "MOST POPULAR", each: 33.99, once: 79.98 },
-  { jars: 1, label: "1 Jar", note: "", each: 38.24, once: 44.99 },
+  { jars: 3, label: "3 Jars", note: "BEST VALUE", each: 29.58, total: 88.74 },
+  { jars: 2, label: "2 Jars", note: "MOST POPULAR", each: 30.99, total: 61.98 },
+  { jars: 1, label: "1 Jar", note: "", each: 35.24, total: 35.24 },
 ];
 
 function Header({ cartCount = 0 }: { cartCount?: number }) {
@@ -374,14 +382,11 @@ function ProductAccordion({ title, children }: { title: string; children: React.
 
 function ProductPurchase({ onAdded }: { onAdded: () => void }) {
   const [quantity, setQuantity] = useState(3);
-  const [plan, setPlan] = useState<"subscribe" | "once">("subscribe");
   const [added, setAdded] = useState(false);
   const selectedQuantity = useMemo(
     () => quantityOptions.find((option) => option.jars === quantity) ?? quantityOptions[0],
     [quantity],
   );
-  const subscribeTotal = selectedQuantity.each * selectedQuantity.jars;
-  const currentTotal = plan === "subscribe" ? subscribeTotal : selectedQuantity.once;
 
   const addToCart = () => {
     setAdded(true);
@@ -408,7 +413,11 @@ function ProductPurchase({ onAdded }: { onAdded: () => void }) {
               key={option.jars}
             >
               {option.note && <em>{option.note}</em>}
-              <img src={`/catakor/product-nad.avif`} alt="" />
+              <span className={`quantity-bottles quantity-bottles-${option.jars}`} aria-hidden="true">
+                {Array.from({ length: option.jars }, (_, index) => (
+                  <img src="/catakor/product-nad.avif" alt="" key={index} />
+                ))}
+              </span>
               <b>{option.label}</b>
               <span>${option.each.toFixed(2)}{option.jars > 1 ? "/each" : ""}</span>
             </button>
@@ -416,35 +425,17 @@ function ProductPurchase({ onAdded }: { onAdded: () => void }) {
         </div>
       </div>
 
-      <div className="plan-group">
-        <div className="purchase-label"><h2>Choose Plan</h2><span>${(currentTotal / (quantity * 60)).toFixed(2)} per serving</span></div>
-        <button
-          type="button"
-          className={plan === "subscribe" ? "plan-option selected" : "plan-option"}
-          onClick={() => setPlan("subscribe")}
-        >
-          <span><b>Subscribe & Save</b><small>SAVE EXTRA 15%</small></span>
-          <span><s>${selectedQuantity.once.toFixed(2)}</s><b>${subscribeTotal.toFixed(2)}</b></span>
-        </button>
-        {plan === "subscribe" && (
-          <ul className="plan-benefits">
-            <li><b>FREE</b> fast shipping</li><li><b>15% DISCOUNT</b> each delivery</li>
-            <li><b>NO CONTRACT</b> cancel anytime</li><li>Out-of-stock <b>PROTECTION</b></li>
-          </ul>
-        )}
-        <button
-          type="button"
-          className={plan === "once" ? "plan-option selected muted" : "plan-option muted"}
-          onClick={() => setPlan("once")}
-        >
-          <b>One-time Purchase</b><span>${selectedQuantity.once.toFixed(2)}</span>
-        </button>
+      <div className="one-time-purchase" aria-label="One-time purchase">
+        <span>
+          <b>ONE-TIME PURCHASE</b>
+          <small>No subscription or recurring charges</small>
+        </span>
+        <strong>${selectedQuantity.total.toFixed(2)}</strong>
       </div>
 
       <button type="button" className={added ? "add-to-cart added" : "add-to-cart"} onClick={addToCart}>
         <span>{added ? "ADDED TO CART" : "ADD TO CART"}</span>
-        {plan === "subscribe" && <s>${selectedQuantity.once.toFixed(2)}</s>}
-        <b>${currentTotal.toFixed(2)}</b>
+        <b>${selectedQuantity.total.toFixed(2)}</b>
       </button>
       <div className="delivery-row"><span>● &nbsp; Delivered in 3–5 days</span><span>🇺🇸 FREE Shipping to USA</span></div>
       <div className="clinician-box">
@@ -523,12 +514,6 @@ export function ProductPage() {
               <img src="https://catakor.com/cdn/shop/files/nad_500_web_1440x637_c7a1ec00-69c3-4fbe-9972-6ab3b9c438ee.jpg?v=1759397079" alt="Cata-Kor liposomal NAD science" />
             </div>
           </div>
-        </section>
-
-        <section className="daily-use-section">
-          <div><span className="eyebrow">A ROUTINE FOR EVERY STAGE</span><h2>RECOMMENDED<br />DAILY USE</h2></div>
-          <div className="age-card"><span>AGE 25–34</span><img src="/catakor/product-nad.avif" alt="NAD Core 250mg" /><h3>NAD⁺ CORE</h3><p>LipoNAD™ 250mg</p></div>
-          <div className="age-card featured"><span>AGE 35+</span><img src="/catakor/product-nad.avif" alt="NAD Advanced 500mg" /><h3>NAD⁺ ADVANCED</h3><p>LipoNAD™ 500mg</p></div>
         </section>
 
         <section className="reviews-section" id="reviews">

@@ -650,34 +650,42 @@ export function HomePage() {
         </section>
 
         <section className="founder-section" id="about">
+          <img
+            className="founder-cutout"
+            src="/catakor/founder-desktop-clear.png"
+            alt="Vlad Seuruk, founder of Cata-Kor"
+          />
           <div className="founder-live-inner">
-            <h2>LONGEVITY, MADE ACCESSIBLE</h2>
-            <span className="founder-quote-mark">“</span>
-            <p>When I first became obsessed with the science of longevity, I kept seeing the same pattern.</p>
-            <p>
-              <b>The most interesting tools — NAD+,</b> advanced wellness protocols, clinical-style testing —
-              were often expensive, confusing, or only available to people with access to private clinics.
-              But healthy aging should not feel exclusive.
-            </p>
-            <p>
-              I started Cata-Kor to bring serious longevity support into everyday routines: products built
-              with quality ingredients, transparent dosing, and testing standards people can trust.
-            </p>
-            <div className="founder-callout">
+            <div className="founder-story">
+              <h2>LONGEVITY, MADE<br />ACCESSIBLE</h2>
+              <span className="founder-quote-mark" aria-hidden="true">“</span>
+              <p>When I first became obsessed with the science of longevity, I kept seeing the same pattern.</p>
               <p>
-                My goal was never to make another supplement brand.{" "}
-                <b>
-                  It was to build a company for people who want to feel better for longer — without making
-                  longevity complicated or out of reach.
-                </b>
+                <b>The most interesting tools — NAD+,</b> advanced wellness protocols, clinical-style testing —
+                were often expensive, confusing, or only available to people with access to private clinics.
+                But healthy aging should not feel exclusive.
               </p>
-              <span>“</span>
             </div>
-            <div className="founder-attribution">
-              <b>Vlad Seuruk</b>
-              <span>Founder of Cata-Kor® - Americas #1<br />NAD+ supplement brand.</span>
+            <div className="founder-mission">
+              <p>
+                I started Cata-Kor to bring serious longevity support into everyday routines: products built
+                with quality ingredients, transparent dosing, and testing standards people can trust.
+              </p>
+              <div className="founder-callout">
+                <p>
+                  My goal was never to make another supplement brand.{" "}
+                  <b>
+                    It was to build a company for people who want to feel better for longer — without making
+                    longevity complicated or out of reach.
+                  </b>
+                </p>
+              </div>
+              <span className="founder-close-quote" aria-hidden="true">”</span>
             </div>
-            <img className="founder-cutout" src="/catakor/founder-cutout.webp" alt="Vlad Seuruk" />
+          </div>
+          <div className="founder-attribution">
+            <b>Vlad Seuruk</b>
+            <span>Founder of Cata-Kor® - Americas<br />#1 NAD+ supplement brand.</span>
           </div>
         </section>
       </main>
