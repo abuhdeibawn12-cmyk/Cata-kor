@@ -100,7 +100,7 @@ const experts = [
   },
 ];
 
-function Header({
+export function Header({
   onCart,
   onAccount,
 }: {
@@ -135,8 +135,8 @@ function Header({
           className={menuOpen ? "main-nav is-open" : "main-nav"}
           aria-label="Main navigation"
         >
-          <a href={`${LIVE_SITE}/collections`}>Shop</a>
-          <a href={`${LIVE_SITE}/collections/all-products`}>Best Sellers</a>
+          <Link href="/collections/shop-all">Shop</Link>
+          <Link href="/collections/shop-all">Best Sellers</Link>
           <a href="#science">Science</a>
           <a href="#about">About</a>
         </nav>
@@ -186,7 +186,7 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-function Footer() {
+export function Footer() {
   const [email, setEmail] = useState("");
   const [joined, setJoined] = useState(false);
 
@@ -268,7 +268,7 @@ function Footer() {
   );
 }
 
-function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   if (!open) return null;
   return (
     <div className="drawer-layer" role="presentation" onMouseDown={onClose}>
@@ -299,7 +299,7 @@ function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
-function AccountDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function AccountDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   if (!open) return null;
   return (
     <div className="dialog-layer" role="presentation" onMouseDown={onClose}>
@@ -506,9 +506,9 @@ export function HomePage() {
                   →
                 </button>
               </div>
-              <a className="lime-button" href={`${LIVE_SITE}/collections/all-products`}>
+              <Link className="lime-button" href="/collections/shop-all">
                 SHOP ALL <span>→</span>
-              </a>
+              </Link>
             </div>
           </div>
           <div className="product-track" ref={productsRef} tabIndex={0} aria-label="Best selling products">

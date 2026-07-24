@@ -35,3 +35,17 @@ test("server-renders the Liposomal NAD product page", async () => {
   assert.match(html, /Subscribe &amp; Save/);
   assert.match(html, /PEACE-OF-MIND GUARANTEE/);
 });
+
+test("server-renders the shop collection without bundles", async () => {
+  const response = await render("/collections/shop-all");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /SHOP ALL/);
+  assert.match(html, /NAD⁺ Advanced LipoNAD™ 500mg/);
+  assert.match(html, /Cata-Kor Liposomal Glutathione/);
+  assert.match(html, /NMN Supplement \| Quercetin \| TMG \| Resveratrol/);
+  assert.match(html, /Skin, Hair &amp; Nails Supplement/);
+  assert.match(html, /Out of stock/);
+  assert.doesNotMatch(html, /Cellular Power Trio|CEO(?:&#x27;|')s Bundle|NAD\+ &amp; NMN Complex &amp; Glutathione/);
+});
