@@ -44,13 +44,21 @@ test("server-renders the Liposomal NAD product page", async () => {
   const html = await response.text();
   assert.match(html, /LIPOSOMAL NAD/);
   assert.match(html, /Select Quantity/);
-  assert.match(html, /29\.58/);
-  assert.match(html, /30\.99/);
-  assert.match(html, /35\.24/);
-  assert.match(html, /88\.74/);
+  assert.match(html, /32\.58/);
+  assert.match(html, /33\.99/);
+  assert.match(html, /38\.24/);
+  assert.match(html, /97\.74/);
   assert.match(html, /ONE-TIME PURCHASE/);
+  assert.match(html, /49c88503ac444cceaa07ad0941b19ff2/);
+  assert.match(html, /626b669d4eae4d0f95088060c2662d1f/);
+  assert.match(html, /1763917e32c14cbda12acec0ee8bcd3d/);
+  assert.match(html, /Sidney Outlaw/);
+  assert.match(html, /Morgan Adams/);
+  assert.match(html, /Previous reviews/);
+  assert.match(html, /Aaron before and after eight weeks using Cata-Kor/);
+  assert.match(html, /FREQUENTLY ASK QUESTION/);
   assert.doesNotMatch(html, /Subscribe &amp; Save|Choose Plan|RECOMMENDED DAILY USE/);
-  assert.match(html, /PEACE-OF-MIND GUARANTEE/);
+  assert.match(html, /PEACE-OF-MIND/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
 });
 

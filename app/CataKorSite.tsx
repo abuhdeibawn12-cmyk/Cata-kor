@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { AccountIcon, BagIcon } from "./ExactHome";
+import { AccountIcon, BagIcon, Footer as SiteFooter } from "./ExactHome";
 
 const PRODUCT_PATH = "/products/nad-advanced-500mg";
 
@@ -115,9 +115,9 @@ const galleryImages = [
 ];
 
 const quantityOptions = [
-  { jars: 3, label: "3 Jars", note: "BEST VALUE", each: 29.58, total: 88.74 },
-  { jars: 2, label: "2 Jars", note: "MOST POPULAR", each: 30.99, total: 61.98 },
-  { jars: 1, label: "1 Jar", note: "", each: 35.24, total: 35.24 },
+  { jars: 3, label: "3 Jars", note: "BEST VALUE", each: 32.58, total: 97.74 },
+  { jars: 2, label: "2 Jars", note: "MOST POPULAR", each: 33.99, total: 67.98 },
+  { jars: 1, label: "1 Jar", note: "", each: 38.24, total: 38.24 },
 ];
 
 function Header({ cartCount = 0 }: { cartCount?: number }) {
@@ -371,12 +371,72 @@ function ProductGallery() {
   );
 }
 
-function ProductAccordion({ title, children }: { title: string; children: React.ReactNode }) {
+function ProductAccordion({
+  title,
+  children,
+  defaultOpen = false,
+}: {
+  title: string;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
   return (
-    <details className="product-accordion">
+    <details className="product-accordion" open={defaultOpen}>
       <summary>{title}<span>＋</span></summary>
       <div>{children}</div>
     </details>
+  );
+}
+
+const customerVideos = [
+  {
+    title: "A solid energy boost",
+    src: "https://cdn.shopify.com/videos/c/o/v/49c88503ac444cceaa07ad0941b19ff2.mov",
+  },
+  {
+    title: "An even better formula",
+    src: "https://cdn.shopify.com/videos/c/o/v/626b669d4eae4d0f95088060c2662d1f.mp4",
+  },
+  {
+    title: "I feel younger",
+    src: "https://cdn.shopify.com/videos/c/o/v/1763917e32c14cbda12acec0ee8bcd3d.mp4",
+  },
+];
+
+function CustomerVideoCard({ title, src }: { title: string; src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const togglePlayback = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      await video.play();
+    } else {
+      video.pause();
+    }
+  };
+
+  return (
+    <article className={playing ? "story-card is-playing" : "story-card"}>
+      <video
+        ref={videoRef}
+        src={src}
+        playsInline
+        preload="metadata"
+        controls={playing}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onEnded={() => setPlaying(false)}
+      />
+      {!playing && (
+        <button type="button" className="story-play-button" onClick={togglePlayback} aria-label={`Play ${title}`}>
+          ▶
+        </button>
+      )}
+      <h3>{title}</h3>
+    </article>
   );
 }
 
@@ -449,21 +509,197 @@ function ProductPurchase({ onAdded }: { onAdded: () => void }) {
         <ProductAccordion title="Safety"><p>Use as directed. Consult your healthcare provider before use if needed.</p></ProductAccordion>
         <ProductAccordion title="How long does it take to notice effects?"><p>Many customers report changes within a few weeks of consistent daily use.*</p></ProductAccordion>
       </div>
+
+      <section className="customer-video-section" aria-labelledby="customer-video-title">
+        <h2 id="customer-video-title">JOIN 100,000+ OTHERS <span aria-hidden="true">💚</span></h2>
+        <div className="story-grid">
+          {customerVideos.map((video) => <CustomerVideoCard {...video} key={video.title} />)}
+        </div>
+      </section>
+
+      <nav className="product-jump-links" aria-label="Learn more about this product">
+        <h2>Learn more about:</h2>
+        <div>
+          <a href="#main-content">↓ <span>How it Works</span></a>
+          <a href="#main-content">↓ <span>Benefits</span></a>
+          <a href="#results">↓ <span>Real Results</span></a>
+          <a href="#guarantee">↓ <span>Why Cata-Kor</span></a>
+          <a href="#reviews">↓ <span>Comparison</span></a>
+          <a href="#faq">↓ <span>FAQs</span></a>
+        </div>
+      </nav>
     </section>
   );
 }
 
 const testimonials = [
-  { name: "Stefano Barberi", role: "Professional Mountain Bike & Gravel Racer", image: "https://catakor.com/cdn/shop/files/PXL_20251031_161014203.MP.jpg?v=1762427856&width=408", quote: "My recovery feels smoother and my daily energy more consistent.*" },
-  { name: "Dr. Nicole Avena", role: "Nutrition Expert and Author", image: "https://catakor.com/cdn/shop/files/NicoleAvena_030723_0003_8edb1051-2982-4c6f-b3ca-a6a905a5c863.jpg?v=1762426902&width=408", quote: "NAD⁺ plays an essential role in the process of energy production.*" },
-  { name: "Shayna Powless", role: "Professional Cyclist", image: "https://catakor.com/cdn/shop/files/IMG_3145.jpg?v=1763389765&width=408", quote: "I choose NAD⁺ for its role in cellular energy production and overall wellness.*" },
-  { name: "Tyler Lesher", role: "NBA Performance Therapist", image: "https://catakor.com/cdn/shop/files/Web_Resolution-05.jpg?v=1763389950&width=408", quote: "It supports the natural processes that help us move and feel our best.*" },
+  {
+    name: "Stefano Barberi",
+    role: "Professional Mountain Bike and Gravel Racer",
+    image: "https://catakor.com/cdn/shop/files/PXL_20251031_161014203.MP.jpg?v=1762427856&width=900",
+    quote: "In the two weeks since I started using it, I’ve noticed my recovery feels smoother.*",
+  },
+  {
+    name: "Zach Calls",
+    role: "Doctor of Physical Therapy",
+    image: "https://catakor.com/cdn/shop/files/Untitled-design-87_cc69b1bd-9ef7-4551-9182-d71dce66217b.png?v=1762428122&width=900",
+    quote: "Cata-Kor NAD⁺ has become one of my go-to supplements for supporting overall energy, recovery, and longevity.*",
+  },
+  {
+    name: "Stephania Rene",
+    role: "Personal Trainer",
+    image: "https://catakor.com/cdn/shop/files/image0.jpg?v=1762428427&width=900",
+    quote: "I’m so thankful I found such a high quality company to trust with their third party testing efforts!*",
+  },
+  {
+    name: "Katie Blank",
+    role: "Orthopedic Physical Therapist",
+    image: "https://catakor.com/cdn/shop/files/BCO.b1cb0ad0-0e84-4d32-bd89-08ee8ae1dee8.png?v=1762428559&width=900",
+    quote: "I recommend Cata-Kor NAD+ due to the high quality ingredients and concentration of NAD+.*",
+  },
+  {
+    name: "Dr. Maria Sophocles",
+    role: "Gynecologist & Women’s Health Advocate",
+    image: "https://catakor.com/cdn/shop/files/09_25TGheadshotsscrubsstandingsmiling.jpg?v=1762428684&width=900",
+    quote: "Cata-Kor’s liposomal NAD+ formulation is an important distinction when considering an NAD+ formulation.*",
+  },
+  {
+    name: "Dr. Nicole Avena",
+    role: "Nutrition Expert and Author, Cata-Kor Partner",
+    image: "https://catakor.com/cdn/shop/files/NicoleAvena_030723_0003_8edb1051-2982-4c6f-b3ca-a6a905a5c863.jpg?v=1762426902&width=900",
+    quote: "NAD+ plays an essential role in the process of energy production.*",
+  },
+  {
+    name: "Dr. Cyntia Brown",
+    role: "Clinical Pharmacologist & Women’s Health Expert",
+    image: "https://catakor.com/cdn/shop/files/image_588.png?v=1762167390&width=900",
+    quote: "What really stands out to me is Cata-Kor’s dedication to science and transparency.*",
+  },
+  {
+    name: "Sidney Outlaw",
+    role: "Professional Fighter",
+    image: "https://catakor.com/cdn/shop/files/image_7.png?v=1762167225&width=900",
+    quote: "It helps you calm everything down. This is a great product. Don’t waste your time. Give it a try.*",
+  },
+  {
+    name: "Dr. Chelsea Azarcon",
+    role: "Naturopathic Medical Doctor",
+    image: "https://catakor.com/cdn/shop/files/image_9.png?v=1762167226&width=900",
+    quote: "Cata-Kor NAD was the first NAD that I felt a significant improvement from taking, within a matter of weeks.*",
+  },
+  {
+    name: "Shayna Powless",
+    role: "Professional Cyclist",
+    image: "https://catakor.com/cdn/shop/files/image_69898.png?v=1762167381&width=900",
+    quote: "I’ve been choosing to supplement with NAD+ due to its role in efficient cellular energy production and overall cellular wellness.*",
+  },
+  {
+    name: "Alecia Beckford-Stewart",
+    role: "DC, CCSP, ICSC, CSCS",
+    image: "https://catakor.com/cdn/shop/files/image_5_989.png?v=1762167402&width=900",
+    quote: "With my glowing skin and consistently high energy levels, I can confidently say this is a wellness product I highly recommend.*",
+  },
+  {
+    name: "Tyler Lesher",
+    role: "NBA Performance Therapist",
+    image: "https://catakor.com/cdn/shop/files/IMG_8372.jpg?v=1763389661&width=900",
+    quote: "NAD⁺ supports cellular energy, mitochondrial function, and the natural repair processes that help us move and feel our best.*",
+  },
+  {
+    name: "Miranda Kay Barber",
+    role: "Professional Fighter and Trainer",
+    image: "https://catakor.com/cdn/shop/files/IMG_3145.jpg?v=1763389765&width=900",
+    quote: "I’m focused on supporting cellular energy and longevity in my performance. Excited to share my experience as I go.*",
+  },
+  {
+    name: "Kristin Mackay",
+    role: "NPC Athlete, Fitness & Nutrition Coach",
+    image: "https://catakor.com/cdn/shop/files/69984753-956A-4271-92AC-E0C50282A687.jpg?v=1763389847&width=900",
+    quote: "Cata-Kor helps with the overall regeneration of cells and how your body uses energy on a cellular level.*",
+  },
+  {
+    name: "Morgan Adams",
+    role: "Certified Holistic Sleep Coach, MSW",
+    image: "https://catakor.com/cdn/shop/files/Web_Resolution-05.jpg?v=1763389950&width=900",
+    quote: "After taking Cata-Kor for a couple of weeks, I saw a 6% increase in my recovery scores according to my WHOOP data.*",
+  },
 ];
+
+function ProductReviewCarousel() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [activeReview, setActiveReview] = useState(0);
+
+  const goToReview = (index: number) => {
+    const track = trackRef.current;
+    const card = track?.children[index] as HTMLElement | undefined;
+    if (!track || !card) return;
+    track.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
+    setActiveReview(index);
+  };
+
+  const moveReviews = (direction: -1 | 1) => {
+    const next = Math.min(Math.max(activeReview + direction * 4, 0), testimonials.length - 1);
+    goToReview(next);
+  };
+
+  const updateActiveReview = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    const cards = Array.from(track.children) as HTMLElement[];
+    let closest = 0;
+    let distance = Number.POSITIVE_INFINITY;
+    cards.forEach((card, index) => {
+      const nextDistance = Math.abs(card.offsetLeft - track.scrollLeft);
+      if (nextDistance < distance) {
+        distance = nextDistance;
+        closest = index;
+      }
+    });
+    setActiveReview(closest);
+  };
+
+  return (
+    <section className="endorser-reviews-section" id="reviews" aria-labelledby="review-carousel-title">
+      <h2 className="sr-only" id="review-carousel-title">Customer and professional reviews</h2>
+      <div className="review-carousel-track" ref={trackRef} onScroll={updateActiveReview}>
+        {testimonials.map((testimonial, index) => (
+          <article className="review-card" key={testimonial.name}>
+            <img src={testimonial.image} alt={testimonial.name} />
+            <h3>{testimonial.name}</h3>
+            <span>{testimonial.role}</span>
+            <div className="review-rule" />
+            <b aria-hidden="true">“</b>
+            <p>{testimonial.quote}</p>
+            <span className="sr-only">Review {index + 1} of {testimonials.length}</span>
+          </article>
+        ))}
+      </div>
+      <div className="review-pagination" aria-label="Select a review">
+        {testimonials.map((testimonial, index) => (
+          <button
+            type="button"
+            className={activeReview === index ? "active" : ""}
+            onClick={() => goToReview(index)}
+            aria-label={`Go to ${testimonial.name}'s review`}
+            aria-current={activeReview === index ? "true" : undefined}
+            key={testimonial.name}
+          />
+        ))}
+      </div>
+      <div className="review-arrow-row">
+        <button type="button" onClick={() => moveReviews(-1)} disabled={activeReview === 0} aria-label="Previous reviews">←</button>
+        <button type="button" onClick={() => moveReviews(1)} disabled={activeReview >= testimonials.length - 4} aria-label="Next reviews">→</button>
+      </div>
+      <p className="review-disclosure">
+        *These individuals partner with Cata-Kor as compensated endorsers, sharing their personal opinions and
+        experiences. They do not provide medical advice. Statements have not been evaluated by the FDA.
+      </p>
+    </section>
+  );
+}
 
 export function ProductPage() {
   const [cartCount, setCartCount] = useState(0);
-  const [activeLearnTab, setActiveLearnTab] = useState("How it Works");
-  const learnTabs = ["How it Works", "Benefits", "Real Results", "Why Cata-Kor", "Comparison"];
 
   return (
     <div className="site-shell product-page">
@@ -474,85 +710,47 @@ export function ProductPage() {
           <ProductPurchase onAdded={() => setCartCount((value) => value + 1)} />
         </div>
 
-        <section className="customer-video-section">
-          <div className="section-heading centered-heading">
-            <span className="eyebrow">REAL CUSTOMER ROUTINES</span>
-            <h2>JOIN 100,000+ OTHERS 💚</h2>
-          </div>
-          <div className="story-grid">
-            {[
-              ["A SOLID ENERGY BOOST", "https://catakor.com/cdn/shop/files/image_588.png?v=1762167390&width=408"],
-              ["AN EVEN BETTER FORMULA", "https://catakor.com/cdn/shop/files/image_7.png?v=1762167225&width=408"],
-              ["I FEEL YOUNGER", "https://catakor.com/cdn/shop/files/image_69898.png?v=1762167381&width=408"],
-            ].map(([title, image]) => (
-              <article className="story-card" key={title}>
-                <img src={image} alt="Cata-Kor customer" />
-                <button type="button" aria-label={`Play ${title}`}>▶</button>
-                <h3>{title}</h3>
-              </article>
-            ))}
-          </div>
-        </section>
+        <ProductReviewCarousel />
 
-        <section className="learn-section" id="science">
-          <div className="learn-tabs" role="tablist" aria-label="Learn more about Liposomal NAD">
-            {learnTabs.map((tab) => (
-              <button key={tab} type="button" role="tab" aria-selected={activeLearnTab === tab} onClick={() => setActiveLearnTab(tab)}>{tab}</button>
-            ))}
-          </div>
-          <div className="learn-content">
+        <section className="result-proof-section" id="results">
+          <article className="result-proof-card">
+            <img
+              src="https://catakor.com/cdn/shop/files/before-after-image.png?v=1751561115"
+              alt="Aaron before and after eight weeks using Cata-Kor"
+            />
             <div>
-              <span className="eyebrow">{activeLearnTab.toUpperCase()}</span>
-              <h2>CELLULAR ENERGY,<br />DELIVERED SMARTER*</h2>
-              <p>
-                Liposomal delivery helps protect NAD⁺ through digestion, supporting more effective absorption
-                and making this formula simple to use every day.*
-              </p>
-              <ul><li>500mg per serving</li><li>Advanced liposomal delivery</li><li>Third-party tested</li></ul>
+              <h2>AARON</h2>
+              <h3>Before vs. 8 Weeks using Cata-Kor</h3>
+              <p>“I started taking this after noticing low energy. Two months in, I feel sharper, more alert, and feel noticeably healthier.”</p>
+              <span>⚡ More Energy</span>
+              <small>Taking: <a href="#main-content">Cata-Kor NAD⁺ Advanced LipoNAD™ 500mg</a></small>
             </div>
-            <div className="learn-visual">
-              <img src="https://catakor.com/cdn/shop/files/nad_500_web_1440x637_c7a1ec00-69c3-4fbe-9972-6ab3b9c438ee.jpg?v=1759397079" alt="Cata-Kor liposomal NAD science" />
+          </article>
+        </section>
+
+        <section className="product-guarantee-section" id="guarantee">
+          <div className="product-guarantee-copy">
+            <h2>PEACE-OF-MIND<br />GUARANTEE</h2>
+            <p>Every bottle is backed by our lifetime Money-Back Promise.</p>
+            <div>
+              <article><strong>LIFETIME</strong><span>Risk-free return<br />window</span></article>
+              <article><strong>&lt; 1%</strong><span>Customers who ever<br />request a refund</span></article>
             </div>
+            <small>Simply email our support team if you’d like a full refund—no returns, hoops, or hassles.</small>
           </div>
-        </section>
-
-        <section className="reviews-section" id="reviews">
-          <div className="section-heading centered-heading"><span className="eyebrow">RECOMMENDED BY PROFESSIONALS</span><h2>TRUSTED IN REAL ROUTINES*</h2></div>
-          <div className="review-grid">
-            {testimonials.map((testimonial) => (
-              <article className="review-card" key={testimonial.name}>
-                <img src={testimonial.image} alt={testimonial.name} />
-                <div className="stars">★★★★★</div>
-                <p>“{testimonial.quote}”</p>
-                <h3>{testimonial.name}</h3>
-                <span>{testimonial.role}</span>
-              </article>
-            ))}
-          </div>
-          <p className="disclosure">These individuals share personal opinions and experiences and do not provide medical advice.</p>
-        </section>
-
-        <section className="results-section">
-          <div className="results-image"><img src="https://catakor.com/cdn/shop/files/before-after-image.png?v=1751561115" alt="Before and after Cata-Kor customer results" /></div>
-          <div className="results-copy"><span className="eyebrow">AARON’S ROUTINE</span><h2>BEFORE VS. 8 WEEKS<br />USING CATA-KOR</h2><p>“Two months in, I feel sharper, more alert, and noticeably healthier.”*</p><strong>⚡ MORE ENERGY</strong></div>
-        </section>
-
-        <section className="peace-section">
-          <span className="eyebrow">BUY WITH CONFIDENCE</span><h2>PEACE-OF-MIND GUARANTEE</h2><p>Every bottle is backed by our lifetime Money-Back Promise.</p>
-          <div><article><strong>LIFETIME</strong><span>Risk-free return window</span></article><article><strong>&lt; 1%</strong><span>Customers who request a refund</span></article></div>
         </section>
 
         <section className="faq-section" id="faq">
-          <div><span className="eyebrow">QUESTIONS, ANSWERED</span><h2>FREQUENTLY ASKED<br />QUESTIONS</h2></div>
-          <div>
-            <ProductAccordion title="How should I take the NAD supplement?"><p>Take two capsules every day, with or without food.</p></ProductAccordion>
+          <h2>FREQUENTLY ASK QUESTION</h2>
+          <div className="faq-accordion-list">
+            <ProductAccordion title="How should I take the NAD supplement?" defaultOpen><p>Take 2 capsules every day with or without food.</p></ProductAccordion>
             <ProductAccordion title="How long does it take to see results?"><p>Results vary, but many customers report changes within a few weeks of daily use.*</p></ProductAccordion>
             <ProductAccordion title="Are there side effects?"><p>The formula is designed for everyday use. Follow the label and consult your clinician if you have questions.</p></ProductAccordion>
-            <ProductAccordion title="Is this NAD⁺ made in the USA?"><p>Yes. Cata-Kor supplements are manufactured in the USA and third-party tested.</p></ProductAccordion>
+            <ProductAccordion title="Is this NAD+ made in the USA?"><p>Yes. Cata-Kor supplements are manufactured in the USA and third-party tested.</p></ProductAccordion>
           </div>
         </section>
       </main>
-      <Footer />
+      <SiteFooter />
       <MysteryChip />
     </div>
   );
