@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { AccountIcon, BagIcon } from "./ExactHome";
 
 const PRODUCT_PATH = "/products/nad-advanced-500mg";
 
@@ -139,16 +140,16 @@ function Header({ cartCount = 0 }: { cartCount?: number }) {
         <nav className={menuOpen ? "main-nav is-open" : "main-nav"} aria-label="Main navigation">
           <Link href="/collections/shop-all">SHOP</Link>
           <Link href="/collections/shop-all">BEST SELLERS</Link>
-          <Link href="/#science">SCIENCE</Link>
+          <Link href="/pages/science-benefits">SCIENCE</Link>
           <Link href="/#about">ABOUT</Link>
         </nav>
         <div className="header-actions">
-          <a href="#footer" className="bag-icon" aria-label={`Cart with ${cartCount} items`}>
-            <span className="bag-handle" />
+          <a href="#footer" className="header-icon-link cart-icon-link" aria-label={`Cart with ${cartCount} items`}>
+            <BagIcon />
             {cartCount > 0 && <b>{cartCount}</b>}
           </a>
-          <a href="#footer" className="user-icon" aria-label="Log in">
-            <span />
+          <a href="#footer" className="header-icon-link" aria-label="Log in">
+            <AccountIcon />
           </a>
         </div>
       </header>
@@ -207,7 +208,7 @@ function Footer() {
         <div>
           <h2>QUICK LINKS</h2>
           <Link href={PRODUCT_PATH}>NAD⁺ ADVANCED</Link>
-          <Link href="/#science">SCIENCE AND QUALITY</Link>
+          <Link href="/pages/science-benefits">SCIENCE AND QUALITY</Link>
           <Link href="/#about">ABOUT CATA-KOR</Link>
           <Link href="/products/nad-advanced-500mg#faq">FAQS</Link>
         </div>
@@ -257,7 +258,7 @@ export function HomePage() {
               <a className="primary-button" href="#products">SHOP BEST SELLERS</a>
             </div>
           </div>
-          <img className="hero-products" src="/catakor/hero-products.webp" alt="Cata-Kor longevity supplements" />
+          <img className="hero-products" src="/catakor/hero-products-hq.png" alt="Cata-Kor longevity supplements" />
         </section>
 
         <section className="products-section" id="products">
@@ -310,7 +311,7 @@ export function HomePage() {
               <li>Transparent dosing</li>
               <li>Third-party tested by NSF</li>
             </ul>
-            <a className="primary-button" href="#science">EXPLORE OUR SCIENCE</a>
+            <Link className="primary-button" href="/pages/science-benefits">EXPLORE OUR SCIENCE</Link>
           </div>
         </section>
 

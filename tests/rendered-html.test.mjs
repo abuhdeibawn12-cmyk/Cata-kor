@@ -28,6 +28,8 @@ test("server-renders the Cata-Kor homepage", async () => {
   assert.doesNotMatch(html, /NMN Complex &amp; Liposomal Glutathione|NAD\+ &amp; NMN Complex &amp; Glutathione/);
   assert.match(html, /expert-card-flip/);
   assert.match(html, /expert-card-back/);
+  assert.match(html, /href="\/pages\/science-benefits"/);
+  assert.match(html, /hero-products-hq\.png/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
   assert.match(html, /Cata-Kor NAD \| Age on your terms/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
@@ -57,5 +59,22 @@ test("server-renders the shop collection without bundles", async () => {
   assert.match(html, /Skin, Hair &amp; Nails Supplement/);
   assert.match(html, /Out of stock/);
   assert.doesNotMatch(html, /Cellular Power Trio|CEO(?:&#x27;|')s Bundle|NAD\+ &amp; NMN Complex &amp; Glutathione/);
+  assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
+});
+
+test("server-renders the complete science and quality page", async () => {
+  const response = await render("/pages/science-benefits");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /Certificate of Analysis/);
+  assert.match(html, /Cata-Kor NMN Supplement/);
+  assert.match(html, /Science and Quality/);
+  assert.match(html, /Stefano Barberi/);
+  assert.match(html, /Morgan Adams/);
+  assert.match(html, /Play NAD\+ supplement video/);
+  assert.match(html, /Questions We Receive Often/);
+  assert.match(html, /coa-nad-advanced\.jpg/);
+  assert.match(html, /liponad-study\.pdf/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
 });

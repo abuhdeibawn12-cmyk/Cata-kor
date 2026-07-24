@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 const NAD_PATH = "/products/nad-advanced-500mg";
+const SCIENCE_PATH = "/pages/science-benefits";
 
 type Product = {
   name: string;
@@ -84,6 +85,59 @@ const experts = [
   },
 ];
 
+export function BagIcon() {
+  return (
+    <svg
+      className="header-vector-icon"
+      width="22"
+      height="25"
+      viewBox="0 0 22 25"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M18.641 6.33617H2.76978C2.32967 6.33617 1.94458 6.6674 1.91708 7.10904L0.651777 22.815C0.624271 23.3119 1.00936 23.7259 1.50448 23.7259H19.7963C20.2914 23.7259 20.6765 23.3119 20.649 22.815L19.4937 7.10904C19.4662 6.6674 19.0811 6.30856 18.641 6.30856V6.33617Z"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeMiterlimit="10"
+      />
+      <path
+        d="M16.055 12.1328V6.06014C16.055 3.07904 13.6344 0.649994 10.6637 0.649994C7.69303 0.649994 5.27246 3.07904 5.27246 6.06014V12.1328"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function AccountIcon() {
+  return (
+    <svg
+      className="header-vector-icon"
+      width="22"
+      height="24"
+      viewBox="0 0 22 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M10.5558 12.9589C13.943 12.9589 16.6888 10.2034 16.6888 6.80443C16.6888 3.40543 13.943 0.649994 10.5558 0.649994C7.16868 0.649994 4.42285 3.40543 4.42285 6.80443C4.42285 10.2034 7.16868 12.9589 10.5558 12.9589Z"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeMiterlimit="10"
+      />
+      <path
+        d="M8.30304 12.9589H12.9706C17.204 12.9589 20.6504 16.4173 20.6504 20.6655V22.6807C20.6504 22.9803 20.4062 23.2254 20.1076 23.2254H1.19313C0.894626 23.2254 0.650391 22.9803 0.650391 22.6807V20.6655C0.650391 16.4173 4.09679 12.9589 8.33017 12.9589H8.30304Z"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeMiterlimit="10"
+      />
+    </svg>
+  );
+}
+
 export function Header({
   onCart,
   onAccount,
@@ -121,14 +175,12 @@ export function Header({
         >
           <Link href="/collections/shop-all">Shop</Link>
           <Link href="/collections/shop-all">Best Sellers</Link>
-          <Link href="/#science">Science</Link>
+          <Link href={SCIENCE_PATH}>Science</Link>
           <Link href="/#about">About</Link>
         </nav>
         <div className="header-actions">
           <button className="header-icon-button" type="button" onClick={onCart} aria-label="Cart">
-            <span className="bag-icon" aria-hidden="true">
-              <span className="bag-handle" />
-            </span>
+            <BagIcon />
           </button>
           <button
             className="header-icon-button"
@@ -136,9 +188,7 @@ export function Header({
             onClick={onAccount}
             aria-label="Log in"
           >
-            <span className="user-icon" aria-hidden="true">
-              <span />
-            </span>
+            <AccountIcon />
           </button>
         </div>
       </header>
@@ -216,11 +266,11 @@ export function Footer() {
         </div>
         <div>
           <h2>QUICK LINKS</h2>
-          <Link href="/#science">COA</Link>
+          <Link href={`${SCIENCE_PATH}#coa`}>COA</Link>
           <Link href={NAD_PATH}>NAD⁺ ADVANCED</Link>
           <Link href="/collections/shop-all">NMN SUPPLEMENT</Link>
           <Link href="/collections/shop-all">SKIN, HAIR &amp; NAILS</Link>
-          <Link href="/#science">SCIENCE AND QUALITY</Link>
+          <Link href={SCIENCE_PATH}>SCIENCE AND QUALITY</Link>
           <Link href="/#footer">AFFILIATE</Link>
         </div>
         <div>
@@ -490,7 +540,7 @@ export function HomePage() {
           </div>
           <img
             className="hero-products"
-            src="/catakor/hero-products.webp"
+            src="/catakor/hero-products-hq.png"
             alt="Cata-Kor longevity supplements"
           />
         </section>
@@ -592,7 +642,7 @@ export function HomePage() {
               <div><img src="/catakor/science-dose.svg" alt="" /><b>Transparent<br />dosing</b></div>
               <div><img src="/catakor/science-tested.svg" alt="" /><b>3-rd party<br />tested by NSF</b></div>
             </div>
-            <Link className="primary-button" href="/#science">
+            <Link className="primary-button" href={SCIENCE_PATH}>
               EXPLORE OUR SCIENCE
             </Link>
           </div>
