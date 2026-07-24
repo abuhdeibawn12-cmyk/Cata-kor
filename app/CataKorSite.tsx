@@ -139,8 +139,8 @@ function Header({ cartCount = 0 }: { cartCount?: number }) {
         <nav className={menuOpen ? "main-nav is-open" : "main-nav"} aria-label="Main navigation">
           <Link href="/collections/shop-all">SHOP</Link>
           <Link href="/collections/shop-all">BEST SELLERS</Link>
-          <a href="#science">SCIENCE</a>
-          <a href="#about">ABOUT</a>
+          <Link href="/#science">SCIENCE</Link>
+          <Link href="/#about">ABOUT</Link>
         </nav>
         <div className="header-actions">
           <a href="#footer" className="bag-icon" aria-label={`Cart with ${cartCount} items`}>
@@ -206,17 +206,17 @@ function Footer() {
         </div>
         <div>
           <h2>QUICK LINKS</h2>
-          <a href={PRODUCT_PATH}>NAD⁺ ADVANCED</a>
-          <a href="#science">SCIENCE AND QUALITY</a>
-          <a href="#about">ABOUT CATA-KOR</a>
-          <a href="#faq">FAQS</a>
+          <Link href={PRODUCT_PATH}>NAD⁺ ADVANCED</Link>
+          <Link href="/#science">SCIENCE AND QUALITY</Link>
+          <Link href="/#about">ABOUT CATA-KOR</Link>
+          <Link href="/products/nad-advanced-500mg#faq">FAQS</Link>
         </div>
         <div>
           <h2>SUPPORT</h2>
-          <a href="#footer">CONTACT US</a>
-          <a href="#footer">REFUND POLICY</a>
-          <a href="#footer">PRIVACY POLICY</a>
-          <a href="#footer">TERMS OF SERVICE</a>
+          <Link href="/#footer">CONTACT US</Link>
+          <Link href="/#footer">REFUND POLICY</Link>
+          <Link href="/#footer">PRIVACY POLICY</Link>
+          <Link href="/#footer">TERMS OF SERVICE</Link>
         </div>
         <div className="newsletter">
           <h2>GET 10% OFF</h2>

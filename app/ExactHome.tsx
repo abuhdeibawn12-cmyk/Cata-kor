@@ -3,7 +3,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-const LIVE_SITE = "https://catakor.com";
 const NAD_PATH = "/products/nad-advanced-500mg";
 
 type Product = {
@@ -30,7 +29,7 @@ const products: Product[] = [
     benefit: "NAD+ pathway support*",
     price: "$55.95",
     image: "/catakor/product-nmn.avif",
-    href: `${LIVE_SITE}/products/nmn`,
+    href: "/collections/shop-all",
     bestseller: true,
     available: false,
   },
@@ -39,7 +38,7 @@ const products: Product[] = [
     benefit: "Antioxidant defense*",
     price: "$39.99",
     image: "/catakor/product-glutathione.avif",
-    href: `${LIVE_SITE}/products/liposomal-glutathione`,
+    href: "/collections/shop-all",
     bestseller: true,
     available: false,
   },
@@ -48,7 +47,7 @@ const products: Product[] = [
     benefit: "Healthy aging support*",
     price: "$44.99",
     image: "/catakor/product-caakg.avif",
-    href: `${LIVE_SITE}/products/ca-akg`,
+    href: "/collections/shop-all",
     bestseller: true,
     available: false,
   },
@@ -100,7 +99,7 @@ export function Header({
         Skip to content
       </a>
       <div className="announcement">
-        <a href={`${LIVE_SITE}/products/nmn`}>Christmas in July - Up to 32% Off</a>
+        <Link href="/collections/shop-all">Christmas in July - Up to 32% Off</Link>
       </div>
       <header className="site-header">
         <Link className="brand" href="/" aria-label="Cata-Kor home">
@@ -122,8 +121,8 @@ export function Header({
         >
           <Link href="/collections/shop-all">Shop</Link>
           <Link href="/collections/shop-all">Best Sellers</Link>
-          <a href="#science">Science</a>
-          <a href="#about">About</a>
+          <Link href="/#science">Science</Link>
+          <Link href="/#about">About</Link>
         </nav>
         <div className="header-actions">
           <button className="header-icon-button" type="button" onClick={onCart} aria-label="Cart">
@@ -217,20 +216,20 @@ export function Footer() {
         </div>
         <div>
           <h2>QUICK LINKS</h2>
-          <a href={`${LIVE_SITE}/pages/coa`}>COA</a>
-          <a href={NAD_PATH}>NAD⁺ ADVANCED</a>
-          <a href={`${LIVE_SITE}/products/nmn`}>NMN SUPPLEMENT</a>
-          <a href={`${LIVE_SITE}/products/ca-akg`}>SKIN, HAIR &amp; NAILS</a>
-          <a href={`${LIVE_SITE}/pages/science-benefits`}>SCIENCE AND QUALITY</a>
-          <a href={`${LIVE_SITE}/pages/affiliate-program`}>AFFILIATE</a>
+          <Link href="/#science">COA</Link>
+          <Link href={NAD_PATH}>NAD⁺ ADVANCED</Link>
+          <Link href="/collections/shop-all">NMN SUPPLEMENT</Link>
+          <Link href="/collections/shop-all">SKIN, HAIR &amp; NAILS</Link>
+          <Link href="/#science">SCIENCE AND QUALITY</Link>
+          <Link href="/#footer">AFFILIATE</Link>
         </div>
         <div>
           <h2>SUPPORT</h2>
-          <a href={`${LIVE_SITE}/policies/terms-of-service`}>TERMS OF SERVICE</a>
-          <a href={`${LIVE_SITE}/policies/refund-policy`}>REFUND POLICY</a>
-          <a href={`${LIVE_SITE}/policies/privacy-policy`}>PRIVACY POLICY</a>
-          <a href={`${LIVE_SITE}/pages/faqs`}>FAQS</a>
-          <a href={`${LIVE_SITE}/pages/contact`}>CONTACT US</a>
+          <Link href="/#footer">TERMS OF SERVICE</Link>
+          <Link href="/#footer">REFUND POLICY</Link>
+          <Link href="/#footer">PRIVACY POLICY</Link>
+          <Link href="/#footer">FAQS</Link>
+          <Link href="/#footer">CONTACT US</Link>
         </div>
         <div className="newsletter">
           <h2>GET 10% OFF</h2>
@@ -322,13 +321,13 @@ export function AccountDialog({ open, onClose }: { open: boolean; onClose: () =>
         </button>
         <img src="/catakor/logo.svg" alt="Cata-Kor" />
         <h2 id="account-title">YOUR CATA-KOR ACCOUNT</h2>
-        <p>Manage subscriptions, orders, and delivery details through the secure customer portal.</p>
-        <a
-          className="primary-button"
-          href={`${LIVE_SITE}/customer_authentication/redirect?locale=en&region_country=US`}
-        >
-          CONTINUE TO LOG IN
-        </a>
+        <p>
+          The customer portal is not connected in this testing build. You can keep shopping without
+          leaving this website.
+        </p>
+        <Link className="primary-button" href="/collections/shop-all" onClick={onClose}>
+          CONTINUE SHOPPING
+        </Link>
       </section>
     </div>
   );
@@ -370,7 +369,7 @@ function Promotion({
           ×
         </button>
         <div className="promo-orbit" aria-hidden="true">
-          <img src="/catakor/product-nad.avif" alt="" />
+          <img src="/catakor/product-nad-hq.png" alt="" />
         </div>
         <div className="promo-copy">
           <span className="eyebrow">MYSTERY DISCOUNT</span>
@@ -539,21 +538,38 @@ export function HomePage() {
                 className={activeExpert === index ? "expert-card is-active" : "expert-card"}
                 key={expert.name}
               >
-                <img src={expert.image} alt={expert.name} />
-                <div>
+                <div className="expert-card-flip">
+                  <div className="expert-card-face expert-card-front">
+                    <img src={expert.image} alt={expert.name} />
+                    <span className="expert-card-scrim" aria-hidden="true" />
+                    <div className="expert-card-front-content">
+                      <b>{expert.name}</b>
+                      <button
+                        className="expert-trigger"
+                        type="button"
+                        onClick={() => setActiveExpert((active) => (active === index ? -1 : index))}
+                        aria-expanded={activeExpert === index}
+                        aria-label={`Show ${expert.name}'s recommendation`}
+                      >
+                        {expert.title}
+                      </button>
+                    </div>
+                  </div>
                   <button
-                    className="expert-trigger"
+                    className="expert-card-face expert-card-back"
                     type="button"
                     onClick={() => setActiveExpert((active) => (active === index ? -1 : index))}
-                    aria-expanded={activeExpert === index}
+                    aria-label={`Hide ${expert.name}'s recommendation`}
                   >
-                    <span>
+                    <span className="expert-avatar">
+                      <img src={expert.image} alt="" />
+                    </span>
+                    <span className="expert-card-back-copy">
                       <b>{expert.name}</b>
                       <small>{expert.title}</small>
+                      <span className="quote">“{expert.quote}”</span>
                     </span>
-                    <i>{activeExpert === index ? "−" : "+"}</i>
                   </button>
-                  <p className="quote">“{expert.quote}”</p>
                 </div>
               </article>
             ))}
@@ -576,9 +592,9 @@ export function HomePage() {
               <div><img src="/catakor/science-dose.svg" alt="" /><b>Transparent<br />dosing</b></div>
               <div><img src="/catakor/science-tested.svg" alt="" /><b>3-rd party<br />tested by NSF</b></div>
             </div>
-            <a className="primary-button" href={`${LIVE_SITE}/pages/science-benefits`}>
+            <Link className="primary-button" href="/#science">
               EXPLORE OUR SCIENCE
-            </a>
+            </Link>
           </div>
           <img className="science-bottle" src="/catakor/science-nmn.webp" alt="Cata-Kor NMN Complex" />
         </section>
