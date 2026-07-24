@@ -13,6 +13,7 @@ type Product = {
   image: string;
   href: string;
   bestseller?: boolean;
+  available?: boolean;
 };
 
 const products: Product[] = [
@@ -31,6 +32,7 @@ const products: Product[] = [
     image: "/catakor/product-nmn.avif",
     href: `${LIVE_SITE}/products/nmn`,
     bestseller: true,
+    available: false,
   },
   {
     name: "Liposomal Glutathione",
@@ -39,6 +41,7 @@ const products: Product[] = [
     image: "/catakor/product-glutathione.avif",
     href: `${LIVE_SITE}/products/liposomal-glutathione`,
     bestseller: true,
+    available: false,
   },
   {
     name: "CA-AKG",
@@ -47,25 +50,7 @@ const products: Product[] = [
     image: "/catakor/product-caakg.avif",
     href: `${LIVE_SITE}/products/ca-akg`,
     bestseller: true,
-  },
-  {
-    name: "NMN Complex & Liposomal Glutathione",
-    price: "$56.99",
-    image: "/catakor/product-duo.avif",
-    href: `${LIVE_SITE}/products/cata-kor-energy-defense-duo-nmn-1-000-mg-liposomal-glutathione-500-mg-vitamin-c-tmg-resveratrol`,
-  },
-  {
-    name: "Liposomal NAD+ & NMN Complex",
-    benefit: "Dual cellular energy support*",
-    price: "$85.99",
-    image: "/catakor/product-duo.avif",
-    href: `${LIVE_SITE}/products/cata-kor-duo-liposomal-nad-advanced-500-mg-nmn-1000-mg-with-resveratrol-tmg-msm`,
-  },
-  {
-    name: "NAD+ & NMN Complex & Glutathione",
-    price: "$119.99",
-    image: "/catakor/product-trio.avif",
-    href: `${LIVE_SITE}/products/cata-kor-liposomal-glutathione-500-mg-nmn-1000-mg-liposomal-nad-advanced-500-mg`,
+    available: false,
   },
 ];
 
@@ -163,10 +148,16 @@ export function Header({
 }
 
 function ProductCard({ product }: { product: Product }) {
-  return (
-    <a className="product-card" href={product.href}>
+  const cardContent = (
+    <>
       <div className="product-card-topline">
-        {product.bestseller ? <span>Bestsellers</span> : <i />}
+        {product.available === false ? (
+          <span className="product-stock-label">Out of stock</span>
+        ) : product.bestseller ? (
+          <span>Bestsellers</span>
+        ) : (
+          <i />
+        )}
         <small>
           CONTENTS
           <br />
@@ -181,7 +172,23 @@ function ProductCard({ product }: { product: Product }) {
       </div>
       <h3>{product.name}</h3>
       {product.benefit && <p>{product.benefit}</p>}
-      <strong>{product.price}</strong>
+      <strong className={product.available === false ? "is-out-of-stock" : ""}>
+        {product.available === false ? "OUT OF STOCK" : product.price}
+      </strong>
+    </>
+  );
+
+  if (product.available === false) {
+    return (
+      <article className="product-card is-sold-out" aria-label={`${product.name} — out of stock`}>
+        {cardContent}
+      </article>
+    );
+  }
+
+  return (
+    <a className="product-card" href={product.href}>
+      {cardContent}
     </a>
   );
 }

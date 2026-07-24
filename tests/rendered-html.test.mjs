@@ -21,6 +21,11 @@ test("server-renders the Cata-Kor homepage", async () => {
   const html = await response.text();
   assert.match(html, /AGE ON YOUR/);
   assert.match(html, /BUILD YOUR DAILY LONGEVITY ROUTINE/);
+  assert.match(html, /NMN Complex/);
+  assert.match(html, /Liposomal Glutathione/);
+  assert.match(html, /CA-AKG/);
+  assert.match(html, /OUT OF STOCK/);
+  assert.doesNotMatch(html, /NMN Complex &amp; Liposomal Glutathione|NAD\+ &amp; NMN Complex &amp; Glutathione/);
   assert.match(html, /Cata-Kor NAD \| Age on your terms/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });

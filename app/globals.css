@@ -419,6 +419,21 @@ h3 {
   transform: translateY(-3px);
 }
 
+.product-card.is-sold-out {
+  cursor: not-allowed;
+}
+
+.product-card.is-sold-out:hover {
+  background: var(--moss);
+  transform: none;
+}
+
+.product-card.is-sold-out .product-image-wrap img {
+  filter: grayscale(0.35);
+  opacity: 0.68;
+  transform: none;
+}
+
 .product-card-topline {
   align-items: flex-start;
   display: flex;
@@ -431,6 +446,13 @@ h3 {
   color: var(--forest);
   font-size: 8px;
   padding: 5px 11px;
+}
+
+.product-card-topline > .product-stock-label {
+  background: #fff;
+  color: var(--forest);
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .product-card-topline small {
@@ -478,6 +500,12 @@ h3 {
   font-family: "Adieu", sans-serif;
   font-size: 29px;
   margin-top: auto;
+}
+
+.product-card > strong.is-out-of-stock {
+  color: #fff;
+  font-size: 18px;
+  letter-spacing: 0.03em;
 }
 
 .experts-section {

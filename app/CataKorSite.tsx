@@ -11,6 +11,7 @@ type Product = {
   price: string;
   image: string;
   href?: string;
+  available?: boolean;
 };
 
 const bestSellers: Product[] = [
@@ -26,18 +27,21 @@ const bestSellers: Product[] = [
     benefit: "NAD⁺ pathway support*",
     price: "$55.95",
     image: "/catakor/product-nmn.avif",
+    available: false,
   },
   {
     name: "Liposomal Glutathione",
     benefit: "Antioxidant defense*",
     price: "$39.99",
     image: "/catakor/product-glutathione.avif",
+    available: false,
   },
   {
     name: "CA-AKG",
     benefit: "Healthy aging support*",
     price: "$44.99",
     image: "/catakor/product-caakg.avif",
+    available: false,
   },
   {
     name: "NAD⁺ & NMN Complex",
@@ -51,7 +55,11 @@ const bestSellers: Product[] = [
     price: "$119.99",
     image: "/catakor/product-trio.avif",
   },
-];
+].filter(
+  (product) =>
+    product.image !== "/catakor/product-duo.avif" &&
+    product.image !== "/catakor/product-trio.avif",
+);
 
 const experts = [
   {
@@ -129,8 +137,8 @@ function Header({ cartCount = 0 }: { cartCount?: number }) {
           <span />
         </button>
         <nav className={menuOpen ? "main-nav is-open" : "main-nav"} aria-label="Main navigation">
-          <a href="#products">SHOP</a>
-          <a href="#products">BEST SELLERS</a>
+          <Link href="/collections/shop-all">SHOP</Link>
+          <Link href="/collections/shop-all">BEST SELLERS</Link>
           <a href="#science">SCIENCE</a>
           <a href="#about">ABOUT</a>
         </nav>
@@ -160,9 +168,15 @@ function MysteryChip() {
 
 function ProductCard({ product }: { product: Product }) {
   return (
-    <a className="product-card" href={product.href ?? "#products"}>
+    <a
+      className={product.available === false ? "product-card is-sold-out" : "product-card"}
+      href={product.available === false ? undefined : product.href ?? "/collections/shop-all"}
+      aria-disabled={product.available === false}
+    >
       <div className="product-card-topline">
-        <span>BESTSELLERS</span>
+        <span className={product.available === false ? "product-stock-label" : ""}>
+          {product.available === false ? "OUT OF STOCK" : "BESTSELLERS"}
+        </span>
         <small>CONTENTS<br />CERTIFIED</small>
       </div>
       <div className="product-image-wrap">
@@ -171,7 +185,9 @@ function ProductCard({ product }: { product: Product }) {
       <div className="stars" aria-label="5 out of 5 stars">★★★★★</div>
       <h3>{product.name}</h3>
       {product.benefit && <p>{product.benefit}</p>}
-      <strong>{product.price}</strong>
+      <strong className={product.available === false ? "is-out-of-stock" : ""}>
+        {product.available === false ? "OUT OF STOCK" : product.price}
+      </strong>
     </a>
   );
 }
@@ -250,7 +266,7 @@ export function HomePage() {
               <h2>BUILD YOUR DAILY LONGEVITY ROUTINE*</h2>
               <p><b>60 day</b> guarantee <span>·</span> <b>1M+</b> consumers</p>
             </div>
-            <a className="lime-button" href={PRODUCT_PATH}>SHOP ALL <span>→</span></a>
+            <Link className="lime-button" href="/collections/shop-all">SHOP ALL <span>→</span></Link>
           </div>
           <div className="product-track">
             {bestSellers.map((product) => <ProductCard product={product} key={product.name} />)}
