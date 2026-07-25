@@ -28,14 +28,14 @@ const bestSellers: Product[] = [
     benefit: "NAD⁺ pathway support*",
     price: "$55.95",
     image: "/catakor/product-nmn.avif",
-    available: false,
+    available: true,
   },
   {
     name: "Liposomal Glutathione",
     benefit: "Antioxidant defense*",
     price: "$39.99",
     image: "/catakor/product-glutathione.avif",
-    available: false,
+    available: true,
   },
   {
     name: "CA-AKG",

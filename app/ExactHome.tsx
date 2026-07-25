@@ -32,7 +32,7 @@ const products: Product[] = [
     image: "/catakor/product-nmn.avif",
     href: "/collections/shop-all",
     bestseller: true,
-    available: false,
+    available: true,
   },
   {
     name: "Liposomal Glutathione",
@@ -41,7 +41,7 @@ const products: Product[] = [
     image: "/catakor/product-glutathione.avif",
     href: "/collections/shop-all",
     bestseller: true,
-    available: false,
+    available: true,
   },
   {
     name: "CA-AKG",

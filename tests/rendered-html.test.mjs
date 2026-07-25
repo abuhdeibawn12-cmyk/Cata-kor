@@ -81,6 +81,8 @@ test("server-renders the shop collection without bundles", async () => {
   assert.match(html, /NMN Supplement \| Quercetin \| TMG \| Resveratrol/);
   assert.match(html, /Skin, Hair &amp; Nails Supplement/);
   assert.match(html, /Out of stock/);
+  assert.equal((html.match(/>Out of stock</g) ?? []).length, 1);
+  assert.equal((html.match(/>Add to cart</g) ?? []).length, 2);
   assert.doesNotMatch(html, /Cellular Power Trio|CEO(?:&#x27;|')s Bundle|NAD\+ &amp; NMN Complex &amp; Glutathione/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
 });

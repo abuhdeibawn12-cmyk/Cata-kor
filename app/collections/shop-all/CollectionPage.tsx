@@ -27,13 +27,13 @@ const products: CollectionProduct[] = [
     name: "Cata-Kor Liposomal Glutathione",
     benefit: "Antioxidant defense*",
     image: "/catakor/product-glutathione.avif",
-    available: false,
+    available: true,
   },
   {
     name: "NMN Supplement | Quercetin | TMG | Resveratrol – 1000 mg",
     benefit: "NAD+ pathway support*",
     image: "/catakor/product-nmn.avif",
-    available: false,
+    available: true,
   },
   {
     name: "Skin, Hair & Nails Supplement",
@@ -44,6 +44,8 @@ const products: CollectionProduct[] = [
 ];
 
 function CollectionCard({ product }: { product: CollectionProduct }) {
+  const [added, setAdded] = useState(false);
+
   return (
     <article className={product.available ? "collection-card" : "collection-card is-sold-out"}>
       <div className="collection-image-wrap">
@@ -58,6 +60,14 @@ function CollectionCard({ product }: { product: CollectionProduct }) {
           <Link className="collection-product-button" href={product.href}>
             View Product
           </Link>
+        ) : product.available ? (
+          <button
+            className={added ? "collection-product-button is-added" : "collection-product-button"}
+            type="button"
+            onClick={() => setAdded(true)}
+          >
+            {added ? "Added to cart" : "Add to cart"}
+          </button>
         ) : (
           <button className="collection-product-button is-disabled" type="button" disabled>
             Out of stock
