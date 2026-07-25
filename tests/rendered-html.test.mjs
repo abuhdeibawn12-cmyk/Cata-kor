@@ -82,9 +82,54 @@ test("server-renders the shop collection without bundles", async () => {
   assert.match(html, /Skin, Hair &amp; Nails Supplement/);
   assert.match(html, /Out of stock/);
   assert.equal((html.match(/>Out of stock</g) ?? []).length, 1);
-  assert.equal((html.match(/>Add to cart</g) ?? []).length, 2);
+  assert.equal((html.match(/>View Product</g) ?? []).length, 3);
+  assert.match(html, /href="\/products\/liposomal-glutathione"/);
+  assert.match(html, /href="\/products\/nmn"/);
+  assert.match(html, /Main_Glu\.png/);
+  assert.match(html, /Main_NMN_42c0bc37/);
   assert.doesNotMatch(html, /Cellular Power Trio|CEO(?:&#x27;|')s Bundle|NAD\+ &amp; NMN Complex &amp; Glutathione/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
+});
+
+test("server-renders the one-time Liposomal Glutathione product page", async () => {
+  const response = await render("/products/liposomal-glutathione");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /LIPOSOMAL GLUTATHIONE/);
+  assert.match(html, /1155MG/);
+  assert.match(html, /Select Quantity/);
+  assert.match(html, /\$32\.86/);
+  assert.match(html, /\$32\.29/);
+  assert.match(html, /\$33\.99/);
+  assert.match(html, /\$98\.59/);
+  assert.match(html, /ONE-TIME PURCHASE/);
+  assert.match(html, /Main_Glu\.png/);
+  assert.match(html, /\$64\.58 total/);
+  assert.match(html, /What makes this glutathione supplement unique/);
+  assert.match(html, /Add to Cart/);
+  assert.doesNotMatch(html, /Subscribe &amp; Save|Choose Plan/);
+});
+
+test("server-renders the one-time NMN product page with exact jar pricing", async () => {
+  const response = await render("/products/nmn");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /NMN 4-IN-1 NAD\+ SUPPORT/);
+  assert.match(html, /1000MG/);
+  assert.match(html, /Select Quantity/);
+  assert.match(html, /\$39\.99/);
+  assert.match(html, /\$35\.99/);
+  assert.match(html, /\$33\.99/);
+  assert.match(html, /\$101\.97/);
+  assert.match(html, /\$71\.98/);
+  assert.match(html, /ONE-TIME PURCHASE/);
+  assert.match(html, /Main_NMN_42c0bc37/);
+  assert.match(html, /\$71\.98 total/);
+  assert.match(html, /Third-Party Tested/);
+  assert.match(html, /Add to Cart/);
+  assert.doesNotMatch(html, /Subscribe &amp; Save|Choose Plan|90 Days Supply|30 Days Supply/);
 });
 
 test("server-renders the complete science and quality page", async () => {

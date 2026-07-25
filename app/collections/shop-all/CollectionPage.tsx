@@ -19,20 +19,23 @@ const products: CollectionProduct[] = [
   {
     name: "NAD⁺ Advanced LipoNAD™ 500mg",
     benefit: "Daily cellular energy*",
-    image: "/catakor/product-nad.avif",
+    image: "https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=900",
     href: "/products/nad-advanced-500mg",
     available: true,
   },
   {
     name: "Cata-Kor Liposomal Glutathione",
     benefit: "Antioxidant defense*",
-    image: "/catakor/product-glutathione.avif",
+    image: "https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=900",
+    href: "/products/liposomal-glutathione",
     available: true,
   },
   {
     name: "NMN Supplement | Quercetin | TMG | Resveratrol – 1000 mg",
     benefit: "NAD+ pathway support*",
-    image: "/catakor/product-nmn.avif",
+    image:
+      "https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=900",
+    href: "/products/nmn",
     available: true,
   },
   {
@@ -44,8 +47,6 @@ const products: CollectionProduct[] = [
 ];
 
 function CollectionCard({ product }: { product: CollectionProduct }) {
-  const [added, setAdded] = useState(false);
-
   return (
     <article className={product.available ? "collection-card" : "collection-card is-sold-out"}>
       <div className="collection-image-wrap">
@@ -60,14 +61,6 @@ function CollectionCard({ product }: { product: CollectionProduct }) {
           <Link className="collection-product-button" href={product.href}>
             View Product
           </Link>
-        ) : product.available ? (
-          <button
-            className={added ? "collection-product-button is-added" : "collection-product-button"}
-            type="button"
-            onClick={() => setAdded(true)}
-          >
-            {added ? "Added to cart" : "Add to cart"}
-          </button>
         ) : (
           <button className="collection-product-button is-disabled" type="button" disabled>
             Out of stock

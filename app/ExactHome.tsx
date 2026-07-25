@@ -21,7 +21,7 @@ const products: Product[] = [
     name: "Liposomal NAD⁺",
     benefit: "Daily cellular energy*",
     price: "$44.99",
-    image: "/catakor/product-nad.avif",
+    image: "https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=900",
     href: NAD_PATH,
     bestseller: true,
   },
@@ -29,8 +29,9 @@ const products: Product[] = [
     name: "NMN Complex",
     benefit: "NAD+ pathway support*",
     price: "$55.95",
-    image: "/catakor/product-nmn.avif",
-    href: "/collections/shop-all",
+    image:
+      "https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=900",
+    href: "/products/nmn",
     bestseller: true,
     available: true,
   },
@@ -38,8 +39,8 @@ const products: Product[] = [
     name: "Liposomal Glutathione",
     benefit: "Antioxidant defense*",
     price: "$39.99",
-    image: "/catakor/product-glutathione.avif",
-    href: "/collections/shop-all",
+    image: "https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=900",
+    href: "/products/liposomal-glutathione",
     bestseller: true,
     available: true,
   },
@@ -268,7 +269,8 @@ export function Footer() {
           <h2>QUICK LINKS</h2>
           <Link href={`${SCIENCE_PATH}#coa`}>COA</Link>
           <Link href={NAD_PATH}>NAD⁺ ADVANCED</Link>
-          <Link href="/collections/shop-all">NMN SUPPLEMENT</Link>
+          <Link href="/products/nmn">NMN SUPPLEMENT</Link>
+          <Link href="/products/liposomal-glutathione">LIPOSOMAL GLUTATHIONE</Link>
           <Link href="/collections/shop-all">SKIN, HAIR &amp; NAILS</Link>
           <Link href={SCIENCE_PATH}>SCIENCE AND QUALITY</Link>
           <Link href="/#footer">AFFILIATE</Link>

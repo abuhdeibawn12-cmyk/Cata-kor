@@ -20,21 +20,24 @@ const bestSellers: Product[] = [
     name: "Liposomal NAD⁺",
     benefit: "Daily cellular energy*",
     price: "$44.99",
-    image: "/catakor/product-nad.avif",
+    image: "https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=900",
     href: PRODUCT_PATH,
   },
   {
     name: "NMN Complex",
     benefit: "NAD⁺ pathway support*",
     price: "$55.95",
-    image: "/catakor/product-nmn.avif",
+    image:
+      "https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=900",
+    href: "/products/nmn",
     available: true,
   },
   {
     name: "Liposomal Glutathione",
     benefit: "Antioxidant defense*",
     price: "$39.99",
-    image: "/catakor/product-glutathione.avif",
+    image: "https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=900",
+    href: "/products/liposomal-glutathione",
     available: true,
   },
   {
