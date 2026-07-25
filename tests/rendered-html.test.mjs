@@ -129,6 +129,17 @@ test("server-renders the one-time NMN product page with exact jar pricing", asyn
   assert.match(html, /\$71\.98 total/);
   assert.match(html, /Third-Party Tested/);
   assert.match(html, /Add to Cart/);
+  assert.match(html, /Support Cellular/);
+  assert.match(html, /Key Benefits/);
+  assert.match(html, /Top Health Experts &amp; Medical Partners/);
+  assert.match(html, /How We Compare/);
+  assert.match(html, /Customer Reviews/);
+  assert.match(html, /Page[\s\S]{0,40}1[\s\S]{0,40}of 20/);
+  assert.match(html, /aria-label="Go to review page 20"/);
+  assert.match(html, /Questions\? We/);
+  assert.match(html, /Image_gp-inline-block/);
+  assert.match(html, /benefits-img\.webp/);
+  assert.match(html, /partner-image-1\.png/);
   assert.doesNotMatch(html, /Subscribe &amp; Save|Choose Plan|90 Days Supply|30 Days Supply/);
 });
 

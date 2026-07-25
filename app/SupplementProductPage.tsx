@@ -147,25 +147,231 @@ const nmn: SupplementProduct = {
   ],
   faqs: [
     {
-      title: "What is NMN?",
+      title: "How long does it take to see results from dietary supplements?",
       copy:
-        "Nicotinamide mononucleotide is a precursor used by the body to make NAD+, a coenzyme involved in cellular energy pathways.",
+        "The time to experience results varies based on the supplement and individual factors. Consistency in usage is key. Some may notice changes quickly, while others may require more time.",
     },
     {
-      title: "Why combine NMN, TMG, quercetin and resveratrol?",
+      title: "Are there potential side effects of dietary supplements?",
       copy:
-        "The four ingredients are combined to support complementary longevity and cellular-energy pathways in one daily formula.*",
+        "Individual responses vary. Stop use and consult a qualified healthcare professional if you experience an unwanted reaction.",
     },
     {
-      title: "How should I take NMN 4-in-1?",
-      copy: "Take two capsules daily, or follow the guidance of your healthcare professional.",
+      title: "How does Cata-Kor ensure the quality of its ingredients?",
+      copy:
+        "Cata-Kor uses transparent formulas and independent testing to verify ingredient identity, purity and product quality.",
     },
     {
-      title: "Is this product third-party tested?",
-      copy: "Yes. Each batch is independently tested for identity, purity and quality.",
+      title: "Are your products gluten-free?",
+      copy:
+        "Review the current ingredient label for product-specific allergen information, and contact our support team if you have a specific sensitivity.",
+    },
+    {
+      title: "Are your products non-GMO/organic?",
+      copy:
+        "Ingredient sourcing varies by formula. The current product label and quality documentation provide the most up-to-date sourcing details.",
+    },
+    {
+      title: "Are your products safe to take with medications?",
+      copy:
+        "If you take prescription medication or manage a medical condition, speak with your healthcare professional before starting any dietary supplement.",
+    },
+    {
+      title: "Do you have samples?",
+      copy:
+        "Samples are not currently listed in this testing storefront. Contact Cata-Kor support for the latest availability.",
     },
   ],
 };
+
+type NmnReview = {
+  name: string;
+  date: string;
+  title: string;
+  body: string;
+};
+
+const nmnExperts = [
+  {
+    name: "Myro Figura",
+    title: "UCLA-Trained MD",
+    image: "https://catakor.com/cdn/shop/files/partner-image-1.png?v=1774888818&width=900",
+    quote:
+      "I’m usually picky about supplements, but with Cata-Kor’s liposomal absorption technology, I know I’m getting unmatched effectiveness.",
+  },
+  {
+    name: "Kayla Barnes-Lentz",
+    title: "A Leading Expert in Female Longevity",
+    image: "https://catakor.com/cdn/shop/files/partner-image-2.jpg?v=1774888818&width=900",
+    quote:
+      "NAD+ is non-negotiable in my longevity protocol, and Cata-Kor is a brand I trust. What sets them apart is their rigorous testing standards and commitment to quality.",
+  },
+  {
+    name: "Zach Colls",
+    title: "NBA/NFL Physical Rehab Coach",
+    image: "https://catakor.com/cdn/shop/files/partner-image-3.png?v=1774888818&width=900",
+    quote:
+      "Cata-Kor’s products are exactly what I need: bioavailable, clean, trusted ingredients, and easy to take.",
+  },
+  {
+    name: "Jenoah McKiver",
+    title: "Olympic Gold Champion",
+    image: "https://catakor.com/cdn/shop/files/partner-image-4.jpg?v=1774888817&width=900",
+    quote:
+      "My intense training career has taken a toll. I rely on Cata-Kor to support recovery, longevity, and cognitive health.",
+  },
+  {
+    name: "Michael Davis",
+    title: "Performance Specialist",
+    image: "https://catakor.com/cdn/shop/files/partner-image-5.jpg?v=1774888818&width=900",
+    quote:
+      "I was honestly blown away by how fast I felt the difference in my performance and recovery.",
+  },
+];
+
+const nmnReviewImages = [
+  "https://review-images.judgeme.com/cata-kor/1781396011__0___tyEdVLo__debb9f8f7c54e3db4f45658b751371c~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500",
+  "https://review-images.judgeme.com/cata-kor/1781396012__0__tCXKEyfU__b11f16284534f3dbdd0d3c51e6acdbe~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500",
+  "https://review-images.judgeme.com/cata-kor/1781396013__0__UBGtu4HW__b87aa7b0c9341439cd654e480772744~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500",
+  "https://review-images.judgeme.com/cata-kor/1781396015__0__ZiYJYDnH__57553392dcb4c3dba0d7f16321e576d~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500",
+  "https://review-images.judgeme.com/cata-kor/1781396015__0__qDJpCmwm__f3d631f549e4dc6bb538775052921eb~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500",
+  "https://review-images.judgeme.com/cata-kor/1781395998__0__p9pvWSwq__99c70eaea5a43b0aeb36e355faf8cff~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500",
+  "https://review-images.judgeme.com/cata-kor/1781395998__0__XYxwIDV2__4d248f792d64a46a4152a2820cd04dc~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500",
+  "https://review-images.judgeme.com/cata-kor/1781395998__0__XUfI4Sz6__05ae2f11d7142e395f218bbbbcb52d6~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500",
+  "https://review-images.judgeme.com/cata-kor/1781395998__0__v-os1O4M__ba680b897f04713a5b2afd60711ee91~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500",
+  "https://review-images.judgeme.com/cata-kor/1781396011__0__Is5tb-bp__ee58a81b5de400a9d294110d6a573ad~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500",
+];
+
+const nmnReviewSeeds: NmnReview[] = [
+  {
+    name: "Gretchen Yeates",
+    date: "07/02/2026",
+    title: "Great results with NMN",
+    body:
+      "I have had great results with the NMN. I was on it before, but ran out and I felt the difference. I was so excited to get back on it and add others too. I feel the difference already.",
+  },
+  {
+    name: "Laura Thompson",
+    date: "06/14/2026",
+    title: "Best skin, hair, and energy",
+    body: "Love NMN—my skin and hair have never been better. My energy has picked up too.",
+  },
+  {
+    name: "Lillian Lee",
+    date: "06/14/2026",
+    title: "Easy capsules, anti-aging at 55+",
+    body:
+      "Capsules are easy to consume and digest. I bought the three pack and am eager to see the effects.",
+  },
+  {
+    name: "Aaliyah Ward",
+    date: "06/14/2026",
+    title: "Changes in just five days",
+    body:
+      "I have been taking this for five days and I’m already noticing a difference in my energy and mood.",
+  },
+  {
+    name: "Daniel",
+    date: "06/14/2026",
+    title: "Better energy, focus, less brain fog",
+    body:
+      "I’m about two weeks in and already feeling the benefits. My energy is improving and I feel more focused.",
+  },
+  {
+    name: "Grace Hill",
+    date: "06/14/2026",
+    title: "Helped my brain fog and fatigue",
+    body:
+      "Great product and easy to take. If you’re feeling brain fog and exhaustion, this has been helpful for me.",
+  },
+  {
+    name: "Ruth Rodriguez",
+    date: "06/14/2026",
+    title: "Skin improving by day three",
+    body: "My skin already feels better and it’s only day three. I can’t wait to see what a month brings.",
+  },
+  {
+    name: "Barbara Ortiz",
+    date: "06/14/2026",
+    title: "A difference in just a week",
+    body: "So far I love this product. I am one week in and I can see a difference and feel better.",
+  },
+  {
+    name: "Jennifer Ramirez",
+    date: "06/14/2026",
+    title: "The real deal with consistency",
+    body: "This is my second bottle of NMN and I notice the difference when I take it consistently.",
+  },
+  {
+    name: "Leah Richardson",
+    date: "06/14/2026",
+    title: "My favorite supplement",
+    body: "My favorite supplement. It has become an easy part of my daily routine.",
+  },
+  {
+    name: "Tara Patel",
+    date: "06/14/2026",
+    title: "Will always take this",
+    body: "I love this product and plan to keep it in my routine.",
+  },
+  {
+    name: "Zoey Myers",
+    date: "06/14/2026",
+    title: "Day one of my journey",
+    body: "So excited to start my Cata-Kor NMN supplement journey and track my progress.",
+  },
+  {
+    name: "Megan Perez",
+    date: "06/14/2026",
+    title: "Nice quality bottle",
+    body: "The order arrived in good condition and the bottle feels high quality.",
+  },
+  {
+    name: "Brooklyn Young",
+    date: "06/14/2026",
+    title: "Improved facial texture",
+    body:
+      "I am starting to notice a difference in the overall texture of my skin after taking it consistently.",
+  },
+  {
+    name: "Sofia Collins",
+    date: "06/14/2026",
+    title: "On my fourth bottle",
+    body: "I’m on my fourth bottle and still love how easy it is to keep up with.",
+  },
+  {
+    name: "Barbara Collins",
+    date: "06/14/2026",
+    title: "Sealed with clear instructions",
+    body: "Great product. It came sealed and included simple, clear instructions.",
+  },
+  {
+    name: "Nicole Williams",
+    date: "06/14/2026",
+    title: "Three days in",
+    body: "I’m three days in and looking forward to reporting back on my progress.",
+  },
+  {
+    name: "Linda Jackson",
+    date: "06/14/2026",
+    title: "Others noticed my healthier skin",
+    body:
+      "I’m on my second month of taking NMN daily. Friends and family have commented that my skin looks healthier.",
+  },
+  {
+    name: "Jasmine Robinson",
+    date: "06/14/2026",
+    title: "Less brain fog, more energy",
+    body:
+      "Fast delivery and an easy routine. I feel more energetic during the day and have noticed less brain fog.",
+  },
+  {
+    name: "Stephanie Kim",
+    date: "06/14/2026",
+    title: "Sharper memory",
+    body: "I have been taking it consistently for three months and feel sharper in my daily routine.",
+  },
+];
 
 function price(value: number) {
   return `$${value.toFixed(2)}`;
@@ -257,6 +463,372 @@ function AccordionList({
         </details>
       ))}
     </div>
+  );
+}
+
+function NmnLongFormSections({ faqs }: { faqs: AccordionItem[] }) {
+  const [expertStart, setExpertStart] = useState(0);
+  const [reviewPage, setReviewPage] = useState(1);
+  const [reviewFilterOpen, setReviewFilterOpen] = useState(false);
+  const [picturesOnly, setPicturesOnly] = useState(false);
+  const [reviewFormOpen, setReviewFormOpen] = useState(false);
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
+
+  const visibleExperts = Array.from(
+    { length: 4 },
+    (_, index) => nmnExperts[(expertStart + index) % nmnExperts.length],
+  );
+
+  const visibleReviews = Array.from({ length: 5 }, (_, index) => {
+    const offset = (reviewPage - 1) * 5 + Math.floor((reviewPage - 1) / 4);
+    const review = nmnReviewSeeds[(offset + index) % nmnReviewSeeds.length];
+    const image = index % 2 === 1 || picturesOnly
+      ? nmnReviewImages[(offset + index) % nmnReviewImages.length]
+      : "";
+    return { ...review, image };
+  });
+
+  const paginationItems: Array<number | "ellipsis"> =
+    reviewPage <= 4
+      ? [1, 2, 3, 4, "ellipsis", 20]
+      : reviewPage >= 17
+        ? [1, "ellipsis", 17, 18, 19, 20]
+        : [1, "ellipsis", reviewPage - 1, reviewPage, reviewPage + 1, "ellipsis", 20];
+
+  const goToReviewPage = (page: number) => {
+    setReviewPage(page);
+    window.requestAnimationFrame(() => {
+      document.getElementById("nmn-reviews")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
+
+  return (
+    <>
+      <section className="nmn-cellular-section">
+        <div className="nmn-cellular-copy">
+          <span>NMN</span>
+          <h2>Support Cellular<br />Health</h2>
+          <p>
+            NMN is a vital coenzyme found in every cell of the body. It plays a key role in supporting
+            mitochondrial function and cellular energy production. Maintaining NMN levels may help promote
+            cellular resilience, support healthy aging, and contribute to cognitive and metabolic function
+            over time.*
+          </p>
+          <ul>
+            {[
+              "Supports cellular energy production*",
+              "Helps maintain healthy cellular function*",
+              "Brain support*",
+              "Promotes mitochondrial function*",
+            ].map((benefit) => (
+              <li key={benefit}>
+                <span aria-hidden="true">✓</span>
+                {benefit}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <img
+          className="nmn-cellular-art"
+          src="https://catakor.com/cdn/shop/files/Image_gp-inline-block_01a37bd0-b432-4a3e-8fb5-ef27f162b876.webp?v=1775054572"
+          alt="Cata-Kor NMN supplement alongside a cellular-health visual"
+          loading="lazy"
+        />
+      </section>
+
+      <section className="nmn-benefits-section">
+        <picture>
+          <source
+            media="(max-width: 700px)"
+            srcSet="https://catakor.com/cdn/shop/files/benefits-img-mob.webp?v=1775054571"
+          />
+          <img
+            src="https://catakor.com/cdn/shop/files/benefits-img.webp?v=1775054572"
+            alt="Cata-Kor NMN capsules and supplement jar"
+            loading="lazy"
+          />
+        </picture>
+        <div className="nmn-benefits-copy">
+          <span>NMN</span>
+          <h2>Key Benefits</h2>
+          {[
+            [
+              "https://catakor.com/cdn/shop/files/benefits-icon-1.svg?v=1774889226",
+              "Cellular Energy",
+              "NMN is a naturally occurring coenzyme that plays a supportive role in normal cellular metabolism. It helps the body convert nutrients into cellular energy and helps maintain healthy energy processes in cells.*",
+            ],
+            [
+              "https://catakor.com/cdn/shop/files/benefits-icon-2.svg?v=1774889464",
+              "Cellular Health",
+              "NMN helps support normal enzymatic activity involved in DNA processes and cellular maintenance, contributing to the maintenance of overall healthy cellular function.*",
+            ],
+            [
+              "https://catakor.com/cdn/shop/files/benefits-icon-3.svg?v=1774889626",
+              "Mitochondrial Support",
+              "NMN is involved in supporting healthy mitochondrial activity, which plays an important role in normal cellular energy production and overall metabolic wellbeing.*",
+            ],
+            [
+              "https://catakor.com/cdn/shop/files/benefits-icon-4.svg?v=1774889668",
+              "Brain Support",
+              "NMN can help support healthy brain cell metabolism and mitochondrial activity, which may help maintain normal cognitive function and overall cellular resilience.*",
+            ],
+          ].map(([icon, title, copy]) => (
+            <article key={title}>
+              <img src={icon} alt="" />
+              <div>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="nmn-experts-section">
+        <div className="nmn-section-heading">
+          <div>
+            <span>RECOMMENDED BY</span>
+            <h2>Top Health Experts &amp; Medical Partners</h2>
+          </div>
+          <div className="nmn-expert-controls">
+            <button
+              type="button"
+              onClick={() =>
+                setExpertStart((start) => (start - 1 + nmnExperts.length) % nmnExperts.length)
+              }
+              aria-label="Previous expert"
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              onClick={() => setExpertStart((start) => (start + 1) % nmnExperts.length)}
+              aria-label="Next expert"
+            >
+              →
+            </button>
+          </div>
+        </div>
+        <div className="nmn-expert-grid" aria-live="polite">
+          {visibleExperts.map((expert) => (
+            <article key={expert.name}>
+              <img src={expert.image} alt={expert.name} loading="lazy" />
+              <h3>{expert.name}</h3>
+              <span>{expert.title}</span>
+              <p><b aria-hidden="true">”</b>{expert.quote}</p>
+            </article>
+          ))}
+        </div>
+        <p className="nmn-expert-disclaimer">
+          These individuals partner with Cata-Kor as paid ambassadors, sharing their real routines and
+          results.
+        </p>
+      </section>
+
+      <section className="nmn-compare-section">
+        <div className="nmn-compare-heading">
+          <h2>How We Compare</h2>
+          <p>MOST NAD+ SUPPLEMENTS ARE GUESSING. WE’RE NOT.</p>
+        </div>
+        <div className="nmn-compare-table" role="table" aria-label="Cata-Kor compared with typical NAD supplements">
+          <div className="nmn-compare-labels" role="rowgroup">
+            <b>Efficacy</b>
+            <b>Dosage</b>
+            <b>Certification</b>
+            <b>Convenience</b>
+            <b>Price</b>
+          </div>
+          <div className="nmn-compare-brand" role="rowgroup">
+            <img src="/catakor/logo.svg" alt="Cata-Kor" />
+            {[
+              "Targets All 4 Hallmarks Of Aging",
+              "Therapeutic Doses",
+              "NSF Certified",
+              "2 Capsules Per Day",
+              "$1.13/Day",
+            ].map((item) => (
+              <span key={item}><b aria-hidden="true">✓</b>{item}</span>
+            ))}
+          </div>
+          <div className="nmn-compare-typical" role="rowgroup">
+            <strong>Typical NAD+<br />Supplements</strong>
+            {[
+              "Focuses On 1 Hallmark Only",
+              "Often Underdosed",
+              "Rarely Certified",
+              "Multiple Pills Daily",
+              "~$3/Day",
+            ].map((item, index) => (
+              <span key={item}><b aria-hidden="true">{index < 2 ? "!" : "×"}</b>{item}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="nmn-reviews-section" id="nmn-reviews">
+        <div className="nmn-reviews-inner">
+          <div className="nmn-reviews-heading">
+            <div>
+              <h2>Customer Reviews</h2>
+              <p><b>5.0</b> <span>392 reviews</span></p>
+            </div>
+            <div className="nmn-review-actions">
+              <button type="button" onClick={() => setReviewFormOpen(true)}>Write a review</button>
+              <button
+                type="button"
+                className={reviewFilterOpen ? "is-active" : ""}
+                onClick={() => setReviewFilterOpen((open) => !open)}
+                aria-expanded={reviewFilterOpen}
+              >
+                Filter
+              </button>
+              <select aria-label="Sort customer reviews">
+                <option>Most recent</option>
+                <option>Highest rating</option>
+                <option>Pictures first</option>
+              </select>
+            </div>
+          </div>
+          {reviewFilterOpen && (
+            <label className="nmn-review-filter">
+              <input
+                type="checkbox"
+                checked={picturesOnly}
+                onChange={(event) => setPicturesOnly(event.target.checked)}
+              />
+              Show reviews with pictures
+            </label>
+          )}
+
+          <div className="nmn-review-photo-strip" aria-label="Customer review photos">
+            {nmnReviewImages.map((image, index) => (
+              <button type="button" key={image} onClick={() => setPicturesOnly(true)}>
+                <img src={image} alt={`Customer review photo ${index + 1}`} loading="lazy" />
+              </button>
+            ))}
+          </div>
+
+          <div className="nmn-review-list" aria-live="polite">
+            {visibleReviews.map((review, index) => (
+              <article key={`${reviewPage}-${review.name}-${index}`}>
+                <div className="nmn-review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+                <div className="nmn-reviewer">
+                  <span>{review.name.charAt(0)}</span>
+                  <div>
+                    <b>{review.name}</b>
+                    {index === 0 && <em>Verified</em>}
+                    <small>{review.date}</small>
+                  </div>
+                </div>
+                <h3>{review.title}</h3>
+                <p>{review.body}</p>
+                {review.image && (
+                  <img
+                    className="nmn-review-image"
+                    src={review.image}
+                    alt={review.title}
+                    loading="lazy"
+                  />
+                )}
+                <div className="nmn-reviewed-product">
+                  <img
+                    src="https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=180"
+                    alt=""
+                  />
+                  <span>Review for<br /><u>NMN 4-in-1</u></span>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <nav className="nmn-review-pagination" aria-label="Customer review pages">
+            <button
+              type="button"
+              disabled={reviewPage === 1}
+              onClick={() => goToReviewPage(reviewPage - 1)}
+              aria-label="Previous review page"
+            >
+              ←
+            </button>
+            {paginationItems.map((item, index) =>
+              item === "ellipsis" ? (
+                <span key={`ellipsis-${index}`}>…</span>
+              ) : (
+                <button
+                  type="button"
+                  className={reviewPage === item ? "is-active" : ""}
+                  onClick={() => goToReviewPage(item)}
+                  aria-label={`Go to review page ${item}`}
+                  aria-current={reviewPage === item ? "page" : undefined}
+                  key={item}
+                >
+                  {item}
+                </button>
+              ),
+            )}
+            <button
+              type="button"
+              disabled={reviewPage === 20}
+              onClick={() => goToReviewPage(reviewPage + 1)}
+              aria-label="Next review page"
+            >
+              →
+            </button>
+          </nav>
+          <p className="nmn-review-page-count">Page {reviewPage} of 20</p>
+        </div>
+      </section>
+
+      <section className="nmn-faq-section">
+        <h2>Questions? We<br />have answers!</h2>
+        <AccordionList items={faqs} className="nmn-faq-list" />
+      </section>
+
+      {reviewFormOpen && (
+        <div className="nmn-review-dialog-layer" role="presentation" onMouseDown={() => setReviewFormOpen(false)}>
+          <section
+            className="nmn-review-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="nmn-review-dialog-title"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <button type="button" onClick={() => setReviewFormOpen(false)} aria-label="Close review form">×</button>
+            {reviewSubmitted ? (
+              <>
+                <h2 id="nmn-review-dialog-title">Thank you for your review</h2>
+                <p>Your feedback has been received for moderation.</p>
+              </>
+            ) : (
+              <>
+                <h2 id="nmn-review-dialog-title">Write a review</h2>
+                <p className="nmn-dialog-stars">★★★★★</p>
+                <form
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    setReviewSubmitted(true);
+                  }}
+                >
+                  <label>
+                    Name
+                    <input type="text" required />
+                  </label>
+                  <label>
+                    Review title
+                    <input type="text" required />
+                  </label>
+                  <label>
+                    Your review
+                    <textarea rows={5} required />
+                  </label>
+                  <button type="submit">Submit review</button>
+                </form>
+              </>
+            )}
+          </section>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -418,25 +990,31 @@ function SupplementProductPage({ product }: { product: SupplementProduct }) {
           </div>
         </section>
 
-        <section className="secondary-quality-strip">
-          <div>
-            <b>TRANSPARENT FORMULA</b>
-            <span>Clear ingredient amounts</span>
-          </div>
-          <div>
-            <b>THIRD-PARTY TESTED</b>
-            <span>Independently quality checked</span>
-          </div>
-          <div>
-            <b>MONEY-BACK GUARANTEE</b>
-            <span>Shop with confidence</span>
-          </div>
-        </section>
+        {product.accent === "brown" ? (
+          <NmnLongFormSections faqs={product.faqs} />
+        ) : (
+          <>
+            <section className="secondary-quality-strip">
+              <div>
+                <b>TRANSPARENT FORMULA</b>
+                <span>Clear ingredient amounts</span>
+              </div>
+              <div>
+                <b>THIRD-PARTY TESTED</b>
+                <span>Independently quality checked</span>
+              </div>
+              <div>
+                <b>MONEY-BACK GUARANTEE</b>
+                <span>Shop with confidence</span>
+              </div>
+            </section>
 
-        <section className="secondary-faq">
-          <h2>FREQUENTLY ASK QUESTION</h2>
-          <AccordionList items={product.faqs} />
-        </section>
+            <section className="secondary-faq">
+              <h2>FREQUENTLY ASK QUESTION</h2>
+              <AccordionList items={product.faqs} />
+            </section>
+          </>
+        )}
       </main>
       <Footer />
       <ProductCart
