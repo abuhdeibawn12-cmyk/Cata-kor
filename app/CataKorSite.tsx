@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { AccountIcon, BagIcon, Footer as SiteFooter } from "./ExactHome";
+import { useCart } from "./CartContext";
 
 const PRODUCT_PATH = "/products/nad-advanced-500mg";
 
@@ -19,14 +20,14 @@ const bestSellers: Product[] = [
   {
     name: "Liposomal NAD⁺",
     benefit: "Daily cellular energy*",
-    price: "$44.99",
+    price: "$38.24",
     image: "https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=900",
     href: PRODUCT_PATH,
   },
   {
     name: "NMN Complex",
     benefit: "NAD⁺ pathway support*",
-    price: "$55.95",
+    price: "$39.99",
     image:
       "https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=900",
     href: "/products/nmn",
@@ -35,7 +36,7 @@ const bestSellers: Product[] = [
   {
     name: "Liposomal Glutathione",
     benefit: "Antioxidant defense*",
-    price: "$39.99",
+    price: "$33.99",
     image: "https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=900",
     href: "/products/liposomal-glutathione",
     available: true,
@@ -123,16 +124,9 @@ const quantityOptions = [
   { jars: 1, label: "1 Jar", note: "", each: 38.24, total: 38.24 },
 ];
 
-type CartSelection = (typeof quantityOptions)[number];
-
-function Header({
-  cartCount = 0,
-  onCart,
-}: {
-  cartCount?: number;
-  onCart?: () => void;
-}) {
+function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { itemCount, openCart } = useCart();
 
   return (
     <>
@@ -140,7 +134,7 @@ function Header({
         Skip to content
       </a>
       <div className="announcement">
-        <a href={PRODUCT_PATH}>CHRISTMAS IN JULY – UP TO 32% OFF</a>
+        <a href="/collections/shop-all">EXTRA 15% OFF AT CHECKOUT · USE CODE CATA15</a>
       </div>
       <header className="site-header">
         <Link className="brand" href="/" aria-label="Cata-Kor home">
@@ -166,11 +160,11 @@ function Header({
           <button
             type="button"
             className="header-icon-button cart-icon-link"
-            onClick={onCart}
-            aria-label={`Open shopping bag with ${cartCount} item${cartCount === 1 ? "" : "s"}`}
+            onClick={openCart}
+            aria-label={`Open shopping bag with ${itemCount} item${itemCount === 1 ? "" : "s"}`}
           >
             <BagIcon />
-            {cartCount > 0 && <b>{cartCount}</b>}
+            {itemCount > 0 && <b>{itemCount}</b>}
           </button>
           <button
             type="button"
@@ -663,18 +657,18 @@ function CustomerVideoCard({ title, src }: { title: string; src: string }) {
   );
 }
 
-function ProductPurchase({ onAdded }: { onAdded: (selection: CartSelection) => void }) {
+function ProductPurchase() {
   const [quantity, setQuantity] = useState(3);
-  const [added, setAdded] = useState(false);
   const [factsOpen, setFactsOpen] = useState(false);
+  const { addRegularItem, openCart } = useCart();
   const selectedQuantity = useMemo(
     () => quantityOptions.find((option) => option.jars === quantity) ?? quantityOptions[0],
     [quantity],
   );
 
   const addToCart = () => {
-    setAdded(true);
-    onAdded(selectedQuantity);
+    addRegularItem("nad", selectedQuantity.jars as 1 | 2 | 3);
+    openCart();
   };
 
   return (
@@ -721,8 +715,8 @@ function ProductPurchase({ onAdded }: { onAdded: (selection: CartSelection) => v
         <strong>${selectedQuantity.total.toFixed(2)}</strong>
       </div>
 
-      <button type="button" className={added ? "add-to-cart added" : "add-to-cart"} onClick={addToCart}>
-        <span>{added ? "ADDED TO CART" : "ADD TO CART"}</span>
+      <button type="button" className="add-to-cart" onClick={addToCart}>
+        <span>ADD TO CART</span>
         <b>${selectedQuantity.total.toFixed(2)}</b>
       </button>
       <div className="delivery-row"><span>● &nbsp; Delivered in 3–5 days</span><span>🇺🇸 FREE Shipping to USA</span></div>
@@ -927,25 +921,13 @@ function ProductReviewCarousel() {
 }
 
 export function ProductPage() {
-  const [cartItems, setCartItems] = useState<CartSelection[]>([]);
-  const [cartOpen, setCartOpen] = useState(false);
-
-  useEffect(() => {
-    if (!cartOpen) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [cartOpen]);
-
   return (
     <div className="site-shell product-page">
-      <Header cartCount={cartItems.length} onCart={() => setCartOpen(true)} />
+      <Header />
       <main id="main-content">
         <div className="product-layout">
           <ProductGallery />
-          <ProductPurchase onAdded={(selection) => setCartItems((items) => [...items, selection])} />
+          <ProductPurchase />
         </div>
 
         <ProductReviewCarousel />
@@ -990,67 +972,6 @@ export function ProductPage() {
       </main>
       <SiteFooter />
       <MysteryChip />
-      <div
-        className="drawer-layer"
-        role="presentation"
-        hidden={!cartOpen}
-        aria-hidden={!cartOpen}
-        onMouseDown={() => setCartOpen(false)}
-      >
-        <aside
-          className="cart-drawer product-cart-drawer"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="product-cart-title"
-          onMouseDown={(event) => event.stopPropagation()}
-        >
-          <div className="drawer-heading">
-            <h2 id="product-cart-title">YOUR CART</h2>
-            <button type="button" onClick={() => setCartOpen(false)} aria-label="Close cart">×</button>
-          </div>
-          {cartItems.length === 0 ? (
-            <div className="empty-cart">
-              <span>0</span>
-              <h3>Your cart is empty</h3>
-              <p>Choose your NAD⁺ supply and add it to your daily longevity routine.</p>
-              <button type="button" className="primary-button" onClick={() => setCartOpen(false)}>
-                CONTINUE SHOPPING
-              </button>
-            </div>
-          ) : (
-            <>
-              <div className="product-cart-items">
-                {cartItems.map((item, index) => (
-                  <article key={`${item.jars}-${index}`}>
-                    <img src="/catakor/product-nad.avif" alt="Cata-Kor Liposomal NAD⁺" />
-                    <div>
-                      <h3>LIPOSOMAL NAD⁺ 500MG</h3>
-                      <p>{item.label} · One-time purchase</p>
-                      <strong>${item.total.toFixed(2)}</strong>
-                    </div>
-                    <button
-                      type="button"
-                      aria-label={`Remove ${item.label} from cart`}
-                      onClick={() => setCartItems((items) => items.filter((_, itemIndex) => itemIndex !== index))}
-                    >
-                      Remove
-                    </button>
-                  </article>
-                ))}
-              </div>
-              <div className="product-cart-summary">
-                <span>SUBTOTAL</span>
-                <strong>${cartItems.reduce((total, item) => total + item.total, 0).toFixed(2)}</strong>
-              </div>
-              <button type="button" className="product-cart-checkout">CHECKOUT</button>
-              <button type="button" className="product-cart-continue" onClick={() => setCartOpen(false)}>
-                CONTINUE SHOPPING
-              </button>
-            </>
-          )}
-          <p className="drawer-footnote">Free U.S. shipping · Lifetime money-back guarantee</p>
-        </aside>
-      </div>
     </div>
   );
 }

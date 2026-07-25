@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useCart } from "./CartContext";
 
 const NAD_PATH = "/products/nad-advanced-500mg";
 const SCIENCE_PATH = "/pages/science-benefits";
@@ -20,7 +21,7 @@ const products: Product[] = [
   {
     name: "Liposomal NAD⁺",
     benefit: "Daily cellular energy*",
-    price: "$44.99",
+    price: "$38.24",
     image: "https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=900",
     href: NAD_PATH,
     bestseller: true,
@@ -28,7 +29,7 @@ const products: Product[] = [
   {
     name: "NMN Complex",
     benefit: "NAD+ pathway support*",
-    price: "$55.95",
+    price: "$39.99",
     image:
       "https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=900",
     href: "/products/nmn",
@@ -38,7 +39,7 @@ const products: Product[] = [
   {
     name: "Liposomal Glutathione",
     benefit: "Antioxidant defense*",
-    price: "$39.99",
+    price: "$33.99",
     image: "https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=900",
     href: "/products/liposomal-glutathione",
     bestseller: true,
@@ -142,10 +143,11 @@ export function AccountIcon() {
 export function Header({
   onCart,
 }: {
-  onCart: () => void;
-  onAccount: () => void;
+  onCart?: () => void;
+  onAccount?: () => void;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { itemCount, openCart } = useCart();
 
   return (
     <>
@@ -153,7 +155,7 @@ export function Header({
         Skip to content
       </a>
       <div className="announcement">
-        <Link href="/collections/shop-all">Christmas in July - Up to 32% Off</Link>
+        <Link href="/collections/shop-all">EXTRA 15% OFF AT CHECKOUT · USE CODE CATA15</Link>
       </div>
       <header className="site-header">
         <Link className="brand" href="/" aria-label="Cata-Kor home">
@@ -179,8 +181,14 @@ export function Header({
           <Link href="/#about">About</Link>
         </nav>
         <div className="header-actions">
-          <button className="header-icon-button" type="button" onClick={onCart} aria-label="Cart">
+          <button
+            className="header-icon-button cart-icon-link"
+            type="button"
+            onClick={onCart ?? openCart}
+            aria-label={`Open shopping bag with ${itemCount} item${itemCount === 1 ? "" : "s"}`}
+          >
             <BagIcon />
+            {itemCount > 0 && <b>{itemCount}</b>}
           </button>
           <button
             className="header-icon-button account-disabled"
@@ -484,8 +492,6 @@ function Promotion({
 
 export function HomePage() {
   const productsRef = useRef<HTMLDivElement>(null);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
   const [promoOpen, setPromoOpen] = useState(false);
   const [activeExpert, setActiveExpert] = useState(-1);
 
@@ -496,11 +502,11 @@ export function HomePage() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = cartOpen || accountOpen || promoOpen ? "hidden" : "";
+    document.body.style.overflow = promoOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [accountOpen, cartOpen, promoOpen]);
+  }, [promoOpen]);
 
   const moveProducts = (direction: number) => {
     const track = productsRef.current;
@@ -510,7 +516,7 @@ export function HomePage() {
 
   return (
     <div className="site-shell exact-home">
-      <Header onCart={() => setCartOpen(true)} onAccount={() => setAccountOpen(true)} />
+      <Header />
       <main id="main-content">
         <section className="home-hero">
           <div className="hero-copy">
@@ -696,8 +702,6 @@ export function HomePage() {
       <button className="mystery-chip" type="button" onClick={() => setPromoOpen(true)}>
         MYSTERY DISCOUNT <span>×</span>
       </button>
-      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
-      <AccountDialog open={accountOpen} onClose={() => setAccountOpen(false)} />
       <Promotion open={promoOpen} onClose={() => setPromoOpen(false)} />
     </div>
   );

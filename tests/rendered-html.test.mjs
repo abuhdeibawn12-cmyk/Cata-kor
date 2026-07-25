@@ -25,6 +25,12 @@ test("server-renders the Cata-Kor homepage", async () => {
   assert.match(html, /Liposomal Glutathione/);
   assert.match(html, /CA-AKG/);
   assert.match(html, /OUT OF STOCK/);
+  assert.match(html, /EXTRA 15% OFF AT CHECKOUT/);
+  assert.match(html, /CATA15/);
+  assert.match(html, /\$38\.24/);
+  assert.match(html, /\$39\.99/);
+  assert.match(html, /\$33\.99/);
+  assert.doesNotMatch(html, /Christmas in July/i);
   assert.doesNotMatch(html, /NMN Complex &amp; Liposomal Glutathione|NAD\+ &amp; NMN Complex &amp; Glutathione/);
   assert.match(html, /expert-card-flip/);
   assert.match(html, /expert-card-back/);
@@ -55,6 +61,7 @@ test("server-renders the Liposomal NAD product page", async () => {
   assert.match(html, /LipoNAD™ delivers β-NAD directly into cells/);
   assert.match(html, /Show more product images/);
   assert.match(html, /Open shopping bag with 0 items/);
+  assert.match(html, /CATA15/);
   assert.match(html, /Account unavailable/);
   assert.doesNotMatch(html, /href="#footer"[^>]*aria-label="Cart|href="#footer"[^>]*aria-label="Log in"/);
   assert.match(html, /49c88503ac444cceaa07ad0941b19ff2/);
@@ -108,6 +115,7 @@ test("server-renders the one-time Liposomal Glutathione product page", async () 
   assert.match(html, /\$64\.58 total/);
   assert.match(html, /What makes this glutathione supplement unique/);
   assert.match(html, /Add to Cart/);
+  assert.match(html, /CATA15/);
   assert.doesNotMatch(html, /Subscribe &amp; Save|Choose Plan/);
 });
 
@@ -129,6 +137,7 @@ test("server-renders the one-time NMN product page with exact jar pricing", asyn
   assert.match(html, /\$71\.98 total/);
   assert.match(html, /Third-Party Tested/);
   assert.match(html, /Add to Cart/);
+  assert.match(html, /CATA15/);
   assert.match(html, /Support Cellular/);
   assert.match(html, /Key Benefits/);
   assert.match(html, /Top Health Experts &amp; Medical Partners/);

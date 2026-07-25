@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { AccountDialog, CartDrawer, Footer, Header } from "../../ExactHome";
+import { useMemo, useState } from "react";
+import { Footer, Header } from "../../ExactHome";
 
 type Availability = "all" | "in-stock" | "out-of-stock";
 type SortOrder = "featured" | "a-z" | "z-a";
@@ -72,18 +72,9 @@ function CollectionCard({ product }: { product: CollectionProduct }) {
 }
 
 export function CollectionPage() {
-  const [cartOpen, setCartOpen] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [availability, setAvailability] = useState<Availability>("all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("featured");
-
-  useEffect(() => {
-    document.body.style.overflow = cartOpen || accountOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [accountOpen, cartOpen]);
 
   const visibleProducts = useMemo(() => {
     const filtered = products.filter((product) => {
@@ -103,7 +94,7 @@ export function CollectionPage() {
 
   return (
     <div className="site-shell exact-home collection-page">
-      <Header onCart={() => setCartOpen(true)} onAccount={() => setAccountOpen(true)} />
+      <Header />
       <main id="main-content">
         <section className="collection-hero">
           <span className="eyebrow">CATA-KOR LONGEVITY SUPPORT</span>
@@ -171,8 +162,6 @@ export function CollectionPage() {
       </main>
 
       <Footer />
-      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
-      <AccountDialog open={accountOpen} onClose={() => setAccountOpen(false)} />
     </div>
   );
 }

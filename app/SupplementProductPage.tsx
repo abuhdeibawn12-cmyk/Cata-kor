@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Footer, Header } from "./ExactHome";
+import { ProductId, useCart } from "./CartContext";
 
 type PackOption = {
   jars: 1 | 2 | 3;
@@ -16,6 +17,7 @@ type AccordionItem = {
 };
 
 type SupplementProduct = {
+  productId: ProductId;
   accent: "blue" | "brown";
   title: string;
   badge: string;
@@ -29,6 +31,7 @@ type SupplementProduct = {
 };
 
 const glutathione: SupplementProduct = {
+  productId: "glutathione",
   accent: "blue",
   title: "LIPOSOMAL GLUTATHIONE",
   badge: "1155MG",
@@ -98,6 +101,7 @@ const glutathione: SupplementProduct = {
 };
 
 const nmn: SupplementProduct = {
+  productId: "nmn",
   accent: "brown",
   title: "NMN 4-IN-1 NAD+ SUPPORT",
   badge: "1000MG",
@@ -390,57 +394,6 @@ function QuantityImage({
         <img src={product.mainImage} alt="" key={index} />
       ))}
     </span>
-  );
-}
-
-function ProductCart({
-  open,
-  onClose,
-  product,
-  selected,
-}: {
-  open: boolean;
-  onClose: () => void;
-  product: SupplementProduct;
-  selected: PackOption;
-}) {
-  if (!open) return null;
-
-  return (
-    <div className="secondary-cart-layer" role="presentation" onMouseDown={onClose}>
-      <aside
-        className="secondary-cart"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="secondary-cart-title"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
-        <div className="secondary-cart-heading">
-          <h2 id="secondary-cart-title">YOUR CART</h2>
-          <button type="button" onClick={onClose} aria-label="Close cart">
-            ×
-          </button>
-        </div>
-        <div className="secondary-cart-item">
-          <img src={product.mainImage} alt="" />
-          <div>
-            <h3>{product.title}</h3>
-            <p>
-              {selected.jars} {selected.jars === 1 ? "Jar" : "Jars"} · One-time purchase
-            </p>
-            <strong>{price(selected.total)}</strong>
-          </div>
-        </div>
-        <div className="secondary-cart-total">
-          <span>Subtotal</span>
-          <strong>{price(selected.total)}</strong>
-        </div>
-        <button className="secondary-checkout" type="button">
-          CHECKOUT
-        </button>
-        <p>Secure checkout · Free U.S. shipping</p>
-      </aside>
-    </div>
   );
 }
 
@@ -836,7 +789,7 @@ function SupplementProductPage({ product }: { product: SupplementProduct }) {
   const [activeImage, setActiveImage] = useState(0);
   const [thumbnailStart, setThumbnailStart] = useState(0);
   const [selectedJars, setSelectedJars] = useState<PackOption["jars"]>(3);
-  const [cartOpen, setCartOpen] = useState(false);
+  const { addRegularItem, openCart } = useCart();
 
   const selected = useMemo(
     () => product.packs.find((pack) => pack.jars === selectedJars) ?? product.packs[0],
@@ -850,13 +803,6 @@ function SupplementProductPage({ product }: { product: SupplementProduct }) {
     });
   }, [product.gallery]);
 
-  useEffect(() => {
-    document.body.style.overflow = cartOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [cartOpen]);
-
   const visibleThumbnails = product.gallery.slice(thumbnailStart, thumbnailStart + 6);
   const chooseImage = (index: number) => {
     setActiveImage(index);
@@ -866,7 +812,7 @@ function SupplementProductPage({ product }: { product: SupplementProduct }) {
 
   return (
     <div className={`site-shell exact-home secondary-product-page accent-${product.accent}`}>
-      <Header onCart={() => setCartOpen(true)} onAccount={() => undefined} />
+      <Header />
       <main id="main-content">
         <section className="secondary-product-hero">
           <div className="secondary-gallery">
@@ -974,7 +920,14 @@ function SupplementProductPage({ product }: { product: SupplementProduct }) {
               <span>ONE-TIME PURCHASE</span>
               <strong>{price(selected.total)}</strong>
             </div>
-            <button className="secondary-add-button" type="button" onClick={() => setCartOpen(true)}>
+            <button
+              className="secondary-add-button"
+              type="button"
+              onClick={() => {
+                addRegularItem(product.productId, selected.jars);
+                openCart();
+              }}
+            >
               Add to Cart <strong>{price(selected.total)}</strong>
             </button>
             <div className="secondary-delivery">
@@ -1017,12 +970,6 @@ function SupplementProductPage({ product }: { product: SupplementProduct }) {
         )}
       </main>
       <Footer />
-      <ProductCart
-        open={cartOpen}
-        onClose={() => setCartOpen(false)}
-        product={product}
-        selected={selected}
-      />
     </div>
   );
 }

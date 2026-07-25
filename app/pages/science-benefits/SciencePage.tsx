@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { AccountDialog, CartDrawer, Footer, Header } from "../../ExactHome";
+import { Footer, Header } from "../../ExactHome";
 
 const scienceAsset = (file: string) => `/catakor/science/${file}`;
 
@@ -175,8 +175,6 @@ function ScienceProductCard({
 }
 
 export function SciencePage() {
-  const [cartOpen, setCartOpen] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [activeReview, setActiveReview] = useState(0);
   const [reviewsPaused, setReviewsPaused] = useState(false);
@@ -205,7 +203,7 @@ export function SciencePage() {
 
   return (
     <div className="site-shell science-page">
-      <Header onCart={() => setCartOpen(true)} onAccount={() => setAccountOpen(true)} />
+      <Header />
       <main id="main-content">
         <section className="science-coa-section" id="coa">
           <div className="science-page-container science-coa-grid">
@@ -412,8 +410,6 @@ export function SciencePage() {
         </section>
       </main>
       <Footer />
-      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
-      <AccountDialog open={accountOpen} onClose={() => setAccountOpen(false)} />
     </div>
   );
 }
