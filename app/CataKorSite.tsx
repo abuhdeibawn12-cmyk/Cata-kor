@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { AccountIcon, BagIcon, Footer as SiteFooter } from "./ExactHome";
 
@@ -120,7 +120,15 @@ const quantityOptions = [
   { jars: 1, label: "1 Jar", note: "", each: 38.24, total: 38.24 },
 ];
 
-function Header({ cartCount = 0 }: { cartCount?: number }) {
+type CartSelection = (typeof quantityOptions)[number];
+
+function Header({
+  cartCount = 0,
+  onCart,
+}: {
+  cartCount?: number;
+  onCart?: () => void;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -152,13 +160,24 @@ function Header({ cartCount = 0 }: { cartCount?: number }) {
           <Link href="/#about">ABOUT</Link>
         </nav>
         <div className="header-actions">
-          <a href="#footer" className="header-icon-link cart-icon-link" aria-label={`Cart with ${cartCount} items`}>
+          <button
+            type="button"
+            className="header-icon-button cart-icon-link"
+            onClick={onCart}
+            aria-label={`Open shopping bag with ${cartCount} item${cartCount === 1 ? "" : "s"}`}
+          >
             <BagIcon />
             {cartCount > 0 && <b>{cartCount}</b>}
-          </a>
-          <a href="#footer" className="header-icon-link" aria-label="Log in">
+          </button>
+          <button
+            type="button"
+            className="header-icon-button account-disabled"
+            aria-label="Account unavailable"
+            aria-disabled="true"
+            disabled
+          >
             <AccountIcon />
-          </a>
+          </button>
         </div>
       </header>
     </>
@@ -348,25 +367,226 @@ export function HomePage() {
 
 function ProductGallery() {
   const [activeImage, setActiveImage] = useState(0);
+  const [thumbnailStart, setThumbnailStart] = useState(0);
+  const visibleThumbnails = 6;
+  const maximumThumbnailStart = Math.max(0, galleryImages.length - visibleThumbnails);
+
+  useEffect(() => {
+    galleryImages.forEach((src) => {
+      const image = new Image();
+      image.src = src;
+    });
+  }, []);
+
+  const selectImage = (index: number) => {
+    setActiveImage(index);
+    if (index < thumbnailStart) setThumbnailStart(index);
+    if (index >= thumbnailStart + visibleThumbnails) {
+      setThumbnailStart(Math.min(maximumThumbnailStart, index - visibleThumbnails + 1));
+    }
+  };
+
+  const moveThumbnails = (direction: -1 | 1) => {
+    setThumbnailStart((current) => Math.max(0, Math.min(maximumThumbnailStart, current + direction)));
+  };
+
   return (
     <div className="product-gallery">
-      <div className="thumbnail-list" aria-label="Product images">
-        {galleryImages.map((image, index) => (
-          <button
-            type="button"
-            className={index === activeImage ? "active" : ""}
-            onClick={() => setActiveImage(index)}
-            aria-label={`View product image ${index + 1}`}
-            key={image}
+      <div className="thumbnail-rail">
+        <button
+          type="button"
+          className="thumbnail-arrow thumbnail-arrow-up"
+          onClick={() => moveThumbnails(-1)}
+          disabled={thumbnailStart === 0}
+          aria-label="Show previous product images"
+        >
+          ‹
+        </button>
+        <div className="thumbnail-list" aria-label="Product images">
+          <div
+            className="thumbnail-track"
+            style={{ "--thumbnail-start": thumbnailStart } as React.CSSProperties}
           >
-            <img src={image} alt="" />
-          </button>
-        ))}
+            {galleryImages.map((image, index) => (
+              <button
+                type="button"
+                className={index === activeImage ? "active" : ""}
+                onClick={() => selectImage(index)}
+                aria-label={`View product image ${index + 1}`}
+                aria-current={index === activeImage ? "true" : undefined}
+                key={image}
+              >
+                <img src={image.replace("width=1100", "width=180")} alt="" />
+              </button>
+            ))}
+          </div>
+        </div>
+        <button
+          type="button"
+          className="thumbnail-arrow thumbnail-arrow-down"
+          onClick={() => moveThumbnails(1)}
+          disabled={thumbnailStart === maximumThumbnailStart}
+          aria-label="Show more product images"
+        >
+          ›
+        </button>
       </div>
       <div className="main-product-image">
-        <img className="product-star" src="/catakor/cell-star.webp" alt="" />
-        <img className="selected-product-image" src={galleryImages[activeImage]} alt="Liposomal NAD⁺" />
+        {activeImage === 0 && <span className="product-star-shape" aria-hidden="true" />}
+        <img
+          className="selected-product-image"
+          src={galleryImages[activeImage]}
+          alt={`Liposomal NAD⁺ product image ${activeImage + 1}`}
+          key={galleryImages[activeImage]}
+        />
+        <div className="gallery-mobile-controls" aria-label="Product image navigation">
+          <button
+            type="button"
+            onClick={() => selectImage(Math.max(0, activeImage - 1))}
+            disabled={activeImage === 0}
+            aria-label="Previous product image"
+          >
+            ←
+          </button>
+          <span>{activeImage + 1} / {galleryImages.length}</span>
+          <button
+            type="button"
+            onClick={() => selectImage(Math.min(galleryImages.length - 1, activeImage + 1))}
+            disabled={activeImage === galleryImages.length - 1}
+            aria-label="Next product image"
+          >
+            →
+          </button>
+        </div>
       </div>
+    </div>
+  );
+}
+
+function SupplementFactsModal({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const [tab, setTab] = useState<"facts" | "ingredients">("facts");
+
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setTab("facts");
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [onClose, open]);
+
+  return (
+    <div
+      className="supplement-modal-layer"
+      role="presentation"
+      hidden={!open}
+      aria-hidden={!open}
+      onMouseDown={() => {
+        setTab("facts");
+        onClose();
+      }}
+    >
+      <section
+        className="supplement-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="supplement-dialog-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <div className="supplement-modal-tabs" role="tablist" aria-label="Product details">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "facts"}
+            className={tab === "facts" ? "active" : ""}
+            onClick={() => setTab("facts")}
+          >
+            Supplement Facts
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "ingredients"}
+            className={tab === "ingredients" ? "active" : ""}
+            onClick={() => setTab("ingredients")}
+          >
+            Ingredients
+          </button>
+        </div>
+
+        <div className="supplement-facts-panel" role="tabpanel" hidden={tab !== "facts"}>
+          <h2 id="supplement-dialog-title">Supplement Facts</h2>
+          <p>Serving Size: 2 Capsules;<br />Servings Per Container: 30</p>
+          <div className="facts-heavy-rule" />
+          <h3><span>Amount Per Serving:</span><span>DV%</span></h3>
+          <div className="facts-heavy-rule" />
+          <div className="facts-row">
+            <strong>LipoNAD™ (providing β-NAD⁺ ≥ 250 mg)</strong>
+            <b>500 mg</b>
+          </div>
+          <div className="facts-row">
+            <span>Trans-Resveratrol</span>
+            <b>50 mg</b>
+          </div>
+          <div className="facts-heavy-rule" />
+          <strong className="facts-daily-value">** Daily Value (DV) not established</strong>
+          <p className="facts-other">
+            Other Ingredients: Sunflower (Helianthus annuus) Lecithin, Silicon Dioxide, Magnesium
+            Stearate, Microcrystalline Cellulose, Vegetable Cellulose (Capsule).
+          </p>
+        </div>
+
+        <div className="ingredients-panel" role="tabpanel" hidden={tab !== "ingredients"}>
+          <h2>Key Ingredients</h2>
+          <div className="ingredient-heading">
+            <strong>LipoNAD™ (providing β-NAD⁺ ≥250 mg)</strong>
+            <b>500 mg</b>
+          </div>
+          <p>
+            LipoNAD™ delivers β-NAD directly into cells using liposomes for better absorption. It’s
+            included to boost cellular energy, metabolism, and healthy-aging benefits more effectively.
+          </p>
+          <div className="ingredient-heading">
+            <strong>Trans-Resveratrol</strong>
+            <b>50 mg</b>
+          </div>
+          <p>
+            Trans-Resveratrol is included for its antioxidant and anti-inflammatory effects. It helps
+            enhance mitochondrial function and supports the activity of NAD⁺ in the body.
+          </p>
+          <h3>Other Ingredients</h3>
+          <p>
+            Sunflower (Helianthus annuus) Lecithin, Silicon Dioxide, Magnesium Stearate,
+            Microcrystalline Cellulose, Vegetable Cellulose (Capsule).
+          </p>
+        </div>
+
+        <button
+          type="button"
+          className="supplement-continue"
+          onClick={() => {
+            setTab("facts");
+            onClose();
+          }}
+        >
+          Continue
+        </button>
+        <div className="supplement-shipping"><span aria-hidden="true">🇺🇸</span> <b>FREE</b> Shipping to USA</div>
+      </section>
     </div>
   );
 }
@@ -440,9 +660,10 @@ function CustomerVideoCard({ title, src }: { title: string; src: string }) {
   );
 }
 
-function ProductPurchase({ onAdded }: { onAdded: () => void }) {
+function ProductPurchase({ onAdded }: { onAdded: (selection: CartSelection) => void }) {
   const [quantity, setQuantity] = useState(3);
   const [added, setAdded] = useState(false);
+  const [factsOpen, setFactsOpen] = useState(false);
   const selectedQuantity = useMemo(
     () => quantityOptions.find((option) => option.jars === quantity) ?? quantityOptions[0],
     [quantity],
@@ -450,7 +671,7 @@ function ProductPurchase({ onAdded }: { onAdded: () => void }) {
 
   const addToCart = () => {
     setAdded(true);
-    onAdded();
+    onAdded(selectedQuantity);
   };
 
   return (
@@ -459,7 +680,11 @@ function ProductPurchase({ onAdded }: { onAdded: () => void }) {
       <div className="review-line"><span className="stars">★★★★★</span><b>4.9/5</b> (2200+ reviews)</div>
       <div className="product-title-row"><h1>LIPOSOMAL NAD⁺</h1><span>500MG</span></div>
       <p className="product-subtitle">Liposomal NAD+ Supplement</p>
-      <div className="product-facts"><b>60 Capsules</b><span>/</span><b>500MG</b><span>/</span><button type="button">SUPPLEMENT FACTS</button></div>
+      <div className="product-facts">
+        <b>60 Capsules</b><span>/</span><b>500MG</b><span>/</span>
+        <button type="button" onClick={() => setFactsOpen(true)}>SUPPLEMENT FACTS</button>
+      </div>
+      <SupplementFactsModal open={factsOpen} onClose={() => setFactsOpen(false)} />
 
       <div className="purchase-group">
         <div className="purchase-label"><h2>Select Quantity</h2><span>{quantity * 60} Capsules</span></div>
@@ -699,15 +924,25 @@ function ProductReviewCarousel() {
 }
 
 export function ProductPage() {
-  const [cartCount, setCartCount] = useState(0);
+  const [cartItems, setCartItems] = useState<CartSelection[]>([]);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  useEffect(() => {
+    if (!cartOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [cartOpen]);
 
   return (
     <div className="site-shell product-page">
-      <Header cartCount={cartCount} />
+      <Header cartCount={cartItems.length} onCart={() => setCartOpen(true)} />
       <main id="main-content">
         <div className="product-layout">
           <ProductGallery />
-          <ProductPurchase onAdded={() => setCartCount((value) => value + 1)} />
+          <ProductPurchase onAdded={(selection) => setCartItems((items) => [...items, selection])} />
         </div>
 
         <ProductReviewCarousel />
@@ -752,6 +987,67 @@ export function ProductPage() {
       </main>
       <SiteFooter />
       <MysteryChip />
+      <div
+        className="drawer-layer"
+        role="presentation"
+        hidden={!cartOpen}
+        aria-hidden={!cartOpen}
+        onMouseDown={() => setCartOpen(false)}
+      >
+        <aside
+          className="cart-drawer product-cart-drawer"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="product-cart-title"
+          onMouseDown={(event) => event.stopPropagation()}
+        >
+          <div className="drawer-heading">
+            <h2 id="product-cart-title">YOUR CART</h2>
+            <button type="button" onClick={() => setCartOpen(false)} aria-label="Close cart">×</button>
+          </div>
+          {cartItems.length === 0 ? (
+            <div className="empty-cart">
+              <span>0</span>
+              <h3>Your cart is empty</h3>
+              <p>Choose your NAD⁺ supply and add it to your daily longevity routine.</p>
+              <button type="button" className="primary-button" onClick={() => setCartOpen(false)}>
+                CONTINUE SHOPPING
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="product-cart-items">
+                {cartItems.map((item, index) => (
+                  <article key={`${item.jars}-${index}`}>
+                    <img src="/catakor/product-nad.avif" alt="Cata-Kor Liposomal NAD⁺" />
+                    <div>
+                      <h3>LIPOSOMAL NAD⁺ 500MG</h3>
+                      <p>{item.label} · One-time purchase</p>
+                      <strong>${item.total.toFixed(2)}</strong>
+                    </div>
+                    <button
+                      type="button"
+                      aria-label={`Remove ${item.label} from cart`}
+                      onClick={() => setCartItems((items) => items.filter((_, itemIndex) => itemIndex !== index))}
+                    >
+                      Remove
+                    </button>
+                  </article>
+                ))}
+              </div>
+              <div className="product-cart-summary">
+                <span>SUBTOTAL</span>
+                <strong>${cartItems.reduce((total, item) => total + item.total, 0).toFixed(2)}</strong>
+              </div>
+              <button type="button" className="product-cart-checkout">CHECKOUT</button>
+              <button type="button" className="product-cart-continue" onClick={() => setCartOpen(false)}>
+                CONTINUE SHOPPING
+              </button>
+            </>
+          )}
+          <p className="drawer-footnote">Free U.S. shipping · Lifetime money-back guarantee</p>
+        </aside>
+      </div>
     </div>
   );
 }

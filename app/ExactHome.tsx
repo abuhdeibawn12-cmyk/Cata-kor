@@ -140,7 +140,6 @@ export function AccountIcon() {
 
 export function Header({
   onCart,
-  onAccount,
 }: {
   onCart: () => void;
   onAccount: () => void;
@@ -183,10 +182,11 @@ export function Header({
             <BagIcon />
           </button>
           <button
-            className="header-icon-button"
+            className="header-icon-button account-disabled"
             type="button"
-            onClick={onAccount}
-            aria-label="Log in"
+            aria-label="Account unavailable"
+            aria-disabled="true"
+            disabled
           >
             <AccountIcon />
           </button>

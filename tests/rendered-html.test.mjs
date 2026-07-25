@@ -49,6 +49,14 @@ test("server-renders the Liposomal NAD product page", async () => {
   assert.match(html, /38\.24/);
   assert.match(html, /97\.74/);
   assert.match(html, /ONE-TIME PURCHASE/);
+  assert.match(html, /Supplement Facts/);
+  assert.match(html, /Serving Size: 2 Capsules/);
+  assert.match(html, /Key Ingredients/);
+  assert.match(html, /LipoNAD™ delivers β-NAD directly into cells/);
+  assert.match(html, /Show more product images/);
+  assert.match(html, /Open shopping bag with 0 items/);
+  assert.match(html, /Account unavailable/);
+  assert.doesNotMatch(html, /href="#footer"[^>]*aria-label="Cart|href="#footer"[^>]*aria-label="Log in"/);
   assert.match(html, /49c88503ac444cceaa07ad0941b19ff2/);
   assert.match(html, /626b669d4eae4d0f95088060c2662d1f/);
   assert.match(html, /1763917e32c14cbda12acec0ee8bcd3d/);
