@@ -1976,6 +1976,7 @@ h3 {
 }
 
 .add-to-cart {
+  -webkit-font-smoothing: antialiased;
   align-items: center;
   background: var(--ink);
   border: 0;
@@ -1983,17 +1984,34 @@ h3 {
   color: #fff;
   cursor: pointer;
   display: flex;
-  font-weight: 700;
+  font-family: "Cata Sans", Arial, Helvetica, sans-serif;
+  font-feature-settings: "kern" 1, "tnum" 1;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
   gap: 12px;
   justify-content: center;
+  letter-spacing: 0.01em;
+  line-height: 1;
   margin-top: 14px;
   min-height: 60px;
+  text-rendering: geometricPrecision;
+  text-transform: uppercase;
+  transition: background 0.18s ease, transform 0.18s ease;
   width: 100%;
 }
 
 .add-to-cart span,
 .add-to-cart b {
   color: var(--lime);
+}
+
+.add-to-cart b {
+  font-family: inherit;
+  font-size: inherit;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 .add-to-cart.added {
@@ -4981,26 +4999,44 @@ h3 {
 }
 
 .secondary-add-button {
-  background: #193c2d;
+  -webkit-font-smoothing: antialiased;
+  align-items: center;
+  background: var(--ink);
   border: 0;
-  border-radius: 12px;
-  color: #e1f77e;
+  border-radius: 10px;
+  color: var(--lime);
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 800;
-  margin-top: 18px;
-  min-height: 58px;
+  display: flex;
+  font-family: "Cata Sans", Arial, Helvetica, sans-serif;
+  font-feature-settings: "kern" 1, "tnum" 1;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  gap: 12px;
+  justify-content: center;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  margin-top: 14px;
+  min-height: 60px;
+  text-rendering: geometricPrecision;
+  text-transform: uppercase;
   transition: background 0.18s ease, transform 0.18s ease;
   width: 100%;
 }
 
 .secondary-add-button strong {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 999px;
-  margin-left: 10px;
-  padding: 6px 9px;
+  background: transparent;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-left: 0;
+  padding: 0;
 }
 
+.add-to-cart:hover,
 .secondary-add-button:hover {
   background: #28543b;
   transform: translateY(-1px);
