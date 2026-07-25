@@ -209,6 +209,11 @@ export function GlobalCart() {
                     <img src={product.image} alt={product.shortName} />
                     <h3>{product.shortName}</h3>
                     <p>{offer.jars} {offer.jars === 1 ? "Jar" : "Jars"} · {offer.discountPercent}% Flash Discount</p>
+                    {offer.replacesSource ? (
+                      <small className="global-offer-mode">REPLACES YOUR CURRENT {source.shortName.toUpperCase()} BUNDLE</small>
+                    ) : (
+                      <small className="global-offer-mode">ADDS A DIFFERENT PRODUCT TO YOUR ORDER</small>
+                    )}
                     <div>
                       <del>{money(offer.originalPrice)}</del>
                       <strong>{money(offer.salePrice)}</strong>
@@ -221,7 +226,9 @@ export function GlobalCart() {
                         setAcceptedOffers((current) => [...current, offer.id]);
                       }}
                     >
-                      {accepted ? "OFFER ADDED" : "ADD FLASH OFFER"}
+                      {accepted
+                        ? offer.replacesSource ? "BUNDLE UPGRADED" : "OFFER ADDED"
+                        : offer.replacesSource ? "REPLACE WITH THIS OFFER" : "ADD FLASH OFFER"}
                     </button>
                   </article>
                 );

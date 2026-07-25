@@ -1,10 +1,10 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { PRODUCT_CATALOG, roundCurrency } from "./cartModel";
+import { applyFlashOffer, PRODUCT_CATALOG, roundCurrency } from "./cartModel";
 import type { CartLine, FlashOffer, JarCount, ProductId } from "./cartModel";
 
-export { buildFlashOffers, PRODUCT_CATALOG, roundCurrency } from "./cartModel";
+export { applyFlashOffer, buildFlashOffers, PRODUCT_CATALOG, roundCurrency } from "./cartModel";
 export type { CartLine, FlashOffer, JarCount, ProductId } from "./cartModel";
 
 type CartContextValue = {
@@ -87,31 +87,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const addFlashOffer = (offer: FlashOffer) => {
-    setItems((current) => {
-      const existing = current.find((line) => line.id === offer.id);
-      if (existing) {
-        return current.map((line) =>
-          line.id === offer.id
-            ? { ...line, quantity: line.quantity + 1, updatedAt: nextOrder() }
-            : line,
-        );
-      }
-      return [
-        ...current,
-        {
-          id: offer.id,
-          productId: offer.productId,
-          jars: offer.jars,
-          quantity: 1,
-          price: offer.salePrice,
-          originalPrice: offer.originalPrice,
-          isFlashSale: true,
-          discountPercent: offer.discountPercent,
-          sourceProductId: offer.sourceProductId,
-          updatedAt: nextOrder(),
-        },
-      ];
-    });
+    setItems((current) => applyFlashOffer(current, offer, nextOrder()));
   };
 
   const setLineQuantity = (id: string, quantity: number) => {

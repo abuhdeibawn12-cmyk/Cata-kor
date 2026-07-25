@@ -377,6 +377,15 @@
   margin: 8px 0;
 }
 
+.global-offer-mode {
+  color: #3f6d2f;
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.35;
+  margin: 2px 0 12px;
+}
+
 .global-offer-grid article > div {
   align-items: baseline;
   display: flex;

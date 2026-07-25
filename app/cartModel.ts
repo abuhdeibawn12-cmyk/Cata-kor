@@ -66,12 +66,14 @@ export type CartLine = {
 
 export type FlashOffer = {
   id: string;
+  sourceLineId: string;
   sourceProductId: ProductId;
   productId: ProductId;
   jars: JarCount;
   originalPrice: number;
   salePrice: number;
   discountPercent: 20 | 25;
+  replacesSource: boolean;
 };
 
 export function roundCurrency(value: number) {
@@ -121,13 +123,52 @@ export function buildFlashOffers(
     const salePrice = roundCurrency(originalPrice * (1 - discountPercent / 100));
 
     return {
-      id: `flash-${source.productId}-${productId}-${jars}-${discountPercent}`,
+      id: `flash-${source.id}-${productId}-${jars}-${discountPercent}`,
+      sourceLineId: source.id,
       sourceProductId: source.productId,
       productId,
       jars,
       originalPrice,
       salePrice,
       discountPercent,
+      replacesSource: source.jars !== 3,
     };
   });
+}
+
+export function applyFlashOffer(
+  current: CartLine[],
+  offer: FlashOffer,
+  updatedAt: number,
+): CartLine[] {
+  const source = current.find((line) => line.id === offer.sourceLineId);
+  const quantityToAdd = offer.replacesSource ? source?.quantity ?? 1 : 1;
+  const cartWithoutSource = offer.replacesSource
+    ? current.filter((line) => line.id !== offer.sourceLineId)
+    : current;
+  const existing = cartWithoutSource.find((line) => line.id === offer.id);
+
+  if (existing) {
+    return cartWithoutSource.map((line) =>
+      line.id === offer.id
+        ? { ...line, quantity: line.quantity + quantityToAdd, updatedAt }
+        : line,
+    );
+  }
+
+  return [
+    ...cartWithoutSource,
+    {
+      id: offer.id,
+      productId: offer.productId,
+      jars: offer.jars,
+      quantity: quantityToAdd,
+      price: offer.salePrice,
+      originalPrice: offer.originalPrice,
+      isFlashSale: true,
+      discountPercent: offer.discountPercent,
+      sourceProductId: offer.sourceProductId,
+      updatedAt,
+    },
+  ];
 }

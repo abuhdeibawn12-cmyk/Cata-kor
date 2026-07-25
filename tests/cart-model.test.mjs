@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { buildFlashOffers } from "../app/cartModel.ts";
+import { applyFlashOffer, buildFlashOffers } from "../app/cartModel.ts";
 
 function regularLine(productId, jars, updatedAt = 1) {
   return {
@@ -93,4 +93,27 @@ test("calculates every alternate-product one-jar flash price", () => {
     assert.equal(offer.jars, 1);
     assert.equal(offer.salePrice, salePrice);
   }
+});
+
+test("an accepted 1-to-2 or 2-to-3 upgrade replaces the original line", () => {
+  const source = { ...regularLine("nad", 1), quantity: 2 };
+  const [offer] = buildFlashOffers([source]);
+  const updatedCart = applyFlashOffer([source], offer, 10);
+
+  assert.equal(updatedCart.some((line) => line.id === source.id), false);
+  assert.equal(updatedCart.length, 1);
+  assert.equal(updatedCart[0].jars, 2);
+  assert.equal(updatedCart[0].quantity, 2);
+  assert.equal(updatedCart[0].price, 54.38);
+  assert.equal(updatedCart[0].isFlashSale, true);
+});
+
+test("an accepted three-jar cross-sell keeps the original bundle", () => {
+  const source = regularLine("nmn", 3);
+  const [offer] = buildFlashOffers([source], () => 0);
+  const updatedCart = applyFlashOffer([source], offer, 10);
+
+  assert.equal(updatedCart.some((line) => line.id === source.id), true);
+  assert.equal(updatedCart.length, 2);
+  assert.equal(updatedCart.find((line) => line.isFlashSale)?.price, 28.68);
 });
