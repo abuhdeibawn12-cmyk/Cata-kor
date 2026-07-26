@@ -1177,14 +1177,19 @@ h3 {
   align-items: center;
   background: var(--lime);
   border-radius: 50%;
+  color: var(--forest);
   display: flex;
-  font-size: 10px;
-  height: 17px;
+  font-size: 11px;
+  font-weight: 800;
+  height: 19px;
   justify-content: center;
+  line-height: 1;
+  min-width: 19px;
+  padding: 0 4px;
   position: absolute;
-  right: -9px;
-  top: -9px;
-  width: 17px;
+  right: -3px;
+  top: -2px;
+  z-index: 2;
 }
 
 .mobile-menu-button {
@@ -3429,6 +3434,11 @@ h3 {
   justify-content: center;
   padding: 0;
   width: 40px;
+}
+
+.header-icon-button.cart-icon-link {
+  overflow: visible;
+  position: relative;
 }
 
 .header-icon-button:hover .header-vector-icon,
