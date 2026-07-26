@@ -154,7 +154,7 @@ function Header() {
           <Link href="/collections/shop-all">SHOP</Link>
           <Link href="/collections/shop-all">BEST SELLERS</Link>
           <Link href="/pages/science-benefits">SCIENCE</Link>
-          <Link href="/#about">ABOUT</Link>
+          <Link href="/pages/about-us">ABOUT</Link>
         </nav>
         <div className="header-actions">
           <button
@@ -178,16 +178,6 @@ function Header() {
         </div>
       </header>
     </>
-  );
-}
-
-function MysteryChip() {
-  const [visible, setVisible] = useState(true);
-  if (!visible) return null;
-  return (
-    <button className="mystery-chip" type="button" onClick={() => setVisible(false)}>
-      MYSTERY DISCOUNT <span>×</span>
-    </button>
   );
 }
 
@@ -233,7 +223,7 @@ function Footer() {
           <h2>QUICK LINKS</h2>
           <Link href={PRODUCT_PATH}>NAD⁺ ADVANCED</Link>
           <Link href="/pages/science-benefits">SCIENCE AND QUALITY</Link>
-          <Link href="/#about">ABOUT CATA-KOR</Link>
+          <Link href="/pages/about-us">ABOUT CATA-KOR</Link>
           <Link href="/products/nad-advanced-500mg#faq">FAQS</Link>
         </div>
         <div>
@@ -242,15 +232,6 @@ function Footer() {
           <Link href="/#footer">REFUND POLICY</Link>
           <Link href="/#footer">PRIVACY POLICY</Link>
           <Link href="/#footer">TERMS OF SERVICE</Link>
-        </div>
-        <div className="newsletter">
-          <h2>GET 10% OFF</h2>
-          <p>Sign up for our latest news & articles. We won’t send spam.</p>
-          <form onSubmit={(event) => event.preventDefault()}>
-            <label className="sr-only" htmlFor="newsletter-email">Email</label>
-            <input id="newsletter-email" type="email" placeholder="EMAIL" />
-            <button type="submit">JOIN</button>
-          </form>
         </div>
       </div>
       <div className="footer-bottom">
@@ -357,7 +338,6 @@ export function HomePage() {
         </section>
       </main>
       <Footer />
-      <MysteryChip />
     </div>
   );
 }
@@ -971,7 +951,6 @@ export function ProductPage() {
         </section>
       </main>
       <SiteFooter />
-      <MysteryChip />
     </div>
   );
 }

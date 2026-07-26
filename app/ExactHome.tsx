@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useCart } from "./CartContext";
 
@@ -142,9 +142,11 @@ export function AccountIcon() {
 
 export function Header({
   onCart,
+  activePage,
 }: {
   onCart?: () => void;
   onAccount?: () => void;
+  activePage?: "about";
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { itemCount, openCart } = useCart();
@@ -178,7 +180,13 @@ export function Header({
           <Link href="/collections/shop-all">Shop</Link>
           <Link href="/collections/shop-all">Best Sellers</Link>
           <Link href={SCIENCE_PATH}>Science</Link>
-          <Link href="/#about">About</Link>
+          <Link
+            className={activePage === "about" ? "is-active" : undefined}
+            href="/pages/about-us"
+            aria-current={activePage === "about" ? "page" : undefined}
+          >
+            About
+          </Link>
         </nav>
         <div className="header-actions">
           <button
@@ -252,15 +260,6 @@ function ProductCard({ product }: { product: Product }) {
 }
 
 export function Footer() {
-  const [email, setEmail] = useState("");
-  const [joined, setJoined] = useState(false);
-
-  const joinNewsletter = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!email.trim()) return;
-    setJoined(true);
-  };
-
   return (
     <footer className="footer" id="footer">
       <div className="footer-top">
@@ -290,37 +289,6 @@ export function Footer() {
           <Link href="/#footer">PRIVACY POLICY</Link>
           <Link href="/#footer">FAQS</Link>
           <Link href="/#footer">CONTACT US</Link>
-        </div>
-        <div className="newsletter">
-          <h2>GET 10% OFF</h2>
-          {joined ? (
-            <p className="form-success" role="status">
-              You’re in — use code WELCOME10 at checkout.
-            </p>
-          ) : (
-            <>
-              <p>Signup for our latest news &amp; articles. We won’t give you spam mails.</p>
-              <form onSubmit={joinNewsletter}>
-                <label className="sr-only" htmlFor="newsletter-email">
-                  Enter your email
-                </label>
-                <input
-                  id="newsletter-email"
-                  type="email"
-                  required
-                  placeholder="Email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-                <button type="submit">Join</button>
-              </form>
-            </>
-          )}
-          <div className="payment-icons" aria-label="Payment methods">
-            {["AMEX", "Pay", "Diners", "Discover", "G Pay", "MC", "PayPal", "Shop", "Venmo", "VISA"].map(
-              (method) => <span key={method}>{method}</span>,
-            )}
-          </div>
         </div>
       </div>
       <div className="footer-bottom">
@@ -393,120 +361,9 @@ export function AccountDialog({ open, onClose }: { open: boolean; onClose: () =>
   );
 }
 
-function Promotion({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
-  const [interest, setInterest] = useState("");
-  const [email, setEmail] = useState("");
-  const [complete, setComplete] = useState(false);
-
-  const close = () => {
-    onClose();
-    window.sessionStorage.setItem("cata-kor-promo-seen", "1");
-  };
-
-  const claim = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!email.trim()) return;
-    setComplete(true);
-  };
-
-  if (!open) return null;
-  return (
-    <div className="dialog-layer promo-layer" role="presentation" onMouseDown={close}>
-      <section
-        className="promo-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="promo-title"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
-        <button className="dialog-close" type="button" onClick={close} aria-label="Close popup">
-          ×
-        </button>
-        <div className="promo-orbit" aria-hidden="true">
-          <img src="/catakor/product-nad-hq.png" alt="" />
-        </div>
-        <div className="promo-copy">
-          <span className="eyebrow">MYSTERY DISCOUNT</span>
-          {complete ? (
-            <>
-              <h2 id="promo-title">YOUR DISCOUNT IS UNLOCKED</h2>
-              <p>Use this private code on your next Cata-Kor order.</p>
-              <button
-                className="promo-code"
-                type="button"
-                onClick={() => navigator.clipboard?.writeText("LONGEVITY15")}
-                aria-label="Copy discount code LONGEVITY15"
-              >
-                LONGEVITY15 <span>CLICK TO COPY</span>
-              </button>
-              <a className="primary-button" href="#products" onClick={close}>
-                SHOP NOW
-              </a>
-            </>
-          ) : interest ? (
-            <>
-              <h2 id="promo-title">ONE LAST STEP</h2>
-              <p>Tell us where to send your {interest.toLowerCase()} offer.</p>
-              <form onSubmit={claim}>
-                <label htmlFor="promo-email">Email address</label>
-                <input
-                  id="promo-email"
-                  type="email"
-                  required
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-                <button className="primary-button" type="submit">
-                  REVEAL MY DISCOUNT
-                </button>
-              </form>
-            </>
-          ) : (
-            <>
-              <h2 id="promo-title">WHAT’S YOUR MAIN GOAL?</h2>
-              <p>Choose one to reveal your Cata-Kor mystery offer.</p>
-              <div className="promo-choices">
-                {["Energy & Focus", "Age Reversal", "Glow Up", "Detox"].map((goal) => (
-                  <button type="button" key={goal} onClick={() => setInterest(goal)}>
-                    {goal}
-                  </button>
-                ))}
-              </div>
-              <button className="promo-skip" type="button" onClick={close}>
-                No thanks
-              </button>
-            </>
-          )}
-        </div>
-      </section>
-    </div>
-  );
-}
-
 export function HomePage() {
   const productsRef = useRef<HTMLDivElement>(null);
-  const [promoOpen, setPromoOpen] = useState(false);
   const [activeExpert, setActiveExpert] = useState(-1);
-
-  useEffect(() => {
-    if (window.sessionStorage.getItem("cata-kor-promo-seen")) return;
-    const timer = window.setTimeout(() => setPromoOpen(true), 1200);
-    return () => window.clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = promoOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [promoOpen]);
 
   const moveProducts = (direction: number) => {
     const track = productsRef.current;
@@ -698,11 +555,6 @@ export function HomePage() {
         </section>
       </main>
       <Footer />
-
-      <button className="mystery-chip" type="button" onClick={() => setPromoOpen(true)}>
-        MYSTERY DISCOUNT <span>×</span>
-      </button>
-      <Promotion open={promoOpen} onClose={() => setPromoOpen(false)} />
     </div>
   );
 }

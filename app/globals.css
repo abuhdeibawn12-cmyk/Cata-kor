@@ -8,6 +8,360 @@
   font-display: swap;
 }
 
+.main-nav a.is-active {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+
+.about-page {
+  background: #fff;
+}
+
+.about-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 610px;
+}
+
+.about-hero-copy {
+  align-items: center;
+  background: #335f2e;
+  color: #fff;
+  display: flex;
+  justify-content: flex-end;
+  padding: 70px clamp(50px, 7vw, 135px) 70px 32px;
+}
+
+.about-hero-copy > div {
+  max-width: 475px;
+}
+
+.about-hero h1 {
+  font-size: clamp(58px, 5vw, 78px);
+  letter-spacing: -0.055em;
+  line-height: 0.99;
+  margin: 0 0 22px;
+  max-width: 460px;
+}
+
+.about-hero p {
+  font-size: 15px;
+  line-height: 1.45;
+  margin: 0 0 32px;
+  max-width: 470px;
+}
+
+.about-hero-copy a {
+  align-items: center;
+  background: var(--lime-soft);
+  border-radius: 999px;
+  color: var(--forest);
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 27px;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.about-hero-copy a:hover {
+  background: var(--lime);
+  transform: translateY(-1px);
+}
+
+.about-hero-image {
+  min-height: 610px;
+  overflow: hidden;
+}
+
+.about-hero-image img {
+  height: 100%;
+  object-fit: cover;
+  object-position: center 42%;
+  width: 100%;
+}
+
+.about-story {
+  background: #f2f0eb;
+  min-height: 530px;
+  overflow: hidden;
+  padding: 78px 30px 72px;
+  position: relative;
+}
+
+.about-story::after {
+  background: #fff;
+  clip-path: polygon(100% 0, 100% 100%, 72% 100%, 60% 72%, 0 50%, 60% 28%, 72% 0);
+  content: "";
+  height: 100%;
+  position: absolute;
+  right: -2px;
+  top: 0;
+  width: min(310px, 20vw);
+}
+
+.about-story-inner {
+  margin: 0 auto;
+  max-width: 930px;
+  padding-right: 165px;
+  position: relative;
+  z-index: 1;
+}
+
+.about-kicker {
+  color: #396c35;
+  display: inline-flex;
+  font-size: 11px;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.about-kicker::before {
+  content: "—";
+}
+
+.about-story h2 {
+  color: #050706;
+  font-size: clamp(34px, 3vw, 45px);
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  margin: 0 0 28px;
+  max-width: 780px;
+}
+
+.about-story p {
+  color: #111;
+  font-size: 15px;
+  line-height: 1.55;
+  margin: 0 0 24px;
+  max-width: 760px;
+}
+
+.about-faqs {
+  display: grid;
+  gap: 60px;
+  grid-template-columns: 230px minmax(0, 1fr);
+  margin: 0 auto;
+  max-width: 980px;
+  padding: 80px 30px 76px;
+}
+
+.about-faq-heading {
+  min-height: 500px;
+  position: relative;
+}
+
+.about-faq-heading .about-kicker {
+  margin-bottom: 22px;
+}
+
+.about-faq-heading h2 {
+  color: #030504;
+  font-size: clamp(38px, 3.2vw, 52px);
+  letter-spacing: -0.05em;
+  line-height: 1.06;
+  margin: 0;
+}
+
+.about-faq-arrow {
+  color: #b7c8ae;
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 84px;
+  font-weight: 400;
+  line-height: 1;
+  margin: 52px 0 54px 92px;
+  transform: rotate(28deg);
+}
+
+.about-faq-heading button {
+  background: #335f2e;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  min-height: 38px;
+  padding: 8px 28px;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.about-faq-heading button:hover {
+  background: #214b20;
+  transform: translateY(-1px);
+}
+
+.about-faq-list {
+  display: grid;
+  gap: 15px;
+}
+
+.about-faq-list details {
+  border: 1px solid #d9ddd8;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.about-faq-list summary {
+  align-items: center;
+  cursor: pointer;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 28px 1fr auto;
+  min-height: 62px;
+  padding: 14px 20px;
+  transition: background 0.18s ease;
+}
+
+.about-faq-list summary:hover {
+  background: #f7f8f5;
+}
+
+.about-faq-list summary::-webkit-details-marker {
+  display: none;
+}
+
+.about-faq-list summary span,
+.about-faq-list summary b {
+  color: #111;
+  font-size: 14px;
+}
+
+.about-faq-list summary b {
+  font-weight: 700;
+}
+
+.about-faq-list summary i {
+  font-size: 18px;
+  font-style: normal;
+  transition: transform 0.18s ease;
+}
+
+.about-faq-list details[open] summary i {
+  transform: rotate(180deg);
+}
+
+.about-faq-list details > p {
+  color: #48554b;
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0 58px 20px 64px;
+}
+
+@media (max-width: 900px) {
+  .about-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .about-hero-copy {
+    justify-content: flex-start;
+    min-height: 490px;
+    padding: 70px 32px;
+  }
+
+  .about-hero-copy > div {
+    margin: 0 auto;
+    max-width: 650px;
+  }
+
+  .about-hero h1 {
+    max-width: 560px;
+  }
+
+  .about-hero-image {
+    min-height: 490px;
+  }
+
+  .about-story-inner {
+    max-width: 720px;
+    padding-right: 80px;
+  }
+
+  .about-story::after {
+    opacity: 0.65;
+    width: 130px;
+  }
+
+  .about-faqs {
+    gap: 38px;
+    grid-template-columns: 1fr;
+    max-width: 760px;
+  }
+
+  .about-faq-heading {
+    min-height: 0;
+  }
+
+  .about-faq-arrow {
+    display: none;
+  }
+
+  .about-faq-heading button {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-hero-copy {
+    min-height: 430px;
+    padding: 58px 20px;
+  }
+
+  .about-hero h1 {
+    font-size: 48px;
+  }
+
+  .about-hero-image {
+    min-height: 390px;
+  }
+
+  .about-story {
+    min-height: 0;
+    padding: 60px 20px 48px;
+  }
+
+  .about-story::after {
+    display: none;
+  }
+
+  .about-story-inner {
+    padding-right: 0;
+  }
+
+  .about-story h2 {
+    font-size: 34px;
+  }
+
+  .about-faqs {
+    padding: 58px 16px 66px;
+  }
+
+  .about-faq-heading h2 {
+    font-size: 40px;
+    max-width: 330px;
+  }
+
+  .about-faq-list summary {
+    gap: 10px;
+    grid-template-columns: 26px 1fr auto;
+    min-height: 72px;
+    padding: 14px;
+  }
+
+  .about-faq-list summary span,
+  .about-faq-list summary b {
+    font-size: 13px;
+  }
+
+  .about-faq-list details > p {
+    padding: 0 20px 20px 50px;
+  }
+}
+
 /* Shared persistent shopping bag, flash sale, and testing checkout */
 .global-cart-layer,
 .global-offer-layer,
@@ -1308,8 +1662,8 @@ h3 {
 
 .footer-top {
   display: grid;
-  gap: 45px;
-  grid-template-columns: 1.3fr 0.8fr 0.8fr 1.4fr;
+  gap: 70px;
+  grid-template-columns: 1.35fr 0.9fr 0.9fr;
   margin-left: auto;
   margin-right: auto;
   max-width: 1240px;
@@ -2739,8 +3093,7 @@ h3 {
     grid-template-columns: 1fr 1fr;
   }
 
-  .footer-top > div:first-child,
-  .footer-top .newsletter {
+  .footer-top > div:first-child {
     grid-column: 1 / -1;
   }
 

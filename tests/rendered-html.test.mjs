@@ -40,6 +40,7 @@ test("server-renders the Cata-Kor homepage", async () => {
   assert.match(html, /My goal was never to make another supplement brand/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
   assert.match(html, /Cata-Kor NAD \| Age on your terms/);
+  assert.doesNotMatch(html, /MYSTERY DISCOUNT|GET 10% OFF/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
 
@@ -75,6 +76,7 @@ test("server-renders the Liposomal NAD product page", async () => {
   assert.doesNotMatch(html, /Subscribe &amp; Save|Choose Plan|RECOMMENDED DAILY USE/);
   assert.match(html, /PEACE-OF-MIND/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
+  assert.doesNotMatch(html, /MYSTERY DISCOUNT|GET 10% OFF/);
 });
 
 test("server-renders the shop collection without bundles", async () => {
@@ -167,4 +169,19 @@ test("server-renders the complete science and quality page", async () => {
   assert.match(html, /coa-nad-advanced\.jpg/);
   assert.match(html, /liponad-study\.pdf/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
+});
+
+test("server-renders the complete About page without discount signup UI", async () => {
+  const response = await render("/pages/about-us");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /Take Charge of Your Aging History/);
+  assert.match(html, /The Genesis of Cata-Kor: A Journey to Transform Lives/);
+  assert.match(html, /Frequently Asked Questions/);
+  assert.match(html, /How long does it take to see results from dietary supplements/);
+  assert.match(html, /Do you have samples/);
+  assert.match(html, /cata-kor-aboutus-hero-banner\.jpg/);
+  assert.match(html, /href="\/pages\/about-us"[^>]*aria-current="page"/);
+  assert.doesNotMatch(html, /MYSTERY DISCOUNT|GET 10% OFF/);
 });
