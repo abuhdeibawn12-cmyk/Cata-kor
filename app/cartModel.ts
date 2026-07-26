@@ -60,6 +60,7 @@ export type CartLine = {
   originalPrice: number;
   isFlashSale: boolean;
   discountPercent?: number;
+  sourceLineId?: string;
   sourceProductId?: ProductId;
   updatedAt: number;
 };
@@ -85,6 +86,7 @@ export function buildFlashOffers(
   random: () => number = Math.random,
 ): FlashOffer[] {
   const latestByProduct = new Map<ProductId, CartLine>();
+  const presentOrProposedProducts = new Set(items.map((item) => item.productId));
 
   items
     .filter((item) => !item.isFlashSale)
@@ -110,11 +112,16 @@ export function buildFlashOffers(
       const alternatives = (Object.keys(PRODUCT_CATALOG) as ProductId[]).filter(
         (candidate) => candidate !== source.productId,
       );
-      const randomIndex = Math.min(
-        alternatives.length - 1,
-        Math.max(0, Math.floor(random() * alternatives.length)),
+      const productsNotInCart = alternatives.filter(
+        (candidate) => !presentOrProposedProducts.has(candidate),
       );
-      productId = alternatives[randomIndex];
+      const offerCandidates = productsNotInCart.length ? productsNotInCart : alternatives;
+      const randomIndex = Math.min(
+        offerCandidates.length - 1,
+        Math.max(0, Math.floor(random() * offerCandidates.length)),
+      );
+      productId = offerCandidates[randomIndex];
+      presentOrProposedProducts.add(productId);
       jars = 1;
       discountPercent = 25;
     }
@@ -142,6 +149,8 @@ export function applyFlashOffer(
   updatedAt: number,
 ): CartLine[] {
   const source = current.find((line) => line.id === offer.sourceLineId);
+  if (!source && !offer.replacesSource) return current;
+
   const quantityToAdd = offer.replacesSource ? source?.quantity ?? 1 : 1;
   const cartWithoutSource = offer.replacesSource
     ? current.filter((line) => line.id !== offer.sourceLineId)
@@ -151,7 +160,12 @@ export function applyFlashOffer(
   if (existing) {
     return cartWithoutSource.map((line) =>
       line.id === offer.id
-        ? { ...line, quantity: line.quantity + quantityToAdd, updatedAt }
+        ? {
+            ...line,
+            quantity: line.quantity + quantityToAdd,
+            sourceLineId: offer.replacesSource ? undefined : offer.sourceLineId,
+            updatedAt,
+          }
         : line,
     );
   }
@@ -167,8 +181,33 @@ export function applyFlashOffer(
       originalPrice: offer.originalPrice,
       isFlashSale: true,
       discountPercent: offer.discountPercent,
+      sourceLineId: offer.replacesSource ? undefined : offer.sourceLineId,
       sourceProductId: offer.sourceProductId,
       updatedAt,
     },
   ];
+}
+
+export function removeCartLine(current: CartLine[], id: string): CartLine[] {
+  return current.filter((line) => line.id !== id && line.sourceLineId !== id);
+}
+
+export function normalizeCartItems(current: CartLine[]): CartLine[] {
+  const regularLines = current.filter((line) => !line.isFlashSale);
+
+  return current.flatMap((line) => {
+    if (!line.isFlashSale || line.discountPercent !== 25) return [line];
+
+    const linkedSource = line.sourceLineId
+      ? regularLines.find((candidate) => candidate.id === line.sourceLineId)
+      : regularLines
+          .filter(
+            (candidate) =>
+              candidate.productId === line.sourceProductId && candidate.jars === 3,
+          )
+          .sort((left, right) => right.updatedAt - left.updatedAt)[0];
+
+    if (!linkedSource) return [];
+    return [{ ...line, sourceLineId: linkedSource.id }];
+  });
 }

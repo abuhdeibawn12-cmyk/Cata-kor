@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { applyFlashOffer, buildFlashOffers } from "../app/cartModel.ts";
+import {
+  applyFlashOffer,
+  buildFlashOffers,
+  normalizeCartItems,
+  removeCartLine,
+} from "../app/cartModel.ts";
 
 function regularLine(productId, jars, updatedAt = 1) {
   return {
@@ -116,4 +121,53 @@ test("an accepted three-jar cross-sell keeps the original bundle", () => {
   assert.equal(updatedCart.some((line) => line.id === source.id), true);
   assert.equal(updatedCart.length, 2);
   assert.equal(updatedCart.find((line) => line.isFlashSale)?.price, 28.68);
+  assert.equal(updatedCart.find((line) => line.isFlashSale)?.sourceLineId, source.id);
+});
+
+test("removing a qualifying three-jar bundle also removes its flash cross-sell", () => {
+  const source = regularLine("glutathione", 3);
+  const [offer] = buildFlashOffers([source], () => 0.999);
+  const cartWithOffer = applyFlashOffer([source], offer, 10);
+  const updatedCart = removeCartLine(cartWithOffer, source.id);
+
+  assert.deepEqual(updatedCart, []);
+});
+
+test("prefers a cross-sell product that is not already in the cart", () => {
+  const glutathione = regularLine("glutathione", 3, 2);
+  const nmn = regularLine("nmn", 1, 1);
+  const offers = buildFlashOffers([glutathione, nmn], () => 0.999);
+  const glutathioneOffer = offers.find(
+    (offer) => offer.sourceProductId === "glutathione",
+  );
+
+  assert.equal(glutathioneOffer.productId, "nad");
+});
+
+test("randomizes valid alternatives when every product is already represented", () => {
+  const offers = buildFlashOffers([
+    regularLine("nad", 1),
+    regularLine("glutathione", 3),
+    regularLine("nmn", 1),
+  ], () => 0.999);
+  const glutathioneOffer = offers.find(
+    (offer) => offer.sourceProductId === "glutathione",
+  );
+
+  assert.equal(glutathioneOffer.productId, "nmn");
+});
+
+test("repairs linked legacy cross-sells and removes legacy orphans", () => {
+  const source = regularLine("glutathione", 3);
+  const legacyOffer = {
+    ...regularLine("nmn", 1, 2),
+    id: "flash-legacy",
+    isFlashSale: true,
+    discountPercent: 25,
+    sourceProductId: "glutathione",
+  };
+
+  const normalized = normalizeCartItems([source, legacyOffer]);
+  assert.equal(normalized[1].sourceLineId, source.id);
+  assert.deepEqual(normalizeCartItems([legacyOffer]), []);
 });

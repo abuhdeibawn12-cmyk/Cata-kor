@@ -1,10 +1,23 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { applyFlashOffer, PRODUCT_CATALOG, roundCurrency } from "./cartModel";
+import {
+  applyFlashOffer,
+  normalizeCartItems,
+  PRODUCT_CATALOG,
+  removeCartLine,
+  roundCurrency,
+} from "./cartModel";
 import type { CartLine, FlashOffer, JarCount, ProductId } from "./cartModel";
 
-export { applyFlashOffer, buildFlashOffers, PRODUCT_CATALOG, roundCurrency } from "./cartModel";
+export {
+  applyFlashOffer,
+  buildFlashOffers,
+  normalizeCartItems,
+  PRODUCT_CATALOG,
+  removeCartLine,
+  roundCurrency,
+} from "./cartModel";
 export type { CartLine, FlashOffer, JarCount, ProductId } from "./cartModel";
 
 type CartContextValue = {
@@ -36,7 +49,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const saved = window.localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved) as CartLine[];
-        if (Array.isArray(parsed)) savedItems = parsed;
+        if (Array.isArray(parsed)) savedItems = normalizeCartItems(parsed);
       }
     } catch {
       window.localStorage.removeItem(STORAGE_KEY);
@@ -92,7 +105,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const setLineQuantity = (id: string, quantity: number) => {
     if (quantity <= 0) {
-      setItems((current) => current.filter((line) => line.id !== id));
+      setItems((current) => removeCartLine(current, id));
       return;
     }
     setItems((current) =>
@@ -110,7 +123,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     addRegularItem,
     addFlashOffer,
     setLineQuantity,
-    removeLine: (id) => setItems((current) => current.filter((line) => line.id !== id)),
+    removeLine: (id) => setItems((current) => removeCartLine(current, id)),
     clearCart: () => setItems([]),
     openCart: () => setCartOpen(true),
     closeCart: () => setCartOpen(false),
