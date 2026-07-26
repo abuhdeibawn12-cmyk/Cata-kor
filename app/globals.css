@@ -1663,11 +1663,16 @@ h3 {
 .footer-top {
   display: grid;
   gap: 70px;
-  grid-template-columns: 1.35fr 0.9fr 0.9fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-left: auto;
   margin-right: auto;
   max-width: 1240px;
   padding-bottom: 62px;
+}
+
+.footer-quick-links {
+  grid-column: 2;
+  text-align: center;
 }
 
 .footer-logo {
@@ -3090,11 +3095,13 @@ h3 {
   }
 
   .footer-top {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
-  .footer-top > div:first-child {
-    grid-column: 1 / -1;
+  .footer-top > div:first-child,
+  .footer-quick-links {
+    grid-column: 1;
+    text-align: center;
   }
 
   .footer-bottom {
@@ -3424,22 +3431,9 @@ h3 {
   width: 40px;
 }
 
-.header-icon-button.account-disabled {
-  cursor: default;
-  opacity: 1;
-}
-
-.header-icon-button.account-disabled:hover .header-vector-icon {
-  transform: none;
-}
-
 .header-icon-button:hover .header-vector-icon,
 .header-icon-link:hover .header-vector-icon {
   transform: translateY(-1px);
-}
-
-.header-icon-button.account-disabled:hover .header-vector-icon {
-  transform: none;
 }
 
 .exact-home .clinicians-line {
@@ -3974,7 +3968,7 @@ h3 {
 
 .exact-home .social-links a:nth-child(1)::after,
 .product-page .social-links a:nth-child(1)::after {
-  content: "T";
+  content: "\2709";
 }
 
 .exact-home .social-links a:nth-child(2)::after,

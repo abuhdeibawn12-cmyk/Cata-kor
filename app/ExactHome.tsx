@@ -114,38 +114,11 @@ export function BagIcon() {
   );
 }
 
-export function AccountIcon() {
-  return (
-    <svg
-      className="header-vector-icon"
-      width="22"
-      height="24"
-      viewBox="0 0 22 24"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M10.5558 12.9589C13.943 12.9589 16.6888 10.2034 16.6888 6.80443C16.6888 3.40543 13.943 0.649994 10.5558 0.649994C7.16868 0.649994 4.42285 3.40543 4.42285 6.80443C4.42285 10.2034 7.16868 12.9589 10.5558 12.9589Z"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeMiterlimit="10"
-      />
-      <path
-        d="M8.30304 12.9589H12.9706C17.204 12.9589 20.6504 16.4173 20.6504 20.6655V22.6807C20.6504 22.9803 20.4062 23.2254 20.1076 23.2254H1.19313C0.894626 23.2254 0.650391 22.9803 0.650391 22.6807V20.6655C0.650391 16.4173 4.09679 12.9589 8.33017 12.9589H8.30304Z"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeMiterlimit="10"
-      />
-    </svg>
-  );
-}
-
 export function Header({
   onCart,
   activePage,
 }: {
   onCart?: () => void;
-  onAccount?: () => void;
   activePage?: "about";
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -197,15 +170,6 @@ export function Header({
           >
             <BagIcon />
             {itemCount > 0 && <b>{itemCount}</b>}
-          </button>
-          <button
-            className="header-icon-button account-disabled"
-            type="button"
-            aria-label="Account unavailable"
-            aria-disabled="true"
-            disabled
-          >
-            <AccountIcon />
           </button>
         </div>
       </header>
@@ -267,28 +231,16 @@ export function Footer() {
           <img className="footer-logo" src="/catakor/logo.svg" alt="Cata-Kor" />
           <p className="footer-tagline">AGE ON YOUR TERMS*</p>
           <div className="social-links">
-            <a href="https://www.tiktok.com/@trycatakor">TikTok</a>
-            <a href="https://www.instagram.com/trycatakor/">Instagram</a>
             <a href="mailto:hello@catakor.com">Email us</a>
           </div>
         </div>
-        <div>
+        <div className="footer-quick-links">
           <h2>QUICK LINKS</h2>
           <Link href={`${SCIENCE_PATH}#coa`}>COA</Link>
           <Link href={NAD_PATH}>NAD⁺ ADVANCED</Link>
           <Link href="/products/nmn">NMN SUPPLEMENT</Link>
           <Link href="/products/liposomal-glutathione">LIPOSOMAL GLUTATHIONE</Link>
-          <Link href="/collections/shop-all">SKIN, HAIR &amp; NAILS</Link>
           <Link href={SCIENCE_PATH}>SCIENCE AND QUALITY</Link>
-          <Link href="/#footer">AFFILIATE</Link>
-        </div>
-        <div>
-          <h2>SUPPORT</h2>
-          <Link href="/#footer">TERMS OF SERVICE</Link>
-          <Link href="/#footer">REFUND POLICY</Link>
-          <Link href="/#footer">PRIVACY POLICY</Link>
-          <Link href="/#footer">FAQS</Link>
-          <Link href="/#footer">CONTACT US</Link>
         </div>
       </div>
       <div className="footer-bottom">

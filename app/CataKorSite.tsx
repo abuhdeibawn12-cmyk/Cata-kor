@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { AccountIcon, BagIcon, Footer as SiteFooter } from "./ExactHome";
+import { BagIcon, Footer as SiteFooter } from "./ExactHome";
 import { useCart } from "./CartContext";
 
 const PRODUCT_PATH = "/products/nad-advanced-500mg";
@@ -166,15 +166,6 @@ function Header() {
             <BagIcon />
             {itemCount > 0 && <b>{itemCount}</b>}
           </button>
-          <button
-            type="button"
-            className="header-icon-button account-disabled"
-            aria-label="Account unavailable"
-            aria-disabled="true"
-            disabled
-          >
-            <AccountIcon />
-          </button>
         </div>
       </header>
     </>
@@ -214,24 +205,13 @@ function Footer() {
         <div>
           <img className="footer-logo" src="/catakor/logo.svg" alt="Cata-Kor" />
           <p className="footer-tagline">AGE ON YOUR TERMS*</p>
-          <div className="social-links">
-            <a href="https://www.tiktok.com/@trycatakor">TIKTOK</a>
-            <a href="https://www.instagram.com/trycatakor/">INSTAGRAM</a>
-          </div>
         </div>
-        <div>
+        <div className="footer-quick-links">
           <h2>QUICK LINKS</h2>
           <Link href={PRODUCT_PATH}>NAD⁺ ADVANCED</Link>
           <Link href="/pages/science-benefits">SCIENCE AND QUALITY</Link>
           <Link href="/pages/about-us">ABOUT CATA-KOR</Link>
           <Link href="/products/nad-advanced-500mg#faq">FAQS</Link>
-        </div>
-        <div>
-          <h2>SUPPORT</h2>
-          <Link href="/#footer">CONTACT US</Link>
-          <Link href="/#footer">REFUND POLICY</Link>
-          <Link href="/#footer">PRIVACY POLICY</Link>
-          <Link href="/#footer">TERMS OF SERVICE</Link>
         </div>
       </div>
       <div className="footer-bottom">

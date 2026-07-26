@@ -41,6 +41,9 @@ test("server-renders the Cata-Kor homepage", async () => {
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
   assert.match(html, /Cata-Kor NAD \| Age on your terms/);
   assert.doesNotMatch(html, /MYSTERY DISCOUNT|GET 10% OFF/);
+  assert.doesNotMatch(html, /Account unavailable|tiktok\.com|instagram\.com/);
+  assert.doesNotMatch(html, /<h2>SUPPORT<\/h2>|>AFFILIATE<\/a>|>SKIN, HAIR &amp; NAILS<\/a>/);
+  assert.match(html, /class="footer-quick-links"/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
 
@@ -63,7 +66,7 @@ test("server-renders the Liposomal NAD product page", async () => {
   assert.match(html, /Show more product images/);
   assert.match(html, /Open shopping bag with 0 items/);
   assert.match(html, /CATA15/);
-  assert.match(html, /Account unavailable/);
+  assert.doesNotMatch(html, /Account unavailable/);
   assert.doesNotMatch(html, /href="#footer"[^>]*aria-label="Cart|href="#footer"[^>]*aria-label="Log in"/);
   assert.match(html, /49c88503ac444cceaa07ad0941b19ff2/);
   assert.match(html, /626b669d4eae4d0f95088060c2662d1f/);
@@ -77,6 +80,26 @@ test("server-renders the Liposomal NAD product page", async () => {
   assert.match(html, /PEACE-OF-MIND/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
   assert.doesNotMatch(html, /MYSTERY DISCOUNT|GET 10% OFF/);
+});
+
+test("removes the account control from every public route", async () => {
+  const routes = [
+    "/",
+    "/collections/shop-all",
+    "/pages/about-us",
+    "/pages/science-benefits",
+    "/products/nad-advanced-500mg",
+    "/products/liposomal-glutathione",
+    "/products/nmn",
+  ];
+
+  for (const pathname of routes) {
+    const response = await render(pathname);
+    assert.equal(response.status, 200, pathname);
+    const html = await response.text();
+    assert.doesNotMatch(html, /Account unavailable|YOUR CATA-KOR ACCOUNT/, pathname);
+    assert.match(html, /Open shopping bag with \d+ items?/, pathname);
+  }
 });
 
 test("server-renders the shop collection without bundles", async () => {
