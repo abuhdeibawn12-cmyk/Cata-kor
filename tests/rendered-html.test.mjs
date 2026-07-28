@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function render(pathname = "/") {
@@ -40,11 +41,21 @@ test("server-renders the Cata-Kor homepage", async () => {
   assert.match(html, /My goal was never to make another supplement brand/);
   assert.doesNotMatch(html, /<a[^>]*href="https?:\/\/(?:www\.)?catakor\.com/i);
   assert.match(html, /Cata-Kor NAD \| Age on your terms/);
+  assert.match(html, /name="viewport"/);
   assert.doesNotMatch(html, /MYSTERY DISCOUNT|GET 10% OFF/);
   assert.doesNotMatch(html, /Account unavailable|tiktok\.com|instagram\.com/);
   assert.doesNotMatch(html, /<h2>SUPPORT<\/h2>|>AFFILIATE<\/a>|>SKIN, HAIR &amp; NAILS<\/a>/);
   assert.match(html, /class="footer-quick-links"/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
+});
+
+test("contains the NAD review carousel within the mobile viewport", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  const sectionRule = css.match(/\.endorser-reviews-section\s*\{[\s\S]*?\}/)?.[0] ?? "";
+
+  assert.match(sectionRule, /contain:\s*inline-size/);
+  assert.match(sectionRule, /overflow-x:\s*hidden/);
+  assert.match(css, /body\s*\{[\s\S]*?overflow-x:\s*hidden/);
 });
 
 test("server-renders the Liposomal NAD product page", async () => {

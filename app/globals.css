@@ -1024,6 +1024,10 @@ body {
   font-family: "Cata Sans", Arial, Helvetica, sans-serif;
   font-size: 16px;
   line-height: 1.45;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .site-shell {
@@ -2563,7 +2567,10 @@ h3 {
 .endorser-reviews-section {
   background: #efefef;
   border-top: 3px solid var(--forest);
+  contain: inline-size;
+  overflow-x: hidden;
   padding: 16px clamp(16px, 2vw, 30px) 28px;
+  width: 100%;
 }
 
 .review-carousel-track {
