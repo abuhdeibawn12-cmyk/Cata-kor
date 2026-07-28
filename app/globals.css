@@ -2567,13 +2567,14 @@ h3 {
 .endorser-reviews-section {
   background: #efefef;
   border-top: 3px solid var(--forest);
-  contain: inline-size;
+  contain: layout paint inline-size;
   overflow-x: hidden;
   padding: 16px clamp(16px, 2vw, 30px) 28px;
   width: 100%;
 }
 
 .review-carousel-track {
+  contain: layout paint;
   display: grid;
   gap: 28px;
   grid-auto-columns: calc((100% - 84px) / 4);

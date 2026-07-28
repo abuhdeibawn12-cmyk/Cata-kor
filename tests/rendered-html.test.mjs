@@ -53,8 +53,9 @@ test("contains the NAD review carousel within the mobile viewport", async () => 
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   const sectionRule = css.match(/\.endorser-reviews-section\s*\{[\s\S]*?\}/)?.[0] ?? "";
 
-  assert.match(sectionRule, /contain:\s*inline-size/);
+  assert.match(sectionRule, /contain:\s*layout paint inline-size/);
   assert.match(sectionRule, /overflow-x:\s*hidden/);
+  assert.match(css, /\.review-carousel-track\s*\{[\s\S]*?contain:\s*layout paint/);
   assert.match(css, /body\s*\{[\s\S]*?overflow-x:\s*hidden/);
 });
 
