@@ -52,9 +52,9 @@ const glutathione: SupplementProduct = {
     "https://catakor.com/cdn/shop/files/9_2d951678-cb63-4457-94bc-e2479151a650.jpg?v=1780499486&width=1445",
   ],
   packs: [
-    { jars: 3, each: 32.86, total: 98.59, label: "BEST VALUE" },
-    { jars: 2, each: 32.29, total: 64.58, label: "MOST POPULAR" },
-    { jars: 1, each: 33.99, total: 33.99 },
+    { jars: 3, each: 32.99, total: 98.97, label: "BEST VALUE" },
+    { jars: 2, each: 34.99, total: 69.98, label: "MOST POPULAR" },
+    { jars: 1, each: 39.99, total: 39.99 },
   ],
   accordions: [
     {

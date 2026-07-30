@@ -21,9 +21,9 @@ export const PRODUCT_CATALOG: Record<ProductId, CatalogProduct> = {
     image: "https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=500",
     href: "/products/nad-advanced-500mg",
     packs: {
-      1: { each: 38.24, total: 38.24 },
-      2: { each: 33.99, total: 67.98 },
-      3: { each: 32.58, total: 97.74 },
+      1: { each: 39.99, total: 39.99 },
+      2: { each: 34.99, total: 69.98 },
+      3: { each: 32.99, total: 98.97 },
     },
   },
   glutathione: {
@@ -32,9 +32,9 @@ export const PRODUCT_CATALOG: Record<ProductId, CatalogProduct> = {
     image: "https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=500",
     href: "/products/liposomal-glutathione",
     packs: {
-      1: { each: 33.99, total: 33.99 },
-      2: { each: 32.29, total: 64.58 },
-      3: { each: 32.86, total: 98.59 },
+      1: { each: 39.99, total: 39.99 },
+      2: { each: 34.99, total: 69.98 },
+      3: { each: 32.99, total: 98.97 },
     },
   },
   nmn: {

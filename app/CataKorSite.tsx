@@ -20,7 +20,7 @@ const bestSellers: Product[] = [
   {
     name: "Liposomal NAD⁺",
     benefit: "Daily cellular energy*",
-    price: "$38.24",
+    price: "$39.99",
     image: "https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=900",
     href: PRODUCT_PATH,
   },
@@ -36,7 +36,7 @@ const bestSellers: Product[] = [
   {
     name: "Liposomal Glutathione",
     benefit: "Antioxidant defense*",
-    price: "$33.99",
+    price: "$39.99",
     image: "https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=900",
     href: "/products/liposomal-glutathione",
     available: true,
@@ -119,9 +119,9 @@ const galleryImages = [
 ];
 
 const quantityOptions = [
-  { jars: 3, label: "3 Jars", note: "BEST VALUE", each: 32.58, total: 97.74 },
-  { jars: 2, label: "2 Jars", note: "MOST POPULAR", each: 33.99, total: 67.98 },
-  { jars: 1, label: "1 Jar", note: "", each: 38.24, total: 38.24 },
+  { jars: 3, label: "3 Jars", note: "BEST VALUE", each: 32.99, total: 98.97 },
+  { jars: 2, label: "2 Jars", note: "MOST POPULAR", each: 34.99, total: 69.98 },
+  { jars: 1, label: "1 Jar", note: "", each: 39.99, total: 39.99 },
 ];
 
 function Header() {

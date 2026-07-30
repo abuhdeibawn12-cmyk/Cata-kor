@@ -21,7 +21,7 @@ const products: Product[] = [
   {
     name: "Liposomal NAD⁺",
     benefit: "Daily cellular energy*",
-    price: "$38.24",
+    price: "$39.99",
     image: "https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=900",
     href: NAD_PATH,
     bestseller: true,
@@ -39,7 +39,7 @@ const products: Product[] = [
   {
     name: "Liposomal Glutathione",
     benefit: "Antioxidant defense*",
-    price: "$33.99",
+    price: "$39.99",
     image: "https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=900",
     href: "/products/liposomal-glutathione",
     bestseller: true,
