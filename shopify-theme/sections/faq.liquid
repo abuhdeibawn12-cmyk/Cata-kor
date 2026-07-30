@@ -1,56 +1,55 @@
-<section class="faq-section section-shell">
-  <div class="faq-heading"><p class="eyebrow">FAQs</p><h2>{{ section.settings.heading }}</h2></div>
-  <div class="faq-list">
-    {% for block in section.blocks %}
-      <details {{ block.shopify_attributes }}>
-        <summary><span>{{ block.settings.question }}</span><b>+</b></summary>
-        <div>{{ block.settings.answer }}</div>
-      </details>
-    {% endfor %}
-  </div>
-</section>
+{% if product.handle == 'nmn' %}
+  <section class="nmn-faq-section">
+    <h2>Questions? We<br>have answers!</h2>
+    <div class="nmn-faq-list">
+      <details open><summary>How long does it take to see results from dietary supplements?<span aria-hidden="true">+</span></summary><p>The time to experience results varies based on the supplement and individual factors. Consistency in usage is key. Some may notice changes quickly, while others may require more time.</p></details>
+      <details><summary>Are there potential side effects of dietary supplements?<span aria-hidden="true">+</span></summary><p>Individual responses vary. Stop use and consult a qualified healthcare professional if you experience an unwanted reaction.</p></details>
+      <details><summary>How does Cata-Kor ensure the quality of its ingredients?<span aria-hidden="true">+</span></summary><p>Cata-Kor uses transparent formulas and independent testing to verify ingredient identity, purity and product quality.</p></details>
+      <details><summary>Are your products gluten-free?<span aria-hidden="true">+</span></summary><p>Review the current ingredient label for product-specific allergen information, and contact our support team if you have a specific sensitivity.</p></details>
+      <details><summary>Are your products non-GMO/organic?<span aria-hidden="true">+</span></summary><p>Ingredient sourcing varies by formula. The current product label and quality documentation provide the most up-to-date sourcing details.</p></details>
+      <details><summary>Are your products safe to take with medications?<span aria-hidden="true">+</span></summary><p>If you take prescription medication or manage a medical condition, speak with your healthcare professional before starting any dietary supplement.</p></details>
+      <details><summary>Do you have samples?<span aria-hidden="true">+</span></summary><p>Samples are not currently listed. Contact Cata-Kor support for the latest availability.</p></details>
+    </div>
+  </section>
+{% elsif product.handle == 'liposomal-glutathione' %}
+  <section class="secondary-faq">
+    <h2>FREQUENTLY ASK QUESTION</h2>
+    <div>
+      <details open><summary>What makes this glutathione supplement unique?<span aria-hidden="true">+</span></summary><p>This formula combines liposomal glutathione with complementary antioxidant cofactors, including vitamin C, selenium, vitamin B2 and resveratrol.</p></details>
+      <details><summary>What is liposomal delivery?<span aria-hidden="true">+</span></summary><p>Liposomal delivery surrounds an ingredient with phospholipids to support stability and absorption.</p></details>
+      <details><summary>How should I take this supplement?<span aria-hidden="true">+</span></summary><p>Take two capsules daily, or follow the guidance of your healthcare professional.</p></details>
+      <details><summary>Are there any side effects?<span aria-hidden="true">+</span></summary><p>Individual responses vary. Stop use and consult a healthcare professional if you experience an unwanted reaction.</p></details>
+    </div>
+  </section>
+{% elsif product.handle == 'nad-advanced-500mg' %}
+  <section class="faq-section" id="faq">
+    <h2>FREQUENTLY ASK QUESTION</h2>
+    <div class="faq-accordion-list">
+      <details class="product-accordion" open><summary>How should I take the NAD supplement?<span>＋</span></summary><div><p>Take 2 capsules every day with or without food.</p></div></details>
+      <details class="product-accordion"><summary>How long does it take to see results?<span>＋</span></summary><div><p>Results vary, but many customers report changes within a few weeks of daily use.*</p></div></details>
+      <details class="product-accordion"><summary>Are there side effects?<span>＋</span></summary><div><p>The formula is designed for everyday use. Follow the label and consult your clinician if you have questions.</p></div></details>
+      <details class="product-accordion"><summary>Is this NAD+ made in the USA?<span>＋</span></summary><div><p>Yes. Cata-Kor supplements are manufactured in the USA and third-party tested.</p></div></details>
+    </div>
+  </section>
+{% else %}
+  <section class="faq-section section-shell">
+    <div class="faq-heading"><p class="eyebrow">FAQs</p><h2>{{ section.settings.heading }}</h2></div>
+    <div class="faq-list">
+      {% for block in section.blocks %}
+        <details {{ block.shopify_attributes }}>
+          <summary><span>{{ block.settings.question }}</span><b>+</b></summary>
+          <div>{{ block.settings.answer }}</div>
+        </details>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}
 
 {% schema %}
 {
-  "name": "FAQ",
-  "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Questions? We have answers!"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "question",
-      "name": "Question",
-      "settings": [
-        {
-          "type": "text",
-          "id": "question",
-          "label": "Question",
-          "default": "How long does it take to see results?"
-        },
-        {
-          "type": "richtext",
-          "id": "answer",
-          "label": "Answer",
-          "default": "<p>Results vary by product and individual factors. Consistency is important, and some people may require more time than others.</p>"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "FAQ",
-      "blocks": [
-        { "type": "question" },
-        { "type": "question", "settings": { "question": "Are there potential side effects?" } },
-        { "type": "question", "settings": { "question": "How does Cata-Kor ensure ingredient quality?" } },
-        { "type": "question", "settings": { "question": "Are your products safe with medications?" } }
-      ]
-    }
-  ]
+  "name":"FAQ",
+  "settings":[{"type":"text","id":"heading","label":"Heading","default":"Questions? We have answers!"}],
+  "blocks":[{"type":"question","name":"Question","settings":[{"type":"text","id":"question","label":"Question","default":"How long does it take to see results?"},{"type":"richtext","id":"answer","label":"Answer","default":"<p>Results vary by product and individual factors. Consistency is important.</p>"}]}],
+  "presets":[{"name":"FAQ","blocks":[{"type":"question"},{"type":"question","settings":{"question":"Are there potential side effects?"}},{"type":"question","settings":{"question":"How does Cata-Kor ensure ingredient quality?"}},{"type":"question","settings":{"question":"Are your products safe with medications?"}}]}]
 }
 {% endschema %}

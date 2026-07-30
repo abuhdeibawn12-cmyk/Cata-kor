@@ -1,45 +1,51 @@
-<aside class="cart-drawer" id="CartDrawer" aria-hidden="true" aria-label="Shopping bag">
-  <button class="cart-drawer__overlay" type="button" data-cart-close aria-label="Close shopping bag"></button>
-  <div class="cart-drawer__panel">
-    <header class="cart-drawer__header">
+<div class="global-cart-layer" id="CartDrawer" role="presentation" aria-hidden="true" hidden>
+  <aside class="global-cart-drawer" role="dialog" aria-modal="true" aria-labelledby="global-cart-title">
+    <div class="global-cart-heading">
       <div>
-        <h2>Your shopping bag</h2>
-        <p data-cart-summary>{{ cart.item_count }} item{% unless cart.item_count == 1 %}s{% endunless %}</p>
+        <h2 id="global-cart-title">YOUR SHOPPING BAG</h2>
+        <p data-cart-summary>
+          {% if cart.items.size > 0 %}{{ cart.items.size }} product selection{% unless cart.items.size == 1 %}s{% endunless %}{% else %}Your bag is empty{% endif %}
+        </p>
       </div>
-      <button class="icon-button" type="button" data-cart-close aria-label="Close shopping bag">×</button>
-    </header>
-
-    <div class="cart-drawer__items" data-cart-items>
-      {% for item in cart.items %}
-        <article class="cart-line" data-line-key="{{ item.key }}">
-          {% if item.image %}
-            {{ item.image | image_url: width: 180 | image_tag: loading: 'lazy', widths: '90,180', alt: item.product.title }}
-          {% endif %}
-          <div>
-            <a href="{{ item.url }}"><strong>{{ item.product.title }}</strong></a>
-            <p>{{ item.variant.title }}</p>
-            <span>{{ item.final_line_price | money }}</span>
-            <div class="quantity-control">
-              <button type="button" data-cart-quantity="{{ item.quantity | minus: 1 }}" aria-label="Decrease quantity">−</button>
-              <span>{{ item.quantity }}</span>
-              <button type="button" data-cart-quantity="{{ item.quantity | plus: 1 }}" aria-label="Increase quantity">+</button>
-            </div>
-            <button class="text-button" type="button" data-cart-remove>Remove</button>
-          </div>
-        </article>
-      {% else %}
-        <div class="cart-empty">
-          <p>Your shopping bag is empty.</p>
-          <a class="button button--lime" href="{{ routes.all_products_collection_url }}">Shop products</a>
-        </div>
-      {% endfor %}
+      <button type="button" data-cart-close aria-label="Close shopping bag">×</button>
     </div>
 
-    <footer class="cart-drawer__footer" data-cart-footer {% if cart.item_count == 0 %}hidden{% endif %}>
-      <div class="cart-total"><span>Subtotal</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
-      <p class="cart-note">Shipping and taxes calculated at checkout. CATA15 applies to eligible regular items only.</p>
-      <button class="button button--dark button--full" type="button" data-start-checkout>Checkout</button>
-      <button class="text-button" type="button" data-cart-close>Continue shopping</button>
-    </footer>
-  </div>
-</aside>
+    <div data-cart-content>
+      {% if cart.items.size == 0 %}
+        <div class="global-empty-cart">
+          <span>0</span>
+          <h3>Your shopping bag is empty</h3>
+          <p>Choose a product and build your daily longevity routine.</p>
+          <button type="button" data-cart-close>CONTINUE SHOPPING</button>
+        </div>
+      {% else %}
+        <div class="global-cart-items" data-cart-items>
+          {% for item in cart.items %}
+            <article data-line-key="{{ item.key }}">
+              {% if item.image %}<img src="{{ item.image | image_url: width: 180 }}" alt="" width="180" height="180">{% endif %}
+              <div class="global-cart-item-copy">
+                {% if item.properties._flash_offer == 'true' %}<span class="global-flash-label">FLASH SALE · {{ item.properties._flash_discount }}% OFF</span>{% endif %}
+                <h3>{{ item.product.title }}</h3>
+                <p>{{ item.variant.title }} · One-time purchase</p>
+                <div class="global-cart-price"><strong>{{ item.final_line_price | money }}</strong></div>
+                <div class="global-cart-quantity">
+                  <span>Bundle quantity</span>
+                  <div>
+                    <button type="button" data-cart-quantity="{{ item.quantity | minus: 1 }}" aria-label="Decrease quantity">−</button>
+                    <b>{{ item.quantity }}</b>
+                    <button type="button" data-cart-quantity="{{ item.quantity | plus: 1 }}" aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+              </div>
+              <button class="global-cart-remove" type="button" data-cart-remove>Remove</button>
+            </article>
+          {% endfor %}
+        </div>
+        <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
+        <button class="global-cart-checkout" type="button" data-start-checkout>CHECKOUT</button>
+        <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
+        <p class="global-cart-note">CATA15 can be applied to regular items at checkout.</p>
+      {% endif %}
+    </div>
+  </aside>
+</div>

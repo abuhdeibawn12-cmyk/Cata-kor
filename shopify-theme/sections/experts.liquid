@@ -8,23 +8,26 @@
     <h2>RECOMMENDED BY HEALTH EXPERTS &amp; ELITE ATHLETES</h2>
     <p>These individuals partner with Cata-Kor as paid ambassadors, sharing their real routines and results.</p>
   </div>
-
   <div class="expert-grid">
     {% for image in expert_images %}
-      <article class="expert-card" tabindex="0">
-        <div class="expert-card__inner">
-          <div class="expert-card__face expert-card__front">
+      <article class="expert-card" data-home-expert>
+        <div class="expert-card-flip">
+          <div class="expert-card-face expert-card-front">
             <img src="{{ image | asset_url }}" alt="{{ expert_names[forloop.index0] }}" loading="lazy" width="700" height="850">
-            <div>
-              <h3>{{ expert_names[forloop.index0] }}</h3>
-              <span>{{ expert_titles[forloop.index0] }}</span>
+            <span class="expert-card-scrim" aria-hidden="true"></span>
+            <div class="expert-card-front-content">
+              <b>{{ expert_names[forloop.index0] }}</b>
+              <button class="expert-trigger" type="button" data-home-expert-toggle aria-expanded="false">{{ expert_titles[forloop.index0] }}</button>
             </div>
           </div>
-          <div class="expert-card__face expert-card__back">
-            <h3>{{ expert_names[forloop.index0] }}</h3>
-            <span>{{ expert_titles[forloop.index0] }}</span>
-            <p>“{{ expert_quotes[forloop.index0] }}”</p>
-          </div>
+          <button class="expert-card-face expert-card-back" type="button" data-home-expert-toggle aria-label="Hide {{ expert_names[forloop.index0] }} recommendation">
+            <span class="expert-avatar"><img src="{{ image | asset_url }}" alt="" width="120" height="120"></span>
+            <span class="expert-card-back-copy">
+              <b>{{ expert_names[forloop.index0] }}</b>
+              <small>{{ expert_titles[forloop.index0] }}</small>
+              <span class="quote">“{{ expert_quotes[forloop.index0] }}”</span>
+            </span>
+          </button>
         </div>
       </article>
     {% endfor %}
@@ -32,9 +35,5 @@
 </section>
 
 {% schema %}
-{
-  "name": "Cata-Kor experts",
-  "settings": [],
-  "presets": [{ "name": "Cata-Kor experts" }]
-}
+{"name":"Cata-Kor experts","settings":[],"presets":[{"name":"Cata-Kor experts"}]}
 {% endschema %}

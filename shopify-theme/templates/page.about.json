@@ -3,13 +3,7 @@
     "main": {
       "type": "about-main",
       "settings": {}
-    },
-    "faq": {
-      "type": "faq",
-      "settings": {
-        "heading": "Frequently asked questions"
-      }
     }
   },
-  "order": ["main", "faq"]
+  "order": ["main"]
 }
