@@ -6,9 +6,7 @@
     },
     "products": {
       "type": "featured-products",
-      "settings": {
-        "heading": "Build your daily longevity routine*"
-      }
+      "settings": {}
     },
     "experts": {
       "type": "experts",

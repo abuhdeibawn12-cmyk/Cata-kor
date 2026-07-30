@@ -1,71 +1,35 @@
 <section class="home-hero">
   <div class="hero-copy">
-    <p class="eyebrow">{{ section.settings.eyebrow }}</p>
-    <h1>{{ section.settings.heading }}</h1>
-    <p class="hero-lead">{{ section.settings.copy }}</p>
-    <div class="hero-rating"><span>★★★★★</span> {{ section.settings.social_proof }}</div>
-    <a class="button button--dark" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+    <div class="clinicians-line">
+      <b>⌇ CLINICIANS’<br>CHOICE ⌇</b>
+      <span>
+        170+ clinicians share this product on FrontrowMD.
+        <a href="https://app.thefrontrowhealth.com/general-store/all?spi=true&utm_campaign=brands_website&utm_content=modal&utm_medium=5469&utm_source=1418&sort=featured&pid=5469">
+          View clinicians &amp; learn more
+        </a>
+      </span>
+    </div>
+    <h1>AGE ON YOUR<br>TERMS*</h1>
+    <p>Support your body at the cellular level, so you can feel better for longer*</p>
+    <div class="hero-cta-row">
+      <div><span class="stars">★★★★★</span> 900,000+ customers, 40,000+ reviews</div>
+      <a class="primary-button" href="#products">SHOP BEST SELLERS</a>
+    </div>
   </div>
-
-  <div class="hero-visual">
-    {% if section.settings.image %}
-      {{ section.settings.image | image_url: width: 1800 | image_tag: widths: '640,960,1400,1800', loading: 'eager', fetchpriority: 'high', alt: section.settings.heading }}
-    {% else %}
-      <img src="{{ 'hero-products-hq.png' | asset_url }}" alt="Cata-Kor longevity supplements" width="1800" height="1200" fetchpriority="high">
-    {% endif %}
-  </div>
+  <img
+    class="hero-products"
+    src="{{ 'hero-products-hq.png' | asset_url }}"
+    alt="Cata-Kor longevity supplements"
+    width="1800"
+    height="1200"
+    fetchpriority="high"
+  >
 </section>
 
 {% schema %}
 {
-  "name": "Home hero",
-  "settings": [
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "CLINICIANS’ CHOICE"
-    },
-    {
-      "type": "textarea",
-      "id": "heading",
-      "label": "Heading",
-      "default": "AGE ON YOUR TERMS*"
-    },
-    {
-      "type": "textarea",
-      "id": "copy",
-      "label": "Copy",
-      "default": "Support your body at the cellular level, so you can feel better for longer*"
-    },
-    {
-      "type": "text",
-      "id": "social_proof",
-      "label": "Social proof",
-      "default": "900,000+ customers, 40,000+ reviews"
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button label",
-      "default": "SHOP BEST SELLERS"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button link",
-      "default": "/collections/all"
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Hero image"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Home hero"
-    }
-  ]
+  "name": "Cata-Kor home hero",
+  "settings": [],
+  "presets": [{ "name": "Cata-Kor home hero" }]
 }
 {% endschema %}

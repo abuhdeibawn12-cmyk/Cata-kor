@@ -1,36 +1,32 @@
-<footer class="site-footer">
-  <div class="footer-brand">
-    <a href="{{ routes.root_url }}"><img src="{{ 'logo.svg' | asset_url }}" alt="{{ shop.name }}" width="250" height="60"></a>
-    <p>AGE ON YOUR TERMS*</p>
+<footer class="footer" id="footer">
+  <div class="footer-top">
+    <div>
+      <a href="{{ routes.root_url }}"><img class="footer-logo" src="{{ 'logo.svg' | asset_url }}" alt="{{ shop.name }}" width="250" height="60"></a>
+      <p class="footer-tagline">AGE ON YOUR TERMS*</p>
+      <div class="social-links">
+        <a href="mailto:hello@catakor.com">Email us</a>
+      </div>
+    </div>
+
+    <nav class="footer-quick-links" aria-label="Footer navigation">
+      <h2>QUICK LINKS</h2>
+      <a href="/pages/science-benefits#coa">COA</a>
+      <a href="/products/nad-advanced-500mg">NAD⁺ ADVANCED</a>
+      <a href="/products/nmn">NMN SUPPLEMENT</a>
+      <a href="/products/liposomal-glutathione">LIPOSOMAL GLUTATHIONE</a>
+      <a href="/pages/science-benefits">SCIENCE AND QUALITY</a>
+    </nav>
   </div>
 
-  <nav class="footer-quick-links" aria-label="Footer navigation">
-    <h2>Quick links</h2>
-    {% for link in section.settings.menu.links %}
-      <a href="{{ link.url }}">{{ link.title }}</a>
-    {% else %}
-      <a href="{{ routes.all_products_collection_url }}">Shop all</a>
-      <a href="/pages/science-benefits">Science and quality</a>
-      <a href="/pages/about-us">About Cata-Kor</a>
-      <a href="{{ routes.cart_url }}">Shopping bag</a>
-    {% endfor %}
-  </nav>
-
-  <p class="footer-disclaimer">
-    *These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure, or prevent any disease.
-  </p>
+  <div class="footer-bottom">
+    <span>© 2026 CATA-KOR</span>
+    <p>*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
+  </div>
 </footer>
 
 {% schema %}
 {
   "name": "Footer",
-  "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Quick links menu",
-      "default": "footer"
-    }
-  ]
+  "settings": []
 }
 {% endschema %}

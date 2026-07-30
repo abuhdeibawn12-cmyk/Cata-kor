@@ -92,6 +92,7 @@
     const menuButton = event.target.closest("[data-menu-toggle]");
     const mediaButton = event.target.closest("[data-media-target]");
     const variantButton = event.target.closest("[data-variant-button]");
+    const productScrollButton = event.target.closest("[data-product-scroll]");
     const quantityButton = event.target.closest("[data-cart-quantity]");
     const removeButton = event.target.closest("[data-cart-remove]");
 
@@ -122,6 +123,11 @@
       const price = variantButton.dataset.priceFormatted;
       if (input) input.value = variantButton.dataset.variantId;
       product?.querySelectorAll("[data-product-price], [data-add-price]").forEach((element) => { element.textContent = price; });
+    }
+    if (productScrollButton) {
+      const track = document.querySelector("[data-product-track]");
+      const direction = Number(productScrollButton.dataset.productScroll || 1);
+      track?.scrollBy({ left: direction * track.clientWidth * 0.78, behavior: "smooth" });
     }
     if (quantityButton || removeButton) {
       const line = event.target.closest("[data-line-key]");

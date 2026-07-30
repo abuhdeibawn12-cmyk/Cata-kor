@@ -1,50 +1,21 @@
-<section class="science-banner">
-  <div class="science-banner__copy">
-    <h2>{{ section.settings.heading }}</h2>
-    <p>{{ section.settings.copy }}</p>
-    <div class="science-points">
-      <span><img src="{{ 'science-quality.svg' | asset_url }}" alt="" width="48" height="48"> Best-quality ingredients</span>
-      <span><img src="{{ 'science-dose.svg' | asset_url }}" alt="" width="48" height="48"> Transparent dosing</span>
-      <span><img src="{{ 'science-tested.svg' | asset_url }}" alt="" width="48" height="48"> Third-party tested</span>
+<section class="science-section" id="science">
+  <div class="science-live-copy">
+    <h2>LONGEVITY SUPPORT<br>MADE SIMPLE*</h2>
+    <p>Our formulas are built to support the key systems behind energy, healthy aging, and cellular defense — with every ingredient chosen for a clear reason*</p>
+    <div class="science-benefits">
+      <div><img src="{{ 'science-quality.svg' | asset_url }}" alt="" width="64" height="64"><b>Best-quality<br>ingredients</b></div>
+      <div><img src="{{ 'science-dose.svg' | asset_url }}" alt="" width="64" height="64"><b>Transparent<br>dosing</b></div>
+      <div><img src="{{ 'science-tested.svg' | asset_url }}" alt="" width="64" height="64"><b>3-rd party<br>tested by NSF</b></div>
     </div>
-    <a class="button button--dark" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+    <a class="primary-button" href="/pages/science-benefits">EXPLORE OUR SCIENCE</a>
   </div>
-  <img class="science-banner__product" src="{{ 'science-nmn.webp' | asset_url }}" alt="Cata-Kor NMN supplement" loading="lazy" width="900" height="900">
+  <img class="science-bottle" src="{{ 'science-nmn.webp' | asset_url }}" alt="Cata-Kor NMN Complex" loading="lazy" width="900" height="900">
 </section>
 
 {% schema %}
 {
-  "name": "Science banner",
-  "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Longevity support made simple*"
-    },
-    {
-      "type": "textarea",
-      "id": "copy",
-      "label": "Copy",
-      "default": "Every ingredient is chosen to support energy, healthy aging and cellular defense for a clear reason.*"
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button label",
-      "default": "Explore our science"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button link",
-      "default": "/pages/science-benefits"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Science banner"
-    }
-  ]
+  "name": "Cata-Kor science",
+  "settings": [],
+  "presets": [{ "name": "Cata-Kor science" }]
 }
 {% endschema %}

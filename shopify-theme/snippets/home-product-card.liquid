@@ -1,0 +1,50 @@
+{% liquid
+  assign card_title = fallback_title
+  assign card_image = fallback_image
+  assign card_price = fallback_price
+  assign card_url = product_url
+  assign card_available = available
+  if card_available == nil
+    assign card_available = true
+  endif
+  if product != blank
+    assign card_title = product.title
+    assign card_url = product.url
+    assign card_available = product.available
+    assign one_jar_variant = product.variants | where: 'title', '1 Jar' | first
+    if one_jar_variant == blank
+      assign one_jar_variant = product.selected_or_first_available_variant
+    endif
+    assign card_price = one_jar_variant.price | money
+  endif
+%}
+
+{% capture card_inner %}
+  <div class="product-card-topline">
+    {% if card_available %}
+      <span>Bestsellers</span>
+    {% else %}
+      <span class="product-stock-label">Out of stock</span>
+    {% endif %}
+    <small>CONTENTS<br>CERTIFIED</small>
+  </div>
+  <div class="product-image-wrap">
+    {% if product != blank and product.featured_image %}
+      {{ product.featured_image | image_url: width: 1000 | image_tag: widths: '360,600,800,1000', loading: 'lazy', alt: card_title }}
+    {% else %}
+      <img src="{{ card_image | asset_url }}" alt="{{ card_title }}" width="1000" height="1000" loading="lazy">
+    {% endif %}
+  </div>
+  <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+  <h3>{{ card_title }}</h3>
+  <p>{{ benefit }}</p>
+  <strong{% unless card_available %} class="is-out-of-stock"{% endunless %}>
+    {% if card_available %}{{ card_price }}{% else %}OUT OF STOCK{% endif %}
+  </strong>
+{% endcapture %}
+
+{% if card_available %}
+  <a class="product-card" href="{{ card_url }}">{{ card_inner }}</a>
+{% else %}
+  <article class="product-card is-sold-out" aria-label="{{ card_title }} — out of stock">{{ card_inner }}</article>
+{% endif %}
