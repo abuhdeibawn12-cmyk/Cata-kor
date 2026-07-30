@@ -618,12 +618,22 @@
       const response = await fetch(`${root}cart/add.js`, {
         method: "POST", headers: { Accept: "application/json" }, body: new FormData(form)
       });
-      if (!response.ok) throw new Error("Unable to add this product");
+      if (!response.ok) {
+        let message = "Unable to add this product";
+        try {
+          const payload = await response.json();
+          message = payload.description || payload.message || message;
+        } catch (_) {}
+        throw new Error(message);
+      }
       renderCart(await getCart());
       openCart();
     } catch (error) {
       console.error(error);
-      if (label) label.textContent = "PLEASE TRY AGAIN";
+      if (label) {
+        label.textContent = error?.message || "PLEASE TRY AGAIN";
+        label.title = error?.message || "";
+      }
     } finally {
       button.disabled = false;
       window.setTimeout(() => { if (label) label.textContent = "ADD TO CART"; }, 900);
