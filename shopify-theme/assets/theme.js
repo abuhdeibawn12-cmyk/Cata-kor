@@ -235,9 +235,9 @@
   const normalVariantForJars = (product, jars) =>
     product.variants.find((variant) =>
       jarsFromTitle(variant.title) === jars &&
-      variant.available &&
+      (testCartMode || variant.available) &&
       !/flash/i.test(variant.title)
-    ) || product.variants.find((variant) => variant.available && !/flash/i.test(variant.title));
+    ) || product.variants.find((variant) => (testCartMode || variant.available) && !/flash/i.test(variant.title));
   const regularItems = (cart) => cart.items.filter((item) => !isFlashItem(item));
 
   const buildFlashOffers = async (cart) => {
