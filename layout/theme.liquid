@@ -23,15 +23,22 @@
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
   </head>
 
-  <body class="template-{{ template.name | handle }}{% if template.name == 'index' %} exact-home{% endif %}{% if template.name == 'product' %} product-page{% endif %}">
+  <body class="template-{{ template.name | handle }}{% if template.name == 'index' or request.path == '/pages/about-us' %} exact-home{% endif %}{% if request.path == '/pages/about-us' %} about-page{% endif %}{% if request.path == '/pages/science-benefits' %} science-page{% endif %}{% if template.name == 'product' %} product-page{% endif %}">
     <a class="skip-link" href="#MainContent">Skip to content</a>
     {% section 'header' %}
 
     <main id="MainContent" role="main" tabindex="-1">
-      {{ content_for_layout }}
+      {% if request.path == '/pages/about-us' %}
+        {% section 'about-main' %}
+      {% elsif request.path == '/pages/science-benefits' %}
+        {% section 'science-main' %}
+      {% else %}
+        {{ content_for_layout }}
+      {% endif %}
     </main>
 
     {% section 'footer' %}
     {% render 'cart-drawer' %}
+    {% render 'flash-offer-dialog' %}
   </body>
 </html>

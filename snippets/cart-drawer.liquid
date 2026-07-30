@@ -38,7 +38,7 @@
     <footer class="cart-drawer__footer" data-cart-footer {% if cart.item_count == 0 %}hidden{% endif %}>
       <div class="cart-total"><span>Subtotal</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
       <p class="cart-note">Shipping and taxes calculated at checkout. CATA15 applies to eligible regular items only.</p>
-      <a class="button button--dark button--full" href="/checkout">Checkout</a>
+      <button class="button button--dark button--full" type="button" data-start-checkout>Checkout</button>
       <button class="text-button" type="button" data-cart-close>Continue shopping</button>
     </footer>
   </div>

@@ -1,45 +1,45 @@
-<section class="about-hero">
-  <div>
-    <h1>{{ section.settings.heading }}</h1>
-    <p>{{ section.settings.copy }}</p>
-    <a class="button button--lime" href="{{ routes.all_products_collection_url }}">Shop now</a>
+<section class="about-hero" aria-labelledby="about-hero-title">
+  <div class="about-hero-copy">
+    <div>
+      <h1 id="about-hero-title">Take Charge of Your Aging History!</h1>
+      <p>Experience high-quality ingredients that fuel your body and mind, support your health and fitness goals, and help you to surpass your limits.</p>
+      <a href="{{ routes.collections_url }}/shop-all">SHOP NOW</a>
+    </div>
   </div>
-  {% if section.settings.image %}
-    {{ section.settings.image | image_url: width: 1600 | image_tag: widths: '600,900,1200,1600', loading: 'eager', alt: section.settings.heading }}
-  {% else %}
-    <div class="about-hero__placeholder"><span>Choose an About hero image in the theme editor</span></div>
-  {% endif %}
+  <div class="about-hero-image">
+    <img src="{{ 'about-hero.jpg' | asset_url }}" alt="An active woman standing confidently on a beach" width="1200" height="800">
+  </div>
 </section>
 
-<section class="about-genesis section-shell">
-  <p class="eyebrow">Liposomal longevity support</p>
-  <h2>The genesis of Cata-Kor: a journey to transform lives</h2>
-  <p>Meet Cata-Kor, a brand of dietary supplements on a mission to make a genuine impact.</p>
-  <p>More than a brand, Cata-Kor is a community committed to healthier, vibrant lives. From thoughtfully designed formulations to positive impacts in households, our approach centers on scientific precision, transparent information and rigorous third-party testing.</p>
-  <p>Today, Cata-Kor inspires individuals to embrace a healthier life through the marriage of science and wellness.</p>
+<section class="about-story" aria-labelledby="about-story-title">
+  <div class="about-story-inner">
+    <span class="about-kicker">Liposomal</span>
+    <h2 id="about-story-title">The Genesis of Cata-Kor: A Journey to Transform Lives</h2>
+    <p>Meet Cata-Kor, a brand of dietary supplements on a mission to make a genuine impact.</p>
+    <p>More than a brand, Cata-Kor is a community—a community committed to healthier, vibrant lives. From groundbreaking formulations in our lab, to positive impacts in households, our brand embodies the transformative power of scientific precision at a cellular level. With the customer’s health and well-being at the forefront of our approach, each of our products undergo rigorous third-party testing to ensure the highest standards of quality, safety, and effectiveness are met.</p>
+    <p>Today, Cata-Kor is a catalyst for change, inspiring individuals to embrace a healthier life through the marriage of science and wellness.</p>
+  </div>
+</section>
+
+<section class="about-faqs" aria-labelledby="about-faq-title">
+  <div class="about-faq-heading">
+    <span class="about-kicker">FAQs</span>
+    <h2 id="about-faq-title">Frequently Asked Questions</h2>
+    <span class="about-faq-arrow" aria-hidden="true">↳</span>
+    <button type="button" data-toggle-all-faqs>View All</button>
+  </div>
+  <div class="about-faq-list" data-about-faqs>
+    {% assign questions = "How long does it take to see results from dietary supplements?|Are there potential side effects of dietary supplements?|How does Cata-Kor ensure the quality of its ingredients?|Are your products gluten-free?|Are your products non-GMO/organic?|Are your products safe to take with medications?|Do you have samples?" | split: "|" %}
+    {% assign answers = "The time to experience results varies based on the supplement and individual factors. Consistency in usage is key. Some may notice changes quickly, while others may require more time.|While most people tolerate supplements well, side effects can occur. Report any adverse reactions to a healthcare provider.|We source ingredients carefully and use rigorous testing and industry-leading quality standards.|Yes.|Yes.|Please consult a certified healthcare professional before use if you take medication or have a known medical condition.|Not at this time." | split: "|" %}
+    {% for question in questions %}
+      <details>
+        <summary><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}.</span><b>{{ question }}</b><i aria-hidden="true">⌄</i></summary>
+        <p>{{ answers[forloop.index0] }}</p>
+      </details>
+    {% endfor %}
+  </div>
 </section>
 
 {% schema %}
-{
-  "name": "About Cata-Kor",
-  "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Take charge of your aging history!"
-    },
-    {
-      "type": "textarea",
-      "id": "copy",
-      "label": "Copy",
-      "default": "Experience high-quality ingredients that fuel your body and mind, support your health and fitness goals, and help you surpass your limits."
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Hero image"
-    }
-  ]
-}
+{"name":"Exact About page","settings":[]}
 {% endschema %}

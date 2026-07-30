@@ -1,63 +1,65 @@
-<section class="collection-section section-shell">
-  <header class="collection-header">
-    <p class="eyebrow">Cata-Kor longevity support</p>
-    <h1>{{ collection.title }}</h1>
-    {% if collection.description != blank %}<div>{{ collection.description }}</div>{% endif %}
-  </header>
+<section class="collection-hero">
+  <span class="eyebrow">CATA-KOR LONGEVITY SUPPORT</span>
+  <h1>SHOP ALL</h1>
+  <p>Science-driven daily formulas made with transparent dosing and trusted quality.</p>
+</section>
 
+<section class="collection-shell" id="products">
   <div class="collection-toolbar">
-    <span>{{ collection.products_count }} products</span>
-    <form method="get">
-      <label for="SortBy">Sort by</label>
-      <select id="SortBy" name="sort_by" onchange="this.form.submit()">
-        {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
-        {% for option in collection.sort_options %}
-          <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name }}</option>
-        {% endfor %}
+    <div class="collection-filter-wrap">
+      <button class="collection-filter-button" type="button" data-filter-toggle aria-expanded="false">
+        Filter: <b data-filter-label>Availability</b><span>+</span>
+      </button>
+      <fieldset class="collection-filter-menu" data-filter-menu hidden>
+        <legend>Availability</legend>
+        <label><input type="radio" name="availability" value="all" checked> <span>All products</span></label>
+        <label><input type="radio" name="availability" value="in-stock"> <span>In stock</span></label>
+        <label><input type="radio" name="availability" value="out-of-stock"> <span>Out of stock</span></label>
+      </fieldset>
+    </div>
+    <div class="collection-sort">
+      <span data-visible-count>{{ collection.products_count }} products</span>
+      <label for="CollectionSort">Sort by:</label>
+      <select id="CollectionSort" data-collection-sort>
+        <option value="featured">Best selling</option>
+        <option value="a-z">Alphabetically, A–Z</option>
+        <option value="z-a">Alphabetically, Z–A</option>
       </select>
-    </form>
+    </div>
   </div>
 
-  {% paginate collection.products by 24 %}
-    <div class="collection-grid">
-      {% for product in collection.products %}
-        <article class="collection-card {% unless product.available %}is-sold-out{% endunless %}">
-          <a href="{{ product.url }}">
-            <div class="collection-card__image">
-              {% unless product.available %}<span>Out of stock</span>{% endunless %}
-              {% if product.featured_image %}
-                {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '320,480,720,900', alt: product.title }}
-              {% else %}
-                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-              {% endif %}
-            </div>
-            <h2>{{ product.title }}</h2>
-            <p>{{ product.description | strip_html | truncatewords: 10 }}</p>
-            {% if product.available %}
-              <strong>From {{ product.price_min | money }}</strong>
-              <span class="button button--dark">View product</span>
-            {% else %}
-              <strong>Out of stock</strong>
-              <span class="button button--disabled">Unavailable</span>
-            {% endif %}
-          </a>
-        </article>
-      {% else %}
-        <p>No products are assigned to this collection yet.</p>
-      {% endfor %}
-    </div>
-
-    {% if paginate.pages > 1 %}
-      <nav class="pagination" aria-label="Pagination">
-        {{ paginate | default_pagination }}
-      </nav>
-    {% endif %}
-  {% endpaginate %}
+  <div class="collection-grid" data-collection-grid aria-live="polite">
+    {% for product in collection.products %}
+      <article
+        class="collection-card{% unless product.available %} is-sold-out{% endunless %}"
+        data-collection-card
+        data-title="{{ product.title | escape }}"
+        data-available="{{ product.available }}"
+        data-original-order="{{ forloop.index }}"
+      >
+        <div class="collection-image-wrap">
+          <span class="collection-sale-badge">Sale</span>
+          {% unless product.available %}<span class="collection-stock-badge">Sold out</span>{% endunless %}
+          {% if product.featured_image %}
+            {{ product.featured_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '360,600,900,1100', alt: product.title }}
+          {% endif %}
+        </div>
+        <div class="collection-card-copy">
+          <h2>{{ product.title }}</h2>
+          <p>{{ product.metafields.custom.benefit | default: product.description | strip_html | truncatewords: 10 }}</p>
+          {% if product.available %}
+            <a class="collection-product-button" href="{{ product.url }}">View Product</a>
+          {% else %}
+            <button class="collection-product-button is-disabled" type="button" disabled>Out of stock</button>
+          {% endif %}
+        </div>
+      </article>
+    {% else %}
+      <p>No products are assigned to this collection yet.</p>
+    {% endfor %}
+  </div>
 </section>
 
 {% schema %}
-{
-  "name": "Main collection",
-  "settings": []
-}
+{"name":"Cata-Kor shop all","settings":[]}
 {% endschema %}

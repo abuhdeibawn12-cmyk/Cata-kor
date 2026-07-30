@@ -1,72 +1,29 @@
-<section class="product-benefits section-shell">
-  <div>
-    <p class="eyebrow">{{ section.settings.eyebrow }}</p>
-    <h2>{{ section.settings.heading }}</h2>
-    <p>{{ section.settings.copy }}</p>
-  </div>
-  <div class="benefit-list">
-    {% for block in section.blocks %}
-      <article {{ block.shopify_attributes }}>
-        <span>✓</span>
-        <div><h3>{{ block.settings.heading }}</h3><p>{{ block.settings.copy }}</p></div>
-      </article>
-    {% endfor %}
-  </div>
-</section>
+{% if product.handle == 'nmn' %}
+  <section class="nmn-support section-shell">
+    <div><p class="eyebrow">NMN</p><h2>Support Cellular Health</h2><p>NMN is a vital coenzyme found in every cell of the body. It supports mitochondrial function, cellular energy production, healthy aging, and cognitive and metabolic function over time.*</p>
+      <ul><li>Supports cellular energy production*</li><li>Helps maintain healthy cellular function*</li><li>Brain support*</li><li>Promotes mitochondrial function*</li></ul>
+    </div>
+    <div class="nmn-support-art"><img src="{{ product.featured_image | image_url: width: 900 }}" alt="{{ product.title }}" width="900" height="900"><img src="{{ 'cell-star.webp' | asset_url }}" alt="" width="900" height="900"></div>
+  </section>
+  <section class="product-benefits section-shell">
+    <div class="benefit-photo"><img src="{{ product.featured_image | image_url: width: 1000 }}" alt="{{ product.title }}" width="1000" height="1000"></div>
+    <div><p class="eyebrow">NMN</p><h2>Key Benefits</h2><div class="benefit-list">
+      <article><span>⚡</span><div><h3>Cellular Energy</h3><p>Supports normal cellular metabolism and healthy energy processes in cells.*</p></div></article>
+      <article><span>⌁</span><div><h3>Cellular Health</h3><p>Supports normal enzymatic activity involved in cellular maintenance.*</p></div></article>
+      <article><span>↯</span><div><h3>Mitochondrial Support</h3><p>Supports healthy mitochondrial activity and normal energy production.*</p></div></article>
+      <article><span>◎</span><div><h3>Brain Support</h3><p>Supports healthy brain cell metabolism and cognitive function.*</p></div></article>
+    </div></div>
+  </section>
+  <section class="compare-section section-shell"><h2>How We Compare</h2><p class="eyebrow">MOST NAD+ SUPPLEMENTS ARE GUESSING. WE’RE NOT.</p>
+    <div class="compare-table"><div><b>Efficacy</b><b>Dosage</b><b>Certification</b><b>Convenience</b><b>Price</b></div><div class="is-cata"><h3>Cata·Kor</h3><span>✓ Targets all 4 hallmarks</span><span>✓ Transparent doses</span><span>✓ Independently tested</span><span>✓ 2 capsules per day</span><span>✓ Bundle value</span></div><div><h3>Typical supplements</h3><span>! Focuses on one hallmark</span><span>! Often underdosed</span><span>× Rarely certified</span><span>× Multiple pills daily</span><span>× Higher daily cost</span></div></div>
+  </section>
+{% else %}
+  <section class="product-benefits section-shell">
+    <div><p class="eyebrow">CATA-KOR</p><h2>{% if product.handle == 'liposomal-glutathione' %}Antioxidant Defense{% else %}Support Cellular Health{% endif %}</h2><p>Transparent liposomal formulas designed to support everyday energy, cellular resilience and healthy aging.*</p></div>
+    <div class="benefit-list"><article><span>✓</span><div><h3>Cellular support</h3><p>Supports normal cellular pathways and everyday wellness.*</p></div></article><article><span>✓</span><div><h3>Transparent quality</h3><p>Clearly labeled ingredients and independent quality controls.</p></div></article><article><span>✓</span><div><h3>Daily consistency</h3><p>Simple capsules designed for a consistent routine.</p></div></article></div>
+  </section>
+{% endif %}
 
 {% schema %}
-{
-  "name": "Product benefits",
-  "settings": [
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "CATA-KOR"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Support cellular health"
-    },
-    {
-      "type": "textarea",
-      "id": "copy",
-      "label": "Copy",
-      "default": "Transparent formulas designed to support everyday energy, cellular resilience and healthy aging.*"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "benefit",
-      "name": "Benefit",
-      "settings": [
-        {
-          "type": "text",
-          "id": "heading",
-          "label": "Heading",
-          "default": "Cellular energy"
-        },
-        {
-          "type": "textarea",
-          "id": "copy",
-          "label": "Copy",
-          "default": "Supports normal cellular energy pathways and everyday wellness.*"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "Product benefits",
-      "blocks": [
-        { "type": "benefit", "settings": { "heading": "Cellular energy" } },
-        { "type": "benefit", "settings": { "heading": "Cellular health" } },
-        { "type": "benefit", "settings": { "heading": "Healthy aging" } },
-        { "type": "benefit", "settings": { "heading": "Transparent quality" } }
-      ]
-    }
-  ]
-}
+{"name":"Exact product benefits","settings":[],"presets":[{"name":"Exact product benefits"}]}
 {% endschema %}
