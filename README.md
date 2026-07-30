@@ -1,15 +1,18 @@
 # Cata-Kor Shopify theme
 
-This directory is an importable Shopify Online Store 2.0 theme. The packaged
-upload file is stored at the repository root as
-`Cata-Kor-Shopify-Theme-1.0.0.zip`.
+This is a Shopify Online Store 2.0 theme connected through GitHub.
 
-## Upload
+## Connect through Shopify
 
 1. In Shopify Admin, open **Online Store → Themes**.
-2. Select **Import theme → Upload zip file**.
-3. Upload `Cata-Kor-Shopify-Theme-1.0.0.zip`.
-4. Preview the imported theme before publishing it.
+2. Select **Add theme → Connect from GitHub**.
+3. Install or authorize the Shopify GitHub app when prompted.
+4. Choose the repository `abuhdeibawn12-cmyk/Cata-kor`.
+5. Choose the branch `codex/shopify-theme`.
+6. Connect it as an unpublished theme, preview it, and publish only when ready.
+
+Shopify automatically pulls future commits from this branch. Changes saved in
+Shopify's theme editor or code editor are also committed back to this branch.
 
 ## Product setup
 
