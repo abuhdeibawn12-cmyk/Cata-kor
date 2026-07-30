@@ -23,7 +23,7 @@
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
   </head>
 
-  <body class="template-{{ template.name | handle }}{% if template.name == 'index' or request.path == '/pages/about-us' %} exact-home{% endif %}{% if request.path == '/pages/about-us' %} about-page{% endif %}{% if request.path == '/pages/science-benefits' %} science-page{% endif %}{% if template.name == 'product' %} product-page{% endif %}">
+  <body class="template-{{ template.name | handle }}{% if template.name == 'index' or request.path == '/pages/about-us' or template.suffix == 'about' %} exact-home{% endif %}{% if request.path == '/pages/about-us' or template.suffix == 'about' %} about-page{% endif %}{% if request.path == '/pages/science-benefits' or template.suffix == 'science' %} science-page{% endif %}{% if template.name == 'product' %} product-page{% endif %}">
     <a class="skip-link" href="#MainContent">Skip to content</a>
     {% section 'header' %}
 

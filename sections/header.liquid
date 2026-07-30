@@ -21,8 +21,8 @@
   <nav class="main-nav" id="MainNavigation" aria-label="Main navigation">
     <a href="{{ routes.collections_url }}/shop-all"{% if request.path == '/collections/shop-all' %} aria-current="page"{% endif %}>Shop</a>
     <a href="{{ routes.collections_url }}/shop-all#products">Best Sellers</a>
-    <a href="/pages/science-benefits"{% if request.path == '/pages/science-benefits' %} aria-current="page"{% endif %}>Science</a>
-    <a href="/pages/about-us"{% if request.path == '/pages/about-us' %} aria-current="page"{% endif %}>About</a>
+    <a href="/pages/contact?view=science"{% if template.suffix == 'science' or request.path == '/pages/science-benefits' %} aria-current="page"{% endif %}>Science</a>
+    <a href="/pages/contact?view=about"{% if template.suffix == 'about' or request.path == '/pages/about-us' %} aria-current="page"{% endif %}>About</a>
   </nav>
 
   <div class="header-actions">
