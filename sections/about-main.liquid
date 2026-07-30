@@ -1,0 +1,45 @@
+<section class="about-hero">
+  <div>
+    <h1>{{ section.settings.heading }}</h1>
+    <p>{{ section.settings.copy }}</p>
+    <a class="button button--lime" href="{{ routes.all_products_collection_url }}">Shop now</a>
+  </div>
+  {% if section.settings.image %}
+    {{ section.settings.image | image_url: width: 1600 | image_tag: widths: '600,900,1200,1600', loading: 'eager', alt: section.settings.heading }}
+  {% else %}
+    <div class="about-hero__placeholder"><span>Choose an About hero image in the theme editor</span></div>
+  {% endif %}
+</section>
+
+<section class="about-genesis section-shell">
+  <p class="eyebrow">Liposomal longevity support</p>
+  <h2>The genesis of Cata-Kor: a journey to transform lives</h2>
+  <p>Meet Cata-Kor, a brand of dietary supplements on a mission to make a genuine impact.</p>
+  <p>More than a brand, Cata-Kor is a community committed to healthier, vibrant lives. From thoughtfully designed formulations to positive impacts in households, our approach centers on scientific precision, transparent information and rigorous third-party testing.</p>
+  <p>Today, Cata-Kor inspires individuals to embrace a healthier life through the marriage of science and wellness.</p>
+</section>
+
+{% schema %}
+{
+  "name": "About Cata-Kor",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Take charge of your aging history!"
+    },
+    {
+      "type": "textarea",
+      "id": "copy",
+      "label": "Copy",
+      "default": "Experience high-quality ingredients that fuel your body and mind, support your health and fitness goals, and help you surpass your limits."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero image"
+    }
+  ]
+}
+{% endschema %}

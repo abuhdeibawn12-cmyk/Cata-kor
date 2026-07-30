@@ -1,0 +1,96 @@
+<section class="featured-products section-shell">
+  <div class="section-heading">
+    <div>
+      <h2>{{ section.settings.heading }}</h2>
+      <p><strong>60 day</strong> guarantee · <strong>1M+</strong> consumers</p>
+    </div>
+    <a class="button button--lime" href="{{ routes.all_products_collection_url }}">Shop all →</a>
+  </div>
+
+  <div class="product-grid">
+    {% for block in section.blocks %}
+      {% assign featured_product = block.settings.product %}
+      {% assign fallback_index = forloop.index %}
+      <article class="product-card" {{ block.shopify_attributes }}>
+        {% if featured_product != blank %}
+          <a href="{{ featured_product.url }}">
+            <div class="product-card__top"><span>Best seller</span></div>
+            {% if featured_product.featured_image %}
+              {{ featured_product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '320,480,720,900', alt: featured_product.title }}
+            {% endif %}
+            <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <h3>{{ featured_product.title }}</h3>
+            <p>{{ block.settings.benefit }}</p>
+            <strong>{{ featured_product.price_min | money }}</strong>
+          </a>
+        {% else %}
+          {% case fallback_index %}
+            {% when 1 %}
+              {% assign fallback_image = 'product-nad-hq.png' %}
+              {% assign fallback_title = 'Liposomal NAD+' %}
+            {% when 2 %}
+              {% assign fallback_image = 'product-nmn.avif' %}
+              {% assign fallback_title = 'NMN Complex' %}
+            {% when 3 %}
+              {% assign fallback_image = 'product-glutathione.avif' %}
+              {% assign fallback_title = 'Liposomal Glutathione' %}
+            {% else %}
+              {% assign fallback_image = 'product-caakg.avif' %}
+              {% assign fallback_title = 'Cata-Kor Supplement' %}
+          {% endcase %}
+          <div class="product-card__top"><span>Select product</span></div>
+          <img src="{{ fallback_image | asset_url }}" alt="{{ fallback_title }}" loading="lazy" width="900" height="900">
+          <div class="stars">★★★★★</div>
+          <h3>{{ fallback_title }}</h3>
+          <p>{{ block.settings.benefit }}</p>
+          <strong>Assign this card in the theme editor</strong>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured products",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Build your daily longevity routine*"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "benefit",
+          "label": "Benefit",
+          "default": "Everyday cellular support*"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured products",
+      "blocks": [
+        { "type": "product", "settings": { "benefit": "Daily cellular energy*" } },
+        { "type": "product", "settings": { "benefit": "NAD+ pathway support*" } },
+        { "type": "product", "settings": { "benefit": "Antioxidant defense*" } },
+        { "type": "product", "settings": { "benefit": "Healthy aging support*" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

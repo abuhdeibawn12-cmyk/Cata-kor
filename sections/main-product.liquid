@@ -1,0 +1,177 @@
+{% assign selected_variant = product.selected_or_first_available_variant %}
+
+<section class="main-product section-shell" data-product-root>
+  <div class="product-gallery" data-product-gallery>
+    <div class="product-thumbnails" role="list" aria-label="Product media">
+      {% for media in product.media %}
+        <button
+          type="button"
+          class="{% if forloop.first %}is-active{% endif %}"
+          data-media-target="{{ media.id }}"
+          aria-label="Show product image {{ forloop.index }}"
+        >
+          {{ media.preview_image | image_url: width: 180 | image_tag: loading: 'lazy', widths: '90,180', alt: product.title }}
+        </button>
+      {% endfor %}
+    </div>
+
+    <div class="product-media">
+      {% for media in product.media %}
+        <div class="product-media__item {% if forloop.first %}is-active{% endif %}" data-media-id="{{ media.id }}">
+          {% case media.media_type %}
+            {% when 'image' %}
+              {{ media | image_url: width: 1600 | image_tag: widths: '540,760,1100,1600', loading: 'eager', alt: product.title }}
+            {% when 'video' %}
+              {{ media | media_tag: controls: true, image_size: '1100x' }}
+            {% when 'external_video' %}
+              {{ media | external_video_tag }}
+            {% else %}
+              {{ media | media_tag }}
+          {% endcase %}
+        </div>
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="product-details">
+    <nav class="breadcrumbs" aria-label="Breadcrumbs">
+      <a href="{{ routes.root_url }}">Home</a><span>/</span><span>{{ product.title }}</span>
+    </nav>
+    <div class="product-rating"><span>★★★★★</span> {{ section.settings.rating_text }}</div>
+    <h1>{{ product.title }}</h1>
+    {% if product.description != blank %}
+      <div class="product-description">{{ product.description | strip_html | truncatewords: 24 }}</div>
+    {% endif %}
+
+    {% form 'product', product, class: 'product-form', data-product-form: '' %}
+      <input type="hidden" name="id" value="{{ selected_variant.id }}" data-variant-input>
+
+      <div class="product-option-heading">
+        <h2>Select quantity</h2>
+      </div>
+
+      <div class="variant-grid" role="radiogroup" aria-label="Select product option">
+        {% for variant in product.variants %}
+          {% assign jar_count = variant.title | split: ' ' | first | plus: 0 %}
+          {% if jar_count < 1 %}
+            {% assign jar_count = 1 %}
+          {% endif %}
+          {% assign each_price = variant.price | divided_by: jar_count %}
+          <button
+            type="button"
+            class="variant-card {% if variant.id == selected_variant.id %}is-selected{% endif %}"
+            data-variant-button
+            data-variant-id="{{ variant.id }}"
+            data-price="{{ variant.price }}"
+            data-price-formatted="{{ variant.price | money | escape }}"
+            data-available="{{ variant.available }}"
+            aria-pressed="{% if variant.id == selected_variant.id %}true{% else %}false{% endif %}"
+            {% unless variant.available %}disabled{% endunless %}
+          >
+            {% if forloop.first %}<em>BEST VALUE</em>{% elsif forloop.index == 2 %}<em>MOST POPULAR</em>{% endif %}
+            {% if variant.featured_image %}
+              {{ variant.featured_image | image_url: width: 260 | image_tag: loading: 'lazy', alt: variant.title }}
+            {% elsif product.featured_image %}
+              {{ product.featured_image | image_url: width: 260 | image_tag: loading: 'lazy', alt: variant.title }}
+            {% endif %}
+            <strong>{{ variant.title }}</strong>
+            <span>
+              {% if jar_count > 1 %}{{ each_price | money }}/each{% else %}{{ variant.price | money }}{% endif %}
+            </span>
+            {% unless variant.available %}<small>Sold out</small>{% endunless %}
+          </button>
+        {% endfor %}
+      </div>
+
+      <div class="one-time-price">
+        <div><strong>One-time purchase</strong><span>No subscription or recurring charges</span></div>
+        <b data-product-price>{{ selected_variant.price | money }}</b>
+      </div>
+
+      <button
+        class="button button--dark button--full product-submit"
+        type="submit"
+        {% unless selected_variant.available %}disabled{% endunless %}
+        data-add-to-cart
+      >
+        <span data-add-label>{% if selected_variant.available %}Add to cart{% else %}Sold out{% endif %}</span>
+        <strong data-add-price>{{ selected_variant.price | money }}</strong>
+      </button>
+    {% endform %}
+
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when '@app' %}
+          {% render block %}
+      {% endcase %}
+    {% endfor %}
+
+    <div class="delivery-line">
+      <span>● Delivered in 3–5 days</span>
+      <span>Free tracked shipping</span>
+    </div>
+
+    <div class="product-trust">
+      <strong>Clinicians’ Choice</strong>
+      <p>{{ section.settings.clinician_text }}</p>
+    </div>
+
+    <div class="product-accordions">
+      <details open>
+        <summary>Details <span>+</span></summary>
+        <div>{{ product.description }}</div>
+      </details>
+      <details>
+        <summary>How to use <span>+</span></summary>
+        <p>{{ section.settings.how_to_use }}</p>
+      </details>
+      <details>
+        <summary>Safety <span>+</span></summary>
+        <p>{{ section.settings.safety }}</p>
+      </details>
+      <details>
+        <summary>Shipping and guarantee <span>+</span></summary>
+        <p>Orders include tracked delivery and are backed by the Cata-Kor money-back guarantee.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main product",
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "rating_text",
+      "label": "Rating text",
+      "default": "4.9/5 (1000+ reviews)"
+    },
+    {
+      "type": "textarea",
+      "id": "clinician_text",
+      "label": "Clinician text",
+      "default": "Trusted by health professionals and customers building consistent wellness routines."
+    },
+    {
+      "type": "textarea",
+      "id": "how_to_use",
+      "label": "How to use",
+      "default": "Follow the directions on the product label or the advice of a qualified healthcare professional."
+    },
+    {
+      "type": "textarea",
+      "id": "safety",
+      "label": "Safety",
+      "default": "Consult a qualified healthcare professional before use if you are pregnant, nursing, taking medication or managing a medical condition."
+    }
+  ]
+}
+{% endschema %}

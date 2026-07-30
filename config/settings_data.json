@@ -1,0 +1,14 @@
+{
+  "current": {
+    "color_primary": "#153f1d",
+    "color_accent": "#dcff72",
+    "color_background": "#ffffff"
+  },
+  "presets": {
+    "Cata-Kor": {
+      "color_primary": "#153f1d",
+      "color_accent": "#dcff72",
+      "color_background": "#ffffff"
+    }
+  }
+}

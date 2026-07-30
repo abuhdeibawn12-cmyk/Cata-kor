@@ -1,0 +1,27 @@
+{
+  "sections": {
+    "hero": {
+      "type": "home-hero",
+      "settings": {}
+    },
+    "products": {
+      "type": "featured-products",
+      "settings": {
+        "heading": "Build your daily longevity routine*"
+      }
+    },
+    "experts": {
+      "type": "experts",
+      "settings": {}
+    },
+    "science": {
+      "type": "science-banner",
+      "settings": {}
+    },
+    "founder": {
+      "type": "founder-story",
+      "settings": {}
+    }
+  },
+  "order": ["hero", "products", "experts", "science", "founder"]
+}

@@ -1,0 +1,33 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Cata-Kor",
+    "theme_version": "1.0.0",
+    "theme_author": "Cata-Kor",
+    "theme_documentation_url": "https://github.com/abuhdeibawn12-cmyk/Cata-kor",
+    "theme_support_url": "https://github.com/abuhdeibawn12-cmyk/Cata-kor"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary green",
+        "default": "#153f1d"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent lime",
+        "default": "#dcff72"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background",
+        "default": "#ffffff"
+      }
+    ]
+  }
+]

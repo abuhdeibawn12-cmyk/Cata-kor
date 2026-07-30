@@ -1,0 +1,93 @@
+<section class="reviews-section section-shell">
+  <div class="section-heading">
+    <div><p class="eyebrow">Real results</p><h2>{{ section.settings.heading }}</h2></div>
+    <span class="review-summary">★★★★★ {{ section.settings.summary }}</span>
+  </div>
+
+  <div class="review-grid">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when '@app' %}
+          {% render block %}
+        {% when 'review' %}
+          <article class="review-card" {{ block.shopify_attributes }}>
+            <div class="stars">★★★★★</div>
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.copy }}</p>
+            <strong>{{ block.settings.name }}</strong>
+            <small>Verified customer</small>
+          </article>
+      {% endcase %}
+    {% endfor %}
+  </div>
+
+  {% if section.settings.reviews_app_note %}
+    <p class="reviews-app-note">{{ section.settings.reviews_app_note }}</p>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Customer reviews",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer reviews"
+    },
+    {
+      "type": "text",
+      "id": "summary",
+      "label": "Summary",
+      "default": "5.0 average rating"
+    },
+    {
+      "type": "textarea",
+      "id": "reviews_app_note",
+      "label": "Reviews app note",
+      "default": "Install your preferred Shopify reviews app and add its app block here for verified review collection, moderation and pagination."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "A great addition to my routine"
+        },
+        {
+          "type": "textarea",
+          "id": "copy",
+          "label": "Review",
+          "default": "Easy to take, well presented and simple to keep consistent."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer name",
+          "default": "Cata-Kor customer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer reviews",
+      "blocks": [
+        { "type": "review" },
+        { "type": "review", "settings": { "title": "Noticeable consistency", "name": "Verified customer" } },
+        { "type": "review", "settings": { "title": "Clean daily support", "name": "Verified customer" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

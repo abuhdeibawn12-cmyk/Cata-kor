@@ -1,0 +1,57 @@
+{% assign expert_images = 'expert-myro.avif,expert-kayla.webp,expert-zach.webp,expert-jenoah.webp' | split: ',' %}
+{% assign expert_names = 'Myro Figura,Kayla Barnes-Lentz,Dr. Zach Colls,Jenoah McKiver' | split: ',' %}
+{% assign expert_titles = 'UCLA-Trained MD,Leading Female Longevity Expert,NBA/NFL Physical Rehab Coach,Olympic Gold Champion' | split: ',' %}
+
+<section class="experts-section section-shell">
+  <div class="section-heading section-heading--center">
+    <h2>{{ section.settings.heading }}</h2>
+    <p>{{ section.settings.copy }}</p>
+  </div>
+
+  <div class="expert-grid">
+    {% for image in expert_images %}
+      <article class="expert-card" tabindex="0">
+        <div class="expert-card__inner">
+          <div class="expert-card__face expert-card__front">
+            <img src="{{ image | asset_url }}" alt="{{ expert_names[forloop.index0] }}" loading="lazy" width="700" height="850">
+            <div>
+              <h3>{{ expert_names[forloop.index0] }}</h3>
+              <span>{{ expert_titles[forloop.index0] }}</span>
+            </div>
+          </div>
+          <div class="expert-card__face expert-card__back">
+            <h3>{{ expert_names[forloop.index0] }}</h3>
+            <span>{{ expert_titles[forloop.index0] }}</span>
+            <p>“Cata-Kor makes transparent, high-quality longevity support easy to include in a consistent daily routine.”</p>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+  <p class="disclosure">These individuals partner with Cata-Kor as paid ambassadors, sharing their personal opinions and experiences.</p>
+</section>
+
+{% schema %}
+{
+  "name": "Experts",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recommended by health experts & elite athletes"
+    },
+    {
+      "type": "textarea",
+      "id": "copy",
+      "label": "Copy",
+      "default": "Real routines, transparent formulas and quality standards people can trust."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Experts"
+    }
+  ]
+}
+{% endschema %}
