@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const host =
     requestHeaders.get("x-forwarded-host") ??
     requestHeaders.get("host") ??
-    "cata-kor-one.vercel.app";
+    "catakor.store";
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
   const description = "Cata-Kor longevity supplements for cellular energy, healthy aging, and everyday wellness.";
