@@ -1,39 +1,123 @@
-{% assign review_names = "Gretchen Yeates,Laura Thompson,Lillian Lee,Aaliyah Ward,Daniel,Grace Hill,Ruth Rodriguez,Barbara Ortiz,Jennifer Ramirez,Leah Richardson,Tara Patel,Zoey Myers,Megan Perez,Brooklyn Young,Sofia Collins,Barbara Collins,Nicole Williams,Linda Jackson,Jasmine Robinson,Stephanie Kim" | split: "," %}
-{% assign review_titles = "Great results with NMN,Best skin hair and energy,Easy capsules at 55+,Changes in just five days,Better energy and focus,Helped my brain fog,Skin improving by day three,A difference in a week,The real deal with consistency,My favorite supplement,Will always take this,Day one of my journey,Nice quality bottle,Improved facial texture,On my fourth bottle,Clear instructions,Three days in,Others noticed healthier skin,Less brain fog more energy,Sharper memory" | split: "," %}
-{% assign review_bodies = "I have had great results with the NMN. I ran out and felt the difference, so I was excited to get back on it.|Love NMN—my skin and hair have never been better. My energy has picked up too.|Capsules are easy to consume and digest. I bought the three pack and am eager to see the effects.|I have been taking this for five days and I’m already noticing a difference in my energy and mood.|I’m about two weeks in and already feeling the benefits. My energy is improving and I feel more focused.|Great product and easy to take. It has been helpful for my brain fog and exhaustion.|My skin already feels better and it’s only day three. I can’t wait to see what a month brings.|I am one week in and I can see a difference and feel better.|This is my second bottle of NMN and I notice the difference when I take it consistently.|My favorite supplement. It has become an easy part of my daily routine.|I love this product and plan to keep it in my routine.|So excited to start my Cata-Kor NMN supplement journey and track my progress.|The order arrived in good condition and the bottle feels high quality.|I am starting to notice a difference in the overall texture of my skin after taking it consistently.|I’m on my fourth bottle and still love how easy it is to keep up with.|It came sealed and included simple clear instructions.|I’m three days in and looking forward to reporting back on my progress.|I’m on my second month. Friends and family have commented that my skin looks healthier.|Fast delivery and an easy routine. I feel more energetic and have noticed less brain fog.|I have been taking it consistently for three months and feel sharper in my daily routine." | split: "|" %}
+{% if product.handle == 'nmn' %}
+  {% assign review_names = "Gretchen Yeates,Laura Thompson,Lillian Lee,Aaliyah Ward,Daniel,Grace Hill,Ruth Rodriguez,Barbara Ortiz,Jennifer Ramirez,Leah Richardson,Tara Patel,Zoey Myers,Megan Perez,Brooklyn Young,Sofia Collins,Barbara Collins,Nicole Williams,Linda Jackson,Jasmine Robinson,Stephanie Kim" | split: "," %}
+  {% assign review_titles = "Great results with NMN,Best skin hair and energy,Easy capsules anti-aging at 55+,Changes in just five days,Better energy focus less brain fog,Helped my brain fog and fatigue,Skin improving by day three,A difference in just a week,The real deal with consistency,My favorite supplement,Will always take this,Day one of my journey,Nice quality bottle,Improved facial texture,On my fourth bottle,Sealed with clear instructions,Three days in,Others noticed my healthier skin,Less brain fog more energy,Sharper memory" | split: "," %}
+  {% assign review_bodies = "I have had great results with the NMN. I was on it before but ran out and I felt the difference. I was so excited to get back on it and add others too. I feel the difference already.|Love NMN—my skin and hair have never been better. My energy has picked up too.|Capsules are easy to consume and digest. I bought the three pack and am eager to see the effects.|I have been taking this for five days and I’m already noticing a difference in my energy and mood.|I’m about two weeks in and already feeling the benefits. My energy is improving and I feel more focused.|Great product and easy to take. If you’re feeling brain fog and exhaustion this has been helpful for me.|My skin already feels better and it’s only day three. I can’t wait to see what a month brings.|So far I love this product. I am one week in and I can see a difference and feel better.|This is my second bottle of NMN and I notice the difference when I take it consistently.|My favorite supplement. It has become an easy part of my daily routine.|I love this product and plan to keep it in my routine.|So excited to start my Cata-Kor NMN supplement journey and track my progress.|The order arrived in good condition and the bottle feels high quality.|I am starting to notice a difference in the overall texture of my skin after taking it consistently.|I’m on my fourth bottle and still love how easy it is to keep up with.|Great product. It came sealed and included simple clear instructions.|I’m three days in and looking forward to reporting back on my progress.|I’m on my second month of taking NMN daily. Friends and family have commented that my skin looks healthier.|Fast delivery and an easy routine. I feel more energetic during the day and have noticed less brain fog.|I have been taking it consistently for three months and feel sharper in my daily routine." | split: "|" %}
+  {% assign review_images = "https://review-images.judgeme.com/cata-kor/1781396011__0___tyEdVLo__debb9f8f7c54e3db4f45658b751371c~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781396012__0__tCXKEyfU__b11f16284534f3dbdd0d3c51e6acdbe~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781396013__0__UBGtu4HW__b87aa7b0c9341439cd654e480772744~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781396015__0__ZiYJYDnH__57553392dcb4c3dba0d7f16321e576d~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781396015__0__qDJpCmwm__f3d631f549e4dc6bb538775052921eb~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781395998__0__p9pvWSwq__99c70eaea5a43b0aeb36e355faf8cff~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781395998__0__XYxwIDV2__4d248f792d64a46a4152a2820cd04dc~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781395998__0__XUfI4Sz6__05ae2f11d7142e395f218bbbbcb52d6~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781395998__0__v-os1O4M__ba680b897f04713a5b2afd60711ee91~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781396011__0__Is5tb-bp__ee58a81b5de400a9d294110d6a573ad~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500" | split: "|" %}
 
-<section class="reviews-section section-shell">
-  <div class="section-heading">
-    <div><p class="eyebrow">Real results</p><h2>Customer Reviews</h2></div>
-    <span class="review-summary">★★★★★ 5.0 average rating</span>
+  <section class="nmn-reviews-section" id="nmn-reviews" data-nmn-reviews>
+    <div class="nmn-reviews-inner">
+      <div class="nmn-reviews-heading">
+        <div>
+          <h2>Customer Reviews</h2>
+          <p><b>5.0</b> <span>392 reviews</span></p>
+        </div>
+        <div class="nmn-review-actions">
+          <button type="button" data-review-form-open>Write a review</button>
+          <button type="button" data-nmn-review-filter aria-expanded="false">Filter</button>
+          <select aria-label="Sort customer reviews">
+            <option>Most recent</option>
+            <option>Highest rating</option>
+            <option>Pictures first</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="nmn-review-filter" data-nmn-review-filter-panel hidden>
+        <input type="checkbox" data-pictures-only>
+        Show reviews with pictures
+      </label>
+
+      <div class="nmn-review-photo-strip" aria-label="Customer review photos">
+        {% for review_image in review_images %}
+          <button type="button" data-review-picture-filter>
+            <img src="{{ review_image }}" alt="Customer review photo {{ forloop.index }}" width="500" height="500" loading="lazy">
+          </button>
+        {% endfor %}
+      </div>
+
+      <div class="nmn-review-pages" data-nmn-review-pages aria-live="polite">
+        {% for page_number in (1..20) %}
+          {% assign page_offset = page_number | minus: 1 | times: 5 %}
+          {% assign quarter_offset = page_number | minus: 1 | divided_by: 4 %}
+          {% assign page_offset = page_offset | plus: quarter_offset %}
+          <div class="nmn-review-list{% if page_number == 1 %} is-active{% endif %}" data-nmn-review-page="{{ page_number }}" {% unless page_number == 1 %}hidden{% endunless %}>
+            {% for item_number in (0..4) %}
+              {% assign seed_index = page_offset | plus: item_number | modulo: 20 %}
+              {% assign image_index = page_offset | plus: item_number | modulo: 10 %}
+              {% assign has_image_mod = item_number | modulo: 2 %}
+              <article data-has-review-image="{% if has_image_mod == 1 %}true{% else %}false{% endif %}">
+                <div class="nmn-review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+                <div class="nmn-reviewer">
+                  <span>{{ review_names[seed_index] | slice: 0 }}</span>
+                  <div>
+                    <b>{{ review_names[seed_index] }}</b>
+                    {% if item_number == 0 %}<em>Verified</em>{% endif %}
+                    <small>{% if page_number == 1 and item_number == 0 %}07/02/2026{% else %}06/14/2026{% endif %}</small>
+                  </div>
+                </div>
+                <h3>{{ review_titles[seed_index] }}</h3>
+                <p>{{ review_bodies[seed_index] }}</p>
+                {% if has_image_mod == 1 %}
+                  <img class="nmn-review-image" src="{{ review_images[image_index] }}" alt="{{ review_titles[seed_index] }}" width="500" height="500" loading="lazy">
+                {% endif %}
+                <div class="nmn-reviewed-product">
+                  <img src="https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=180" alt="" width="180" height="180">
+                  <span>Review for<br><u>NMN 4-in-1</u></span>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <nav class="nmn-review-pagination" data-nmn-review-pagination aria-label="Customer review pages"></nav>
+      <p class="nmn-review-page-count" data-nmn-review-page-count>Page 1 of 20</p>
+    </div>
+  </section>
+
+  <div class="nmn-review-dialog-layer" data-review-dialog hidden>
+    <section class="nmn-review-dialog" role="dialog" aria-modal="true" aria-labelledby="nmn-review-dialog-title">
+      <button type="button" data-review-form-close aria-label="Close review form">×</button>
+      <div data-review-form-content>
+        <h2 id="nmn-review-dialog-title">Write a review</h2>
+        <p class="nmn-dialog-stars">★★★★★</p>
+        <form data-review-form>
+          <label>Name<input type="text" required></label>
+          <label>Review title<input type="text" required></label>
+          <label>Your review<textarea rows="5" required></textarea></label>
+          <button type="submit">Submit review</button>
+        </form>
+      </div>
+      <div data-review-thanks hidden>
+        <h2>Thank you for your review</h2>
+        <p>Your feedback has been received for moderation.</p>
+      </div>
+    </section>
   </div>
-
-  <div class="review-pages" data-review-pages>
-    {% for name in review_names %}
-      <article class="review-page{% if forloop.first %} is-active{% endif %}" data-review-page="{{ forloop.index }}">
-        <div class="stars">★★★★★</div>
-        <h3>{{ review_titles[forloop.index0] }}</h3>
-        <p>{{ review_bodies[forloop.index0] }}</p>
-        <strong>{{ name }}</strong>
-        <small>Verified customer · 06/14/2026</small>
-      </article>
-    {% endfor %}
-  </div>
-
-  <nav class="review-page-nav" aria-label="Customer review pages">
-    <button type="button" data-review-page-change="-1" aria-label="Previous review">←</button>
-    {% for name in review_names %}<button class="{% if forloop.first %}is-active{% endif %}" type="button" data-review-page-go="{{ forloop.index }}">{{ forloop.index }}</button>{% endfor %}
-    <button type="button" data-review-page-change="1" aria-label="Next review">→</button>
-  </nav>
-
-  {% for block in section.blocks %}{% if block.type == '@app' %}{% render block %}{% endif %}{% endfor %}
-</section>
+{% elsif product.handle == 'nad-advanced-500mg' %}
+  {% assign review_names = "Stefano Barberi|Zach Calls|Stephania Rene|Katie Blank|Dr. Maria Sophocles|Dr. Nicole Avena|Dr. Cyntia Brown|Sidney Outlaw|Dr. Chelsea Azarcon|Shayna Powless|Alecia Beckford-Stewart|Tyler Lesher|Miranda Kay Barber|Kristin Mackay|Morgan Adams" | split: "|" %}
+  {% assign review_roles = "Professional Mountain Bike and Gravel Racer|Doctor of Physical Therapy|Personal Trainer|Orthopedic Physical Therapist|Gynecologist & Women’s Health Advocate|Nutrition Expert and Author Cata-Kor Partner|Clinical Pharmacologist & Women’s Health Expert|Professional Fighter|Naturopathic Medical Doctor|Professional Cyclist|DC CCSP ICSC CSCS|NBA Performance Therapist|Professional Fighter and Trainer|NPC Athlete Fitness & Nutrition Coach|Certified Holistic Sleep Coach MSW" | split: "|" %}
+  {% assign review_images = "https://catakor.com/cdn/shop/files/PXL_20251031_161014203.MP.jpg?v=1762427856&width=900|https://catakor.com/cdn/shop/files/Untitled-design-87_cc69b1bd-9ef7-4551-9182-d71dce66217b.png?v=1762428122&width=900|https://catakor.com/cdn/shop/files/image0.jpg?v=1762428427&width=900|https://catakor.com/cdn/shop/files/BCO.b1cb0ad0-0e84-4d32-bd89-08ee8ae1dee8.png?v=1762428559&width=900|https://catakor.com/cdn/shop/files/09_25TGheadshotsscrubsstandingsmiling.jpg?v=1762428684&width=900|https://catakor.com/cdn/shop/files/NicoleAvena_030723_0003_8edb1051-2982-4c6f-b3ca-a6a905a5c863.jpg?v=1762426902&width=900|https://catakor.com/cdn/shop/files/image_588.png?v=1762167390&width=900|https://catakor.com/cdn/shop/files/image_7.png?v=1762167225&width=900|https://catakor.com/cdn/shop/files/image_9.png?v=1762167226&width=900|https://catakor.com/cdn/shop/files/image_69898.png?v=1762167381&width=900|https://catakor.com/cdn/shop/files/image_5_989.png?v=1762167402&width=900|https://catakor.com/cdn/shop/files/IMG_8372.jpg?v=1763389661&width=900|https://catakor.com/cdn/shop/files/IMG_3145.jpg?v=1763389765&width=900|https://catakor.com/cdn/shop/files/69984753-956A-4271-92AC-E0C50282A687.jpg?v=1763389847&width=900|https://catakor.com/cdn/shop/files/Web_Resolution-05.jpg?v=1763389950&width=900" | split: "|" %}
+  {% assign review_quotes = "In the two weeks since I started using it I’ve noticed my recovery feels smoother.*|Cata-Kor NAD⁺ has become one of my go-to supplements for supporting overall energy recovery and longevity.*|I’m so thankful I found such a high quality company to trust with their third party testing efforts!*|I recommend Cata-Kor NAD+ due to the high quality ingredients and concentration of NAD+.*|Cata-Kor’s liposomal NAD+ formulation is an important distinction when considering an NAD+ formulation.*|NAD+ plays an essential role in the process of energy production.*|What really stands out to me is Cata-Kor’s dedication to science and transparency.*|It helps you calm everything down. This is a great product. Don’t waste your time. Give it a try.*|Cata-Kor NAD was the first NAD that I felt a significant improvement from taking within a matter of weeks.*|I’ve been choosing to supplement with NAD+ due to its role in efficient cellular energy production and overall cellular wellness.*|With my glowing skin and consistently high energy levels I can confidently say this is a wellness product I highly recommend.*|NAD⁺ supports cellular energy mitochondrial function and the natural repair processes that help us move and feel our best.*|I’m focused on supporting cellular energy and longevity in my performance. Excited to share my experience as I go.*|Cata-Kor helps with the overall regeneration of cells and how your body uses energy on a cellular level.*|After taking Cata-Kor for a couple of weeks I saw a 6% increase in my recovery scores according to my WHOOP data.*" | split: "|" %}
+  <section class="endorser-reviews-section" id="reviews" aria-labelledby="review-carousel-title" data-nad-reviews>
+    <h2 class="sr-only" id="review-carousel-title">Customer and professional reviews</h2>
+    <div class="review-carousel-track" data-nad-review-track>
+      {% for name in review_names %}
+        <article class="review-card">
+          <img src="{{ review_images[forloop.index0] }}" alt="{{ name }}" width="900" height="900" loading="lazy">
+          <h3>{{ name }}</h3><span>{{ review_roles[forloop.index0] }}</span><div class="review-rule"></div><b aria-hidden="true">“</b><p>{{ review_quotes[forloop.index0] }}</p>
+          <span class="sr-only">Review {{ forloop.index }} of {{ review_names.size }}</span>
+        </article>
+      {% endfor %}
+    </div>
+    <div class="review-pagination" aria-label="Select a review">
+      {% for name in review_names %}<button type="button" class="{% if forloop.first %}active{% endif %}" data-nad-review-go="{{ forloop.index0 }}" aria-label="Go to {{ name }} review"></button>{% endfor %}
+    </div>
+    <div class="review-arrow-row"><button type="button" data-nad-review-step="-4" disabled aria-label="Previous reviews">←</button><button type="button" data-nad-review-step="4" aria-label="Next reviews">→</button></div>
+    <p class="review-disclosure">*These individuals partner with Cata-Kor as compensated endorsers, sharing their personal opinions and experiences. They do not provide medical advice. Statements have not been evaluated by the FDA.</p>
+  </section>
+{% endif %}
 
 {% schema %}
-{
-  "name":"Customer reviews",
-  "settings":[],
-  "blocks":[{"type":"@app"}],
-  "presets":[{"name":"Customer reviews"}]
-}
+{"name":"Customer reviews","settings":[],"blocks":[{"type":"@app"}],"presets":[{"name":"Customer reviews"}]}
 {% endschema %}

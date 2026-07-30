@@ -1,26 +1,137 @@
 {% if product.handle == 'nmn' %}
-  <section class="nmn-support section-shell">
-    <div><p class="eyebrow">NMN</p><h2>Support Cellular Health</h2><p>NMN is a vital coenzyme found in every cell of the body. It supports mitochondrial function, cellular energy production, healthy aging, and cognitive and metabolic function over time.*</p>
-      <ul><li>Supports cellular energy production*</li><li>Helps maintain healthy cellular function*</li><li>Brain support*</li><li>Promotes mitochondrial function*</li></ul>
+  <section class="nmn-cellular-section">
+    <div class="nmn-cellular-copy">
+      <span>NMN</span>
+      <h2>Support Cellular<br>Health</h2>
+      <p>NMN is a vital coenzyme found in every cell of the body. It plays a key role in supporting mitochondrial function and cellular energy production. Maintaining NMN levels may help promote cellular resilience, support healthy aging, and contribute to cognitive and metabolic function over time.*</p>
+      <ul>
+        <li><span aria-hidden="true">✓</span>Supports cellular energy production*</li>
+        <li><span aria-hidden="true">✓</span>Helps maintain healthy cellular function*</li>
+        <li><span aria-hidden="true">✓</span>Brain support*</li>
+        <li><span aria-hidden="true">✓</span>Promotes mitochondrial function*</li>
+      </ul>
     </div>
-    <div class="nmn-support-art"><img src="{{ product.featured_image | image_url: width: 900 }}" alt="{{ product.title }}" width="900" height="900"><img src="{{ 'cell-star.webp' | asset_url }}" alt="" width="900" height="900"></div>
+    <img class="nmn-cellular-art" src="https://catakor.com/cdn/shop/files/Image_gp-inline-block_01a37bd0-b432-4a3e-8fb5-ef27f162b876.webp?v=1775054572" alt="Cata-Kor NMN supplement alongside a cellular-health visual" width="900" height="900" loading="lazy">
   </section>
-  <section class="product-benefits section-shell">
-    <div class="benefit-photo"><img src="{{ product.featured_image | image_url: width: 1000 }}" alt="{{ product.title }}" width="1000" height="1000"></div>
-    <div><p class="eyebrow">NMN</p><h2>Key Benefits</h2><div class="benefit-list">
-      <article><span>⚡</span><div><h3>Cellular Energy</h3><p>Supports normal cellular metabolism and healthy energy processes in cells.*</p></div></article>
-      <article><span>⌁</span><div><h3>Cellular Health</h3><p>Supports normal enzymatic activity involved in cellular maintenance.*</p></div></article>
-      <article><span>↯</span><div><h3>Mitochondrial Support</h3><p>Supports healthy mitochondrial activity and normal energy production.*</p></div></article>
-      <article><span>◎</span><div><h3>Brain Support</h3><p>Supports healthy brain cell metabolism and cognitive function.*</p></div></article>
-    </div></div>
+
+  <section class="nmn-benefits-section">
+    <picture>
+      <source media="(max-width: 700px)" srcset="https://catakor.com/cdn/shop/files/benefits-img-mob.webp?v=1775054571">
+      <img src="https://catakor.com/cdn/shop/files/benefits-img.webp?v=1775054572" alt="Cata-Kor NMN capsules and supplement jar" width="900" height="1200" loading="lazy">
+    </picture>
+    <div class="nmn-benefits-copy">
+      <span>NMN</span>
+      <h2>Key Benefits</h2>
+      <article>
+        <img src="https://catakor.com/cdn/shop/files/benefits-icon-1.svg?v=1774889226" alt="" width="40" height="40">
+        <div><h3>Cellular Energy</h3><p>NMN is a naturally occurring coenzyme that plays a supportive role in normal cellular metabolism. It helps the body convert nutrients into cellular energy and helps maintain healthy energy processes in cells.*</p></div>
+      </article>
+      <article>
+        <img src="https://catakor.com/cdn/shop/files/benefits-icon-2.svg?v=1774889464" alt="" width="40" height="40">
+        <div><h3>Cellular Health</h3><p>NMN helps support normal enzymatic activity involved in DNA processes and cellular maintenance, contributing to the maintenance of overall healthy cellular function.*</p></div>
+      </article>
+      <article>
+        <img src="https://catakor.com/cdn/shop/files/benefits-icon-3.svg?v=1774889626" alt="" width="40" height="40">
+        <div><h3>Mitochondrial Support</h3><p>NMN is involved in supporting healthy mitochondrial activity, which plays an important role in normal cellular energy production and overall metabolic wellbeing.*</p></div>
+      </article>
+      <article>
+        <img src="https://catakor.com/cdn/shop/files/benefits-icon-4.svg?v=1774889668" alt="" width="40" height="40">
+        <div><h3>Brain Support</h3><p>NMN can help support healthy brain cell metabolism and mitochondrial activity, which may help maintain normal cognitive function and overall cellular resilience.*</p></div>
+      </article>
+    </div>
   </section>
-  <section class="compare-section section-shell"><h2>How We Compare</h2><p class="eyebrow">MOST NAD+ SUPPLEMENTS ARE GUESSING. WE’RE NOT.</p>
-    <div class="compare-table"><div><b>Efficacy</b><b>Dosage</b><b>Certification</b><b>Convenience</b><b>Price</b></div><div class="is-cata"><h3>Cata·Kor</h3><span>✓ Targets all 4 hallmarks</span><span>✓ Transparent doses</span><span>✓ Independently tested</span><span>✓ 2 capsules per day</span><span>✓ Bundle value</span></div><div><h3>Typical supplements</h3><span>! Focuses on one hallmark</span><span>! Often underdosed</span><span>× Rarely certified</span><span>× Multiple pills daily</span><span>× Higher daily cost</span></div></div>
+
+  <section class="nmn-experts-section" data-nmn-experts>
+    <div class="nmn-section-heading">
+      <div><span>RECOMMENDED BY</span><h2>Top Health Experts &amp; Medical Partners</h2></div>
+      <div class="nmn-expert-controls">
+        <button type="button" data-expert-step="-1" aria-label="Previous expert">←</button>
+        <button type="button" data-expert-step="1" aria-label="Next expert">→</button>
+      </div>
+    </div>
+    <div class="nmn-expert-grid" aria-live="polite">
+      <article data-expert-card>
+        <img src="https://catakor.com/cdn/shop/files/partner-image-1.png?v=1774888818&width=900" alt="Myro Figura" width="900" height="900" loading="lazy">
+        <h3>Myro Figura</h3><span>UCLA-Trained MD</span>
+        <p><b aria-hidden="true">”</b>I’m usually picky about supplements, but with Cata-Kor’s liposomal absorption technology, I know I’m getting unmatched effectiveness.</p>
+      </article>
+      <article data-expert-card>
+        <img src="https://catakor.com/cdn/shop/files/partner-image-2.jpg?v=1774888818&width=900" alt="Kayla Barnes-Lentz" width="900" height="900" loading="lazy">
+        <h3>Kayla Barnes-Lentz</h3><span>A Leading Expert in Female Longevity</span>
+        <p><b aria-hidden="true">”</b>NAD+ is non-negotiable in my longevity protocol, and Cata-Kor is a brand I trust. What sets them apart is their rigorous testing standards and commitment to quality.</p>
+      </article>
+      <article data-expert-card>
+        <img src="https://catakor.com/cdn/shop/files/partner-image-3.png?v=1774888818&width=900" alt="Zach Colls" width="900" height="900" loading="lazy">
+        <h3>Zach Colls</h3><span>NBA/NFL Physical Rehab Coach</span>
+        <p><b aria-hidden="true">”</b>Cata-Kor’s products are exactly what I need: bioavailable, clean, trusted ingredients, and easy to take.</p>
+      </article>
+      <article data-expert-card>
+        <img src="https://catakor.com/cdn/shop/files/partner-image-4.jpg?v=1774888817&width=900" alt="Jenoah McKiver" width="900" height="900" loading="lazy">
+        <h3>Jenoah McKiver</h3><span>Olympic Gold Champion</span>
+        <p><b aria-hidden="true">”</b>My intense training career has taken a toll. I rely on Cata-Kor to support recovery, longevity, and cognitive health.</p>
+      </article>
+      <article data-expert-card hidden>
+        <img src="https://catakor.com/cdn/shop/files/partner-image-5.jpg?v=1774888818&width=900" alt="Michael Davis" width="900" height="900" loading="lazy">
+        <h3>Michael Davis</h3><span>Performance Specialist</span>
+        <p><b aria-hidden="true">”</b>I was honestly blown away by how fast I felt the difference in my performance and recovery.</p>
+      </article>
+    </div>
+    <p class="nmn-expert-disclaimer">These individuals partner with Cata-Kor as paid ambassadors, sharing their real routines and results.</p>
   </section>
-{% else %}
-  <section class="product-benefits section-shell">
-    <div><p class="eyebrow">CATA-KOR</p><h2>{% if product.handle == 'liposomal-glutathione' %}Antioxidant Defense{% else %}Support Cellular Health{% endif %}</h2><p>Transparent liposomal formulas designed to support everyday energy, cellular resilience and healthy aging.*</p></div>
-    <div class="benefit-list"><article><span>✓</span><div><h3>Cellular support</h3><p>Supports normal cellular pathways and everyday wellness.*</p></div></article><article><span>✓</span><div><h3>Transparent quality</h3><p>Clearly labeled ingredients and independent quality controls.</p></div></article><article><span>✓</span><div><h3>Daily consistency</h3><p>Simple capsules designed for a consistent routine.</p></div></article></div>
+
+  <section class="nmn-compare-section">
+    <div class="nmn-compare-heading">
+      <h2>How We Compare</h2>
+      <p>MOST NAD+ SUPPLEMENTS ARE GUESSING. WE’RE NOT.</p>
+    </div>
+    <div class="nmn-compare-table" role="table" aria-label="Cata-Kor compared with typical NAD supplements">
+      <div class="nmn-compare-labels" role="rowgroup"><b>Efficacy</b><b>Dosage</b><b>Certification</b><b>Convenience</b><b>Price</b></div>
+      <div class="nmn-compare-brand" role="rowgroup">
+        <img src="{{ 'logo.svg' | asset_url }}" alt="Cata-Kor" width="250" height="60">
+        <span><b aria-hidden="true">✓</b>Targets All 4 Hallmarks Of Aging</span>
+        <span><b aria-hidden="true">✓</b>Therapeutic Doses</span>
+        <span><b aria-hidden="true">✓</b>NSF Certified</span>
+        <span><b aria-hidden="true">✓</b>2 Capsules Per Day</span>
+        <span><b aria-hidden="true">✓</b>$1.13/Day</span>
+      </div>
+      <div class="nmn-compare-typical" role="rowgroup">
+        <strong>Typical NAD+<br>Supplements</strong>
+        <span><b aria-hidden="true">!</b>Focuses On 1 Hallmark Only</span>
+        <span><b aria-hidden="true">!</b>Often Underdosed</span>
+        <span><b aria-hidden="true">×</b>Rarely Certified</span>
+        <span><b aria-hidden="true">×</b>Multiple Pills Daily</span>
+        <span><b aria-hidden="true">×</b>~$3/Day</span>
+      </div>
+    </div>
+  </section>
+{% elsif product.handle == 'liposomal-glutathione' %}
+  <section class="secondary-quality-strip">
+    <div><b>TRANSPARENT FORMULA</b><span>Clear ingredient amounts</span></div>
+    <div><b>THIRD-PARTY TESTED</b><span>Independently quality checked</span></div>
+    <div><b>MONEY-BACK GUARANTEE</b><span>Shop with confidence</span></div>
+  </section>
+{% elsif product.handle == 'nad-advanced-500mg' %}
+  <section class="result-proof-section" id="results">
+    <article class="result-proof-card">
+      <img src="https://catakor.com/cdn/shop/files/before-after-image.png?v=1751561115" alt="Aaron before and after eight weeks using Cata-Kor" width="1000" height="550" loading="lazy">
+      <div>
+        <h2>AARON</h2><h3>Before vs. 8 Weeks using Cata-Kor</h3>
+        <p>“I started taking this after noticing low energy. Two months in, I feel sharper, more alert, and feel noticeably healthier.”</p>
+        <span>⚡ More Energy</span>
+        <small>Taking: <a href="#MainContent">Cata-Kor NAD⁺ Advanced LipoNAD™ 500mg</a></small>
+      </div>
+    </article>
+  </section>
+  <section class="product-guarantee-section" id="guarantee">
+    <div class="product-guarantee-copy">
+      <h2>PEACE-OF-MIND<br>GUARANTEE</h2>
+      <p>Every bottle is backed by our lifetime Money-Back Promise.</p>
+      <div>
+        <article><strong>LIFETIME</strong><span>Risk-free return<br>window</span></article>
+        <article><strong>&lt; 1%</strong><span>Customers who ever<br>request a refund</span></article>
+      </div>
+      <small>Simply email our support team if you’d like a full refund—no returns, hoops, or hassles.</small>
+    </div>
   </section>
 {% endif %}
 

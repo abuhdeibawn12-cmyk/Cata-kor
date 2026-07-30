@@ -1,185 +1,244 @@
-{% assign selected_variant = product.selected_or_first_available_variant %}
+{% if product.handle == 'nmn' or product.handle == 'liposomal-glutathione' %}
+  {% for variant in product.variants %}
+    {% if variant.title contains '3' %}{% assign variant_3 = variant %}{% endif %}
+    {% if variant.title contains '2' %}{% assign variant_2 = variant %}{% endif %}
+    {% if variant.title contains '1' %}{% assign variant_1 = variant %}{% endif %}
+  {% endfor %}
 
-<section class="main-product section-shell" data-product-root>
-  <div class="product-gallery" data-product-gallery>
-    <div class="product-thumbnails" role="list" aria-label="Product media">
-      {% for media in product.media %}
-        <button
-          type="button"
-          class="{% if forloop.first %}is-active{% endif %}"
-          data-media-target="{{ media.id }}"
-          aria-label="Show product image {{ forloop.index }}"
-        >
-          {{ media.preview_image | image_url: width: 180 | image_tag: loading: 'lazy', widths: '90,180', alt: product.title }}
-        </button>
-      {% endfor %}
-    </div>
+  {% if product.handle == 'nmn' %}
+    {% assign product_id = 'nmn' %}
+    {% assign exact_title = 'NMN 4-IN-1 NAD+ SUPPORT' %}
+    {% assign badge = '1000MG' %}
+    {% assign subtitle = 'Designed to build, recycle, protect, and activate NAD+ pathways.' %}
+    {% assign reviews = '4.9/5 (399+ reviews)' %}
+    {% assign main_image = 'https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=1100' %}
+    {% assign gallery_text = 'https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=1100|https://catakor.com/cdn/shop/files/3_NMN_bbce3af2-5504-48dc-970c-fe25fff2a0ad.jpg?v=1783426601&width=1100|https://catakor.com/cdn/shop/files/2_NMN_053d7393-a9db-469d-8ecb-51880935753c.jpg?v=1783426601&width=1445|https://catakor.com/cdn/shop/files/4_NMN_e27e16fe-9161-41bc-b268-0ce9f64cfd55.jpg?v=1783426609&width=1445|https://catakor.com/cdn/shop/files/7_NMN_1352f876-5cda-4e43-a370-8d14e63d9883.jpg?v=1783426609&width=1445|https://catakor.com/cdn/shop/files/5_NMN_4123d42c-2f4a-4c6b-8eed-14ecea140918.jpg?v=1783426444&width=1445|https://catakor.com/cdn/shop/files/5_NMN_4f364f54-6fc8-4ef4-9ab8-3c10b1b05739.jpg?v=1783426609&width=1445|https://catakor.com/cdn/shop/files/9_NMN_bbefea93-83dd-486d-b27d-7f9277d60fb8.jpg?v=1783426608&width=1445|https://catakor.com/cdn/shop/files/8_NMN_d6190cf0-d0a6-46c0-aa2a-4e5e73e22bca.jpg?v=1783426608&width=1445|https://catakor.com/cdn/shop/files/9_NMN.jpg?v=1774889070&width=1445|https://catakor.com/cdn/shop/files/NMN_2_pack-2.png?v=1774889070&width=1445|https://catakor.com/cdn/shop/files/NMN_3_pack-2.png?v=1774889070&width=1445' %}
+    {% assign accordion_titles = 'How to Use|Ingredients|Shipping & Guarantee|Third-Party Tested' | split: '|' %}
+    {% assign accordion_copies = 'Take two capsules daily with water, with or without food.|NMN, trimethylglycine (TMG), quercetin and trans-resveratrol. See the product label for the complete ingredient list.|Orders include tracked U.S. delivery and are backed by the Cata-Kor money-back guarantee.|Every batch is independently tested for identity, purity and quality before release.' | split: '|' %}
+    {% assign each_3 = 33.99 %}
+    {% assign each_2 = 35.99 %}
+    {% assign total_3 = 101.97 %}
+    {% assign total_2 = 71.98 %}
+  {% else %}
+    {% assign product_id = 'glutathione' %}
+    {% assign exact_title = 'LIPOSOMAL GLUTATHIONE' %}
+    {% assign badge = '1155MG' %}
+    {% assign subtitle = 'Glutathione Supplement' %}
+    {% assign reviews = '4.9 (107+ reviews)' %}
+    {% assign main_image = 'https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=1100' %}
+    {% assign gallery_text = 'https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=1100|https://catakor.com/cdn/shop/files/2_180af383-77a1-4658-bad6-6f56081aea14.jpg?v=1777301848&width=1100|https://catakor.com/cdn/shop/files/Glu_2.jpg?v=1784023438&width=1445|https://catakor.com/cdn/shop/files/4_76de2ec1-d8f9-4fb4-a973-bcde17ca02e4.jpg?v=1777301849&width=1445|https://catakor.com/cdn/shop/files/Glu_4.jpg?v=1784023438&width=1445|https://catakor.com/cdn/shop/files/32.jpg?v=1783426405&width=1445|https://catakor.com/cdn/shop/files/7139FNgEiTL._AC_SL1500.jpg?v=1784023470&width=1445|https://catakor.com/cdn/shop/files/Glu_7.jpg?v=1784023437&width=1445|https://catakor.com/cdn/shop/files/5_1_b1becfa8-499f-4364-95d8-53ede377bb0a.jpg?v=1780499486&width=1445|https://catakor.com/cdn/shop/files/8_COA_test.png?v=1777037332&width=1445|https://catakor.com/cdn/shop/files/9_2d951678-cb63-4457-94bc-e2479151a650.jpg?v=1780499486&width=1445' %}
+    {% assign accordion_titles = 'Details|How to Use|Safety|Ingredients' | split: '|' %}
+    {% assign accordion_copies = 'A liposomal glutathione formula with vitamin C, selenium, vitamin B2 and resveratrol to support antioxidant activity and cellular defense.*|Take two capsules daily with water, with or without food.|Consult a qualified healthcare professional before use if you are pregnant, nursing, taking medication or managing a medical condition.|Liposomal glutathione, vitamin C, selenium, vitamin B2 and trans-resveratrol. See the product label for the complete ingredient list.' | split: '|' %}
+    {% assign each_3 = 32.99 %}
+    {% assign each_2 = 34.99 %}
+    {% assign total_3 = 98.97 %}
+    {% assign total_2 = 69.98 %}
+  {% endif %}
+  {% assign gallery = gallery_text | split: '|' %}
 
-    <div class="product-media">
-      {% for media in product.media %}
-        <div class="product-media__item {% if forloop.first %}is-active{% endif %}" data-media-id="{{ media.id }}">
-          {% case media.media_type %}
-            {% when 'image' %}
-              {{ media | image_url: width: 1600 | image_tag: widths: '540,760,1100,1600', loading: 'eager', alt: product.title }}
-            {% when 'video' %}
-              {{ media | media_tag: controls: true, image_size: '1100x' }}
-            {% when 'external_video' %}
-              {{ media | external_video_tag }}
-            {% else %}
-              {{ media | media_tag }}
-          {% endcase %}
+  <section class="secondary-product-hero" data-product-root data-secondary-product="{{ product_id }}">
+    <div class="secondary-gallery" data-secondary-gallery>
+      <div class="secondary-thumbnail-column">
+        <button type="button" class="secondary-thumbnail-arrow" data-thumbnail-shift="-1" disabled aria-label="Show previous product images">↑</button>
+        <div class="secondary-thumbnails">
+          {% for source in gallery %}
+            <button
+              class="{% if forloop.first %}is-active{% endif %}"
+              type="button"
+              data-gallery-index="{{ forloop.index0 }}"
+              {% if forloop.index > 6 %}hidden{% endif %}
+              aria-label="Show product image {{ forloop.index }}"
+            >
+              <img src="{{ source | replace: 'width=1100', 'width=180' | replace: 'width=1445', 'width=180' }}" alt="" width="180" height="180">
+            </button>
+          {% endfor %}
         </div>
-      {% else %}
-        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-      {% endfor %}
-    </div>
-  </div>
-
-  <div class="product-details">
-    <nav class="breadcrumbs" aria-label="Breadcrumbs">
-      <a href="{{ routes.root_url }}">Home</a><span>/</span><span>{{ product.title }}</span>
-    </nav>
-    <div class="product-rating"><span>★★★★★</span> {{ section.settings.rating_text }}</div>
-    <h1>{{ product.title }}</h1>
-    {% if product.description != blank %}
-      <div class="product-description">{{ product.description | strip_html | truncatewords: 24 }}</div>
-    {% endif %}
-    <div class="product-spec-line">
-      <span>60 Capsules</span><span>/</span>
-      <span>{% if product.handle == 'liposomal-glutathione' %}1155MG{% elsif product.handle == 'nmn' %}1000MG{% else %}500MG{% endif %}</span><span>/</span>
-      <button type="button" data-facts-open>SUPPLEMENT FACTS</button>
-    </div>
-
-    {% form 'product', product, class: 'product-form', data-product-form: '' %}
-      <input type="hidden" name="id" value="{{ selected_variant.id }}" data-variant-input>
-
-      <div class="product-option-heading">
-        <h2>Select quantity</h2>
+        <button type="button" class="secondary-thumbnail-arrow" data-thumbnail-shift="1" aria-label="Show more product images">↓</button>
       </div>
 
-      <div class="variant-grid" role="radiogroup" aria-label="Select product option">
-        {% for variant in product.variants %}
-          {% assign jar_count = variant.title | split: ' ' | first | plus: 0 %}
-          {% if jar_count < 1 %}
-            {% assign jar_count = 1 %}
-          {% endif %}
-          {% assign each_price = variant.price | divided_by: jar_count %}
-          <button
-            type="button"
-            class="variant-card {% if variant.id == selected_variant.id %}is-selected{% endif %}"
-            data-variant-button
-            data-variant-id="{{ variant.id }}"
-            data-price="{{ variant.price }}"
-            data-price-formatted="{{ variant.price | money | escape }}"
-            data-available="{{ variant.available }}"
-            aria-pressed="{% if variant.id == selected_variant.id %}true{% else %}false{% endif %}"
-            {% unless variant.available %}disabled{% endunless %}
-          >
-            {% if forloop.first %}<em>BEST VALUE</em>{% elsif forloop.index == 2 %}<em>MOST POPULAR</em>{% endif %}
-            {% if variant.featured_image %}
-              {{ variant.featured_image | image_url: width: 260 | image_tag: loading: 'lazy', alt: variant.title }}
-            {% elsif product.featured_image %}
-              {{ product.featured_image | image_url: width: 260 | image_tag: loading: 'lazy', alt: variant.title }}
-            {% endif %}
-            <strong>{{ variant.title }}</strong>
-            <span>
-              {% if jar_count > 1 %}{{ each_price | money }}/each{% else %}{{ variant.price | money }}{% endif %}
-            </span>
-            {% unless variant.available %}<small>Sold out</small>{% endunless %}
-          </button>
+      <div class="secondary-main-image has-star">
+        <span class="secondary-gallery-star" aria-hidden="true"></span>
+        <img src="{{ main_image }}" alt="{{ exact_title }} product view 1" width="1100" height="1100" data-secondary-main-image>
+        <button class="secondary-image-nav previous" type="button" data-gallery-step="-1" aria-label="Previous product image">‹</button>
+        <button class="secondary-image-nav next" type="button" data-gallery-step="1" aria-label="Next product image">›</button>
+      </div>
+      <script type="application/json" data-secondary-gallery-json>{{ gallery | json }}</script>
+    </div>
+
+    <div class="secondary-product-details">
+      <div class="secondary-rating">
+        <span aria-label="5 out of 5 stars">★★★★★</span>
+        <b>{{ reviews }}</b>
+      </div>
+      <div class="secondary-title-row">
+        <h1>{{ exact_title }}</h1>
+        <span>{{ badge }}</span>
+      </div>
+      <p class="secondary-subtitle">{{ subtitle }}</p>
+
+      <div class="secondary-quantity-heading">
+        <h2>Select Quantity</h2>
+        <span data-selected-capsules>180 Capsules</span>
+      </div>
+      <div class="secondary-pack-grid">
+        <button class="secondary-pack is-selected" type="button" data-secondary-pack data-jars="3" data-variant-id="{{ variant_3.id }}" data-total="{{ total_3 }}" aria-pressed="true">
+          <em>BEST VALUE</em>
+          <span class="secondary-pack-image jars-3" aria-hidden="true">{% for i in (1..3) %}<img src="{{ main_image }}" alt="" width="160" height="160">{% endfor %}</span>
+          <strong>3 Jars</strong>
+          <span>${{ each_3 }}/each</span>
+        </button>
+        <button class="secondary-pack" type="button" data-secondary-pack data-jars="2" data-variant-id="{{ variant_2.id }}" data-total="{{ total_2 }}" aria-pressed="false">
+          <em>MOST POPULAR</em>
+          <span class="secondary-pack-image jars-2" aria-hidden="true">{% for i in (1..2) %}<img src="{{ main_image }}" alt="" width="160" height="160">{% endfor %}</span>
+          <strong>2 Jars</strong>
+          <span>${{ each_2 }}/each</span>
+        </button>
+        <button class="secondary-pack" type="button" data-secondary-pack data-jars="1" data-variant-id="{{ variant_1.id }}" data-total="39.99" aria-pressed="false">
+          <span class="secondary-pack-image jars-1" aria-hidden="true"><img src="{{ main_image }}" alt="" width="160" height="160"></span>
+          <strong>1 Jar</strong>
+          <span>$39.99</span>
+        </button>
+      </div>
+
+      <div class="secondary-one-time">
+        <span>ONE-TIME PURCHASE</span>
+        <strong data-secondary-total>${{ total_3 }}</strong>
+      </div>
+      <form action="{{ routes.cart_add_url }}" method="post" data-product-form>
+        <input type="hidden" name="id" value="{{ variant_3.id }}" data-variant-input>
+        <input type="hidden" name="quantity" value="1">
+        <button class="secondary-add-button" type="submit" data-add-to-cart>
+          <span data-add-label>Add to Cart</span> <strong data-add-price>${{ total_3 }}</strong>
+        </button>
+      </form>
+      <div class="secondary-delivery">
+        <span>● Free tracked delivery</span>
+        <span>🇺🇸 FREE Shipping to USA</span>
+      </div>
+      <div class="secondary-guarantee">
+        <span aria-hidden="true">◎</span>
+        <b>Less than 1%</b> of customers claim our Money Back Guarantee.
+      </div>
+
+      <div class="secondary-details-accordions">
+        {% for title in accordion_titles %}
+          <details {% if forloop.first %}open{% endif %}>
+            <summary>{{ title }}<span aria-hidden="true">+</span></summary>
+            <p>{{ accordion_copies[forloop.index0] }}</p>
+          </details>
         {% endfor %}
       </div>
+    </div>
+  </section>
+{% elsif product.handle == 'nad-advanced-500mg' %}
+  {% for variant in product.variants %}
+    {% if variant.title contains '3' and variant.title contains 'Jar' %}{% assign nad_variant_3 = variant %}{% endif %}
+    {% if variant.title contains '2' and variant.title contains 'Jar' %}{% assign nad_variant_2 = variant %}{% endif %}
+    {% if variant.title contains '1' and variant.title contains 'Jar' %}{% assign nad_variant_1 = variant %}{% endif %}
+  {% endfor %}
+  {% assign nad_gallery_text = 'https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=1100|https://catakor.com/cdn/shop/files/1_NAD500_f37a2f8b-6fd5-43fe-a035-c83a38d54ec4.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/2_NAD500_0ce4c9f5-fb17-4ac1-88c2-d4c4af74fc81.jpg?v=1783421259&width=1100|https://catakor.com/cdn/shop/files/3_NAD500_284becb5-a117-43e4-88d0-7ef566cd05c9.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/4_NAD500_5964a474-23e5-46af-8174-36317bfd56c5.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/5_NAD500_db73c746-222c-4b71-8b49-e692af53d992.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/6_NAD500_0d0e1d1a-b711-4d81-8c41-95cdd9fa436c.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/7_NAD500_Manufactured_for.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/5_NAD500_a65fca12-ec33-4c89-9817-0919959280a7.jpg?v=1774889169&width=1100|https://catakor.com/cdn/shop/files/7_NAD500_91bae966-e2fe-499f-9161-0c0f42aca355.jpg?v=1774889169&width=1100|https://catakor.com/cdn/shop/files/8_NAD500-2.jpg?v=1774889110&width=1100|https://catakor.com/cdn/shop/files/3_NAD500_8218ca19-959f-4866-9785-0017cff2f5a0.jpg?v=1774889153&width=1100|https://catakor.com/cdn/shop/files/NAD250_2_jars_5e4c06d5-c927-43b1-9da8-f943028f9ece.jpg?v=1774889110&width=1100|https://catakor.com/cdn/shop/files/NAD250_3_jars_33cd95d4-1a11-40c4-a248-3e99cbee0e30.jpg?v=1774889110&width=1100' %}
+  {% assign nad_gallery = nad_gallery_text | split: '|' %}
+  {% assign nad_main_image = nad_gallery[0] %}
 
-      <div class="one-time-price">
-        <div><strong>One-time purchase</strong><span>No subscription or recurring charges</span></div>
-        <b data-product-price>{{ selected_variant.price | money }}</b>
+  <div class="product-layout" data-product-root>
+    <div class="product-gallery" data-nad-gallery>
+      <div class="thumbnail-rail">
+        <button type="button" class="thumbnail-arrow thumbnail-arrow-up" data-nad-thumbnail-shift="-1" disabled aria-label="Show previous product images">‹</button>
+        <div class="thumbnail-list" aria-label="Product images">
+          <div class="thumbnail-track">
+            {% for source in nad_gallery %}
+              <button type="button" class="{% if forloop.first %}active{% endif %}" data-nad-gallery-index="{{ forloop.index0 }}" aria-label="View product image {{ forloop.index }}">
+                <img src="{{ source | replace: 'width=1100', 'width=180' }}" alt="" width="180" height="180">
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+        <button type="button" class="thumbnail-arrow thumbnail-arrow-down" data-nad-thumbnail-shift="1" aria-label="Show more product images">›</button>
+      </div>
+      <div class="main-product-image">
+        <span class="product-star-shape" aria-hidden="true"></span>
+        <img class="selected-product-image" src="{{ nad_main_image }}" alt="Liposomal NAD+ product image 1" width="1100" height="1100" data-nad-main-image>
+        <div class="gallery-mobile-controls" aria-label="Product image navigation">
+          <button type="button" data-nad-gallery-step="-1" disabled aria-label="Previous product image">←</button>
+          <span data-nad-gallery-count>1 / {{ nad_gallery.size }}</span>
+          <button type="button" data-nad-gallery-step="1" aria-label="Next product image">→</button>
+        </div>
+      </div>
+      <script type="application/json" data-nad-gallery-json>{{ nad_gallery | json }}</script>
+    </div>
+
+    <section class="product-info" aria-label="Product information">
+      <nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="{{ routes.root_url }}">Home</a><span>/</span><b>Liposomal NAD+</b></nav>
+      <div class="review-line"><span class="stars">★★★★★</span><b>4.9/5</b> (2200+ reviews)</div>
+      <div class="product-title-row"><h1>LIPOSOMAL NAD+</h1><span>500MG</span></div>
+      <p class="product-subtitle">Liposomal NAD+ Supplement</p>
+      <div class="product-facts"><b>60 Capsules</b><span>/</span><b>500MG</b><span>/</span><button type="button" data-facts-open>SUPPLEMENT FACTS</button></div>
+
+      <div class="purchase-group">
+        <div class="purchase-label"><h2>Select Quantity</h2><span data-nad-capsules>180 Capsules</span></div>
+        <div class="quantity-options">
+          <button type="button" class="quantity-option selected" data-nad-pack data-jars="3" data-variant-id="{{ nad_variant_3.id }}" data-total="98.97" aria-pressed="true">
+            <em>BEST VALUE</em><span class="quantity-bottles quantity-bottles-3" aria-hidden="true">{% for i in (1..3) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>3 Jars</b><span>$32.99/each</span>
+          </button>
+          <button type="button" class="quantity-option" data-nad-pack data-jars="2" data-variant-id="{{ nad_variant_2.id }}" data-total="69.98" aria-pressed="false">
+            <em>MOST POPULAR</em><span class="quantity-bottles quantity-bottles-2" aria-hidden="true">{% for i in (1..2) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>2 Jars</b><span>$34.99/each</span>
+          </button>
+          <button type="button" class="quantity-option" data-nad-pack data-jars="1" data-variant-id="{{ nad_variant_1.id }}" data-total="39.99" aria-pressed="false">
+            <span class="quantity-bottles quantity-bottles-1" aria-hidden="true"><img src="{{ nad_main_image }}" alt="" width="120" height="120"></span><b>1 Jar</b><span>$39.99</span>
+          </button>
+        </div>
       </div>
 
-      <button
-        class="button button--dark button--full product-submit"
-        type="submit"
-        {% unless selected_variant.available %}disabled{% endunless %}
-        data-add-to-cart
-      >
-        <span data-add-label>{% if selected_variant.available %}Add to cart{% else %}Sold out{% endif %}</span>
-        <strong data-add-price>{{ selected_variant.price | money }}</strong>
-      </button>
-    {% endform %}
+      <div class="one-time-purchase"><span><b>ONE-TIME PURCHASE</b><small>No subscription or recurring charges</small></span><strong data-nad-total>$98.97</strong></div>
+      <form action="{{ routes.cart_add_url }}" method="post" data-product-form>
+        <input type="hidden" name="id" value="{{ nad_variant_3.id }}" data-variant-input>
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit" class="add-to-cart" data-add-to-cart><span data-add-label>ADD TO CART</span><b data-add-price>$98.97</b></button>
+      </form>
+      <div class="delivery-row"><span>● &nbsp; Delivered in 3–5 days</span><span>🇺🇸 FREE Shipping to USA</span></div>
+      <div class="clinician-box"><b>⌇ CLINICIANS’ CHOICE ⌇</b><p>192 clinicians share this on <i>FrontrowMD</i> without compensation.</p><a href="#reviews">View clinicians &amp; learn more</a></div>
+      <div class="guarantee-strip"><b>Less than 1%</b> of customers claim our Money Back Guarantee.</div>
+      <div class="product-accordions">
+        <details class="product-accordion"><summary>How to Use<span>＋</span></summary><div><p>Take two capsules daily, with or without food.</p></div></details>
+        <details class="product-accordion"><summary>Safety<span>＋</span></summary><div><p>Use as directed. Consult your healthcare provider before use if needed.</p></div></details>
+        <details class="product-accordion"><summary>How long does it take to notice effects?<span>＋</span></summary><div><p>Many customers report changes within a few weeks of consistent daily use.*</p></div></details>
+      </div>
 
-    {% for block in section.blocks %}
-      {% case block.type %}
-        {% when '@app' %}
-          {% render block %}
-      {% endcase %}
-    {% endfor %}
-
-    <div class="delivery-line">
-      <span>● Delivered in 3–5 days</span>
-      <span>Free tracked shipping</span>
-    </div>
-
-    <div class="product-trust">
-      <strong>Clinicians’ Choice</strong>
-      <p>{{ section.settings.clinician_text }}</p>
-    </div>
-
-    <div class="product-accordions">
-      <details open>
-        <summary>Details <span>+</span></summary>
-        <div>{{ product.description }}</div>
-      </details>
-      <details>
-        <summary>How to use <span>+</span></summary>
-        <p>{{ section.settings.how_to_use }}</p>
-      </details>
-      <details>
-        <summary>Safety <span>+</span></summary>
-        <p>{{ section.settings.safety }}</p>
-      </details>
-      <details>
-        <summary>Shipping and guarantee <span>+</span></summary>
-        <p>Orders include tracked delivery and are backed by the Cata-Kor money-back guarantee.</p>
-      </details>
-    </div>
+      <section class="customer-video-section" aria-labelledby="customer-video-title">
+        <h2 id="customer-video-title">JOIN 100,000+ OTHERS <span aria-hidden="true">💚</span></h2>
+        <div class="story-grid">
+          <article class="story-card"><video src="https://cdn.shopify.com/videos/c/o/v/49c88503ac444cceaa07ad0941b19ff2.mov" playsinline preload="metadata"></video><button type="button" class="story-play-button" data-story-play aria-label="Play A solid energy boost">▶</button><h3>A solid energy boost</h3></article>
+          <article class="story-card"><video src="https://cdn.shopify.com/videos/c/o/v/626b669d4eae4d0f95088060c2662d1f.mp4" playsinline preload="metadata"></video><button type="button" class="story-play-button" data-story-play aria-label="Play An even better formula">▶</button><h3>An even better formula</h3></article>
+          <article class="story-card"><video src="https://cdn.shopify.com/videos/c/o/v/1763917e32c14cbda12acec0ee8bcd3d.mp4" playsinline preload="metadata"></video><button type="button" class="story-play-button" data-story-play aria-label="Play I feel younger">▶</button><h3>I feel younger</h3></article>
+        </div>
+      </section>
+      <nav class="product-jump-links" aria-label="Learn more about this product">
+        <h2>Learn more about:</h2><div><a href="#MainContent">↓ <span>How it Works</span></a><a href="#MainContent">↓ <span>Benefits</span></a><a href="#results">↓ <span>Real Results</span></a><a href="#guarantee">↓ <span>Why Cata-Kor</span></a><a href="#reviews">↓ <span>Comparison</span></a><a href="#faq">↓ <span>FAQs</span></a></div>
+      </nav>
+    </section>
   </div>
-</section>
 
-<section class="customer-video-section">
-  <h2>JOIN 100,000+ OTHERS 💚</h2>
-  <div class="customer-video-grid">
-    <video controls playsinline preload="metadata" src="https://cdn.shopify.com/videos/c/o/v/49c88503ac444cceaa07ad0941b19ff2.mov"></video>
-    <video controls playsinline preload="metadata" src="https://cdn.shopify.com/videos/c/o/v/626b669d4eae4d0f95088060c2662d1f.mp4"></video>
-    <video controls playsinline preload="metadata" src="https://cdn.shopify.com/videos/c/o/v/1763917e32c14cbda12acec0ee8bcd3d.mp4"></video>
+  <div class="supplement-modal-layer" data-facts-layer hidden>
+    <section class="supplement-modal" role="dialog" aria-modal="true" aria-labelledby="supplement-dialog-title">
+      <div class="supplement-modal-tabs" role="tablist"><button type="button" class="active" data-facts-tab="facts">Supplement Facts</button><button type="button" data-facts-tab="ingredients">Ingredients</button></div>
+      <div class="supplement-facts-panel" data-facts-panel="facts">
+        <h2 id="supplement-dialog-title">Supplement Facts</h2><p>Serving Size: 2 Capsules;<br>Servings Per Container: 30</p><div class="facts-heavy-rule"></div>
+        <h3><span>Amount Per Serving:</span><span>DV%</span></h3><div class="facts-heavy-rule"></div>
+        <div class="facts-row"><strong>LipoNAD™ (providing β-NAD⁺ ≥ 250 mg)</strong><b>500 mg</b></div><div class="facts-row"><span>Trans-Resveratrol</span><b>50 mg</b></div>
+        <div class="facts-heavy-rule"></div><strong class="facts-daily-value">** Daily Value (DV) not established</strong>
+        <p class="facts-other">Other Ingredients: Sunflower (Helianthus annuus) Lecithin, Silicon Dioxide, Magnesium Stearate, Microcrystalline Cellulose, Vegetable Cellulose (Capsule).</p>
+      </div>
+      <div class="ingredients-panel" data-facts-panel="ingredients" hidden>
+        <h2>Key Ingredients</h2><div class="ingredient-heading"><strong>LipoNAD™ (providing β-NAD⁺ ≥250 mg)</strong><b>500 mg</b></div>
+        <p>LipoNAD™ delivers β-NAD directly into cells using liposomes for better absorption. It’s included to boost cellular energy, metabolism, and healthy-aging benefits more effectively.</p>
+        <div class="ingredient-heading"><strong>Trans-Resveratrol</strong><b>50 mg</b></div><p>Trans-Resveratrol is included for its antioxidant and anti-inflammatory effects. It helps enhance mitochondrial function and supports the activity of NAD⁺ in the body.</p>
+        <h3>Other Ingredients</h3><p>Sunflower Lecithin, Silicon Dioxide, Magnesium Stearate, Microcrystalline Cellulose, Vegetable Cellulose (Capsule).</p>
+      </div>
+      <button type="button" class="supplement-continue" data-facts-close>Continue</button>
+      <div class="supplement-shipping"><span aria-hidden="true">🇺🇸</span> <b>FREE</b> Shipping to USA</div>
+    </section>
   </div>
-</section>
-
-<div class="facts-layer" data-facts-layer hidden>
-  <section class="facts-dialog" role="dialog" aria-modal="true" aria-labelledby="FactsTitle">
-    <button class="facts-close" type="button" data-facts-close aria-label="Close">×</button>
-    <div class="facts-tabs">
-      <button class="is-active" type="button" data-facts-tab="facts">Supplement Facts</button>
-      <button type="button" data-facts-tab="ingredients">Ingredients</button>
-    </div>
-    <div class="facts-panel is-active" data-facts-panel="facts">
-      <h2 id="FactsTitle">Supplement Facts</h2>
-      <p>Serving Size: 2 Capsules;<br>Servings Per Container: 30</p>
-      <h3>Amount Per Serving: <span>DV%</span></h3>
-      {% if product.handle == 'liposomal-glutathione' %}
-        <p><b>Liposomal Glutathione</b> 1155 mg</p>
-      {% elsif product.handle == 'nmn' %}
-        <p><b>NMN, TMG, Quercetin &amp; Resveratrol</b> 1000 mg</p>
-      {% else %}
-        <p><b>LipoNAD™ (providing β-NAD⁺ ≥ 250 mg)</b> 500 mg</p><p><b>Trans-Resveratrol</b> 50 mg</p>
-      {% endif %}
-      <small>** Daily Value (DV) not established</small>
-    </div>
-    <div class="facts-panel" data-facts-panel="ingredients">
-      <h2>Ingredients</h2>
-      <p>{{ product.metafields.custom.ingredients | default: 'See the current product label for the complete ingredient and capsule information.' }}</p>
-    </div>
-    <button class="button button--dark button--full" type="button" data-facts-close>Continue</button>
-  </section>
-</div>
+{% endif %}
 
 {% schema %}
 {

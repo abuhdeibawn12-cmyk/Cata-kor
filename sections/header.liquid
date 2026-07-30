@@ -1,5 +1,5 @@
 <div class="announcement">
-  <a href="/discount/CATA15?redirect={{ routes.collections_url }}/shop-all">
+  <a href="{{ routes.collections_url }}/shop-all">
     {{ section.settings.announcement }}
   </a>
 </div>
@@ -21,14 +21,14 @@
   <nav class="main-nav" id="MainNavigation" aria-label="Main navigation">
     <a href="{{ routes.collections_url }}/shop-all"{% if request.path == '/collections/shop-all' %} aria-current="page"{% endif %}>Shop</a>
     <a href="{{ routes.collections_url }}/shop-all#products">Best Sellers</a>
-    <a href="/pages/contact?view=science"{% if template.suffix == 'science' or request.path == '/pages/science-benefits' %} aria-current="page"{% endif %}>Science</a>
-    <a href="/pages/contact?view=about"{% if template.suffix == 'about' or request.path == '/pages/about-us' %} aria-current="page"{% endif %}>About</a>
+    <a href="/pages/science-benefits"{% if template.suffix == 'science' or request.path == '/pages/science-benefits' %} aria-current="page"{% endif %}>Science</a>
+    <a href="/pages/about-us"{% if template.suffix == 'about' or request.path == '/pages/about-us' %} class="is-active" aria-current="page"{% endif %}>About</a>
   </nav>
 
   <div class="header-actions">
-    <button class="header-cart cart-icon-link" type="button" data-cart-open aria-label="Open shopping bag with {{ cart.item_count }} items">
+    <button class="header-icon-button cart-icon-link" type="button" data-cart-open aria-label="Open shopping bag with {{ cart.item_count }} items">
       {% render 'icon-bag' %}
-      <span class="cart-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+      <b data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</b>
     </button>
   </div>
 </header>

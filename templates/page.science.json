@@ -3,13 +3,7 @@
     "main": {
       "type": "science-main",
       "settings": {}
-    },
-    "faq": {
-      "type": "faq",
-      "settings": {
-        "heading": "Science and quality questions"
-      }
     }
   },
-  "order": ["main", "faq"]
+  "order": ["main"]
 }
