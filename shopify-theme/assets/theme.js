@@ -2,6 +2,10 @@
   const root = window.Shopify?.routes?.root || "/";
   const drawer = document.querySelector("#CartDrawer");
   const flashDialog = document.querySelector("#FlashOfferDialog");
+  const testCartMode = document.body.dataset.cartMode === "test";
+  const testCartStorageKey = "catakor-test-cart-v2";
+  const productHandles = ["nad-advanced-500mg", "liposomal-glutathione", "nmn"];
+  let productCatalogPromise;
   const moneyFormatter = new Intl.NumberFormat(document.documentElement.lang || "en-US", {
     style: "currency",
     currency: window.Shopify?.currency?.active || "USD"
@@ -101,12 +105,62 @@
          </div>`;
   };
 
+  const buildCart = (items = []) => ({
+    items,
+    item_count: items.reduce((total, item) => total + Number(item.quantity || 0), 0),
+    total_price: items.reduce((total, item) => total + Number(item.final_line_price || 0), 0)
+  });
+  const readTestCart = () => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(testCartStorageKey) || "[]");
+      return buildCart(Array.isArray(parsed) ? parsed : []);
+    } catch (_) {
+      return buildCart();
+    }
+  };
+  const writeTestCart = (items) => {
+    const cart = buildCart(items);
+    localStorage.setItem(testCartStorageKey, JSON.stringify(cart.items));
+    window.dispatchEvent(new CustomEvent("catakor:cart-change", { detail: cart }));
+    return cart;
+  };
+  const loadProductCatalog = async () => {
+    if (!productCatalogPromise) {
+      productCatalogPromise = Promise.all(productHandles.map(async (handle) => {
+        const response = await fetch(`${root}products/${handle}.js`);
+        if (!response.ok) throw new Error(`Unable to load ${handle}`);
+        return response.json();
+      }));
+    }
+    return productCatalogPromise;
+  };
+  const findVariant = async (variantId) => {
+    for (const product of await loadProductCatalog()) {
+      const variant = product.variants.find((candidate) => Number(candidate.id) === Number(variantId));
+      if (variant) return { product, variant };
+    }
+    throw new Error("Unable to find this product option");
+  };
   const getCart = async () => {
+    if (testCartMode) return readTestCart();
     const response = await fetch(`${root}cart.js`, { headers: { Accept: "application/json" } });
     if (!response.ok) throw new Error("Unable to load cart");
     return response.json();
   };
   const updateLine = async (key, quantity) => {
+    if (testCartMode) {
+      const items = readTestCart().items
+        .map((item) => item.key === key
+          ? {
+              ...item,
+              quantity,
+              final_line_price: item.price * quantity,
+              final_price: item.price
+            }
+          : item)
+        .filter((item) => item.quantity > 0);
+      return writeTestCart(items);
+    }
     const response = await fetch(`${root}cart/change.js`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -116,6 +170,35 @@
     return response.json();
   };
   const addVariant = async (variantId, quantity = 1, properties = {}) => {
+    if (testCartMode) {
+      const { product, variant } = await findVariant(variantId);
+      const flash = properties?._flash_offer === "true";
+      const propertyKey = flash
+        ? `${properties._flash_source_token || "replacement"}:${properties._flash_discount || ""}`
+        : "regular";
+      const key = `${variant.id}:${propertyKey}`;
+      const cart = readTestCart();
+      const existing = cart.items.find((item) => item.key === key);
+      const nextQuantity = Number(existing?.quantity || 0) + quantity;
+      const price = Number(variant.price || 0);
+      const line = {
+        key,
+        id: Number(variant.id),
+        variant_id: Number(variant.id),
+        handle: product.handle,
+        product_title: product.title,
+        variant_title: variant.title,
+        quantity: nextQuantity,
+        price,
+        final_price: price,
+        final_line_price: price * nextQuantity,
+        image: variant.featured_image?.src || product.featured_image || "",
+        properties
+      };
+      return writeTestCart(existing
+        ? cart.items.map((item) => item.key === key ? line : item)
+        : [...cart.items, line]);
+    }
     const response = await fetch(`${root}cart/add.js`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -243,6 +326,16 @@
   const continueCheckout = () => {
     if (flashDialog) flashDialog.hidden = true;
     unlockPage();
+    if (testCartMode) {
+      renderCart(readTestCart());
+      openCart();
+      const checkoutButton = drawer?.querySelector("[data-start-checkout]");
+      if (checkoutButton) {
+        checkoutButton.textContent = "TEST CART READY";
+        checkoutButton.title = "Live checkout will be connected during launch configuration.";
+      }
+      return;
+    }
     window.location.href = `${root}checkout`;
   };
 
@@ -617,19 +710,7 @@
     try {
       const variantId = Number(form.querySelector("[name='id']")?.value || 0);
       const quantity = Number(form.querySelector("[name='quantity']")?.value || 1);
-      const response = await fetch(`${root}cart/add.js`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ items: [{ id: variantId, quantity }] })
-      });
-      if (!response.ok) {
-        let message = "Unable to add this product";
-        try {
-          const payload = await response.json();
-          message = payload.description || payload.message || message;
-        } catch (_) {}
-        throw new Error(message);
-      }
+      await addVariant(variantId, quantity);
       renderCart(await getCart());
       openCart();
     } catch (error) {
