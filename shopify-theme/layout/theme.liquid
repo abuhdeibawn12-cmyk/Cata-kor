@@ -23,7 +23,7 @@
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
   </head>
 
-  <body class="site-shell template-{{ template.name | handle }}{% if template.name == 'index' or request.path == '/pages/about-us' or template.suffix == 'about' or product.handle == 'nmn' or product.handle == 'liposomal-glutathione' %} exact-home{% endif %}{% if request.path == '/pages/about-us' or template.suffix == 'about' %} about-page{% endif %}{% if request.path == '/pages/science-benefits' or template.suffix == 'science' %} science-page{% endif %}{% if template.name == 'product' %} product-page{% endif %}{% if product.handle == 'nmn' %} secondary-product-page accent-brown{% elsif product.handle == 'liposomal-glutathione' %} secondary-product-page accent-blue{% endif %}{% if template.name == 'collection' %} collection-page{% endif %}">
+  <body data-market-country="{{ localization.country.iso_code }}" class="site-shell template-{{ template.name | handle }}{% if template.name == 'index' or request.path == '/pages/about-us' or template.suffix == 'about' or product.handle == 'nmn' or product.handle == 'liposomal-glutathione' %} exact-home{% endif %}{% if request.path == '/pages/about-us' or template.suffix == 'about' %} about-page{% endif %}{% if request.path == '/pages/science-benefits' or template.suffix == 'science' %} science-page{% endif %}{% if template.name == 'product' %} product-page{% endif %}{% if product.handle == 'nmn' %} secondary-product-page accent-brown{% elsif product.handle == 'liposomal-glutathione' %} secondary-product-page accent-blue{% endif %}{% if template.name == 'collection' %} collection-page{% endif %}">
     <a class="skip-link" href="#MainContent">Skip to content</a>
     {% section 'header' %}
 
