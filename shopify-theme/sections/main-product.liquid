@@ -44,6 +44,11 @@
     {% if product.description != blank %}
       <div class="product-description">{{ product.description | strip_html | truncatewords: 24 }}</div>
     {% endif %}
+    <div class="product-spec-line">
+      <span>60 Capsules</span><span>/</span>
+      <span>{% if product.handle == 'liposomal-glutathione' %}1155MG{% elsif product.handle == 'nmn' %}1000MG{% else %}500MG{% endif %}</span><span>/</span>
+      <button type="button" data-facts-open>SUPPLEMENT FACTS</button>
+    </div>
 
     {% form 'product', product, class: 'product-form', data-product-form: '' %}
       <input type="hidden" name="id" value="{{ selected_variant.id }}" data-variant-input>
@@ -138,6 +143,43 @@
     </div>
   </div>
 </section>
+
+<section class="customer-video-section">
+  <h2>JOIN 100,000+ OTHERS 💚</h2>
+  <div class="customer-video-grid">
+    <video controls playsinline preload="metadata" src="https://cdn.shopify.com/videos/c/o/v/49c88503ac444cceaa07ad0941b19ff2.mov"></video>
+    <video controls playsinline preload="metadata" src="https://cdn.shopify.com/videos/c/o/v/626b669d4eae4d0f95088060c2662d1f.mp4"></video>
+    <video controls playsinline preload="metadata" src="https://cdn.shopify.com/videos/c/o/v/1763917e32c14cbda12acec0ee8bcd3d.mp4"></video>
+  </div>
+</section>
+
+<div class="facts-layer" data-facts-layer hidden>
+  <section class="facts-dialog" role="dialog" aria-modal="true" aria-labelledby="FactsTitle">
+    <button class="facts-close" type="button" data-facts-close aria-label="Close">×</button>
+    <div class="facts-tabs">
+      <button class="is-active" type="button" data-facts-tab="facts">Supplement Facts</button>
+      <button type="button" data-facts-tab="ingredients">Ingredients</button>
+    </div>
+    <div class="facts-panel is-active" data-facts-panel="facts">
+      <h2 id="FactsTitle">Supplement Facts</h2>
+      <p>Serving Size: 2 Capsules;<br>Servings Per Container: 30</p>
+      <h3>Amount Per Serving: <span>DV%</span></h3>
+      {% if product.handle == 'liposomal-glutathione' %}
+        <p><b>Liposomal Glutathione</b> 1155 mg</p>
+      {% elsif product.handle == 'nmn' %}
+        <p><b>NMN, TMG, Quercetin &amp; Resveratrol</b> 1000 mg</p>
+      {% else %}
+        <p><b>LipoNAD™ (providing β-NAD⁺ ≥ 250 mg)</b> 500 mg</p><p><b>Trans-Resveratrol</b> 50 mg</p>
+      {% endif %}
+      <small>** Daily Value (DV) not established</small>
+    </div>
+    <div class="facts-panel" data-facts-panel="ingredients">
+      <h2>Ingredients</h2>
+      <p>{{ product.metafields.custom.ingredients | default: 'See the current product label for the complete ingredient and capsule information.' }}</p>
+    </div>
+    <button class="button button--dark button--full" type="button" data-facts-close>Continue</button>
+  </section>
+</div>
 
 {% schema %}
 {

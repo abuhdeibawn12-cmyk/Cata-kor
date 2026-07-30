@@ -1,42 +1,65 @@
-<section class="science-page-hero">
-  <div class="section-shell">
-    <p class="eyebrow">Science and quality</p>
-    <h1>{{ section.settings.heading }}</h1>
-    <p>{{ section.settings.copy }}</p>
+<section class="science-coa-section" id="coa">
+  <div class="science-page-container science-coa-grid">
+    <div class="science-coa-copy">
+      <span class="science-kicker">COA</span>
+      <h1>Certificate of Analysis (COA)</h1>
+      <p>As part of our commitment to quality and transparency, we provide official Certificates of Analysis issued by independent third-party laboratories to verify purity, potency, and safety.</p>
+    </div>
+    <div class="science-product-grid">
+      <article class="science-product-card">
+        <a class="science-product-image" href="{{ routes.collections_url }}/shop-all"><img src="{{ 'science-nad-core.png' | asset_url }}" alt="NAD+ Core LipoNAD 250mg" width="900" height="900"></a>
+        <a class="science-product-name" href="{{ routes.collections_url }}/shop-all">NAD⁺ Core LipoNAD™ 250mg</a>
+        <a class="science-pill-button" href="{{ 'science-coa-nad-core.jpg' | asset_url }}" target="_blank">COA CERTIFICATE</a>
+      </article>
+      <article class="science-product-card">
+        <a class="science-product-image" href="/products/nad-advanced-500mg"><img src="{{ 'product-nad-hq.png' | asset_url }}" alt="NAD+ Advanced LipoNAD 500mg" width="900" height="900"><span>Sale</span></a>
+        <a class="science-product-name" href="/products/nad-advanced-500mg">NAD⁺ Advanced LipoNAD™ 500mg</a>
+        <p>Daily cellular energy*</p>
+        <a class="science-pill-button" href="{{ 'science-coa-nad-advanced.jpg' | asset_url }}" target="_blank">COA CERTIFICATE</a>
+      </article>
+    </div>
   </div>
 </section>
 
-<section class="science-standards section-shell">
-  <article><img src="{{ 'science-quality.svg' | asset_url }}" alt="" width="60" height="60"><h2>Quality ingredients</h2><p>Ingredients selected with clear formulation purposes and transparent information.</p></article>
-  <article><img src="{{ 'science-dose.svg' | asset_url }}" alt="" width="60" height="60"><h2>Transparent dosing</h2><p>Product labels clearly communicate the amounts included in each serving.</p></article>
-  <article><img src="{{ 'science-tested.svg' | asset_url }}" alt="" width="60" height="60"><h2>Independent testing</h2><p>Quality controls are designed to support identity, purity and consistency.</p></article>
+<section class="science-feature science-feature-nmn"><div class="science-page-container science-feature-grid">
+  <div class="science-feature-art"><img src="{{ 'science-nmn.png' | asset_url }}" alt="Cata-Kor NMN Supplement" width="1200" height="1200"></div>
+  <div class="science-feature-copy"><h2>Cata-Kor NMN Supplement</h2><p>Cata-Kor’s NMN Supplement with Resveratrol, TMG and Quercetin is a high-purity NAD+ supplement designed to support cellular energy and healthy aging.</p><a class="science-pill-button" href="{{ 'science-coa-nmn.png' | asset_url }}" target="_blank">COA CERTIFICATE</a></div>
+</div></section>
+
+<section class="science-feature science-feature-akg"><div class="science-page-container science-feature-grid">
+  <div class="science-feature-copy"><h2>CA AKG</h2><p>AKG supports lasting energy, biotin supports hair, skin, and nails, and MSM supports comfortable movement—designed as a thoughtful daily nudge toward feeling strong and balanced.</p><a class="science-pill-button" href="{{ 'science-coa-ca-akg.png' | asset_url }}" target="_blank">COA CERTIFICATE</a></div>
+  <div class="science-feature-art"><img src="{{ 'science-ca-akg.png' | asset_url }}" alt="Cata-Kor CA AKG supplement" width="1200" height="1200"></div>
+</div></section>
+
+<section class="science-quality-section" id="quality"><div class="science-page-container science-quality-grid">
+  <div class="science-quality-copy"><span class="science-kicker">Liposomal</span><h2>Science and Quality</h2><p>In a preclinical animal study, our LipoNAD™ preserved NAD+ levels in the liver at 9.31x higher than regular NAD+.**</p><a class="science-pill-button" href="{{ 'science-liponad-study.pdf' | asset_url }}" target="_blank">READ THE SCIENTIFIC STUDY</a></div>
+  <img class="science-quality-chart" src="{{ 'science-bioavailability.png' | asset_url }}" alt="Liposomal NAD+ test results" width="1000" height="700">
+</div></section>
+
+{% assign review_images = "science-review-stefano.jpg,science-review-zach.png,science-review-stephania.jpg,science-review-katie.png,science-review-maria.jpg,science-review-nicole.jpg,science-review-cyntia.png,science-review-sidney.png,science-review-chelsea.png,science-review-shayna.png,science-review-alecia.png,science-review-tyler.jpg,science-review-miranda.jpg,science-review-kristin.jpg,science-review-morgan.jpg" | split: "," %}
+{% assign review_names = "Stefano Barberi,Zach Calls,Stephania Rene,Katie Blank,Dr. Maria Sophocles,Dr. Nicole Avena,Dr. Cyntia Brown,Sidney Outlaw,Dr. Chelsea Azarcon,Shayna Powless,Alecia Beckford-Stewart,Tyler Lesher,Miranda Kay Barber,Kristin Mackay,Morgan Adams" | split: "," %}
+<section class="science-reviews-section">
+  <div class="science-review-track" data-review-track>
+    {% for image in review_images %}
+      <article class="science-review-card"><img src="{{ image | asset_url }}" alt="{{ review_names[forloop.index0] }}" width="500" height="500"><h3>{{ review_names[forloop.index0] }}</h3><span>Health and performance professional</span><p>“Cata-Kor supports a consistent approach to energy, recovery, and longevity as part of my routine.*”</p><small>{{ forloop.index }} / {{ review_images.size }}</small></article>
+    {% endfor %}
+  </div>
+  <div class="science-review-controls"><button type="button" data-review-scroll="-1">←</button><button type="button" data-review-scroll="1">→</button></div>
+  <p class="science-review-disclosure">*These individuals partner with Cata-Kor as compensated endorsers, sharing their personal opinions and experiences.</p>
 </section>
 
-<section class="science-evidence section-shell">
-  <div>
-    <p class="eyebrow">Why Cata-Kor</p>
-    <h2>Built around transparent quality</h2>
-    <p>Our formulas are designed to make everyday longevity support easier to understand. Product-specific certificates, ingredient details and supporting resources can be linked from each product page.</p>
+<section class="science-video-section">
+  <video controls playsinline poster="{{ 'science-video-poster.jpg' | asset_url }}" preload="metadata"><source src="{{ 'science-nad-story.mp4' | asset_url }}" type="video/mp4">Your browser does not support HTML video.</video>
+</section>
+
+<section class="science-faq-section" id="science-faq">
+  <div class="science-faq-heading"><span class="science-kicker">FAQs</span><h2>Questions We Receive Often</h2><a class="science-pill-button" href="#science-faq-list">VIEW ALL</a></div>
+  <div class="science-faq-list" id="science-faq-list">
+    {% assign questions = "How long does it take to see results from dietary supplements?|Are there potential side effects of dietary supplements?|What makes this supplement unique?|Are your products gluten-free?|Are your products non-GMO/organic?|Are your products safe to take with medications?|Do you have samples?" | split: "|" %}
+    {% for question in questions %}<details class="science-faq-item"><summary><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}.</span><b>{{ question }}</b><i>⌄</i></summary><p>Individual results and circumstances vary. Follow the product label and consult a qualified healthcare professional when appropriate.</p></details>{% endfor %}
   </div>
-  <img src="{{ 'science-nmn.webp' | asset_url }}" alt="Cata-Kor supplement quality" loading="lazy" width="900" height="900">
 </section>
 
 {% schema %}
-{
-  "name": "Science and quality",
-  "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Longevity support made simple*"
-    },
-    {
-      "type": "textarea",
-      "id": "copy",
-      "label": "Copy",
-      "default": "Our formulas are built to support the key systems behind energy, healthy aging and cellular defense—with every ingredient chosen for a clear reason.*"
-    }
-  ]
-}
+{"name":"Exact Science page","settings":[]}
 {% endschema %}
