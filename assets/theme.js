@@ -615,8 +615,12 @@
     button.disabled = true;
     if (label) label.textContent = "ADDING…";
     try {
+      const variantId = Number(form.querySelector("[name='id']")?.value || 0);
+      const quantity = Number(form.querySelector("[name='quantity']")?.value || 1);
       const response = await fetch(`${root}cart/add.js`, {
-        method: "POST", headers: { Accept: "application/json" }, body: new FormData(form)
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ items: [{ id: variantId, quantity }] })
       });
       if (!response.ok) {
         let message = "Unable to add this product";
