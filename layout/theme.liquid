@@ -23,7 +23,7 @@
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
   </head>
 
-  <body>
+  <body class="template-{{ template.name | handle }}{% if template.name == 'index' %} exact-home{% endif %}{% if template.name == 'product' %} product-page{% endif %}">
     <a class="skip-link" href="#MainContent">Skip to content</a>
     {% section 'header' %}
 
