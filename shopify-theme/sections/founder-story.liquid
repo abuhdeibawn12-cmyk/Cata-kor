@@ -1,0 +1,31 @@
+<section class="founder-story section-shell">
+  <div class="founder-story__copy">
+    <h2>{{ section.settings.heading }}</h2>
+    <p>When I first became obsessed with the science of longevity, I kept seeing the same pattern.</p>
+    <p><strong>The most interesting tools—NAD+, advanced wellness protocols and clinical-style testing—were often expensive, confusing or only available to people with access to private clinics.</strong></p>
+  </div>
+  <img src="{{ 'founder-desktop-clear.png' | asset_url }}" alt="Founder of Cata-Kor" loading="lazy" width="800" height="900">
+  <div class="founder-story__quote">
+    <p>My goal was never to make another supplement brand. It was to build a company for people who want to feel better for longer—without making longevity complicated or out of reach.</p>
+    <strong>Founder of Cata-Kor</strong>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Founder story",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Longevity, made accessible"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Founder story"
+    }
+  ]
+}
+{% endschema %}

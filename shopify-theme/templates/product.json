@@ -1,0 +1,23 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {}
+    },
+    "benefits": {
+      "type": "product-benefits",
+      "settings": {}
+    },
+    "reviews": {
+      "type": "product-reviews",
+      "settings": {}
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "heading": "Questions? We have answers!"
+      }
+    }
+  },
+  "order": ["main", "benefits", "reviews", "faq"]
+}

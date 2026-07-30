@@ -1,0 +1,42 @@
+<section class="science-page-hero">
+  <div class="section-shell">
+    <p class="eyebrow">Science and quality</p>
+    <h1>{{ section.settings.heading }}</h1>
+    <p>{{ section.settings.copy }}</p>
+  </div>
+</section>
+
+<section class="science-standards section-shell">
+  <article><img src="{{ 'science-quality.svg' | asset_url }}" alt="" width="60" height="60"><h2>Quality ingredients</h2><p>Ingredients selected with clear formulation purposes and transparent information.</p></article>
+  <article><img src="{{ 'science-dose.svg' | asset_url }}" alt="" width="60" height="60"><h2>Transparent dosing</h2><p>Product labels clearly communicate the amounts included in each serving.</p></article>
+  <article><img src="{{ 'science-tested.svg' | asset_url }}" alt="" width="60" height="60"><h2>Independent testing</h2><p>Quality controls are designed to support identity, purity and consistency.</p></article>
+</section>
+
+<section class="science-evidence section-shell">
+  <div>
+    <p class="eyebrow">Why Cata-Kor</p>
+    <h2>Built around transparent quality</h2>
+    <p>Our formulas are designed to make everyday longevity support easier to understand. Product-specific certificates, ingredient details and supporting resources can be linked from each product page.</p>
+  </div>
+  <img src="{{ 'science-nmn.webp' | asset_url }}" alt="Cata-Kor supplement quality" loading="lazy" width="900" height="900">
+</section>
+
+{% schema %}
+{
+  "name": "Science and quality",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Longevity support made simple*"
+    },
+    {
+      "type": "textarea",
+      "id": "copy",
+      "label": "Copy",
+      "default": "Our formulas are built to support the key systems behind energy, healthy aging and cellular defense—with every ingredient chosen for a clear reason.*"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,45 @@
+<aside class="cart-drawer" id="CartDrawer" aria-hidden="true" aria-label="Shopping bag">
+  <button class="cart-drawer__overlay" type="button" data-cart-close aria-label="Close shopping bag"></button>
+  <div class="cart-drawer__panel">
+    <header class="cart-drawer__header">
+      <div>
+        <h2>Your shopping bag</h2>
+        <p data-cart-summary>{{ cart.item_count }} item{% unless cart.item_count == 1 %}s{% endunless %}</p>
+      </div>
+      <button class="icon-button" type="button" data-cart-close aria-label="Close shopping bag">×</button>
+    </header>
+
+    <div class="cart-drawer__items" data-cart-items>
+      {% for item in cart.items %}
+        <article class="cart-line" data-line-key="{{ item.key }}">
+          {% if item.image %}
+            {{ item.image | image_url: width: 180 | image_tag: loading: 'lazy', widths: '90,180', alt: item.product.title }}
+          {% endif %}
+          <div>
+            <a href="{{ item.url }}"><strong>{{ item.product.title }}</strong></a>
+            <p>{{ item.variant.title }}</p>
+            <span>{{ item.final_line_price | money }}</span>
+            <div class="quantity-control">
+              <button type="button" data-cart-quantity="{{ item.quantity | minus: 1 }}" aria-label="Decrease quantity">−</button>
+              <span>{{ item.quantity }}</span>
+              <button type="button" data-cart-quantity="{{ item.quantity | plus: 1 }}" aria-label="Increase quantity">+</button>
+            </div>
+            <button class="text-button" type="button" data-cart-remove>Remove</button>
+          </div>
+        </article>
+      {% else %}
+        <div class="cart-empty">
+          <p>Your shopping bag is empty.</p>
+          <a class="button button--lime" href="{{ routes.all_products_collection_url }}">Shop products</a>
+        </div>
+      {% endfor %}
+    </div>
+
+    <footer class="cart-drawer__footer" data-cart-footer {% if cart.item_count == 0 %}hidden{% endif %}>
+      <div class="cart-total"><span>Subtotal</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
+      <p class="cart-note">Shipping and taxes calculated at checkout. CATA15 applies to eligible regular items only.</p>
+      <a class="button button--dark button--full" href="/checkout">Checkout</a>
+      <button class="text-button" type="button" data-cart-close>Continue shopping</button>
+    </footer>
+  </div>
+</aside>
