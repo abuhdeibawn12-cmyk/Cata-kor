@@ -1,0 +1,10 @@
+Handle,Title,Body (HTML),Vendor,Type,Tags,Published,Option1 Name,Option1 Value,Variant SKU,Variant Grams,Variant Inventory Tracker,Variant Inventory Qty,Variant Inventory Policy,Variant Fulfillment Service,Variant Price,Variant Compare At Price,Variant Requires Shipping,Variant Taxable,Image Src,Image Position,Image Alt Text,Status
+nad-advanced-500mg,NAD+ Advanced LipoNAD™ 500mg,"<p>Liposomal NAD+ supplement with resveratrol for daily cellular energy and general wellness support.*</p>",Cata-Kor,Supplements,"NAD,Liposomal,Best seller",TRUE,Bundle,1 Jar,CK-NAD-1,150,shopify,100,deny,manual,39.99,,TRUE,TRUE,https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=1200,1,Cata-Kor NAD+ Advanced,active
+nad-advanced-500mg,,,,,,,Bundle,2 Jars,CK-NAD-2,300,shopify,100,deny,manual,69.98,,TRUE,TRUE,,,,active
+nad-advanced-500mg,,,,,,,Bundle,3 Jars,CK-NAD-3,450,shopify,100,deny,manual,98.97,,TRUE,TRUE,,,,active
+liposomal-glutathione,Cata-Kor Liposomal Glutathione,"<p>Liposomal glutathione with vitamin C and resveratrol for antioxidant defense and cellular support.*</p>",Cata-Kor,Supplements,"Glutathione,Liposomal,Best seller",TRUE,Bundle,1 Jar,CK-GLU-1,150,shopify,100,deny,manual,39.99,,TRUE,TRUE,https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=1200,1,Cata-Kor Liposomal Glutathione,active
+liposomal-glutathione,,,,,,,Bundle,2 Jars,CK-GLU-2,300,shopify,100,deny,manual,69.98,,TRUE,TRUE,,,,active
+liposomal-glutathione,,,,,,,Bundle,3 Jars,CK-GLU-3,450,shopify,100,deny,manual,98.97,,TRUE,TRUE,,,,active
+nmn,NMN Supplement | Quercetin | TMG | Resveratrol – 1000 mg,"<p>NMN 4-in-1 NAD+ support with TMG, quercetin and resveratrol for cellular energy and healthy aging.*</p>",Cata-Kor,Supplements,"NMN,NAD support,Best seller",TRUE,Bundle,1 Jar,CK-NMN-1,150,shopify,100,deny,manual,39.99,,TRUE,TRUE,https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=1200,1,Cata-Kor NMN 4-in-1,active
+nmn,,,,,,,Bundle,2 Jars,CK-NMN-2,300,shopify,100,deny,manual,71.98,,TRUE,TRUE,,,,active
+nmn,,,,,,,Bundle,3 Jars,CK-NMN-3,450,shopify,100,deny,manual,101.97,,TRUE,TRUE,,,,active
