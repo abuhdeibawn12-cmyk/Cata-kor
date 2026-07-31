@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "science": {
+      "type": "science-main",
+      "settings": {}
+    },
+    "about": {
+      "type": "about-main",
+      "settings": {}
+    },
+    "main": {
+      "type": "main-404",
+      "settings": {}
+    }
+  },
+  "order": ["science", "about", "main"]
+}

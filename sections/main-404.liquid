@@ -1,9 +1,19 @@
-<section class="empty-state section-shell">
+<section class="empty-state section-shell" data-route-fallback-page="404">
   <p class="eyebrow">404</p>
   <h1>We couldn’t find that page.</h1>
   <p>The page may have moved, or the link may be out of date.</p>
   <a class="button button--dark" href="{{ routes.root_url }}">Return home</a>
 </section>
+
+<script>
+  (function () {
+    var path = window.location.pathname.replace(/\/$/, '');
+    var route = path === '/pages/science-benefits' ? 'science' : path === '/pages/about-us' ? 'about' : '404';
+    document.querySelectorAll('[data-route-fallback-page]').forEach(function (section) {
+      section.hidden = section.getAttribute('data-route-fallback-page') !== route;
+    });
+  }());
+</script>
 
 {% schema %}
 {

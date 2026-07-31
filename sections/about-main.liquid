@@ -1,3 +1,4 @@
+<div data-route-fallback-page="about"{% if template.name == '404' %} hidden{% endif %}>
 <section class="about-hero" aria-labelledby="about-hero-title">
   <div class="about-hero-copy">
     <div>
@@ -39,6 +40,7 @@
     {% endfor %}
   </div>
 </section>
+</div>
 
 {% schema %}
 {"name":"Exact About page","settings":[]}
