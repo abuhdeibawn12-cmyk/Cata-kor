@@ -34,6 +34,8 @@
     {% assign total_3 = 98.97 %}
     {% assign total_2 = 69.98 %}
   {% endif %}
+  {% assign gallery_text = gallery_text | replace: 'width=1100', 'width=1600' | replace: 'width=1445', 'width=1600' %}
+  {% assign main_image = main_image | replace: 'width=1100', 'width=1600' %}
   {% assign gallery = gallery_text | split: '|' %}
 
   <section class="secondary-product-hero" data-product-root data-secondary-product="{{ product_id }}">
@@ -49,7 +51,7 @@
               {% if forloop.index > 6 %}hidden{% endif %}
               aria-label="Show product image {{ forloop.index }}"
             >
-              <img src="{{ source | replace: 'width=1100', 'width=180' | replace: 'width=1445', 'width=180' }}" alt="" width="180" height="180">
+              <img src="{{ source | replace: 'width=1600', 'width=240' }}" alt="" width="240" height="240">
             </button>
           {% endfor %}
         </div>
@@ -58,7 +60,7 @@
 
       <div class="secondary-main-image has-star">
         <span class="secondary-gallery-star" aria-hidden="true"></span>
-        <img src="{{ main_image }}" alt="{{ exact_title }} product view 1" width="1100" height="1100" data-secondary-main-image>
+        <img src="{{ main_image }}" alt="{{ exact_title }} product view 1" width="1600" height="1600" data-secondary-main-image>
         <button class="secondary-image-nav previous" type="button" data-gallery-step="-1" aria-label="Previous product image">‹</button>
         <button class="secondary-image-nav next" type="button" data-gallery-step="1" aria-label="Next product image">›</button>
       </div>
@@ -137,6 +139,7 @@
     {% if variant.title contains '1' and variant.title contains 'Jar' %}{% assign nad_variant_1 = variant %}{% endif %}
   {% endfor %}
   {% assign nad_gallery_text = 'https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=1100|https://catakor.com/cdn/shop/files/1_NAD500_f37a2f8b-6fd5-43fe-a035-c83a38d54ec4.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/2_NAD500_0ce4c9f5-fb17-4ac1-88c2-d4c4af74fc81.jpg?v=1783421259&width=1100|https://catakor.com/cdn/shop/files/3_NAD500_284becb5-a117-43e4-88d0-7ef566cd05c9.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/4_NAD500_5964a474-23e5-46af-8174-36317bfd56c5.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/5_NAD500_db73c746-222c-4b71-8b49-e692af53d992.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/6_NAD500_0d0e1d1a-b711-4d81-8c41-95cdd9fa436c.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/7_NAD500_Manufactured_for.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/5_NAD500_a65fca12-ec33-4c89-9817-0919959280a7.jpg?v=1774889169&width=1100|https://catakor.com/cdn/shop/files/7_NAD500_91bae966-e2fe-499f-9161-0c0f42aca355.jpg?v=1774889169&width=1100|https://catakor.com/cdn/shop/files/8_NAD500-2.jpg?v=1774889110&width=1100|https://catakor.com/cdn/shop/files/3_NAD500_8218ca19-959f-4866-9785-0017cff2f5a0.jpg?v=1774889153&width=1100|https://catakor.com/cdn/shop/files/NAD250_2_jars_5e4c06d5-c927-43b1-9da8-f943028f9ece.jpg?v=1774889110&width=1100|https://catakor.com/cdn/shop/files/NAD250_3_jars_33cd95d4-1a11-40c4-a248-3e99cbee0e30.jpg?v=1774889110&width=1100' %}
+  {% assign nad_gallery_text = nad_gallery_text | replace: 'width=1100', 'width=1600' %}
   {% assign nad_gallery = nad_gallery_text | split: '|' %}
   {% assign nad_main_image = nad_gallery[0] %}
 
@@ -148,7 +151,7 @@
           <div class="thumbnail-track">
             {% for source in nad_gallery %}
               <button type="button" class="{% if forloop.first %}active{% endif %}" data-nad-gallery-index="{{ forloop.index0 }}" aria-label="View product image {{ forloop.index }}">
-                <img src="{{ source | replace: 'width=1100', 'width=180' }}" alt="" width="180" height="180">
+                <img src="{{ source | replace: 'width=1600', 'width=240' }}" alt="" width="240" height="240">
               </button>
             {% endfor %}
           </div>
@@ -157,7 +160,7 @@
       </div>
       <div class="main-product-image">
         <span class="product-star-shape" aria-hidden="true"></span>
-        <img class="selected-product-image" src="{{ nad_main_image }}" alt="Liposomal NAD+ product image 1" width="1100" height="1100" data-nad-main-image>
+        <img class="selected-product-image" src="{{ nad_main_image }}" alt="Liposomal NAD+ product image 1" width="1600" height="1600" data-nad-main-image>
         <div class="gallery-mobile-controls" aria-label="Product image navigation">
           <button type="button" data-nad-gallery-step="-1" disabled aria-label="Previous product image">←</button>
           <span data-nad-gallery-count>1 / {{ nad_gallery.size }}</span>
