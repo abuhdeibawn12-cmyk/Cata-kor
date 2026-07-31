@@ -169,9 +169,26 @@
     if (!response.ok) throw new Error("Unable to update cart");
     return response.json();
   };
-  const addVariant = async (variantId, quantity = 1, properties = {}) => {
+  const addVariant = async (variantId, quantity = 1, properties = {}, fallbackProduct = null) => {
     if (testCartMode) {
-      const { product, variant } = await findVariant(variantId);
+      let product;
+      let variant;
+      try {
+        ({ product, variant } = await findVariant(variantId));
+      } catch (error) {
+        if (!fallbackProduct) throw error;
+        product = {
+          handle: fallbackProduct.handle,
+          title: fallbackProduct.title,
+          featured_image: fallbackProduct.image
+        };
+        variant = {
+          id: variantId,
+          title: fallbackProduct.variantTitle,
+          price: fallbackProduct.price,
+          featured_image: fallbackProduct.image ? { src: fallbackProduct.image } : null
+        };
+      }
       const flash = properties?._flash_offer === "true";
       const propertyKey = flash
         ? `${properties._flash_source_token || "replacement"}:${properties._flash_discount || ""}`
@@ -206,6 +223,28 @@
     });
     if (!response.ok) throw new Error("Unable to add item");
     return response.json();
+  };
+  const productFallbackFromForm = (form) => {
+    const productRoot = form.closest("[data-product-root]");
+    const selectedPack = productRoot?.querySelector(
+      '[data-nad-pack][aria-pressed="true"], [data-secondary-pack][aria-pressed="true"]'
+    );
+    const productType = productRoot?.dataset.secondaryProduct || "nad";
+    const handle = productType === "glutathione"
+      ? "liposomal-glutathione"
+      : productType === "nmn" ? "nmn" : "nad-advanced-500mg";
+    const image = productRoot?.querySelector("[data-nad-main-image], [data-secondary-main-image]")?.currentSrc
+      || productRoot?.querySelector("[data-nad-main-image], [data-secondary-main-image]")?.src
+      || "";
+    const jars = Math.max(1, Number(selectedPack?.dataset.jars || 1));
+    const total = Number(selectedPack?.dataset.total || 0);
+    return {
+      handle,
+      title: productRoot?.querySelector("h1")?.textContent?.trim() || "Cata-Kor Supplement",
+      variantTitle: `${jars} ${jars === 1 ? "Jar" : "Jars"}`,
+      price: Math.round(total * 100),
+      image
+    };
   };
   const sourceToken = (item) => `${item.handle}:${item.variant_id}`;
   const removeOrphanFlashItems = async (cart, removedRegular) => {
@@ -737,7 +776,7 @@
     try {
       const variantId = Number(form.querySelector("[name='id']")?.value || 0);
       const quantity = Number(form.querySelector("[name='quantity']")?.value || 1);
-      await addVariant(variantId, quantity);
+      await addVariant(variantId, quantity, {}, productFallbackFromForm(form));
       renderCart(await getCart());
       openCart();
     } catch (error) {
