@@ -1,3 +1,4 @@
+<div data-route-fallback-page="science"{% if template.name == '404' %} hidden{% endif %}>
 <section class="science-coa-section" id="coa">
   <div class="science-page-container science-coa-grid">
     <div class="science-coa-copy">
@@ -59,6 +60,7 @@
     {% for question in questions %}<details class="science-faq-item"><summary><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}.</span><b>{{ question }}</b><i>⌄</i></summary><p>Individual results and circumstances vary. Follow the product label and consult a qualified healthcare professional when appropriate.</p></details>{% endfor %}
   </div>
 </section>
+</div>
 
 {% schema %}
 {"name":"Exact Science page","settings":[]}
