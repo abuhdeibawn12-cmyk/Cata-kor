@@ -1950,6 +1950,55 @@ h3 {
   display: none;
 }
 
+.nad-image-nav {
+  align-items: center;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(20, 70, 33, 0.38);
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(20, 70, 33, 0.12);
+  color: var(--forest);
+  cursor: pointer;
+  display: flex;
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  height: 46px;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  position: absolute;
+  top: 48%;
+  transform: translateY(-50%);
+  transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+  width: 46px;
+  z-index: 4;
+}
+
+.nad-image-nav:hover:not(:disabled) {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: #efff9b;
+  transform: translateY(-50%) scale(1.06);
+}
+
+.nad-image-nav:focus-visible {
+  outline: 3px solid #d8ff66;
+  outline-offset: 3px;
+}
+
+.nad-image-nav:disabled {
+  cursor: default;
+  opacity: 0.28;
+}
+
+.nad-image-nav-previous {
+  left: 18px;
+}
+
+.nad-image-nav-next {
+  right: 18px;
+}
+
 .product-info {
   min-width: 0;
   padding: 0 clamp(12px, 1.2vw, 22px) 0 clamp(26px, 2.6vw, 44px);
@@ -3240,6 +3289,10 @@ h3 {
     position: absolute;
     right: 15px;
     z-index: 3;
+  }
+
+  .nad-image-nav {
+    display: none;
   }
 
   .gallery-mobile-controls button {
