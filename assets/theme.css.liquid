@@ -1901,10 +1901,10 @@ h3 {
   align-items: flex-start;
   background: #fff;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   min-width: 0;
   overflow: hidden;
-  padding: 50px 0 0 68px;
+  padding: 50px 0 0;
   position: relative;
 }
 
@@ -1912,7 +1912,7 @@ h3 {
   background: #f1ffbf;
   clip-path: polygon(50% 0, 58% 38%, 100% 50%, 58% 62%, 50% 100%, 42% 62%, 0 50%, 42% 38%);
   height: min(680px, 92%);
-  left: 44%;
+  left: 50%;
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -1952,26 +1952,34 @@ h3 {
 
 .nad-image-nav {
   align-items: center;
-  backdrop-filter: blur(8px);
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(20, 70, 33, 0.38);
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(20, 70, 33, 0.2);
   border-radius: 50%;
-  box-shadow: 0 8px 24px rgba(20, 70, 33, 0.12);
+  box-shadow: 0 7px 22px rgba(20, 70, 33, 0.1);
   color: var(--forest);
   cursor: pointer;
   display: flex;
-  font-family: Arial, sans-serif;
-  font-size: 24px;
-  height: 46px;
+  height: 40px;
   justify-content: center;
-  line-height: 1;
   padding: 0;
   position: absolute;
   top: 48%;
   transform: translateY(-50%);
   transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
-  width: 46px;
+  width: 40px;
   z-index: 4;
+}
+
+.nad-image-nav svg {
+  fill: none;
+  height: 19px;
+  pointer-events: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+  width: 19px;
 }
 
 .nad-image-nav:hover:not(:disabled) {
@@ -1992,11 +2000,11 @@ h3 {
 }
 
 .nad-image-nav-previous {
-  left: 18px;
+  left: calc(50% - 252px);
 }
 
 .nad-image-nav-next {
-  right: 18px;
+  right: calc(50% - 252px);
 }
 
 .product-info {
@@ -2962,7 +2970,7 @@ h3 {
 
   .main-product-image {
     height: 620px;
-    padding-left: 40px;
+    padding-left: 0;
     padding-top: 42px;
   }
 
