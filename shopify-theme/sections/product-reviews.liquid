@@ -103,8 +103,11 @@
     <h2 class="sr-only" id="review-carousel-title">Customer and professional reviews</h2>
     <div class="review-carousel-track" data-nad-review-track>
       {% for name in review_names %}
+        {% assign review_image_large = review_images[forloop.index0] | replace: 'width=900', 'width=1400&height=1400&crop=center' %}
+        {% assign review_image_medium = review_images[forloop.index0] | replace: 'width=900', 'width=900&height=900&crop=center' %}
+        {% assign review_image_small = review_images[forloop.index0] | replace: 'width=900', 'width=560&height=560&crop=center' %}
         <article class="review-card">
-          <img src="{{ review_images[forloop.index0] }}" alt="{{ name }}" width="900" height="900" loading="lazy">
+          <img src="{{ review_image_large }}" srcset="{{ review_image_small }} 560w, {{ review_image_medium }} 900w, {{ review_image_large }} 1400w" sizes="(max-width: 760px) 78vw, (max-width: 1050px) 32vw, 272px" alt="{{ name }}" width="1400" height="1400" loading="lazy" decoding="async">
           <h3>{{ name }}</h3><span>{{ review_roles[forloop.index0] }}</span><div class="review-rule"></div><b aria-hidden="true">“</b><p>{{ review_quotes[forloop.index0] }}</p>
           <span class="sr-only">Review {{ forloop.index }} of {{ review_names.size }}</span>
         </article>
