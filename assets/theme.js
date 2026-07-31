@@ -339,6 +339,34 @@
     window.location.href = `${root}checkout`;
   };
 
+  const preloadGalleryImages = (sources) => {
+    sources.forEach((source) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = source;
+    });
+  };
+
+  const swapGalleryImage = (image, source, alt) => {
+    if (!image) return;
+    const absoluteSource = new URL(source, window.location.href).href;
+    if (image.src === absoluteSource) {
+      image.alt = alt;
+      return;
+    }
+    const token = `${Date.now()}-${Math.random()}`;
+    image.dataset.swapToken = token;
+    image.classList.add("is-changing");
+    window.setTimeout(() => {
+      if (image.dataset.swapToken !== token) return;
+      image.src = source;
+      image.alt = alt;
+      window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+        if (image.dataset.swapToken === token) image.classList.remove("is-changing");
+      }));
+    }, 90);
+  };
+
   const setSecondaryGalleryIndex = (gallery, requestedIndex) => {
     if (!gallery) return;
     const data = JSON.parse(gallery.querySelector("[data-secondary-gallery-json]")?.textContent || "[]");
@@ -347,8 +375,8 @@
     gallery.dataset.galleryActive = String(index);
     const main = gallery.querySelector("[data-secondary-main-image]");
     if (main) {
-      main.src = data[index];
-      main.alt = `${main.alt.replace(/\s+product view \d+$/i, "")} product view ${index + 1}`;
+      main.dataset.baseAlt ||= main.alt.replace(/\s+product view \d+$/i, "");
+      swapGalleryImage(main, data[index], `${main.dataset.baseAlt} product view ${index + 1}`);
     }
     gallery.querySelector(".secondary-main-image")?.classList.toggle("has-star", index === 0);
     gallery.querySelectorAll("[data-gallery-index]").forEach((button) =>
@@ -366,6 +394,7 @@
     });
   };
   document.querySelectorAll("[data-secondary-gallery]").forEach((gallery) => {
+    preloadGalleryImages(JSON.parse(gallery.querySelector("[data-secondary-gallery-json]")?.textContent || "[]"));
     gallery.dataset.galleryActive = "0";
     gallery.dataset.thumbnailStart = "0";
     setSecondaryGalleryIndex(gallery, 0);
@@ -383,10 +412,7 @@
     gallery.dataset.galleryActive = String(index);
     gallery.dataset.thumbnailStart = String(start);
     const main = gallery.querySelector("[data-nad-main-image]");
-    if (main) {
-      main.src = data[index];
-      main.alt = `Liposomal NAD+ product image ${index + 1}`;
-    }
+    if (main) swapGalleryImage(main, data[index], `Liposomal NAD+ product image ${index + 1}`);
     gallery.querySelector(".product-star-shape").hidden = index !== 0;
     gallery.querySelector(".thumbnail-track")?.style.setProperty("--thumbnail-start", start);
     gallery.querySelectorAll("[data-nad-gallery-index]").forEach((button) =>
@@ -402,6 +428,7 @@
     });
   };
   document.querySelectorAll("[data-nad-gallery]").forEach((gallery) => {
+    preloadGalleryImages(JSON.parse(gallery.querySelector("[data-nad-gallery-json]")?.textContent || "[]"));
     gallery.dataset.galleryActive = "0";
     gallery.dataset.thumbnailStart = "0";
     setNadGalleryIndex(gallery, 0);

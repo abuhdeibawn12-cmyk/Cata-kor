@@ -1,0 +1,13 @@
+{% comment %}
+  Shopify does not create Page records from a theme repository. During storefront
+  testing, keep the intended Science and About routes usable even before those
+  records are created in the admin. Once Page records exist, their JSON templates
+  take precedence and render the same sections.
+{% endcomment %}
+{% if request.path == '/pages/science-benefits' %}
+  {% section 'science-main' %}
+{% elsif request.path == '/pages/about-us' %}
+  {% section 'about-main' %}
+{% else %}
+  {% section 'main-404' %}
+{% endif %}

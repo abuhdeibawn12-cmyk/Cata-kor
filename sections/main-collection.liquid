@@ -18,7 +18,7 @@
       </fieldset>
     </div>
     <div class="collection-sort">
-      <span data-visible-count>{{ collection.products_count }} products</span>
+      <span data-visible-count>4 products</span>
       <label for="CollectionSort">Sort by:</label>
       <select id="CollectionSort" data-collection-sort>
         <option value="featured">Best selling</option>
@@ -28,35 +28,51 @@
     </div>
   </div>
 
+  {% assign desired_handles = 'nad-advanced-500mg|liposomal-glutathione|nmn' | split: '|' %}
   <div class="collection-grid" data-collection-grid aria-live="polite">
-    {% for product in collection.products %}
-      <article
-        class="collection-card{% unless product.available %} is-sold-out{% endunless %}"
-        data-collection-card
-        data-title="{{ product.title | escape }}"
-        data-available="{{ product.available }}"
-        data-original-order="{{ forloop.index }}"
-      >
-        <div class="collection-image-wrap">
-          <span class="collection-sale-badge">Sale</span>
-          {% unless product.available %}<span class="collection-stock-badge">Sold out</span>{% endunless %}
-          {% if product.featured_image %}
-            {{ product.featured_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '360,600,900,1100', alt: product.title }}
-          {% endif %}
-        </div>
-        <div class="collection-card-copy">
-          <h2>{{ product.title }}</h2>
-          <p>{{ product.metafields.custom.benefit | default: product.description | strip_html | truncatewords: 10 }}</p>
-          {% if product.available %}
-            <a class="collection-product-button" href="{{ product.url }}">View Product</a>
-          {% else %}
-            <button class="collection-product-button is-disabled" type="button" disabled>Out of stock</button>
-          {% endif %}
-        </div>
-      </article>
-    {% else %}
-      <p>No products are assigned to this collection yet.</p>
+    {% for desired_handle in desired_handles %}
+      {% assign desired_product = all_products[desired_handle] %}
+      {% if desired_product != blank %}
+        <article
+          class="collection-card"
+          data-collection-card
+          data-title="{{ desired_product.title | escape }}"
+          data-available="true"
+          data-original-order="{{ forloop.index }}"
+        >
+          <div class="collection-image-wrap">
+            <span class="collection-sale-badge">Sale</span>
+            {% if desired_product.featured_image %}
+              {{ desired_product.featured_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '360,600,900,1100,1400', alt: desired_product.title }}
+            {% endif %}
+          </div>
+          <div class="collection-card-copy">
+            <h2>{{ desired_product.title }}</h2>
+            <p>{{ desired_product.metafields.custom.benefit | default: desired_product.description | strip_html | truncatewords: 10 }}</p>
+            <a class="collection-product-button" href="{{ desired_product.url }}">View Product</a>
+          </div>
+        </article>
+      {% endif %}
     {% endfor %}
+
+    <article
+      class="collection-card is-sold-out"
+      data-collection-card
+      data-title="Skin, Hair &amp; Nails Supplement"
+      data-available="false"
+      data-original-order="4"
+    >
+      <div class="collection-image-wrap">
+        <span class="collection-sale-badge">Sale</span>
+        <span class="collection-stock-badge">Sold out</span>
+        <img src="{{ 'product-caakg.avif' | asset_url }}" alt="Skin, Hair &amp; Nails Supplement" width="1000" height="1000" loading="lazy">
+      </div>
+      <div class="collection-card-copy">
+        <h2>Skin, Hair &amp; Nails Supplement</h2>
+        <p>Healthy aging support*</p>
+        <button class="collection-product-button is-disabled" type="button" disabled>Out of stock</button>
+      </div>
+    </article>
   </div>
 </section>
 
