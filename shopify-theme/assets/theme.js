@@ -473,6 +473,48 @@
     setNadGalleryIndex(gallery, 0);
   });
 
+  const updateScienceReviewState = (section, requestedIndex) => {
+    const cards = [...section.querySelectorAll("[data-science-review-card]")];
+    if (!cards.length) return 0;
+    const index = Math.max(0, Math.min(cards.length - 1, requestedIndex));
+    section.dataset.scienceReview = String(index);
+    section.querySelectorAll("[data-science-review-go]").forEach((button) => {
+      const active = Number(button.dataset.scienceReviewGo) === index;
+      button.classList.toggle("is-active", active);
+      if (active) button.setAttribute("aria-current", "true");
+      else button.removeAttribute("aria-current");
+    });
+    return index;
+  };
+  const setScienceReview = (section, requestedIndex) => {
+    if (!section) return;
+    const cards = [...section.querySelectorAll("[data-science-review-card]")];
+    const index = updateScienceReviewState(section, requestedIndex);
+    const track = section.querySelector("[data-review-track]");
+    if (track && cards[index]) track.scrollTo({ left: cards[index].offsetLeft, behavior: "smooth" });
+  };
+  document.querySelectorAll("[data-science-reviews]").forEach((section) => {
+    const track = section.querySelector("[data-review-track]");
+    updateScienceReviewState(section, 0);
+    let frame;
+    track?.addEventListener("scroll", () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const cards = [...section.querySelectorAll("[data-science-review-card]")];
+        let closestIndex = 0;
+        let closestDistance = Number.POSITIVE_INFINITY;
+        cards.forEach((card, index) => {
+          const distance = Math.abs(card.offsetLeft - track.scrollLeft);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestIndex = index;
+          }
+        });
+        updateScienceReviewState(section, closestIndex);
+      });
+    }, { passive: true });
+  });
+
   const setNmnReviewPage = (section, requestedPage) => {
     const page = Math.max(1, Math.min(20, requestedPage));
     section.dataset.reviewPage = String(page);
@@ -549,6 +591,7 @@
     const filterToggle = target.closest("[data-filter-toggle]");
     const toggleAllFaqs = target.closest("[data-toggle-all-faqs]");
     const reviewScroll = target.closest("[data-review-scroll]");
+    const scienceReviewGo = target.closest("[data-science-review-go]");
     const reviewPageGo = target.closest("[data-review-page-go]");
     const reviewPageChange = target.closest("[data-review-page-change]");
     const productScrollButton = target.closest("[data-product-scroll]");
@@ -709,9 +752,10 @@
       toggleAllFaqs.textContent = shouldOpen ? "Close All" : "View All";
     }
     if (reviewScroll) {
-      const track = document.querySelector("[data-review-track]");
-      track?.scrollBy({ left: Number(reviewScroll.dataset.reviewScroll) * track.clientWidth * 0.78, behavior: "smooth" });
+      const section = reviewScroll.closest("[data-science-reviews]");
+      setScienceReview(section, Number(section?.dataset.scienceReview || 0) + Number(reviewScroll.dataset.reviewScroll));
     }
+    if (scienceReviewGo) setScienceReview(scienceReviewGo.closest("[data-science-reviews]"), Number(scienceReviewGo.dataset.scienceReviewGo));
     if (reviewPageGo || reviewPageChange) {
       const pages = [...document.querySelectorAll("[data-review-page]")];
       const current = Math.max(0, pages.findIndex((page) => page.classList.contains("is-active")));

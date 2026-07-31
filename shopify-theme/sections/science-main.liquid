@@ -39,13 +39,21 @@
 
 {% assign review_images = "science-review-stefano.jpg,science-review-zach.png,science-review-stephania.jpg,science-review-katie.png,science-review-maria.jpg,science-review-nicole.jpg,science-review-cyntia.png,science-review-sidney.png,science-review-chelsea.png,science-review-shayna.png,science-review-alecia.png,science-review-tyler.jpg,science-review-miranda.jpg,science-review-kristin.jpg,science-review-morgan.jpg" | split: "," %}
 {% assign review_names = "Stefano Barberi,Zach Calls,Stephania Rene,Katie Blank,Dr. Maria Sophocles,Dr. Nicole Avena,Dr. Cyntia Brown,Sidney Outlaw,Dr. Chelsea Azarcon,Shayna Powless,Alecia Beckford-Stewart,Tyler Lesher,Miranda Kay Barber,Kristin Mackay,Morgan Adams" | split: "," %}
-<section class="science-reviews-section">
+{% assign review_roles = "Professional Mountain Bike and Gravel Racer|Doctor of Physical Therapy|Personal Trainer|Orthopedic Physical Therapist|Gynecologist and Women's Health Advocate|Nutrition Expert and Author, Cata-Kor Partner|Clinical Pharmacologist and Women's Health Expert|Professional Fighter|Naturopathic Medical Doctor|Professional Cyclist|DC, CCSP, ICSC, CSCS|NBA Performance Therapist|Professional Fighter and Trainer|NPC Athlete, Fitness and Nutrition Coach|Certified Holistic Sleep Coach, MSW" | split: "|" %}
+{% assign review_quotes = "In the two weeks since I started using it, I've noticed my recovery feels smoother.*|Cata-Kor NAD+ has become one of my go-to supplements for supporting overall energy, recovery, and longevity.*|I'm so thankful I found such a high quality company to trust with their third party testing efforts!*|I recommend Cata-Kor NAD+ due to the high quality ingredients and concentration of NAD+.*|Cata-Kor's liposomal NAD+ formulation is an important distinction when considering an NAD+ formulation.*|I recognize the importance of NAD+ in the human body. NAD+ plays an essential role in the process of energy production.*|What really stands out to me about Cata-Kor NAD+ is its dedication to science and transparency.*|It helps you calm everything down. This is a great product. Don't waste your time. Give it a try.*|Cata-Kor NAD was the first NAD that I felt a significant improvement from taking, within a matter of weeks.*|I've been choosing to supplement with NAD+ due to its role in efficient cellular energy production and overall cellular wellness.*|With my glowing skin and consistently high energy levels, I can confidently say that Cata-Kor is a wellness product I highly recommend.*|NAD+ supports cellular energy, mitochondrial function, and the natural repair processes that help us move and feel our best.*|I've started incorporating Cata-Kor's Liposomal NAD+ into my recovery routine to support cellular energy and longevity in my performance.*|Cata-Kor helps with the overall regeneration of cells and how your body uses energy on a cellular level.*|After taking Cata-Kor for a couple of weeks, I saw a 6% increase in my recovery scores according to my WHOOP data.*" | split: "|" %}
+<section class="science-reviews-section" data-science-reviews>
   <div class="science-review-track" data-review-track>
     {% for image in review_images %}
-      <article class="science-review-card"><img src="{{ image | asset_url }}" alt="{{ review_names[forloop.index0] }}" width="500" height="500"><h3>{{ review_names[forloop.index0] }}</h3><span>Health and performance professional</span><p>“Cata-Kor supports a consistent approach to energy, recovery, and longevity as part of my routine.*”</p><small>{{ forloop.index }} / {{ review_images.size }}</small></article>
+      <article class="science-review-card" data-science-review-card><img src="{{ image | asset_url }}" alt="{{ review_names[forloop.index0] }}" width="900" height="900"><h3>{{ review_names[forloop.index0] }}</h3><span>{{ review_roles[forloop.index0] }}</span><p>&ldquo;{{ review_quotes[forloop.index0] }}&rdquo;</p><small>{{ forloop.index }} / {{ review_images.size }}</small></article>
     {% endfor %}
   </div>
-  <div class="science-review-controls"><button type="button" data-review-scroll="-1">←</button><button type="button" data-review-scroll="1">→</button></div>
+  <div class="science-review-controls">
+    <button type="button" data-review-scroll="-1" aria-label="Previous reviews">&larr;</button>
+    <div class="science-review-dots" aria-label="Choose a review">
+      {% for name in review_names %}<button type="button" class="{% if forloop.first %}is-active{% endif %}" data-science-review-go="{{ forloop.index0 }}" aria-label="Go to {{ name }} review"{% if forloop.first %} aria-current="true"{% endif %}></button>{% endfor %}
+    </div>
+    <button type="button" data-review-scroll="1" aria-label="Next reviews">&rarr;</button>
+  </div>
   <p class="science-review-disclosure">*These individuals partner with Cata-Kor as compensated endorsers, sharing their personal opinions and experiences.</p>
 </section>
 
