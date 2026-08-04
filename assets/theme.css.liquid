@@ -6995,7 +6995,7 @@ h3 {
   display: flex;
   gap: 24px;
   margin: 0 auto;
-  max-width: 1140px;
+  max-width: 1152px;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
   padding-bottom: 18px;
@@ -7010,7 +7010,7 @@ h3 {
 }
 
 .science-review-card {
-  flex: 0 0 calc((100% - 72px) / 4);
+  flex: 0 0 270px;
   min-width: 0;
   position: relative;
   scroll-snap-align: start;
@@ -7019,6 +7019,9 @@ h3 {
 .science-review-card > img {
   aspect-ratio: 1.25 / 1;
   border-radius: 12px;
+  display: block;
+  height: 216px;
+  image-rendering: auto;
   object-fit: cover;
   object-position: center top;
   width: 100%;
@@ -7258,10 +7261,6 @@ h3 {
     max-width: 720px;
   }
 
-  .science-review-card {
-    flex-basis: calc((100% - 24px) / 2);
-  }
-
   .science-feature-grid,
   .science-feature-akg .science-feature-grid,
   .science-quality-grid {
@@ -7365,8 +7364,12 @@ h3 {
   }
 
   .science-review-card {
-    flex-basis: 86%;
+    flex-basis: min(270px, calc(100vw - 48px));
     min-width: 0;
+  }
+
+  .science-review-card > img {
+    height: auto;
   }
 
   .science-review-card p {
