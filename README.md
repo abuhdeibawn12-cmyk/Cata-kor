@@ -29,6 +29,11 @@ display the per-jar price.
 Add product media to each product and set inventory on every variant. Shopify
 will then control product availability, pricing, cart totals and checkout.
 
+The live checkout flash offers also require three private products. Follow
+[`SHOPIFY_SETUP.md`](SHOPIFY_SETUP.md) for their exact handles, tags, variants,
+prices, inventory, and discount exclusions. Flash prices are real Shopify
+variant prices so the amount shown in the bag is preserved at checkout.
+
 ## Theme editor setup
 
 1. Open **Customize** on the imported theme.
@@ -47,9 +52,9 @@ will then control product availability, pricing, cart totals and checkout.
 - The product and reviews sections accept Shopify app blocks. Subscription and
   verified-reviews apps can therefore be installed later without rewriting the
   theme.
-- Flash-sale replacement logic should be implemented through Shopify Functions
-  or a compatible upsell app so the price and eligibility rules are enforced
-  during Shopify checkout.
+- The theme adds the separately priced private flash variants to checkout. Use
+  Shopify Functions or a compatible upsell app only if stricter server-side
+  offer-eligibility enforcement is required.
 
 ## Development
 

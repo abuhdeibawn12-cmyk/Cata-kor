@@ -16,6 +16,9 @@
     {% if page_description %}
       <meta name="description" content="{{ page_description | escape }}">
     {% endif %}
+    {% if product.tags contains 'flash-offer' %}
+      <meta name="robots" content="noindex,nofollow">
+    {% endif %}
 
     <link rel="icon" type="image/jpeg" href="{{ 'favicon.jpg' | asset_url }}">
     {{ content_for_header }}
@@ -23,7 +26,7 @@
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
   </head>
 
-  <body data-cart-mode="test" class="site-shell template-{{ template.name | handle }}{% if template.name == 'index' or request.path == '/pages/about-us' or template.suffix == 'about' or product.handle == 'nmn' or product.handle == 'liposomal-glutathione' %} exact-home{% endif %}{% if request.path == '/pages/about-us' or template.suffix == 'about' %} about-page{% endif %}{% if request.path == '/pages/science-benefits' or template.suffix == 'science' %} science-page{% endif %}{% if template.name == 'product' %} product-page{% endif %}{% if product.handle == 'nmn' %} secondary-product-page accent-brown{% elsif product.handle == 'liposomal-glutathione' %} secondary-product-page accent-blue{% endif %}{% if template.name == 'collection' %} collection-page{% endif %}">
+  <body data-cart-mode="live" class="site-shell template-{{ template.name | handle }}{% if template.name == 'index' or request.path == '/pages/about-us' or template.suffix == 'about' or product.handle == 'nmn' or product.handle == 'liposomal-glutathione' %} exact-home{% endif %}{% if request.path == '/pages/about-us' or template.suffix == 'about' %} about-page{% endif %}{% if request.path == '/pages/science-benefits' or template.suffix == 'science' %} science-page{% endif %}{% if template.name == 'product' %} product-page{% endif %}{% if product.handle == 'nmn' %} secondary-product-page accent-brown{% elsif product.handle == 'liposomal-glutathione' %} secondary-product-page accent-blue{% endif %}{% if template.name == 'collection' %} collection-page{% endif %}">
     <a class="skip-link" href="#MainContent">Skip to content</a>
     {% section 'header' %}
 

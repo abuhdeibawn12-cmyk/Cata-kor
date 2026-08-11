@@ -4,18 +4,33 @@
     <form action="{{ routes.cart_url }}" method="post">
       <div class="cart-page__lines">
         {% for item in cart.items %}
+          {% assign is_flash_item = false %}
+          {% if item.properties._flash_offer == 'true' %}{% assign is_flash_item = true %}{% endif %}
+          {% assign display_title = item.properties._flash_display_title | default: item.product.title %}
+          {% assign display_variant = item.properties._flash_display_variant | default: item.variant.title %}
           <article class="cart-page__line">
             {% if item.image %}
-              {{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: item.product.title }}
+              {{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: display_title }}
             {% endif %}
             <div>
-              <a href="{{ item.url }}"><h2>{{ item.product.title }}</h2></a>
-              <p>{{ item.variant.title }}</p>
+              {% unless is_flash_item %}<a href="{{ item.url }}">{% endunless %}
+                <h2>{{ display_title }}</h2>
+              {% unless is_flash_item %}</a>{% endunless %}
+              {% if is_flash_item %}<span class="global-flash-label">FLASH SALE · {{ item.properties._flash_discount }}% OFF</span>{% endif %}
+              <p>{{ display_variant }}</p>
+              {% if is_flash_item and item.properties._flash_original_price_cents %}
+                <del>{{ item.properties._flash_original_price_cents | times: item.quantity | money }}</del>
+              {% endif %}
               <strong>{{ item.final_line_price | money }}</strong>
-              <label>
-                Quantity
-                <input type="number" name="updates[]" value="{{ item.quantity }}" min="0">
-              </label>
+              {% if is_flash_item %}
+                <input type="hidden" name="updates[]" value="{{ item.quantity }}">
+                <p>Flash bundle quantity: {{ item.quantity }}</p>
+              {% else %}
+                <label>
+                  Quantity
+                  <input type="number" name="updates[]" value="{{ item.quantity }}" min="0">
+                </label>
+              {% endif %}
               <a href="{{ item.url_to_remove }}">Remove</a>
             </div>
           </article>
@@ -24,7 +39,7 @@
       <div class="cart-page__summary">
         <p><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></p>
         <button class="button button--outline" type="submit" name="update">Update bag</button>
-        <button class="button button--dark" type="submit" name="checkout">Checkout</button>
+        <button class="button button--dark" type="submit" name="checkout" data-start-checkout>Checkout</button>
       </div>
     </form>
   {% else %}

@@ -1,4 +1,10 @@
-{% if product.handle == 'nmn' or product.handle == 'liposomal-glutathione' %}
+{% if product.tags contains 'flash-offer' %}
+  <section class="flash-product-redirect" aria-live="polite">
+    <p>This private offer is available from the shopping bag.</p>
+    <a href="{{ routes.collections_url }}/shop-all">Continue shopping</a>
+  </section>
+  <script>window.location.replace({{ routes.collections_url | append: '/shop-all' | json }});</script>
+{% elsif product.handle == 'nmn' or product.handle == 'liposomal-glutathione' %}
   {% for variant in product.variants %}
     {% if variant.title contains '3' %}{% assign variant_3 = variant %}{% endif %}
     {% if variant.title contains '2' %}{% assign variant_2 = variant %}{% endif %}

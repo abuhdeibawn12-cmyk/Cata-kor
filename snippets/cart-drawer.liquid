@@ -21,20 +21,31 @@
       {% else %}
         <div class="global-cart-items" data-cart-items>
           {% for item in cart.items %}
+            {% assign is_flash_item = false %}
+            {% if item.properties._flash_offer == 'true' %}{% assign is_flash_item = true %}{% endif %}
             <article data-line-key="{{ item.key }}">
               {% if item.image %}<img src="{{ item.image | image_url: width: 180 }}" alt="" width="180" height="180">{% endif %}
               <div class="global-cart-item-copy">
-                {% if item.properties._flash_offer == 'true' %}<span class="global-flash-label">FLASH SALE · {{ item.properties._flash_discount }}% OFF</span>{% endif %}
-                <h3>{{ item.product.title }}</h3>
-                <p>{{ item.variant.title }} · One-time purchase</p>
-                <div class="global-cart-price"><strong>{{ item.final_line_price | money }}</strong></div>
+                {% if is_flash_item %}<span class="global-flash-label">FLASH SALE · {{ item.properties._flash_discount }}% OFF</span>{% endif %}
+                <h3>{{ item.properties._flash_display_title | default: item.product.title }}</h3>
+                <p>{{ item.properties._flash_display_variant | default: item.variant.title }} · One-time purchase</p>
+                <div class="global-cart-price">
+                  {% if is_flash_item and item.properties._flash_original_price_cents %}
+                    <del>{{ item.properties._flash_original_price_cents | times: item.quantity | money }}</del>
+                  {% endif %}
+                  <strong>{{ item.final_line_price | money }}</strong>
+                </div>
                 <div class="global-cart-quantity">
-                  <span>Bundle quantity</span>
-                  <div>
-                    <button type="button" data-cart-quantity="{{ item.quantity | minus: 1 }}" aria-label="Decrease quantity">−</button>
-                    <b>{{ item.quantity }}</b>
-                    <button type="button" data-cart-quantity="{{ item.quantity | plus: 1 }}" aria-label="Increase quantity">+</button>
-                  </div>
+                  <span>{% if is_flash_item %}Flash bundle quantity{% else %}Bundle quantity{% endif %}</span>
+                  {% if is_flash_item %}
+                    <div><b aria-label="{{ item.quantity }} flash bundles">{{ item.quantity }}</b></div>
+                  {% else %}
+                    <div>
+                      <button type="button" data-cart-quantity="{{ item.quantity | minus: 1 }}" aria-label="Decrease quantity">−</button>
+                      <b aria-label="{{ item.quantity }} bundles">{{ item.quantity }}</b>
+                      <button type="button" data-cart-quantity="{{ item.quantity | plus: 1 }}" aria-label="Increase quantity">+</button>
+                    </div>
+                  {% endif %}
                 </div>
               </div>
               <button class="global-cart-remove" type="button" data-cart-remove>Remove</button>

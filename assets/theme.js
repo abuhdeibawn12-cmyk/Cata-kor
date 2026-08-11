@@ -5,6 +5,11 @@
   const testCartMode = document.body.dataset.cartMode === "test";
   const testCartStorageKey = "catakor-test-cart-v2";
   const productHandles = ["nad-advanced-500mg", "liposomal-glutathione", "nmn"];
+  const flashProductHandles = {
+    "nad-advanced-500mg": "nad-advanced-500mg-flash-offer",
+    "liposomal-glutathione": "liposomal-glutathione-flash-offer",
+    nmn: "nmn-flash-offer"
+  };
   let productCatalogPromise;
   const moneyFormatter = new Intl.NumberFormat(document.documentElement.lang || "en-US", {
     style: "currency",
@@ -22,11 +27,7 @@
   };
   const jarsFromTitle = (title = "") => Math.max(1, Number(String(title).match(/\d+/)?.[0] || 1));
   const isFlashItem = (item) => item.properties?._flash_offer === "true";
-  const effectiveUnitPrice = (item) =>
-    isFlashItem(item) && item.properties?._flash_sale_price_cents
-      ? Number(item.properties._flash_sale_price_cents)
-      : Math.round(item.final_line_price / Math.max(1, item.quantity));
-  const effectiveLinePrice = (item) => effectiveUnitPrice(item) * item.quantity;
+  const effectiveLinePrice = (item) => Number(item.final_line_price || 0);
   const effectiveSubtotal = (cart) =>
     cart.items.reduce((total, item) => total + effectiveLinePrice(item), 0);
 
@@ -52,26 +53,30 @@
 
   const cartLineMarkup = (item) => {
     const flash = isFlashItem(item);
-    const unitSale = effectiveUnitPrice(item);
+    const lineSale = effectiveLinePrice(item);
     const originalUnit = Number(item.properties?._flash_original_price_cents || 0);
+    const displayTitle = item.properties?._flash_display_title || item.product_title;
+    const displayVariant = item.properties?._flash_display_variant || item.variant_title || "1 Jar";
     return `
       <article data-line-key="${escapeHtml(item.key)}">
         ${item.image ? `<img src="${escapeHtml(imageUrl(item.image))}" alt="">` : ""}
         <div class="global-cart-item-copy">
           ${flash ? `<span class="global-flash-label">FLASH SALE · ${escapeHtml(item.properties?._flash_discount || "")}% OFF</span>` : ""}
-          <h3>${escapeHtml(item.product_title)}</h3>
-          <p>${escapeHtml(item.variant_title || "1 Jar")} · One-time purchase</p>
+          <h3>${escapeHtml(displayTitle)}</h3>
+          <p>${escapeHtml(displayVariant)} · One-time purchase</p>
           <div class="global-cart-price">
             ${flash && originalUnit ? `<del>${formatMoney(originalUnit * item.quantity)}</del>` : ""}
-            <strong>${formatMoney(unitSale * item.quantity)}</strong>
+            <strong>${formatMoney(lineSale)}</strong>
           </div>
           <div class="global-cart-quantity">
-            <span>Bundle quantity</span>
-            <div>
-              <button type="button" data-cart-quantity="${Math.max(0, item.quantity - 1)}" aria-label="Decrease quantity">−</button>
-              <b aria-label="${item.quantity} bundles">${item.quantity}</b>
-              <button type="button" data-cart-quantity="${item.quantity + 1}" aria-label="Increase quantity">+</button>
-            </div>
+            <span>${flash ? "Flash bundle quantity" : "Bundle quantity"}</span>
+            ${flash
+              ? `<div><b aria-label="${item.quantity} flash bundles">${item.quantity}</b></div>`
+              : `<div>
+                  <button type="button" data-cart-quantity="${Math.max(0, item.quantity - 1)}" aria-label="Decrease quantity">−</button>
+                  <b aria-label="${item.quantity} bundles">${item.quantity}</b>
+                  <button type="button" data-cart-quantity="${item.quantity + 1}" aria-label="Increase quantity">+</button>
+                </div>`}
           </div>
         </div>
         <button class="global-cart-remove" type="button" data-cart-remove>Remove</button>
@@ -126,7 +131,8 @@
   };
   const loadProductCatalog = async () => {
     if (!productCatalogPromise) {
-      productCatalogPromise = Promise.all(productHandles.map(async (handle) => {
+      const handles = [...productHandles, ...Object.values(flashProductHandles)];
+      productCatalogPromise = Promise.all(handles.map(async (handle) => {
         const response = await fetch(`${root}products/${handle}.js`);
         if (!response.ok) throw new Error(`Unable to load ${handle}`);
         return response.json();
@@ -277,16 +283,43 @@
       (testCartMode || variant.available) &&
       !/flash/i.test(variant.title)
     ) || product.variants.find((variant) => (testCartMode || variant.available) && !/flash/i.test(variant.title));
+  const flashVariantForJars = (product, jars, expectedPrice) =>
+    product.variants.find((variant) =>
+      jarsFromTitle(variant.title) === jars &&
+      (testCartMode || variant.available) &&
+      Number(variant.price) === expectedPrice
+    );
+  const flashSelectionFor = async (regularHandle, jars, expectedPrice) => {
+    const handle = flashProductHandles[regularHandle];
+    if (!handle) return null;
+    try {
+      const product = await productJson(handle);
+      const variant = flashVariantForJars(product, jars, expectedPrice);
+      if (!variant) {
+        console.warn(`Flash product ${handle} is missing an available ${jars}-jar variant priced at ${expectedPrice} cents.`);
+        return null;
+      }
+      return { product, variant };
+    } catch (error) {
+      console.warn(`Unable to load flash product ${handle}.`, error);
+      return null;
+    }
+  };
   const regularItems = (cart) => cart.items.filter((item) => !isFlashItem(item));
 
   const buildFlashOffers = async (cart) => {
     const latestByProduct = new Map();
-    const regular = regularItems(cart);
+    const acceptedSourceTokens = new Set(cart.items
+      .filter(isFlashItem)
+      .map((item) => item.properties?._flash_source_token)
+      .filter(Boolean));
+    const regular = regularItems(cart).filter((item) => !acceptedSourceTokens.has(sourceToken(item)));
     regular.forEach((item) => {
       if (!latestByProduct.has(item.handle)) latestByProduct.set(item.handle, item);
     });
-    const catalog = ["nad-advanced-500mg", "liposomal-glutathione", "nmn"];
-    const presentOrProposed = new Set(cart.items.map((item) => item.handle));
+    const presentOrProposed = new Set(cart.items.map((item) =>
+      item.properties?._flash_display_handle || item.handle
+    ));
     const offers = [];
     for (const source of latestByProduct.values()) {
       const sourceJars = jarsFromTitle(source.variant_title);
@@ -294,23 +327,40 @@
         const product = await productJson(source.handle);
         const jars = sourceJars + 1;
         const variant = normalVariantForJars(product, jars);
-        if (variant) offers.push({ source, product, variant, jars, discount: 20, replaces: true });
+        if (!variant) continue;
+        const discount = 20;
+        const salePrice = Math.round(variant.price * (1 - discount / 100));
+        const flashSelection = await flashSelectionFor(source.handle, jars, salePrice);
+        if (flashSelection) offers.push({
+          source, product, variant,
+          flashProduct: flashSelection.product,
+          flashVariant: flashSelection.variant,
+          jars, discount, salePrice, replaces: true
+        });
         continue;
       }
-      const alternatives = catalog.filter((handle) => handle !== source.handle);
+      const alternatives = productHandles.filter((handle) => handle !== source.handle);
       let candidates = alternatives.filter((handle) => !presentOrProposed.has(handle));
       if (!candidates.length) candidates = alternatives;
       const handle = candidates[Math.floor(Math.random() * candidates.length)];
       presentOrProposed.add(handle);
       const product = await productJson(handle);
       const variant = normalVariantForJars(product, 1);
-      if (variant) offers.push({ source, product, variant, jars: 1, discount: 25, replaces: false });
+      if (!variant) continue;
+      const discount = 25;
+      const salePrice = Math.round(variant.price * (1 - discount / 100));
+      const flashSelection = await flashSelectionFor(handle, 1, salePrice);
+      if (flashSelection) offers.push({
+        source, product, variant,
+        flashProduct: flashSelection.product,
+        flashVariant: flashSelection.variant,
+        jars: 1, discount, salePrice, replaces: false
+      });
     }
     return offers;
   };
 
   const flashOfferMarkup = (offer, index) => {
-    const salePrice = Math.round(offer.variant.price * (1 - offer.discount / 100));
     const sourceName = offer.source.product_title.replace(/\s+\d+\s*MG$/i, "");
     return `<article data-flash-index="${index}">
       <span>BECAUSE YOU CHOSE ${escapeHtml(sourceName.toUpperCase())}</span>
@@ -320,7 +370,7 @@
       <small class="global-offer-mode">${offer.replaces
         ? `REPLACES YOUR CURRENT ${escapeHtml(sourceName.toUpperCase())} BUNDLE`
         : "ADDS A DIFFERENT PRODUCT TO YOUR ORDER"}</small>
-      <div><del>${formatMoney(offer.variant.price)}</del><strong>${formatMoney(salePrice)}</strong></div>
+      <div><del>${formatMoney(offer.variant.price)}</del><strong>${formatMoney(offer.salePrice)}</strong></div>
       <button type="button" data-accept-flash="${index}">${offer.replaces ? "REPLACE WITH THIS OFFER" : "ADD FLASH OFFER"}</button>
     </article>`;
   };
@@ -332,7 +382,10 @@
       return;
     }
     const grid = flashDialog?.querySelector("[data-flash-offers]");
-    if (!flashDialog || !grid) return;
+    if (!flashDialog || !grid) {
+      window.location.href = `${root}checkout`;
+      return;
+    }
     grid.innerHTML = offers.map(flashOfferMarkup).join("");
     flashDialog._offers = offers;
     flashDialog._accepted = new Set();
@@ -347,15 +400,22 @@
     if (!offer || button.disabled) return;
     button.disabled = true;
     button.textContent = "UPDATING…";
-    const salePrice = Math.round(offer.variant.price * (1 - offer.discount / 100));
-    if (offer.replaces) await updateLine(offer.source.key, 0);
-    await addVariant(offer.variant.id, offer.replaces ? offer.source.quantity : 1, {
+    await addVariant(offer.flashVariant.id, offer.replaces ? offer.source.quantity : 1, {
       _flash_offer: "true",
       _flash_discount: String(offer.discount),
       _flash_original_price_cents: String(offer.variant.price),
-      _flash_sale_price_cents: String(salePrice),
-      _flash_source_token: offer.replaces ? "" : sourceToken(offer.source)
+      _flash_source_token: offer.replaces ? "" : sourceToken(offer.source),
+      _flash_display_handle: offer.product.handle,
+      _flash_display_title: offer.product.title,
+      _flash_display_variant: offer.variant.title
+    }, {
+      handle: offer.flashProduct.handle,
+      title: offer.flashProduct.title,
+      variantTitle: offer.flashVariant.title,
+      price: offer.flashVariant.price,
+      image: offer.product.featured_image
     });
+    if (offer.replaces) await updateLine(offer.source.key, 0);
     flashDialog._accepted.add(index);
     button.textContent = offer.replaces ? "BUNDLE UPGRADED" : "OFFER ADDED";
     const continueButton = flashDialog.querySelector("[data-flash-continue]");
@@ -625,7 +685,11 @@
     }
     if (checkoutButton) {
       event.preventDefault();
-      try { await showFlashOffers(); } catch (error) { console.error(error); }
+      try { await showFlashOffers(); }
+      catch (error) {
+        console.error(error);
+        window.location.href = `${root}checkout`;
+      }
     }
     if (flashButton) {
       try { await acceptFlashOffer(Number(flashButton.dataset.acceptFlash), flashButton); }
