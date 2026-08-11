@@ -933,5 +933,10 @@
     control.addEventListener("change", updateCollection)
   );
 
-  getCart().then(renderCart).catch(() => {});
+  getCart().then((cart) => {
+    renderCart(cart);
+    if (document.querySelector("[data-cart-page]")) {
+      window.requestAnimationFrame(openCart);
+    }
+  }).catch(() => {});
 })();

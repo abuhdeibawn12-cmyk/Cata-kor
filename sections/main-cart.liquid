@@ -1,53 +1,80 @@
-<section class="cart-page section-shell">
-  <h1>Your shopping bag</h1>
-  {% if cart.item_count > 0 %}
-    <form action="{{ routes.cart_url }}" method="post">
+<section class="cart-page" data-cart-page>
+  <div class="cart-page__inner">
+    <header class="cart-page__heading">
+      <div>
+        <span>YOUR CATA-KOR ROUTINE</span>
+        <h1>Your shopping bag</h1>
+      </div>
+      <p>{{ cart.items.size }} product selection{% unless cart.items.size == 1 %}s{% endunless %}</p>
+    </header>
+
+    {% if cart.item_count > 0 %}
+      <form class="cart-page__form" action="{{ routes.cart_url }}" method="post">
       <div class="cart-page__lines">
         {% for item in cart.items %}
           {% assign is_flash_item = false %}
           {% if item.properties._flash_offer == 'true' %}{% assign is_flash_item = true %}{% endif %}
           {% assign display_title = item.properties._flash_display_title | default: item.product.title %}
           {% assign display_variant = item.properties._flash_display_variant | default: item.variant.title %}
-          <article class="cart-page__line">
-            {% if item.image %}
-              {{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: display_title }}
-            {% endif %}
-            <div>
-              {% unless is_flash_item %}<a href="{{ item.url }}">{% endunless %}
-                <h2>{{ display_title }}</h2>
-              {% unless is_flash_item %}</a>{% endunless %}
-              {% if is_flash_item %}<span class="global-flash-label">FLASH SALE · {{ item.properties._flash_discount }}% OFF</span>{% endif %}
-              <p>{{ display_variant }}</p>
-              {% if is_flash_item and item.properties._flash_original_price_cents %}
-                <del>{{ item.properties._flash_original_price_cents | times: item.quantity | money }}</del>
+          <article class="cart-page__line{% if is_flash_item %} is-flash{% endif %}">
+            <div class="cart-page__media">
+              {% if item.image %}
+                {{ item.image | image_url: width: 420 | image_tag: loading: 'lazy', alt: display_title }}
               {% endif %}
-              <strong>{{ item.final_line_price | money }}</strong>
-              {% if is_flash_item %}
-                <input type="hidden" name="updates[]" value="{{ item.quantity }}">
-                <p>Flash bundle quantity: {{ item.quantity }}</p>
-              {% else %}
-                <label>
-                  Quantity
-                  <input type="number" name="updates[]" value="{{ item.quantity }}" min="0">
-                </label>
-              {% endif %}
-              <a href="{{ item.url_to_remove }}">Remove</a>
+            </div>
+            <div class="cart-page__details">
+              <div class="cart-page__line-heading">
+                <div>
+                  {% if is_flash_item %}<span class="global-flash-label">FLASH SALE · {{ item.properties._flash_discount }}% OFF</span>{% endif %}
+                  {% unless is_flash_item %}<a href="{{ item.url }}">{% endunless %}
+                    <h2>{{ display_title }}</h2>
+                  {% unless is_flash_item %}</a>{% endunless %}
+                  <p>{{ display_variant }} · One-time purchase</p>
+                </div>
+                <a class="cart-page__remove" href="{{ item.url_to_remove }}" aria-label="Remove {{ display_title }}">Remove</a>
+              </div>
+
+              <div class="cart-page__line-footer">
+                <div class="cart-page__price">
+                  {% if is_flash_item and item.properties._flash_original_price_cents %}
+                    <del>{{ item.properties._flash_original_price_cents | times: item.quantity | money }}</del>
+                  {% endif %}
+                  <strong>{{ item.final_line_price | money }}</strong>
+                </div>
+                {% if is_flash_item %}
+                  <input type="hidden" name="updates[]" value="{{ item.quantity }}">
+                  <span class="cart-page__fixed-quantity">Flash bundle quantity: <b>{{ item.quantity }}</b></span>
+                {% else %}
+                  <label class="cart-page__quantity">
+                    <span>Quantity</span>
+                    <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric">
+                  </label>
+                {% endif %}
+              </div>
             </div>
           </article>
         {% endfor %}
       </div>
-      <div class="cart-page__summary">
-        <p><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></p>
-        <button class="button button--outline" type="submit" name="update">Update bag</button>
-        <button class="button button--dark" type="submit" name="checkout" data-start-checkout>Checkout</button>
+
+        <aside class="cart-page__summary">
+          <span>ORDER SUMMARY</span>
+          <p><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></p>
+          <small>Taxes and shipping are calculated at checkout.</small>
+          <button class="cart-page__checkout" type="submit" name="checkout" data-start-checkout>CHECKOUT</button>
+          <button class="cart-page__update" type="submit" name="update">UPDATE BAG</button>
+          <a href="{{ routes.collections_url }}/shop-all">CONTINUE SHOPPING</a>
+          <em>CATA15 can be applied to regular items at checkout.</em>
+        </aside>
+      </form>
+    {% else %}
+      <div class="cart-empty">
+        <span>0</span>
+        <h2>Your shopping bag is empty</h2>
+        <p>Choose a product and build your daily longevity routine.</p>
+        <a href="{{ routes.collections_url }}/shop-all">SHOP PRODUCTS</a>
       </div>
-    </form>
-  {% else %}
-    <div class="cart-empty">
-      <p>Your shopping bag is empty.</p>
-      <a class="button button--lime" href="{{ routes.all_products_collection_url }}">Shop products</a>
-    </div>
-  {% endif %}
+    {% endif %}
+  </div>
 </section>
 
 {% schema %}
