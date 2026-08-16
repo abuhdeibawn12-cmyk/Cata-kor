@@ -606,6 +606,125 @@
   };
   document.querySelectorAll("[data-nmn-reviews]").forEach((section) => setNmnReviewPage(section, 1));
 
+  const compactPaginationItems = (page, totalPages) => {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1);
+    if (page <= 4) return [1, 2, 3, 4, "ellipsis", totalPages];
+    if (page >= totalPages - 3) return [1, "ellipsis", totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    return [1, "ellipsis", page - 1, page, page + 1, "ellipsis", totalPages];
+  };
+
+  const initializeNadCustomerReviews = async (section) => {
+    const status = section.querySelector("[data-nad-customer-status]");
+    const list = section.querySelector("[data-nad-customer-list]");
+    const pagination = section.querySelector("[data-nad-customer-pagination]");
+    const sort = section.querySelector("[data-nad-customer-sort]");
+    const picturesOnly = section.querySelector("[data-nad-customer-pictures]");
+    const photoStrip = section.querySelector("[data-nad-customer-photos]");
+    const histogram = section.querySelector("[data-nad-customer-histogram]");
+    const perPage = 5;
+    let currentPage = 1;
+    let reviews = [];
+
+    const safeImageUrl = (url) => /^https:\/\//i.test(String(url || "")) ? String(url) : "";
+    const starsMarkup = (rating) => Array.from({ length: 5 }, (_, index) =>
+      `<span class="${index < rating ? "is-filled" : ""}">&#9733;</span>`
+    ).join("");
+    const filteredReviews = () => {
+      const withIndex = reviews.map((review, index) => ({ review, index }));
+      const filtered = picturesOnly.checked
+        ? withIndex.filter(({ review }) => review.pictures?.some(safeImageUrl))
+        : withIndex;
+      if (sort.value === "highest") filtered.sort((a, b) => b.review.rating - a.review.rating || a.index - b.index);
+      if (sort.value === "lowest") filtered.sort((a, b) => a.review.rating - b.review.rating || a.index - b.index);
+      return filtered.map(({ review }) => review);
+    };
+
+    const render = () => {
+      const visibleReviews = filteredReviews();
+      const totalPages = Math.max(1, Math.ceil(visibleReviews.length / perPage));
+      currentPage = Math.max(1, Math.min(currentPage, totalPages));
+      const start = (currentPage - 1) * perPage;
+      const pageReviews = visibleReviews.slice(start, start + perPage);
+
+      status.textContent = visibleReviews.length
+        ? `Showing ${start + 1}\u2013${Math.min(start + perPage, visibleReviews.length)} of ${visibleReviews.length} reviews`
+        : "No customer reviews match this filter.";
+      list.innerHTML = pageReviews.map((review) => {
+        const initial = Array.from(review.name || "A")[0] || "A";
+        const photos = (review.pictures || []).map(safeImageUrl).filter(Boolean);
+        return `<article class="nad-customer-review" data-review-uuid="${escapeHtml(review.uuid)}">
+          <div class="nad-customer-review__stars" role="img" aria-label="${review.rating} out of 5 stars">${starsMarkup(review.rating)}</div>
+          <div class="nad-customer-review__person">
+            <span aria-hidden="true">${escapeHtml(initial.toUpperCase())}</span>
+            <div><strong>${escapeHtml(review.name || "Anonymous")}</strong>${review.verified ? '<em>Verified</em>' : ""}<small>${escapeHtml(review.date)}</small></div>
+          </div>
+          ${review.title ? `<h3>${escapeHtml(review.title)}</h3>` : ""}
+          ${review.body ? `<p>${escapeHtml(review.body)}</p>` : ""}
+          ${photos.length ? `<div class="nad-customer-review__media">${photos.map((url) => `<a href="${escapeHtml(url)}" target="_blank" rel="noopener"><img src="${escapeHtml(url)}" alt="Customer photo from ${escapeHtml(review.name || "a reviewer")}" width="360" height="360" loading="lazy"></a>`).join("")}</div>` : ""}
+        </article>`;
+      }).join("");
+
+      pagination.hidden = visibleReviews.length <= perPage;
+      pagination.innerHTML = `<button type="button" data-nad-customer-page="${currentPage - 1}" ${currentPage === 1 ? "disabled" : ""} aria-label="Previous review page">&#8592;</button>
+        ${compactPaginationItems(currentPage, totalPages).map((item) => item === "ellipsis"
+          ? '<span aria-hidden="true">&hellip;</span>'
+          : `<button type="button" class="${currentPage === item ? "is-active" : ""}" data-nad-customer-page="${item}" ${currentPage === item ? 'aria-current="page"' : ""}>${item}</button>`
+        ).join("")}
+        <button type="button" data-nad-customer-page="${currentPage + 1}" ${currentPage === totalPages ? "disabled" : ""} aria-label="Next review page">&#8594;</button>`;
+    };
+
+    try {
+      const response = await fetch(section.dataset.reviewsUrl, { credentials: "same-origin" });
+      if (!response.ok) throw new Error(`Review data returned ${response.status}`);
+      const payload = await response.json();
+      reviews = Array.isArray(payload.reviews) ? payload.reviews : [];
+      section.querySelector("[data-nad-customer-average]").textContent = Number(payload.averageRating || 0).toFixed(1);
+      section.querySelector("[data-nad-customer-total]").textContent = String(payload.totalReviews || reviews.length);
+
+      histogram.innerHTML = [5, 4, 3, 2, 1].map((rating) => {
+        const count = Number(payload.histogram?.[rating] || 0);
+        const percent = reviews.length ? (count / reviews.length) * 100 : 0;
+        return `<div><span>${rating} star</span><i><b style="width:${percent.toFixed(2)}%"></b></i><small>${count}</small></div>`;
+      }).join("");
+
+      const photoReviews = reviews.flatMap((review) => (review.pictures || [])
+        .map(safeImageUrl)
+        .filter(Boolean)
+        .map((url) => ({ url, uuid: review.uuid, name: review.name }))
+      ).filter((photo, index, all) => all.findIndex((candidate) => candidate.url === photo.url) === index).slice(0, 12);
+      if (photoReviews.length) {
+        photoStrip.hidden = false;
+        photoStrip.innerHTML = photoReviews.map((photo) => `<button type="button" data-nad-customer-photo="${escapeHtml(photo.uuid)}" aria-label="Show review from ${escapeHtml(photo.name || "customer")}"><img src="${escapeHtml(photo.url)}" alt="Customer review photo" width="180" height="180" loading="lazy"></button>`).join("");
+      }
+
+      sort.addEventListener("change", () => { currentPage = 1; render(); });
+      picturesOnly.addEventListener("change", () => { currentPage = 1; render(); });
+      pagination.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-nad-customer-page]");
+        if (!button || button.disabled) return;
+        currentPage = Number(button.dataset.nadCustomerPage);
+        render();
+        list.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      photoStrip.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-nad-customer-photo]");
+        if (!button) return;
+        picturesOnly.checked = true;
+        sort.value = "recent";
+        const pictureReviews = reviews.filter((review) => review.pictures?.some(safeImageUrl));
+        const position = pictureReviews.findIndex((review) => review.uuid === button.dataset.nadCustomerPhoto);
+        currentPage = Math.max(1, Math.floor(Math.max(0, position) / perPage) + 1);
+        render();
+        list.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      render();
+    } catch (error) {
+      console.error(error);
+      status.textContent = "Customer reviews could not be loaded. Please refresh the page to try again.";
+    }
+  };
+  document.querySelectorAll("[data-nad-customer-reviews]").forEach(initializeNadCustomerReviews);
+
   document.querySelectorAll("[data-nmn-experts]").forEach((section) => {
     section.dataset.expertStart = "0";
   });

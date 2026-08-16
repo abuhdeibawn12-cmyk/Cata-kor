@@ -1,0 +1,55 @@
+{% if product.handle == 'nad-advanced-500mg' %}
+  <section
+    class="nad-customer-reviews"
+    id="customer-reviews"
+    aria-labelledby="nad-customer-reviews-title"
+    data-nad-customer-reviews
+    data-reviews-url="{{ 'nad-customer-reviews.json' | asset_url }}"
+  >
+    <div class="nad-customer-reviews__inner">
+      <header class="nad-customer-reviews__header">
+        <div>
+          <p class="nad-customer-reviews__eyebrow">Real customer feedback</p>
+          <h2 id="nad-customer-reviews-title">Customer Reviews</h2>
+          <div class="nad-customer-reviews__score" aria-label="4.2 out of 5 stars from 263 reviews">
+            <strong data-nad-customer-average>4.2</strong>
+            <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;<i>&#9733;</i></span>
+            <small><b data-nad-customer-total>263</b> reviews</small>
+          </div>
+        </div>
+        <div class="nad-customer-reviews__controls">
+          <label>
+            <span class="sr-only">Sort customer reviews</span>
+            <select data-nad-customer-sort aria-label="Sort customer reviews">
+              <option value="recent">Most recent</option>
+              <option value="highest">Highest rating</option>
+              <option value="lowest">Lowest rating</option>
+            </select>
+          </label>
+          <label class="nad-customer-reviews__photo-filter">
+            <input type="checkbox" data-nad-customer-pictures>
+            Photos only
+          </label>
+        </div>
+      </header>
+
+      <div class="nad-customer-reviews__overview">
+        <div class="nad-customer-reviews__histogram" data-nad-customer-histogram aria-label="Rating breakdown"></div>
+        <div class="nad-customer-reviews__photos" data-nad-customer-photos aria-label="Customer review photos" hidden></div>
+      </div>
+
+      <p class="nad-customer-reviews__source">Customer feedback transferred from our original store. Verified badges are shown only where present in the original review record.</p>
+      <p class="nad-customer-reviews__status" data-nad-customer-status>Loading customer reviews&hellip;</p>
+      <div class="nad-customer-reviews__list" data-nad-customer-list aria-live="polite"></div>
+      <nav class="nad-customer-reviews__pagination" data-nad-customer-pagination aria-label="Customer review pages"></nav>
+    </div>
+  </section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "NAD customer reviews",
+  "settings": [],
+  "presets": [{ "name": "NAD customer reviews" }]
+}
+{% endschema %}

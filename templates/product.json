@@ -17,7 +17,11 @@
       "settings": {
         "heading": "Questions? We have answers!"
       }
+    },
+    "customer_reviews": {
+      "type": "nad-customer-reviews",
+      "settings": {}
     }
   },
-  "order": ["main", "benefits", "reviews", "faq"]
+  "order": ["main", "benefits", "reviews", "faq", "customer_reviews"]
 }
