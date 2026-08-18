@@ -30,6 +30,15 @@
   const effectiveLinePrice = (item) => Number(item.final_line_price || 0);
   const effectiveSubtotal = (cart) =>
     cart.items.reduce((total, item) => total + effectiveLinePrice(item), 0);
+  const hasPendingFlashOffer = (cart) => {
+    const acceptedSourceTokens = new Set(cart.items
+      .filter(isFlashItem)
+      .map((item) => item.properties?._flash_source_token)
+      .filter(Boolean));
+    return cart.items.some((item) =>
+      !isFlashItem(item) && !acceptedSourceTokens.has(`${item.handle}:${item.variant_id}`)
+    );
+  };
 
   const lockPage = () => document.body.classList.add("is-locked");
   const unlockPage = () => {
@@ -97,10 +106,16 @@
         : "Your bag is empty";
     }
     if (!content) return;
+    const showFlashTeaser = hasPendingFlashOffer(cart);
     content.innerHTML = cart.items.length
       ? `<div class="global-cart-items" data-cart-items>${cart.items.map(cartLineMarkup).join("")}</div>
+         ${showFlashTeaser ? `<div class="global-cart-offer-hint" role="note">
+           <span>⚡ Limited One-Time Offer</span>
+           <strong>A Private Flash Deal Is Waiting</strong>
+           <p>Use the checkout button below to reveal it. No code required.</p>
+         </div>` : ""}
          <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>${formatMoney(effectiveSubtotal(cart))}</strong></div>
-         <button class="global-cart-checkout" type="button" data-start-checkout>CHECKOUT</button>
+         <button class="global-cart-checkout" type="button" data-start-checkout>${showFlashTeaser ? "CHECKOUT &amp; REVEAL OFFER →" : "CHECKOUT"}</button>
          <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
          <p class="global-cart-note">CATA15 can be applied to regular items at checkout.</p>`
       : `<div class="global-empty-cart">
