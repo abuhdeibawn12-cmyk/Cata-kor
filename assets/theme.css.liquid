@@ -2627,12 +2627,23 @@ h3 {
   padding-bottom: 24px;
 }
 
+.footer-quick-links,
+.footer-policy-links {
+  align-self: start;
+}
+
 .footer-quick-links {
   grid-column: 2;
   text-align: center;
 }
 
-.footer-quick-links a {
+.footer-policy-links {
+  grid-column: 3;
+  text-align: center;
+}
+
+.footer-quick-links a,
+.footer-policy-links a {
   display: block;
   font-family: "Helvetica Neue", "Cata Sans", Arial, sans-serif;
   font-size: 11px;
@@ -2650,24 +2661,6 @@ h3 {
   font-family: "Adieu", sans-serif;
   font-size: 24px;
   margin: 35px 0;
-}
-
-.social-links {
-  display: flex;
-  font-size: 12px;
-  gap: 22px;
-}
-
-.social-links a {
-  align-items: center;
-  background: var(--lime);
-  border-radius: 50%;
-  display: inline-flex;
-  font-size: 14px;
-  height: 38px;
-  justify-content: center;
-  margin: 0;
-  width: 38px;
 }
 
 .footer-top h2 {
@@ -4170,7 +4163,8 @@ h3 {
   }
 
   .footer-top > div:first-child,
-  .footer-quick-links {
+  .footer-quick-links,
+  .footer-policy-links {
     grid-column: 1;
     text-align: center;
   }
@@ -5013,40 +5007,6 @@ h3 {
 .exact-home .footer-tagline,
 .product-page .footer-tagline {
   color: #fff;
-}
-
-.exact-home .social-links a,
-.product-page .social-links a {
-  align-items: center;
-  background: var(--lime);
-  border-radius: 50%;
-  color: var(--forest);
-  display: flex;
-  font-size: 0;
-  height: 38px;
-  justify-content: center;
-  width: 38px;
-}
-
-.exact-home .social-links a::after,
-.product-page .social-links a::after {
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.exact-home .social-links a:nth-child(1)::after,
-.product-page .social-links a:nth-child(1)::after {
-  content: "\2709";
-}
-
-.exact-home .social-links a:nth-child(2)::after,
-.product-page .social-links a:nth-child(2)::after {
-  content: "◎";
-}
-
-.exact-home .social-links a:nth-child(3)::after,
-.product-page .social-links a:nth-child(3)::after {
-  content: "✉";
 }
 
 .exact-home .newsletter,

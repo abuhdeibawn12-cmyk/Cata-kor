@@ -3,9 +3,6 @@
     <div class="footer-brand">
       <a href="{{ routes.root_url }}"><img class="footer-logo" src="{{ 'logo.svg' | asset_url }}" alt="{{ shop.name }}" width="250" height="60"></a>
       <p class="footer-tagline">AGE ON YOUR TERMS*</p>
-      <div class="social-links">
-        <a href="mailto:hello@catakor.com" aria-label="Email Cata-Kor">✉</a>
-      </div>
     </div>
 
     <nav class="footer-quick-links" aria-label="Footer navigation">
@@ -16,6 +13,14 @@
       <a href="/products/liposomal-glutathione">LIPOSOMAL GLUTATHIONE</a>
       <a href="/pages/science-benefits">SCIENCE AND QUALITY</a>
       <a href="/pages/faqs">FAQs</a>
+    </nav>
+
+    <nav class="footer-policy-links" aria-label="Store policies">
+      <h2>POLICIES</h2>
+      <a href="{{ shop.refund_policy.url | default: '/policies/refund-policy' }}">RETURN AND REFUND POLICY</a>
+      <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}">SHIPPING POLICY</a>
+      <a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">PRIVACY POLICY</a>
+      <a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}">TERMS OF SERVICE</a>
     </nav>
   </div>
 
