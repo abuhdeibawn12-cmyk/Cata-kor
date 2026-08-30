@@ -29,7 +29,10 @@
                   {% unless is_flash_item %}<a href="{{ item.url }}">{% endunless %}
                     <h2>{{ display_title }}</h2>
                   {% unless is_flash_item %}</a>{% endunless %}
-                  <p>{{ display_variant }} · One-time purchase</p>
+                  <p>
+                    {{ display_variant }} ·
+                    {% if item.selling_plan_allocation %}{{ item.selling_plan_allocation.selling_plan.name | default: 'Delivered every month · Save 15%' }}{% else %}One-time purchase{% endif %}
+                  </p>
                 </div>
                 <a class="cart-page__remove" href="{{ item.url_to_remove }}" aria-label="Remove {{ display_title }}">Remove</a>
               </div>

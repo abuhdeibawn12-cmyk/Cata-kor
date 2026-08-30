@@ -3633,63 +3633,154 @@ h3 {
   font-size: 12px;
 }
 
+.product-plan-selector {
+  margin-top: 28px;
+}
+
+.product-plan-selector > h2 {
+  color: var(--ink);
+  font-family: "Cata Sans", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 13px;
+}
+
 .plan-option {
   align-items: center;
-  background: #f8f8f8;
+  background: #f7f8f6;
   border: 1px solid #aab3ab;
-  border-radius: 12px;
+  border-radius: 13px;
+  color: var(--ink);
   cursor: pointer;
   display: flex;
+  font: inherit;
   justify-content: space-between;
-  margin-top: 10px;
-  min-height: 56px;
-  padding: 10px 16px;
+  min-height: 72px;
+  padding: 12px 17px;
+  position: relative;
   text-align: left;
+  transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
   width: 100%;
 }
 
-.plan-option.selected {
-  background: var(--lime);
+.plan-option:hover {
   border-color: var(--forest);
+  transform: translateY(-1px);
 }
 
-.plan-option > span {
-  align-items: flex-start;
+.plan-option.selected {
+  background: #e5fa83;
+  border-color: var(--forest);
+  box-shadow: 0 0 0 1px var(--forest), 0 7px 18px rgba(23, 63, 21, 0.1);
+}
+
+.plan-option--subscription {
+  padding-top: 18px;
+}
+
+.plan-option__copy,
+.plan-option__price {
   display: flex;
-  gap: 9px;
+  flex-direction: column;
 }
 
-.plan-option > span:first-child {
-  flex-direction: column;
+.plan-option__copy {
+  align-items: flex-start;
   gap: 3px;
 }
 
-.plan-option small {
+.plan-option__copy small {
   background: var(--forest);
-  border-radius: 10px;
+  border-radius: 999px;
   color: var(--lime);
   font-size: 9px;
-  padding: 3px 8px;
+  font-weight: 800;
+  left: 16px;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  position: absolute;
+  top: -10px;
 }
 
-.plan-option s {
-  opacity: 0.6;
+.plan-option__copy b {
+  font-size: 15px;
+  letter-spacing: 0.01em;
+}
+
+.plan-option em {
+  color: #5f6e64;
+  font-size: 10px;
+  font-style: normal;
+  line-height: 1.3;
+}
+
+.plan-option__price {
+  align-items: flex-end;
+  flex: 0 0 auto;
+  gap: 1px;
+  margin-left: 14px;
+}
+
+.plan-option__price s {
+  color: #66736a;
+  font-size: 11px;
+}
+
+.plan-option__price strong,
+.plan-option--one-time > strong {
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 .plan-benefits {
   display: grid;
   font-size: 10px;
-  gap: 5px 25px;
-  grid-template-columns: 1fr 1fr;
+  gap: 7px 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   list-style: none;
-  margin: 10px 0 16px;
-  padding: 0 15px;
+  margin: 12px 0 17px;
+  padding: 0 10px;
+}
+
+.plan-benefits li {
+  color: #4f5f55;
+  line-height: 1.35;
 }
 
 .plan-benefits li::before {
-  color: #a8d537;
+  color: #72a900;
   content: "✓";
-  margin-right: 5px;
+  font-weight: 900;
+  margin-right: 6px;
+}
+
+.plan-option--one-time {
+  min-height: 64px;
+}
+
+.is-subscription-selected .product-flash-hint {
+  display: none;
+}
+
+@media (max-width: 520px) {
+  .plan-option {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .plan-option__copy b,
+  .plan-option__price strong,
+  .plan-option--one-time > strong {
+    font-size: 14px;
+  }
+
+  .plan-benefits {
+    grid-template-columns: 1fr;
+    padding-left: 7px;
+    padding-right: 7px;
+  }
 }
 
 .one-time-purchase {

@@ -27,6 +27,11 @@
   };
   const jarsFromTitle = (title = "") => Math.max(1, Number(String(title).match(/\d+/)?.[0] || 1));
   const isFlashItem = (item) => item.properties?._flash_offer === "true";
+  const isSubscriptionItem = (item) => Boolean(item.selling_plan_allocation);
+  const purchaseLabel = (item) => {
+    if (!isSubscriptionItem(item)) return "One-time purchase";
+    return item.selling_plan_allocation?.selling_plan?.name || "Delivered every month · Save 15%";
+  };
   const effectiveLinePrice = (item) => Number(item.final_line_price || 0);
   const effectiveSubtotal = (cart) =>
     cart.items.reduce((total, item) => total + effectiveLinePrice(item), 0);
@@ -36,7 +41,7 @@
       .map((item) => item.properties?._flash_source_token)
       .filter(Boolean));
     return cart.items.some((item) =>
-      !isFlashItem(item) && !acceptedSourceTokens.has(`${item.handle}:${item.variant_id}`)
+      !isFlashItem(item) && !isSubscriptionItem(item) && !acceptedSourceTokens.has(`${item.handle}:${item.variant_id}`)
     );
   };
 
@@ -72,7 +77,7 @@
         <div class="global-cart-item-copy">
           ${flash ? `<span class="global-flash-label">FLASH SALE · ${escapeHtml(item.properties?._flash_discount || "")}% OFF</span>` : ""}
           <h3>${escapeHtml(displayTitle)}</h3>
-          <p>${escapeHtml(displayVariant)} · One-time purchase</p>
+          <p>${escapeHtml(displayVariant)} · ${escapeHtml(purchaseLabel(item))}</p>
           <div class="global-cart-price">
             ${flash && originalUnit ? `<del>${formatMoney(originalUnit * item.quantity)}</del>` : ""}
             <strong>${formatMoney(lineSale)}</strong>
@@ -107,6 +112,7 @@
     }
     if (!content) return;
     const showFlashTeaser = hasPendingFlashOffer(cart);
+    const hasOneTimePurchase = cart.items.some((item) => !isFlashItem(item) && !isSubscriptionItem(item));
     content.innerHTML = cart.items.length
       ? `<div class="global-cart-items" data-cart-items>${cart.items.map(cartLineMarkup).join("")}</div>
          ${showFlashTeaser ? `<div class="global-cart-offer-hint" role="note">
@@ -117,7 +123,7 @@
          <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>${formatMoney(effectiveSubtotal(cart))}</strong></div>
          <button class="global-cart-checkout" type="button" data-start-checkout>${showFlashTeaser ? "CHECKOUT &amp; REVEAL OFFER →" : "CHECKOUT"}</button>
          <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
-         <p class="global-cart-note">CATA15 can be applied to regular items at checkout.</p>`
+         ${hasOneTimePurchase ? '<p class="global-cart-note">CATA15 can be applied to one-time items at checkout.</p>' : ""}`
       : `<div class="global-empty-cart">
            <span>0</span><h3>Your shopping bag is empty</h3>
            <p>Choose a product and build your daily longevity routine.</p>
@@ -190,7 +196,7 @@
     if (!response.ok) throw new Error("Unable to update cart");
     return response.json();
   };
-  const addVariant = async (variantId, quantity = 1, properties = {}, fallbackProduct = null) => {
+  const addVariant = async (variantId, quantity = 1, properties = {}, fallbackProduct = null, sellingPlanId = null) => {
     if (testCartMode) {
       let product;
       let variant;
@@ -213,12 +219,15 @@
       const flash = properties?._flash_offer === "true";
       const propertyKey = flash
         ? `${properties._flash_source_token || "replacement"}:${properties._flash_discount || ""}`
-        : "regular";
+        : `regular:${sellingPlanId || "one-time"}`;
       const key = `${variant.id}:${propertyKey}`;
       const cart = readTestCart();
       const existing = cart.items.find((item) => item.key === key);
       const nextQuantity = Number(existing?.quantity || 0) + quantity;
-      const price = Number(variant.price || 0);
+      const allocation = sellingPlanId
+        ? variant.selling_plan_allocations?.find((candidate) => Number(candidate.selling_plan_id) === Number(sellingPlanId))
+        : null;
+      const price = Number(allocation?.price || variant.price || 0);
       const line = {
         key,
         id: Number(variant.id),
@@ -231,16 +240,27 @@
         final_price: price,
         final_line_price: price * nextQuantity,
         image: variant.featured_image?.src || product.featured_image || "",
-        properties
+        properties,
+        selling_plan_allocation: allocation
+          ? {
+              ...allocation,
+              selling_plan: allocation.selling_plan || {
+                id: Number(sellingPlanId),
+                name: "Delivered every month · Save 15%"
+              }
+            }
+          : null
       };
       return writeTestCart(existing
         ? cart.items.map((item) => item.key === key ? line : item)
         : [...cart.items, line]);
     }
+    const item = { id: variantId, quantity, properties };
+    if (sellingPlanId) item.selling_plan = Number(sellingPlanId);
     const response = await fetch(`${root}cart/add.js`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ items: [{ id: variantId, quantity, properties }] })
+      body: JSON.stringify({ items: [item] })
     });
     if (!response.ok) throw new Error("Unable to add item");
     return response.json();
@@ -267,6 +287,46 @@
       image
     };
   };
+  const selectedPackFor = (product) => product?.querySelector(
+    '[data-nad-pack][aria-pressed="true"], [data-secondary-pack][aria-pressed="true"]'
+  );
+  const refreshPurchaseOptions = (product) => {
+    if (!product) return;
+    const pack = selectedPackFor(product);
+    const form = product.querySelector("[data-product-form]");
+    if (!pack || !form) return;
+    const oneTimeCents = Number(pack.dataset.oneTimeCents || Math.round(Number(pack.dataset.total || 0) * 100));
+    const subscriptionCents = Number(pack.dataset.subscriptionCents || oneTimeCents);
+    const sellingPlanId = Number(pack.dataset.sellingPlanId || 0);
+    const requestedMode = product.dataset.purchaseMode || "one-time";
+    const mode = requestedMode === "subscription" && sellingPlanId ? "subscription" : "one-time";
+    product.dataset.purchaseMode = mode;
+
+    product.querySelectorAll("[data-purchase-mode]").forEach((button) => {
+      const selected = button.dataset.purchaseMode === mode;
+      button.classList.toggle("selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
+    product.querySelectorAll("[data-plan-one-time-price], [data-plan-compare-price]").forEach((element) => {
+      element.textContent = formatMoney(oneTimeCents);
+    });
+    product.querySelectorAll("[data-plan-subscription-price]").forEach((element) => {
+      element.textContent = formatMoney(subscriptionCents);
+    });
+
+    const sellingPlanInput = form.querySelector("[data-selling-plan-input]");
+    if (sellingPlanInput) {
+      sellingPlanInput.value = String(sellingPlanId || "");
+      sellingPlanInput.disabled = mode !== "subscription" || !sellingPlanId;
+    }
+    const selectedPrice = mode === "subscription" ? subscriptionCents : oneTimeCents;
+    const addPrice = form.querySelector("[data-add-price]");
+    if (addPrice) addPrice.textContent = formatMoney(selectedPrice);
+    product.classList.toggle("is-subscription-selected", mode === "subscription");
+    const flashHint = product.querySelector(".product-flash-hint");
+    if (flashHint) flashHint.hidden = mode === "subscription";
+  };
+  document.querySelectorAll("[data-product-root]").forEach(refreshPurchaseOptions);
   const sourceToken = (item) => `${item.handle}:${item.variant_id}`;
   const removeOrphanFlashItems = async (cart, removedRegular) => {
     if (!removedRegular || isFlashItem(removedRegular)) return cart;
@@ -320,7 +380,7 @@
       return null;
     }
   };
-  const regularItems = (cart) => cart.items.filter((item) => !isFlashItem(item));
+  const regularItems = (cart) => cart.items.filter((item) => !isFlashItem(item) && !isSubscriptionItem(item));
 
   const buildFlashOffers = async (cart) => {
     const latestByProduct = new Map();
@@ -771,6 +831,7 @@
     const galleryStep = target.closest("[data-gallery-step]");
     const thumbnailShift = target.closest("[data-thumbnail-shift]");
     const packButton = target.closest("[data-secondary-pack]");
+    const purchaseModeButton = target.closest("[data-purchase-mode]");
     const expertStep = target.closest("[data-expert-step]");
     const nmnReviewGo = target.closest("[data-nmn-review-go]");
     const reviewFilter = target.closest("[data-nmn-review-filter]");
@@ -847,9 +908,8 @@
         button.setAttribute("aria-pressed", String(selected));
       });
       product.querySelector("[data-variant-input]").value = packButton.dataset.variantId;
-      product.querySelector("[data-secondary-total]").textContent = `$${Number(packButton.dataset.total).toFixed(2)}`;
-      product.querySelector("[data-add-price]").textContent = `$${Number(packButton.dataset.total).toFixed(2)}`;
       product.querySelector("[data-selected-capsules]").textContent = `${Number(packButton.dataset.jars) * 60} Capsules`;
+      refreshPurchaseOptions(product);
     }
     if (nadGalleryThumb || nadGalleryStep || nadThumbnailShift) {
       const gallery = target.closest("[data-nad-gallery]");
@@ -868,9 +928,13 @@
         button.setAttribute("aria-pressed", String(selected));
       });
       product.querySelector("[data-variant-input]").value = nadPack.dataset.variantId;
-      product.querySelector("[data-nad-total]").textContent = `$${Number(nadPack.dataset.total).toFixed(2)}`;
-      product.querySelector("[data-add-price]").textContent = `$${Number(nadPack.dataset.total).toFixed(2)}`;
       product.querySelector("[data-nad-capsules]").textContent = `${Number(nadPack.dataset.jars) * 60} Capsules`;
+      refreshPurchaseOptions(product);
+    }
+    if (purchaseModeButton) {
+      const product = purchaseModeButton.closest("[data-product-root]");
+      product.dataset.purchaseMode = purchaseModeButton.dataset.purchaseMode;
+      refreshPurchaseOptions(product);
     }
     if (storyPlay) {
       const card = storyPlay.closest(".story-card");
@@ -1018,7 +1082,8 @@
     try {
       const variantId = Number(form.querySelector("[name='id']")?.value || 0);
       const quantity = Number(form.querySelector("[name='quantity']")?.value || 1);
-      await addVariant(variantId, quantity, {}, productFallbackFromForm(form));
+      const sellingPlanId = Number(form.querySelector("[name='selling_plan']:not(:disabled)")?.value || 0) || null;
+      await addVariant(variantId, quantity, {}, productFallbackFromForm(form), sellingPlanId);
       renderCart(await getCart());
       openCart();
     } catch (error) {

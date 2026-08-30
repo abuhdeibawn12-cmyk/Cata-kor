@@ -1,0 +1,37 @@
+{% liquid
+  assign subscription_allocation = selected_variant.selling_plan_allocations.first
+%}
+
+{% if subscription_allocation %}
+  <section class="product-plan-selector" data-purchase-options aria-labelledby="purchase-options-title-{{ product.id }}">
+    <h2 id="purchase-options-title-{{ product.id }}">Choose Plan</h2>
+
+    <button class="plan-option plan-option--subscription" type="button" data-purchase-mode="subscription" aria-pressed="false">
+      <span class="plan-option__copy">
+        <small>SAVE EXTRA 15%</small>
+        <b>Subscribe &amp; Save</b>
+        <em>Delivered every month</em>
+      </span>
+      <span class="plan-option__price">
+        <s data-plan-compare-price>{{ selected_variant.price | money }}</s>
+        <strong data-plan-subscription-price>{{ subscription_allocation.price | money }}</strong>
+        <em>per delivery</em>
+      </span>
+    </button>
+
+    <ul class="plan-benefits" aria-label="Subscription benefits">
+      <li>Free standard shipping</li>
+      <li>15% off every delivery</li>
+      <li>Delivered every month</li>
+      <li>Manage through your account</li>
+    </ul>
+
+    <button class="plan-option plan-option--one-time selected" type="button" data-purchase-mode="one-time" aria-pressed="true">
+      <span class="plan-option__copy">
+        <b>One-Time Purchase</b>
+        <em>No subscription or recurring charges</em>
+      </span>
+      <strong data-plan-one-time-price>{{ selected_variant.price | money }}</strong>
+    </button>
+  </section>
+{% endif %}

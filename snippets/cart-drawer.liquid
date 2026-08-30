@@ -19,18 +19,23 @@
           <button type="button" data-cart-close>CONTINUE SHOPPING</button>
         </div>
       {% else %}
-        {% assign has_regular_item = false %}
+        {% assign has_flash_eligible_item = false %}
         <div class="global-cart-items" data-cart-items>
           {% for item in cart.items %}
             {% assign is_flash_item = false %}
             {% if item.properties._flash_offer == 'true' %}{% assign is_flash_item = true %}{% endif %}
-            {% unless is_flash_item %}{% assign has_regular_item = true %}{% endunless %}
+            {% unless is_flash_item %}
+              {% unless item.selling_plan_allocation %}{% assign has_flash_eligible_item = true %}{% endunless %}
+            {% endunless %}
             <article data-line-key="{{ item.key }}">
               {% if item.image %}<img src="{{ item.image | image_url: width: 180 }}" alt="" width="180" height="180">{% endif %}
               <div class="global-cart-item-copy">
                 {% if is_flash_item %}<span class="global-flash-label">FLASH SALE · {{ item.properties._flash_discount }}% OFF</span>{% endif %}
                 <h3>{{ item.properties._flash_display_title | default: item.product.title }}</h3>
-                <p>{{ item.properties._flash_display_variant | default: item.variant.title }} · One-time purchase</p>
+                <p>
+                  {{ item.properties._flash_display_variant | default: item.variant.title }} ·
+                  {% if item.selling_plan_allocation %}{{ item.selling_plan_allocation.selling_plan.name | default: 'Delivered every month · Save 15%' }}{% else %}One-time purchase{% endif %}
+                </p>
                 <div class="global-cart-price">
                   {% if is_flash_item and item.properties._flash_original_price_cents %}
                     <del>{{ item.properties._flash_original_price_cents | times: item.quantity | money }}</del>
@@ -54,7 +59,7 @@
             </article>
           {% endfor %}
         </div>
-        {% if has_regular_item %}
+        {% if has_flash_eligible_item %}
           <div class="global-cart-offer-hint" role="note">
             <span>⚡ Limited One-Time Offer</span>
             <strong>A Private Flash Deal Is Waiting</strong>
@@ -62,9 +67,9 @@
           </div>
         {% endif %}
         <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
-        <button class="global-cart-checkout" type="button" data-start-checkout>{% if has_regular_item %}CHECKOUT &amp; REVEAL OFFER →{% else %}CHECKOUT{% endif %}</button>
+        <button class="global-cart-checkout" type="button" data-start-checkout>{% if has_flash_eligible_item %}CHECKOUT &amp; REVEAL OFFER →{% else %}CHECKOUT{% endif %}</button>
         <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
-        <p class="global-cart-note">CATA15 can be applied to regular items at checkout.</p>
+        {% if has_flash_eligible_item %}<p class="global-cart-note">CATA15 can be applied to one-time items at checkout.</p>{% endif %}
       {% endif %}
     </div>
   </aside>
