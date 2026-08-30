@@ -25,6 +25,19 @@
   </nav>
 
   <div class="header-actions">
+    {% if shop.customer_accounts_enabled %}
+      <shopify-account
+        class="header-account-component"
+        menu="{{ section.settings.customer_account_menu | default: 'customer-account-main-menu' }}"
+        aria-label="{% if customer %}Open customer account{% else %}Sign in to customer account{% endif %}"
+      >
+        <span class="header-account-trigger" slot="signed-out-avatar">
+          {% render 'icon-account' %}
+          <span class="header-account-label">SIGN IN</span>
+        </span>
+      </shopify-account>
+    {% endif %}
+
     <button class="header-icon-button cart-icon-link" type="button" data-cart-open aria-label="Open shopping bag with {{ cart.item_count }} items">
       {% render 'icon-bag' %}
       <b data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</b>
@@ -40,6 +53,12 @@
       "type": "image_picker",
       "id": "logo",
       "label": "Logo"
+    },
+    {
+      "type": "link_list",
+      "id": "customer_account_menu",
+      "label": "Customer account menu",
+      "default": "customer-account-main-menu"
     },
     {
       "type": "text",

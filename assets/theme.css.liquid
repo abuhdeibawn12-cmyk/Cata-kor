@@ -2106,7 +2106,7 @@ h3 {
 .header-actions {
   align-items: center;
   display: flex;
-  gap: 27px;
+  gap: 22px;
 }
 
 .header-vector-icon {
@@ -2114,6 +2114,37 @@ h3 {
   display: block;
   flex: none;
   shape-rendering: geometricPrecision;
+}
+
+.header-account-component {
+  --shopify-account-signed-in-avatar-color-background: var(--lime);
+  --shopify-account-signed-in-avatar-color-text: var(--forest);
+  --shopify-account-signed-in-avatar-size: 36px;
+  align-items: center;
+  display: inline-flex;
+}
+
+.header-account-component::part(signed-out-avatar) {
+  height: 40px;
+  padding: 0;
+  width: auto;
+}
+
+.header-account-trigger {
+  align-items: center;
+  color: var(--forest);
+  display: inline-flex;
+  gap: 8px;
+  height: 40px;
+  justify-content: center;
+}
+
+.header-account-label {
+  font-family: "Adieu", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .header-icon-link {
@@ -4025,7 +4056,15 @@ h3 {
   }
 
   .header-actions {
-    gap: 19px;
+    gap: 14px;
+  }
+
+  .header-account-label {
+    display: none;
+  }
+
+  .header-account-component::part(signed-out-avatar) {
+    width: 40px;
   }
 
   .home-hero {
@@ -4461,6 +4500,35 @@ h3 {
 
 }
 
+@media (max-width: 340px) {
+  .site-header {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .brand img {
+    height: 27px;
+  }
+
+  .mobile-menu-button {
+    margin-right: 8px;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+
+  .header-account-component::part(signed-out-avatar),
+  .site-header .header-icon-button {
+    height: 36px;
+    width: 36px;
+  }
+
+  .header-account-trigger {
+    height: 36px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -4494,7 +4562,8 @@ h3 {
 }
 
 .header-icon-button:hover .header-vector-icon,
-.header-icon-link:hover .header-vector-icon {
+.header-icon-link:hover .header-vector-icon,
+.header-account-component:hover .header-vector-icon {
   transform: translateY(-1px);
 }
 
