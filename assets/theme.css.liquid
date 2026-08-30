@@ -323,6 +323,288 @@
 
 /* Standalone FAQs page */
 
+/* Contact page */
+
+.contact-page {
+  background: #f7f8f3;
+  color: #102a17;
+  padding: 38px 24px 110px;
+}
+
+.contact-page__inner {
+  margin: 0 auto;
+  max-width: 1180px;
+}
+
+.contact-page__breadcrumbs {
+  align-items: center;
+  color: #6a756c;
+  display: flex;
+  font-size: 11px;
+  gap: 9px;
+  margin-bottom: 72px;
+}
+
+.contact-page__breadcrumbs a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact-page__hero {
+  align-items: end;
+  display: grid;
+  gap: 70px;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+  margin-bottom: 74px;
+}
+
+.contact-page__eyebrow,
+.contact-page__form-kicker {
+  color: #315f35;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  margin: 0 0 18px;
+  text-transform: uppercase;
+}
+
+.contact-page__hero h1 {
+  font-size: clamp(54px, 7vw, 94px);
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+  margin: 0;
+  max-width: 730px;
+}
+
+.contact-page__hero > p {
+  color: #5f6e62;
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0 0 6px;
+}
+
+.contact-page__layout {
+  display: grid;
+  gap: 30px;
+  grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.28fr);
+}
+
+.contact-page__details {
+  background: var(--forest);
+  border-radius: 24px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 570px;
+  padding: 43px 40px;
+}
+
+.contact-page__details > div {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 30px;
+}
+
+.contact-page__details > div:last-child {
+  border-bottom: 0;
+}
+
+.contact-page__details span {
+  color: var(--lime);
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  margin-bottom: 13px;
+}
+
+.contact-page__details a:not(.contact-page__faq-link) {
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.contact-page__details p {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.contact-page__faq-link {
+  align-items: center;
+  display: inline-flex;
+  font-size: 15px;
+  font-weight: 700;
+  gap: 14px;
+}
+
+.contact-page__faq-link span {
+  color: var(--lime);
+  display: inline;
+  font-size: 20px;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.contact-page__content {
+  font-size: 13px;
+}
+
+.contact-page__form-card {
+  background: #fff;
+  border: 1px solid #d9dfd5;
+  border-radius: 24px;
+  padding: 43px clamp(28px, 4vw, 58px) 50px;
+}
+
+.contact-page__form-card h2 {
+  font-size: clamp(34px, 4vw, 48px);
+  margin: 0 0 38px;
+}
+
+.contact-page__form {
+  display: grid;
+  gap: 22px;
+}
+
+.contact-page__field-row {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.contact-page__field {
+  display: grid;
+  gap: 9px;
+}
+
+.contact-page__field label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.contact-page__field label span {
+  color: #778078;
+  font-weight: 400;
+}
+
+.contact-page__field input,
+.contact-page__field textarea {
+  background: #f7f8f3;
+  border: 1px solid #cbd4c8;
+  border-radius: 12px;
+  color: #102a17;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  padding: 15px 17px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.contact-page__field textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.contact-page__field input:focus,
+.contact-page__field textarea:focus {
+  border-color: var(--forest);
+  box-shadow: 0 0 0 3px rgba(23, 63, 18, 0.12);
+}
+
+.contact-page__form button {
+  align-items: center;
+  background: var(--forest);
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-size: 13px;
+  font-weight: 800;
+  justify-content: space-between;
+  margin-top: 5px;
+  min-height: 56px;
+  padding: 0 25px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  width: 100%;
+}
+
+.contact-page__form button:hover {
+  background: var(--forest-deep);
+  transform: translateY(-1px);
+}
+
+.contact-page__form button span {
+  color: var(--lime);
+  font-size: 20px;
+}
+
+.contact-page__success {
+  background: #edf8d8;
+  border: 1px solid #bad56e;
+  border-radius: 10px;
+  color: #234411;
+  margin: 0;
+  padding: 14px 16px;
+}
+
+.contact-page__form .errors {
+  color: #9b2727;
+  font-size: 13px;
+}
+
+@media (max-width: 850px) {
+  .contact-page__breadcrumbs {
+    margin-bottom: 50px;
+  }
+
+  .contact-page__hero {
+    align-items: start;
+    gap: 28px;
+    grid-template-columns: 1fr;
+    margin-bottom: 52px;
+  }
+
+  .contact-page__hero > p {
+    max-width: 580px;
+  }
+
+  .contact-page__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-page__details {
+    gap: 32px;
+    min-height: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .contact-page {
+    padding: 28px 18px 72px;
+  }
+
+  .contact-page__breadcrumbs {
+    margin-bottom: 42px;
+  }
+
+  .contact-page__hero h1 {
+    font-size: clamp(48px, 15vw, 68px);
+  }
+
+  .contact-page__details,
+  .contact-page__form-card {
+    border-radius: 18px;
+    padding: 30px 22px;
+  }
+
+  .contact-page__field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .faqs-template {
   background: #f7f8f3;
 }
