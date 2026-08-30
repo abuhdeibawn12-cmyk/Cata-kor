@@ -2125,26 +2125,20 @@ h3 {
 }
 
 .header-account-component::part(signed-out-avatar) {
+  border-radius: 50%;
   height: 40px;
   padding: 0;
-  width: auto;
+  transition: background 0.2s ease, transform 0.2s ease;
+  width: 40px;
 }
 
 .header-account-trigger {
   align-items: center;
   color: var(--forest);
   display: inline-flex;
-  gap: 8px;
   height: 40px;
   justify-content: center;
-}
-
-.header-account-label {
-  font-family: "Adieu", sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
+  width: 40px;
 }
 
 .header-icon-link {
@@ -2643,19 +2637,19 @@ h3 {
 }
 
 .footer {
-  background: var(--cream);
-  color: var(--forest);
-  padding: 72px clamp(24px, 6.9vw, 100px) 24px;
+  background: var(--forest);
+  color: #fff;
+  min-height: 610px;
+  padding: 52px clamp(24px, 5.5vw, 100px) 18px;
 }
 
 .footer-top {
   display: grid;
-  gap: 70px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(48px, 6vw, 110px);
+  grid-template-columns: 1.08fr 1fr 0.88fr 1.05fr;
   margin-left: auto;
   margin-right: auto;
-  max-width: 1240px;
-  padding-bottom: 24px;
+  max-width: 1630px;
 }
 
 .footer-quick-links,
@@ -2664,73 +2658,141 @@ h3 {
 }
 
 .footer-quick-links {
-  grid-column: 2;
-  text-align: center;
+  grid-column: auto;
+  text-align: left;
 }
 
 .footer-policy-links {
-  grid-column: 3;
-  text-align: center;
+  grid-column: auto;
+  text-align: left;
 }
 
 .footer-quick-links a,
 .footer-policy-links a {
   display: block;
   font-family: "Helvetica Neue", "Cata Sans", Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.25;
-  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+  margin: 0 0 24px;
+  width: fit-content;
 }
 
 .footer-logo {
-  height: 42px;
+  filter: brightness(0) saturate(100%) invert(98%) sepia(69%) saturate(638%) hue-rotate(20deg) brightness(103%) contrast(101%);
+  height: 54px;
   width: auto;
 }
 
 .footer-tagline {
+  color: #fff;
   font-family: "Adieu", sans-serif;
-  font-size: 24px;
-  margin: 35px 0;
+  font-size: 20px;
+  margin: 38px 0 42px;
 }
 
 .footer-top h2 {
-  font-size: 14px;
-  margin-bottom: 22px;
+  font-family: "Helvetica Neue", "Cata Sans", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 29px;
 }
 
-.footer-top > div > a {
+.footer-contact-link {
+  align-items: center;
+  background: var(--lime);
+  border-radius: 50%;
+  color: var(--forest);
+  display: inline-flex;
+  height: 49px;
+  justify-content: center;
+  transition: transform 0.2s ease, background 0.2s ease;
+  width: 49px;
+}
+
+.footer-contact-link:hover {
+  background: var(--lime-soft);
+  transform: translateY(-2px);
+}
+
+.footer-contact-icon {
   display: block;
-  font-size: 12px;
-  margin-bottom: 12px;
+}
+
+.newsletter {
+  align-self: start;
+  background: rgba(255, 255, 255, 0.045);
+  border-radius: 17px;
+  padding: 25px 20px 19px;
 }
 
 .newsletter p {
-  font-size: 13px;
-  max-width: 320px;
+  font-size: 12px;
+  line-height: 1.35;
+  margin: -18px 0 16px;
+  max-width: 285px;
 }
 
-.newsletter form {
-  border-bottom: 1px solid var(--forest);
+.footer-newsletter-form {
+  background: #e9e9e7;
+  border-radius: 999px;
   display: flex;
-  margin-top: 25px;
-  max-width: 360px;
-}
-
-.newsletter input {
-  background: transparent;
-  border: 0;
-  min-width: 0;
-  outline: none;
-  padding: 12px 0;
+  min-height: 50px;
+  overflow: visible;
+  position: relative;
   width: 100%;
 }
 
-.newsletter button {
+.footer-newsletter-form input[type="email"] {
   background: transparent;
   border: 0;
+  color: var(--forest);
+  font: inherit;
+  min-width: 0;
+  outline: none;
+  padding: 0 24px;
+  width: 100%;
+}
+
+.footer-newsletter-form input[type="email"]::placeholder {
+  color: #4f5e4b;
+  opacity: 1;
+}
+
+.footer-newsletter-form button {
+  background: var(--lime);
+  border: 0;
+  border-radius: 999px;
+  color: var(--forest);
   cursor: pointer;
-  font-weight: 700;
+  font-family: "Helvetica Neue", "Cata Sans", Arial, sans-serif;
+  font-size: 15px;
+  min-width: 116px;
+  padding: 0 24px;
+}
+
+.footer-newsletter-form button:hover {
+  background: var(--lime-soft);
+}
+
+.footer-newsletter-message {
+  bottom: -24px;
+  font-size: 10px;
+  left: 8px;
+  position: absolute;
+}
+
+.footer-lower {
+  margin: 105px auto 0;
+  max-width: 1630px;
+  text-align: center;
+}
+
+.footer-disclaimer {
+  font-size: 11px;
+  line-height: 1.4;
+  margin: 32px auto 0;
+  max-width: 920px;
 }
 
 .mystery-chip {
@@ -3931,6 +3993,28 @@ h3 {
     padding-right: 35px;
   }
 
+  .footer {
+    min-height: 0;
+  }
+
+  .footer-top {
+    gap: 58px 72px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-quick-links,
+  .footer-policy-links {
+    grid-column: auto;
+  }
+
+  .newsletter {
+    max-width: 440px;
+  }
+
+  .footer-lower {
+    margin-top: 72px;
+  }
+
   .main-nav {
     gap: 25px;
   }
@@ -4057,10 +4141,6 @@ h3 {
 
   .header-actions {
     gap: 14px;
-  }
-
-  .header-account-label {
-    display: none;
   }
 
   .header-account-component::part(signed-out-avatar) {
@@ -4198,14 +4278,32 @@ h3 {
   }
 
   .footer-top {
+    gap: 48px;
     grid-template-columns: 1fr;
   }
 
   .footer-top > div:first-child,
   .footer-quick-links,
-  .footer-policy-links {
+  .footer-policy-links,
+  .newsletter {
     grid-column: 1;
     text-align: center;
+  }
+
+  .footer-quick-links a,
+  .footer-policy-links a {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .newsletter {
+    justify-self: center;
+    max-width: 410px;
+    width: 100%;
+  }
+
+  .footer-lower {
+    margin-top: 60px;
   }
 
   .mystery-chip {
@@ -4485,19 +4583,6 @@ h3 {
     font-size: 18px;
   }
 
-  .product-page .footer {
-    padding-bottom: 28px;
-  }
-
-  .product-page .payment-icons {
-    bottom: auto;
-    flex-wrap: wrap;
-    left: auto;
-    margin-top: 24px;
-    position: static;
-    transform: none;
-  }
-
 }
 
 @media (max-width: 340px) {
@@ -4565,6 +4650,10 @@ h3 {
 .header-icon-link:hover .header-vector-icon,
 .header-account-component:hover .header-vector-icon {
   transform: translateY(-1px);
+}
+
+.header-account-component:hover::part(signed-out-avatar) {
+  background: var(--lime-soft);
 }
 
 .exact-home .clinicians-line {
@@ -5062,78 +5151,24 @@ h3 {
   }
 }
 
-.exact-home .footer,
-.product-page .footer {
-  background: #173f12;
-  color: #fff;
-}
-
-.exact-home .footer-logo,
-.product-page .footer-logo {
-  filter: brightness(0) saturate(100%) invert(98%) sepia(69%) saturate(638%) hue-rotate(20deg) brightness(103%) contrast(101%);
-}
-
-.exact-home .footer-tagline,
-.product-page .footer-tagline {
-  color: #fff;
-}
-
-.exact-home .newsletter,
-.product-page .newsletter {
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 14px;
-  padding: 20px;
-}
-
-.exact-home .newsletter form,
-.product-page .newsletter form {
-  background: #ecebea;
-  border: 0;
-  border-radius: 999px;
-  overflow: hidden;
-  padding-left: 18px;
-}
-
-.exact-home .newsletter button,
-.product-page .newsletter button {
-  background: var(--lime);
-  border-radius: 999px;
-  min-width: 90px;
-}
-
 .payment-icons {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 27px;
+  gap: 12px;
+  justify-content: center;
+  margin: 0;
 }
 
 .payment-icons span {
   align-items: center;
-  background: #fff;
-  border-radius: 3px;
-  color: #163b12;
   display: flex;
-  font-size: 7px;
-  font-weight: 700;
-  height: 24px;
+  height: 28px;
   justify-content: center;
-  min-width: 38px;
-  padding: 0 4px;
 }
 
-.product-page .footer {
-  padding-bottom: 92px;
-  position: relative;
-}
-
-.product-page .payment-icons {
-  bottom: 54px;
-  flex-wrap: nowrap;
-  left: 50%;
-  margin: 0;
-  position: absolute;
-  transform: translateX(-50%);
+.payment-icons svg {
+  height: 28px;
+  width: auto;
 }
 
 .form-success {

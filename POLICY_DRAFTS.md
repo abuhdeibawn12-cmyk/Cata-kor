@@ -26,7 +26,7 @@ Proof of purchase is required.
 
 ## Requesting a Return
 
-Before sending anything, email ostrichmanagements@gmail.com with:
+Before sending anything, email support@catakor.store with:
 
 - your name and order number;
 - the product you want to return;
@@ -65,7 +65,7 @@ Customers might have additional mandatory cancellation and refund rights based o
 
 ## Contact
 
-Email: ostrichmanagements@gmail.com
+Email: support@catakor.store
 
 Seller: Ostrich Management Solutions Ltd
 
@@ -107,7 +107,7 @@ Items in the same order may arrive in separate parcels. If an order is split, no
 
 ## Customs, Duties and Import Charges
 
-CataKorStore will cover applicable import duties or customs charges for supported United States and United Kingdom deliveries. If a carrier or customs authority unexpectedly requests payment, contact ostrichmanagements@gmail.com before paying whenever possible. If you must pay to prevent a parcel from being returned or delayed, retain the official receipt and contact us so that we can review and reimburse verified eligible charges.
+CataKorStore will cover applicable import duties or customs charges for supported United States and United Kingdom deliveries. If a carrier or customs authority unexpectedly requests payment, contact support@catakor.store before paying whenever possible. If you must pay to prevent a parcel from being returned or delayed, retain the official receipt and contact us so that we can review and reimburse verified eligible charges.
 
 Customers remain responsible for providing any information reasonably required by customs or the carrier.
 
@@ -119,11 +119,11 @@ If a parcel is returned because an address was incomplete, incorrect or refused,
 
 ## Delayed, Lost or Damaged Parcels
 
-If tracking has not updated, the estimated delivery period has passed, or the parcel arrives damaged, email ostrichmanagements@gmail.com with the order number and relevant photographs or tracking information. We will work with the carrier or fulfilment partner and provide an appropriate remedy where the order is confirmed lost, damaged or incorrectly delivered.
+If tracking has not updated, the estimated delivery period has passed, or the parcel arrives damaged, email support@catakor.store with the order number and relevant photographs or tracking information. We will work with the carrier or fulfilment partner and provide an appropriate remedy where the order is confirmed lost, damaged or incorrectly delivered.
 
 ## Contact
 
-Email: ostrichmanagements@gmail.com
+Email: support@catakor.store
 
 Seller: Ostrich Management Solutions Ltd
 
@@ -237,7 +237,7 @@ Courts with jurisdiction under applicable law may hear disputes. Nothing in this
 
 ## 18. Contact Information
 
-Email: ostrichmanagements@gmail.com
+Email: support@catakor.store
 
 Seller: Ostrich Management Solutions Ltd
 

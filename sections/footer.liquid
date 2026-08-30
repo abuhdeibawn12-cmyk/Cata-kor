@@ -3,6 +3,9 @@
     <div class="footer-brand">
       <a href="{{ routes.root_url }}"><img class="footer-logo" src="{{ 'logo.svg' | asset_url }}" alt="{{ shop.name }}" width="250" height="60"></a>
       <p class="footer-tagline">AGE ON YOUR TERMS*</p>
+      <a class="footer-contact-link" href="/pages/contact" aria-label="Contact CataKor">
+        {% render 'icon-email' %}
+      </a>
     </div>
 
     <nav class="footer-quick-links" aria-label="Footer navigation">
@@ -21,7 +24,46 @@
       <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}">SHIPPING POLICY</a>
       <a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">PRIVACY POLICY</a>
       <a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}">TERMS OF SERVICE</a>
+      <a href="/pages/contact">CONTACT INFORMATION</a>
     </nav>
+
+    <div class="newsletter">
+      <h2>GET EXCLUSIVE OFFERS</h2>
+      <p>Sign up for our latest news and offers. We won't send spam.</p>
+      {% form 'customer', class: 'footer-newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter,exclusive-offers">
+        <label class="sr-only" for="FooterNewsletterEmail">Email address</label>
+        <input
+          id="FooterNewsletterEmail"
+          type="email"
+          name="contact[email]"
+          value="{% if customer %}{{ customer.email }}{% endif %}"
+          placeholder="Email"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="off"
+          required
+        >
+        <button type="submit">JOIN</button>
+        {% if form.posted_successfully? %}
+          <span class="footer-newsletter-message" role="status">Thank you for joining.</span>
+        {% elsif form.errors %}
+          <span class="footer-newsletter-message" role="alert">Please enter a valid email.</span>
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+
+  <div class="footer-lower">
+    {% if shop.enabled_payment_types.size > 0 %}
+      <div class="payment-icons" role="list" aria-label="Accepted payment methods">
+        {% for type in shop.enabled_payment_types %}
+          <span role="listitem">{{ type | payment_type_svg_tag }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <p class="footer-disclaimer">*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
   </div>
 
 </footer>
