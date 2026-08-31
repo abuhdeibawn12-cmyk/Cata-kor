@@ -512,6 +512,10 @@
     }
     window.location.href = `${root}checkout`;
   };
+  const continueShoppingFromOffer = () => {
+    if (flashDialog) flashDialog.hidden = true;
+    unlockPage();
+  };
 
   const preloadGalleryImages = (sources) => {
     sources.forEach((source) => {
@@ -827,6 +831,7 @@
     const checkoutButton = target.closest("[data-start-checkout]");
     const flashButton = target.closest("[data-accept-flash]");
     const flashContinue = target.closest("[data-flash-continue]");
+    const flashShopMore = target.closest("[data-flash-shop-more]");
     const galleryThumb = target.closest("[data-gallery-index]");
     const galleryStep = target.closest("[data-gallery-step]");
     const thumbnailShift = target.closest("[data-thumbnail-shift]");
@@ -891,6 +896,7 @@
       catch (error) { console.error(error); flashButton.disabled = false; flashButton.textContent = "PLEASE TRY AGAIN"; }
     }
     if (flashContinue) continueCheckout();
+    if (flashShopMore) continueShoppingFromOffer();
     if (galleryThumb || galleryStep || thumbnailShift) {
       const gallery = target.closest("[data-secondary-gallery]");
       if (galleryThumb) setSecondaryGalleryIndex(gallery, Number(galleryThumb.dataset.galleryIndex));
