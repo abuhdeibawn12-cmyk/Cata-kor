@@ -519,6 +519,7 @@
 
   const preloadGalleryImages = (sources) => {
     sources.forEach((source) => {
+      if (source.startsWith("__")) return;
       const image = new Image();
       image.decoding = "async";
       image.src = source;
@@ -552,9 +553,15 @@
     const index = Math.max(0, Math.min(data.length - 1, requestedIndex));
     gallery.dataset.galleryActive = String(index);
     const main = gallery.querySelector("[data-secondary-main-image]");
+    const composition = gallery.querySelector("[data-bundle-composition]");
+    const isComposition = data[index] === "__bundle_composition__";
+    if (composition) composition.hidden = !isComposition;
     if (main) {
-      main.dataset.baseAlt ||= main.alt.replace(/\s+product view \d+$/i, "");
-      swapGalleryImage(main, data[index], `${main.dataset.baseAlt} product view ${index + 1}`);
+      main.hidden = isComposition;
+      if (!isComposition) {
+        main.dataset.baseAlt ||= main.alt.replace(/\s+product view \d+$/i, "");
+        swapGalleryImage(main, data[index], `${main.dataset.baseAlt} product view ${index + 1}`);
+      }
     }
     gallery.querySelector(".secondary-main-image")?.classList.toggle("has-star", index === 0);
     gallery.querySelectorAll("[data-gallery-index]").forEach((button) =>
