@@ -1,20 +1,36 @@
-{% if product.handle == 'nad-advanced-500mg' %}
+{% liquid
+  assign customer_reviews_asset = blank
+  assign customer_reviews_average = blank
+  assign customer_reviews_total = blank
+
+  if product.handle == 'nad-advanced-500mg'
+    assign customer_reviews_asset = 'nad-customer-reviews.json'
+    assign customer_reviews_average = 4.2
+    assign customer_reviews_total = 263
+  elsif product.handle == 'liposomal-glutathione'
+    assign customer_reviews_asset = 'glutathione-customer-reviews.json'
+    assign customer_reviews_average = 4.7
+    assign customer_reviews_total = 87
+  endif
+%}
+
+{% if customer_reviews_asset != blank %}
   <section
     class="nad-customer-reviews"
     id="customer-reviews"
-    aria-labelledby="nad-customer-reviews-title"
+    aria-labelledby="customer-reviews-title"
     data-nad-customer-reviews
-    data-reviews-url="{{ 'nad-customer-reviews.json' | asset_url }}"
+    data-reviews-url="{{ customer_reviews_asset | asset_url }}"
   >
     <div class="nad-customer-reviews__inner">
       <header class="nad-customer-reviews__header">
         <div>
           <p class="nad-customer-reviews__eyebrow">Real customer feedback</p>
-          <h2 id="nad-customer-reviews-title">Customer Reviews</h2>
-          <div class="nad-customer-reviews__score" aria-label="4.2 out of 5 stars from 263 reviews">
-            <strong data-nad-customer-average>4.2</strong>
+          <h2 id="customer-reviews-title">Customer Reviews</h2>
+          <div class="nad-customer-reviews__score" aria-label="{{ customer_reviews_average }} out of 5 stars from {{ customer_reviews_total }} reviews">
+            <strong data-nad-customer-average>{{ customer_reviews_average }}</strong>
             <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;<i>&#9733;</i></span>
-            <small><b data-nad-customer-total>263</b> reviews</small>
+            <small><b data-nad-customer-total>{{ customer_reviews_total }}</b> reviews</small>
           </div>
         </div>
         <div class="nad-customer-reviews__controls">
@@ -48,8 +64,8 @@
 
 {% schema %}
 {
-  "name": "NAD customer reviews",
+  "name": "Customer reviews",
   "settings": [],
-  "presets": [{ "name": "NAD customer reviews" }]
+  "presets": [{ "name": "Customer reviews" }]
 }
 {% endschema %}
