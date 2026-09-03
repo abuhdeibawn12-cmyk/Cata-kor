@@ -6946,6 +6946,8 @@ h3 {
   .accent-blue .secondary-thumbnail-column {
     justify-content: flex-start;
     padding-top: 20px;
+    position: relative;
+    z-index: 3;
   }
 
   .accent-blue .secondary-main-image {
@@ -6954,6 +6956,7 @@ h3 {
     height: clamp(620px, 45vw, 760px);
     justify-content: flex-start;
     min-height: 0;
+    overflow: visible;
     padding-top: 36px;
   }
 
@@ -6963,12 +6966,19 @@ h3 {
   }
 
   .accent-blue .secondary-gallery-star {
-    aspect-ratio: 1;
+    aspect-ratio: 783 / 767;
+    background: transparent url("https://catakor.com/cdn/shop/files/Star_5_1_55ff70e4-36ff-49bc-9b84-bdc7138bffce.png?v=1740745981&width=1000") center / 100% 100% no-repeat;
     height: auto;
+    left: 35%;
     max-width: none;
-    top: 0;
+    top: -3vw;
     transform: translateX(-50%);
-    width: clamp(680px, 42vw, 800px);
+    width: clamp(719px, 56.2vw, 1000px);
+  }
+
+  .accent-blue .secondary-gallery-star::before,
+  .accent-blue .secondary-gallery-star::after {
+    display: none;
   }
 }
 
