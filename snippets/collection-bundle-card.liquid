@@ -1,0 +1,49 @@
+{% liquid
+  assign bundle_product = all_products[handle]
+  assign bundle_url = '/products/' | append: handle
+  assign bundle_available = false
+  assign bundle_variant = blank
+
+  if bundle_product != blank
+    assign bundle_url = bundle_product.url
+    assign bundle_variant = bundle_product.selected_or_first_available_variant
+    if bundle_product.available and force_sold_out != true
+      assign bundle_available = true
+    endif
+  endif
+%}
+
+<article
+  class="collection-card collection-bundle-card{% unless bundle_available %} is-sold-out{% endunless %}"
+  data-collection-card
+  data-title="{{ title | escape }}"
+  data-available="{{ bundle_available }}"
+  data-original-order="{{ order }}"
+>
+  <a class="collection-card-hitbox" href="{{ bundle_url }}" aria-label="View {{ title | escape }}"></a>
+  <div class="collection-image-wrap">
+    <span class="collection-sale-badge">Bundle</span>
+    {% unless bundle_available %}<span class="collection-stock-badge">Sold out</span>{% endunless %}
+    {% if composition == 'nad-glutathione' %}
+      <span class="collection-bundle-composition" aria-hidden="true">
+        <img class="is-nad" src="{{ 'product-nad-hq.png' | asset_url }}" alt="" width="1100" height="1100" loading="lazy">
+        <img class="is-glutathione" src="{{ 'product-glutathione.avif' | asset_url }}" alt="" width="1000" height="1000" loading="lazy">
+      </span>
+    {% else %}
+      <img src="{{ image }}" alt="{{ title | escape }}" width="1200" height="1200" loading="lazy">
+    {% endif %}
+  </div>
+  <div class="collection-card-copy">
+    <h2>{{ title }}</h2>
+    <p>{{ benefit }}</p>
+    {% if bundle_available and bundle_variant != blank %}
+      <form action="{{ routes.cart_add_url }}" method="post" data-product-form>
+        <input type="hidden" name="id" value="{{ bundle_variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button class="collection-product-button" type="submit">Add to cart</button>
+      </form>
+    {% else %}
+      <button class="collection-product-button is-disabled" type="button" disabled>Sold out</button>
+    {% endif %}
+  </div>
+</article>

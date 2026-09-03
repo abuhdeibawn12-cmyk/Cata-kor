@@ -1,4 +1,14 @@
-{% if product.handle == 'nmn' %}
+{% if product.type == 'Bundle' %}
+  <section class="secondary-faq bundle-faq" id="faq">
+    <h2>FREQUENTLY ASK QUESTION</h2>
+    <div>
+      <details open><summary>How should I take the products in this bundle?<span aria-hidden="true">+</span></summary><p>Follow the directions on each product label. If you take medication or manage a medical condition, consult a qualified healthcare professional before use.</p></details>
+      <details><summary>Can I use the formulas together?<span aria-hidden="true">+</span></summary><p>The products are bundled as complementary daily formulas. Follow each label and do not exceed the stated serving size.</p></details>
+      <details><summary>How is the bundle shipped?<span aria-hidden="true">+</span></summary><p>The products are packed together and shipped with tracking. Current delivery estimates are shown during checkout.</p></details>
+      <details><summary>What is the return policy?<span aria-hidden="true">+</span></summary><p>Please review the Return and Refund Policy linked in the footer for the current eligibility requirements.</p></details>
+    </div>
+  </section>
+{% elsif product.handle == 'nmn' %}
   <section class="nmn-faq-section">
     <h2>Questions? We<br>have answers!</h2>
     <div class="nmn-faq-list">

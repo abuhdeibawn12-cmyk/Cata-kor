@@ -1,0 +1,105 @@
+{% liquid
+  assign bundle_variant = product.selected_or_first_available_variant
+  assign bundle_image = blank
+  assign bundle_gallery = blank
+  assign bundle_badge = 'BUNDLE'
+  assign bundle_copy = 'A complementary Cata-Kor formula pairing designed for a simple daily wellness routine.'
+  assign bundle_bullets = 'Third-party tested|Made in the USA|Manufactured from globally sourced ingredients' | split: '|'
+  assign bundle_composition = blank
+
+  case product.handle
+    when 'bundle-nad-nmn'
+      assign bundle_image = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD.png?v=1783680342'
+      assign bundle_gallery = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD.png?v=1783680342|https://cdn.shopify.com/s/files/1/0918/3667/8454/files/2_265dc661-93dd-4723-8cf6-3c9138f9c018.jpg?v=1783169420|https://cdn.shopify.com/s/files/1/0918/3667/8454/files/61JmcdKRxyL._AC_SL1500_299f1d09-6053-4757-bb18-7240b3d34490.jpg?v=1783169420|https://cdn.shopify.com/s/files/1/0918/3667/8454/files/3_9fc18715-b342-4262-840f-d76f4248430d.jpg?v=1783169420'
+      assign bundle_copy = 'A two-formula pairing for daily cellular energy and healthy-aging support.*'
+      assign bundle_bullets = 'NMN: Supports NAD+ levels*|Quercetin: Supports cellular renewal*|TMG: Supports methylation balance*|Resveratrol: Supports SIRT1 activity*' | split: '|'
+    when 'bundle-nmn-glutathione'
+      assign bundle_image = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_GLU.png?v=1783680215'
+      assign bundle_gallery = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_GLU.png?v=1783680215|https://cdn.shopify.com/s/files/1/0918/3667/8454/files/1_a4492c5f-0598-4b82-adf0-9bf3547ee037.png?v=1780411784|https://cdn.shopify.com/s/files/1/0918/3667/8454/files/2_91acbaea-daa9-4c27-96df-b5caf0741a56.jpg?v=1780411783|https://cdn.shopify.com/s/files/1/0918/3667/8454/files/3_cc69d014-2422-4a31-b5bb-174fbe4c8de6.jpg?v=1780411783'
+      assign bundle_copy = 'A two-formula pairing for cellular energy and antioxidant defense support.*'
+      assign bundle_bullets = 'NMN: Supports NAD+ levels*|TMG: Supports methylation balance*|Liposomal glutathione: Supports antioxidant defenses*|Vitamin C: Supports normal immune function*' | split: '|'
+    when 'bundle-nad-glutathione'
+      assign bundle_composition = 'nad-glutathione'
+      assign bundle_copy = 'A two-formula pairing for cellular energy and antioxidant defense support.*'
+      assign bundle_bullets = 'LipoNAD™: Supports cellular energy production*|Resveratrol: Supports healthy cellular function*|Liposomal glutathione: Supports antioxidant defenses*|Vitamin C: Supports normal immune function*' | split: '|'
+    when 'bundle-nad-nmn-glutathione'
+      assign bundle_image = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD_GLU.png?v=1783680368'
+      assign bundle_gallery = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD_GLU.png?v=1783680368|https://cdn.shopify.com/s/files/1/0918/3667/8454/files/20.jpg?v=1783169994|https://cdn.shopify.com/s/files/1/0918/3667/8454/files/21.jpg?v=1783169994|https://cdn.shopify.com/s/files/1/0918/3667/8454/files/22.jpg?v=1783169994'
+      assign bundle_copy = 'Three complementary formulas for cellular energy, healthy aging and antioxidant defense support.*'
+      assign bundle_bullets = 'Third-party tested for identity, purity and quality|Three complementary daily formulas|Made in the USA|Manufactured from globally sourced ingredients' | split: '|'
+    when 'bundle-nmn-ca-akg'
+      assign bundle_image = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_Ca_Akg.png?v=1783680150'
+    when 'bundle-nad-nmn-ca-akg'
+      assign bundle_image = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NAD_NMN_Ca_Akg.png?v=1783680182'
+    when 'bundle-nmn-ca-akg-glutathione'
+      assign bundle_image = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_CA_Akg_GLU.png?v=1783680255'
+    when 'bundle-nad-nmn-ca-akg-glutathione'
+      assign bundle_image = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_Ca_Akg_GLU_NAD.png?v=1783680277'
+  endcase
+
+  assign bundle_gallery_items = bundle_gallery | split: '|'
+%}
+
+<section class="bundle-product-hero" data-product-root>
+  <div class="bundle-product-gallery{% if bundle_composition != blank %} has-composition{% endif %}"{% if bundle_gallery != blank %} data-secondary-gallery{% endif %}>
+    <div class="bundle-thumbnails" aria-label="Bundle images">
+      {% if bundle_composition == 'nad-glutathione' %}
+        <span class="bundle-thumbnail-composition" aria-hidden="true">
+          <img src="{{ 'product-nad-hq.png' | asset_url }}" alt="" width="180" height="180">
+          <img src="{{ 'product-glutathione.avif' | asset_url }}" alt="" width="160" height="160">
+        </span>
+      {% else %}
+        {% for source in bundle_gallery_items %}
+          <button class="{% if forloop.first %}is-active{% endif %}" type="button" data-gallery-index="{{ forloop.index0 }}" aria-label="Show bundle image {{ forloop.index }}">
+            <img src="{{ source }}" alt="" width="180" height="180" loading="lazy">
+          </button>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="bundle-main-image secondary-main-image has-star">
+      <span class="bundle-gallery-star" aria-hidden="true"></span>
+      {% if bundle_composition == 'nad-glutathione' %}
+        <span class="bundle-product-composition" role="img" aria-label="Cata-Kor NAD+ Advanced and Liposomal Glutathione bundle">
+          <img class="is-nad" src="{{ 'product-nad-hq.png' | asset_url }}" alt="" width="1100" height="1100">
+          <img class="is-glutathione" src="{{ 'product-glutathione.avif' | asset_url }}" alt="" width="1200" height="1200">
+        </span>
+      {% else %}
+        <img src="{{ bundle_image }}" alt="{{ product.title | escape }}" width="1400" height="1400" data-secondary-main-image>
+      {% endif %}
+    </div>
+    {% if bundle_gallery != blank %}<script type="application/json" data-secondary-gallery-json>{{ bundle_gallery_items | json }}</script>{% endif %}
+  </div>
+
+  <div class="bundle-product-details">
+    <nav class="bundle-breadcrumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span>/</span><span>{{ product.title }}</span></nav>
+    <div class="bundle-rating"><span aria-label="5 out of 5 stars">★★★★★</span><b>4.9/5</b></div>
+    <div class="bundle-title-row">
+      <h1>{{ product.title }}</h1>
+      <span>{{ bundle_badge }}</span>
+    </div>
+    <p class="bundle-intro">{{ bundle_copy }}</p>
+    <ul class="bundle-feature-list">
+      {% for bullet in bundle_bullets %}<li>{{ bullet }}</li>{% endfor %}
+    </ul>
+    <strong class="bundle-price">{{ product.price | money_with_currency }}</strong>
+
+    {% if product.available and bundle_variant != blank %}
+      <form action="{{ routes.cart_add_url }}" method="post" data-product-form>
+        <input type="hidden" name="id" value="{{ bundle_variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button class="bundle-buy-button" type="submit" data-add-to-cart><span data-add-label>BUY NOW</span></button>
+      </form>
+    {% else %}
+      <button class="bundle-buy-button is-disabled" type="button" disabled>SOLD OUT</button>
+    {% endif %}
+  </div>
+</section>
+
+<section class="bundle-customer-reviews" id="customer-reviews" aria-labelledby="bundle-reviews-title">
+  <h2 id="bundle-reviews-title">Customer Reviews</h2>
+  <div>
+    <p>Be the first to write a review</p>
+    <a href="/pages/contact-information">Write a review</a>
+  </div>
+</section>

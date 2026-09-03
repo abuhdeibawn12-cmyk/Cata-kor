@@ -4,6 +4,8 @@
     <a href="{{ routes.collections_url }}/shop-all">Continue shopping</a>
   </section>
   <script>window.location.replace({{ routes.collections_url | append: '/shop-all' | json }});</script>
+{% elsif product.type == 'Bundle' %}
+  {% render 'bundle-product', product: product %}
 {% elsif product.handle == 'nmn' or product.handle == 'liposomal-glutathione' %}
   {% for variant in product.variants %}
     {% if variant.title contains '3' %}{% assign variant_3 = variant %}{% endif %}

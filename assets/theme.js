@@ -1137,6 +1137,7 @@
   document.querySelectorAll('input[name="availability"], [data-collection-sort]').forEach((control) =>
     control.addEventListener("change", updateCollection)
   );
+  updateCollection();
 
   getCart().then((cart) => {
     renderCart(cart);

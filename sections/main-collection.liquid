@@ -18,7 +18,7 @@
       </fieldset>
     </div>
     <div class="collection-sort">
-      <span data-visible-count>4 products</span>
+      <span data-visible-count>Products</span>
       <label for="CollectionSort">Sort by:</label>
       <select id="CollectionSort" data-collection-sort>
         <option value="featured">Best selling</option>
@@ -73,6 +73,16 @@
         <button class="collection-product-button is-disabled" type="button" disabled>Out of stock</button>
       </div>
     </article>
+
+    {% render 'collection-bundle-card', handle: 'bundle-nad-nmn', title: 'BUNDLE: LIPOSOMAL NAD+ & NMN COMPLEX', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD.png?v=1783680342', benefit: 'Dual cellular energy support*', order: 5 %}
+    {% render 'collection-bundle-card', handle: 'bundle-nmn-glutathione', title: 'BUNDLE: NMN COMPLEX & LIPOSOMAL GLUTATHIONE', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_GLU.png?v=1783680215', benefit: 'Cellular energy and antioxidant support*', order: 6 %}
+    {% render 'collection-bundle-card', handle: 'bundle-nad-glutathione', title: 'BUNDLE: LIPOSOMAL NAD+ & GLUTATHIONE', image: blank, benefit: 'Cellular energy and antioxidant defense support*', order: 7, composition: 'nad-glutathione' %}
+    {% render 'collection-bundle-card', handle: 'bundle-nad-nmn-glutathione', title: 'BUNDLE: LIPOSOMAL NAD+ & NMN COMPLEX & GLUTATHIONE', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD_GLU.png?v=1783680368', benefit: 'Complete cellular energy and antioxidant support*', order: 8 %}
+
+    {% render 'collection-bundle-card', handle: 'bundle-nmn-ca-akg', title: 'BUNDLE: Cata-Kor NMN Longevity Support & Beauty Blend', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_Ca_Akg.png?v=1783680150', benefit: 'Longevity and beauty blend*', order: 9, force_sold_out: true %}
+    {% render 'collection-bundle-card', handle: 'bundle-nad-nmn-ca-akg', title: 'BUNDLE: Cellular Power Trio', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NAD_NMN_Ca_Akg.png?v=1783680182', benefit: 'NAD+, NMN and CA-AKG support*', order: 10, force_sold_out: true %}
+    {% render 'collection-bundle-card', handle: 'bundle-nmn-ca-akg-glutathione', title: 'BUNDLE: Ultimate Longevity', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_CA_Akg_GLU.png?v=1783680255', benefit: 'Cellular and antioxidant support blend*', order: 11, force_sold_out: true %}
+    {% render 'collection-bundle-card', handle: 'bundle-nad-nmn-ca-akg-glutathione', title: 'BUNDLE: Complete Cata-Kor Collection', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_Ca_Akg_GLU_NAD.png?v=1783680277', benefit: 'Four-formula daily wellness bundle*', order: 12, force_sold_out: true %}
   </div>
 </section>
 
