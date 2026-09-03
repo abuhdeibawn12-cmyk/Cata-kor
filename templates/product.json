@@ -23,5 +23,5 @@
       "settings": {}
     }
   },
-  "order": ["main", "benefits", "reviews", "faq", "customer_reviews"]
+  "order": ["main", "benefits", "reviews", "customer_reviews", "faq"]
 }
