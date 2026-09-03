@@ -6434,21 +6434,23 @@ h3 {
   width: 100%;
 }
 
-.bundle-thumbnail-composition img {
+.secondary-thumbnails .bundle-thumbnail-composition img {
   height: 68%;
   object-fit: contain;
   position: absolute;
   width: 58%;
 }
 
-.bundle-thumbnail-composition img:first-child {
+.secondary-thumbnails .bundle-thumbnail-composition img:first-child {
   left: 1%;
   top: 1%;
+  z-index: 1;
 }
 
-.bundle-thumbnail-composition img:last-child {
+.secondary-thumbnails .bundle-thumbnail-composition img:last-child {
   bottom: 1%;
   right: 0;
+  z-index: 2;
 }
 
 .bundle-main-image {
