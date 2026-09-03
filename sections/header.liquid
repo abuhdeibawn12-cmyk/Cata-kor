@@ -18,8 +18,8 @@
   </button>
 
   <nav class="main-nav" id="MainNavigation" aria-label="Main navigation">
-    <a href="{{ routes.collections_url }}/shop-all"{% if request.path == '/collections/shop-all' %} aria-current="page"{% endif %}>Shop</a>
-    <a href="{{ routes.collections_url }}/shop-all#products">Best Sellers</a>
+    <a href="{{ routes.collections_url }}/shop-all"{% if request.path == '/collections/shop-all' and template.suffix != 'best-sellers' %} aria-current="page"{% endif %}>Shop</a>
+    <a href="{{ routes.collections_url }}/shop-all?view=best-sellers"{% if template.suffix == 'best-sellers' %} aria-current="page"{% endif %}>Best Sellers</a>
     <a href="/pages/science-benefits"{% if template.suffix == 'science' or request.path == '/pages/science-benefits' %} aria-current="page"{% endif %}>Science</a>
     <a href="/pages/about-us"{% if template.suffix == 'about' or request.path == '/pages/about-us' %} class="is-active" aria-current="page"{% endif %}>About</a>
   </nav>

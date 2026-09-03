@@ -441,9 +441,13 @@
 
   const flashOfferMarkup = (offer, index) => {
     const sourceName = offer.source.product_title.replace(/\s+\d+\s*MG$/i, "");
+    const jarCount = Math.min(3, Math.max(1, Number(offer.jars) || 1));
+    const productImage = offer.product.featured_image
+      ? `<figure class="global-offer-pack-image jars-${jarCount}" role="img" aria-label="${jarCount} ${jarCount === 1 ? "jar" : "jars"} of ${escapeHtml(offer.product.title)}">${Array.from({ length: jarCount }, () => `<img src="${escapeHtml(imageUrl(offer.product.featured_image, 500))}" alt="">`).join("")}</figure>`
+      : "";
     return `<article data-flash-index="${index}">
       <span>BECAUSE YOU CHOSE ${escapeHtml(sourceName.toUpperCase())}</span>
-      ${offer.product.featured_image ? `<img src="${escapeHtml(imageUrl(offer.product.featured_image, 500))}" alt="${escapeHtml(offer.product.title)}">` : ""}
+      ${productImage}
       <h3>${escapeHtml(offer.product.title)}</h3>
       <p>${offer.jars} ${offer.jars === 1 ? "Jar" : "Jars"} · ${offer.discount}% Flash Discount</p>
       <small class="global-offer-mode">${offer.replaces

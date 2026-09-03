@@ -1944,11 +1944,43 @@
   letter-spacing: 0.06em;
 }
 
-.global-offer-grid img {
+.global-offer-pack-image {
   height: 160px;
   margin: 8px auto;
+  max-width: 100%;
+  position: relative;
+  width: 250px;
+}
+
+.global-offer-pack-image img {
+  height: 160px;
+  left: 50%;
   object-fit: contain;
-  width: 180px;
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  width: 160px;
+}
+
+.global-offer-pack-image.jars-2 img:first-child {
+  transform: translateX(-72%);
+}
+
+.global-offer-pack-image.jars-2 img:last-child {
+  transform: translateX(-28%);
+}
+
+.global-offer-pack-image.jars-3 img:nth-child(1) {
+  transform: translateX(-84%) scale(0.92);
+}
+
+.global-offer-pack-image.jars-3 img:nth-child(2) {
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.global-offer-pack-image.jars-3 img:nth-child(3) {
+  transform: translateX(-16%) scale(0.92);
 }
 
 .global-offer-grid h3 {
