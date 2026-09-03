@@ -28,6 +28,10 @@
   const jarsFromTitle = (title = "") => Math.max(1, Number(String(title).match(/\d+/)?.[0] || 1));
   const isFlashItem = (item) => item.properties?._flash_offer === "true";
   const isSubscriptionItem = (item) => Boolean(item.selling_plan_allocation);
+  const isBundleItem = (item) =>
+    String(item.product_type || "").toLowerCase() === "bundle" || String(item.handle || "").startsWith("bundle-");
+  const isFlashEligibleItem = (item) =>
+    !isFlashItem(item) && !isSubscriptionItem(item) && !isBundleItem(item);
   const purchaseLabel = (item) => {
     if (!isSubscriptionItem(item)) return "One-time purchase";
     return item.selling_plan_allocation?.selling_plan?.name || "Delivered every month · Save 15%";
@@ -41,7 +45,7 @@
       .map((item) => item.properties?._flash_source_token)
       .filter(Boolean));
     return cart.items.some((item) =>
-      !isFlashItem(item) && !isSubscriptionItem(item) && !acceptedSourceTokens.has(`${item.handle}:${item.variant_id}`)
+      isFlashEligibleItem(item) && !acceptedSourceTokens.has(`${item.handle}:${item.variant_id}`)
     );
   };
 
@@ -112,7 +116,7 @@
     }
     if (!content) return;
     const showFlashTeaser = hasPendingFlashOffer(cart);
-    const hasOneTimePurchase = cart.items.some((item) => !isFlashItem(item) && !isSubscriptionItem(item));
+    const hasOneTimePurchase = cart.items.some(isFlashEligibleItem);
     content.innerHTML = cart.items.length
       ? `<div class="global-cart-items" data-cart-items>${cart.items.map(cartLineMarkup).join("")}</div>
          ${showFlashTeaser ? `<div class="global-cart-offer-hint" role="note">
@@ -380,7 +384,7 @@
       return null;
     }
   };
-  const regularItems = (cart) => cart.items.filter((item) => !isFlashItem(item) && !isSubscriptionItem(item));
+  const regularItems = (cart) => cart.items.filter(isFlashEligibleItem);
 
   const buildFlashOffers = async (cart) => {
     const latestByProduct = new Map();

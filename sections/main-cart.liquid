@@ -9,6 +9,14 @@
     </header>
 
     {% if cart.item_count > 0 %}
+      {% assign has_regular_discount_item = false %}
+      {% for item in cart.items %}
+        {% assign is_regular_discount_item = true %}
+        {% if item.properties._flash_offer == 'true' or item.selling_plan_allocation or item.product.type == 'Bundle' or item.product.handle contains 'bundle-' %}
+          {% assign is_regular_discount_item = false %}
+        {% endif %}
+        {% if is_regular_discount_item %}{% assign has_regular_discount_item = true %}{% endif %}
+      {% endfor %}
       <form class="cart-page__form" action="{{ routes.cart_url }}" method="post">
       <div class="cart-page__lines">
         {% for item in cart.items %}
@@ -66,7 +74,7 @@
           <button class="cart-page__checkout" type="submit" name="checkout" data-start-checkout>CHECKOUT</button>
           <button class="cart-page__update" type="submit" name="update">UPDATE BAG</button>
           <a href="{{ routes.collections_url }}/shop-all">CONTINUE SHOPPING</a>
-          <em>CATA15 can be applied to regular items at checkout.</em>
+          {% if has_regular_discount_item %}<em>CATA15 can be applied to regular items at checkout.</em>{% endif %}
         </aside>
       </form>
     {% else %}

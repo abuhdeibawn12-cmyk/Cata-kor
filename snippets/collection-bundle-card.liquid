@@ -40,7 +40,7 @@
       <form action="{{ routes.cart_add_url }}" method="post" data-product-form>
         <input type="hidden" name="id" value="{{ bundle_variant.id }}">
         <input type="hidden" name="quantity" value="1">
-        <button class="collection-product-button" type="submit">Add to cart</button>
+        <button class="collection-product-button" type="submit" data-add-to-cart><span data-add-label>Add to cart</span></button>
       </form>
     {% else %}
       <button class="collection-product-button is-disabled" type="button" disabled>Sold out</button>
