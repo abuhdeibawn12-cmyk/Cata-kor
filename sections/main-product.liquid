@@ -92,10 +92,10 @@
 
       <div class="secondary-quantity-heading">
         <h2>Select Quantity</h2>
-        <span data-selected-capsules>180 Capsules</span>
+        <span data-selected-capsules>60 Capsules</span>
       </div>
       <div class="secondary-pack-grid">
-        <button class="secondary-pack is-selected" type="button" data-secondary-pack data-jars="3" data-variant-id="{{ variant_3.id }}" data-total="{{ total_3 }}" data-one-time-cents="{{ variant_3.price }}" data-subscription-cents="{{ variant_3_subscription.price | default: variant_3.price }}" data-selling-plan-id="{{ variant_3_subscription.selling_plan.id }}" aria-pressed="true">
+        <button class="secondary-pack" type="button" data-secondary-pack data-jars="3" data-variant-id="{{ variant_3.id }}" data-total="{{ total_3 }}" data-one-time-cents="{{ variant_3.price }}" data-subscription-cents="{{ variant_3_subscription.price | default: variant_3.price }}" data-selling-plan-id="{{ variant_3_subscription.selling_plan.id }}" aria-pressed="false">
           <em>BEST VALUE</em>
           <span class="secondary-pack-image jars-3" aria-hidden="true">{% for i in (1..3) %}<img src="{{ main_image }}" alt="" width="160" height="160">{% endfor %}</span>
           <strong>3 Jars</strong>
@@ -107,20 +107,20 @@
           <strong>2 Jars</strong>
           <span>${{ each_2 }}/each</span>
         </button>
-        <button class="secondary-pack" type="button" data-secondary-pack data-jars="1" data-variant-id="{{ variant_1.id }}" data-total="39.99" data-one-time-cents="{{ variant_1.price }}" data-subscription-cents="{{ variant_1_subscription.price | default: variant_1.price }}" data-selling-plan-id="{{ variant_1_subscription.selling_plan.id }}" aria-pressed="false">
+        <button class="secondary-pack is-selected" type="button" data-secondary-pack data-jars="1" data-variant-id="{{ variant_1.id }}" data-total="{{ variant_1.price | divided_by: 100.0 }}" data-one-time-cents="{{ variant_1.price }}" data-subscription-cents="{{ variant_1_subscription.price | default: variant_1.price }}" data-selling-plan-id="{{ variant_1_subscription.selling_plan.id }}" aria-pressed="true">
           <span class="secondary-pack-image jars-1" aria-hidden="true"><img src="{{ main_image }}" alt="" width="160" height="160"></span>
           <strong>1 Jar</strong>
-          <span>$39.99</span>
+          <span>{{ variant_1.price | money }}</span>
         </button>
       </div>
 
-      {% render 'subscription-plan-selector', product: product, selected_variant: variant_3 %}
+      {% render 'subscription-plan-selector', product: product, selected_variant: variant_1 %}
       <form action="{{ routes.cart_add_url }}" method="post" data-product-form>
-        <input type="hidden" name="id" value="{{ variant_3.id }}" data-variant-input>
+        <input type="hidden" name="id" value="{{ variant_1.id }}" data-variant-input>
         <input type="hidden" name="quantity" value="1">
-        {% if variant_3_subscription %}<input type="hidden" name="selling_plan" value="{{ variant_3_subscription.selling_plan.id }}" data-selling-plan-input disabled>{% endif %}
+        {% if variant_1_subscription %}<input type="hidden" name="selling_plan" value="{{ variant_1_subscription.selling_plan.id }}" data-selling-plan-input disabled>{% endif %}
         <button class="secondary-add-button" type="submit" data-add-to-cart>
-          <span data-add-label>Add to Cart</span> <strong data-add-price>${{ total_3 }}</strong>
+          <span data-add-label>Add to Cart</span> <strong data-add-price>{{ variant_1.price | money }}</strong>
         </button>
       </form>
       <div class="product-flash-hint" role="note">
@@ -197,26 +197,26 @@
       <div class="product-facts"><b>60 Capsules</b><span>/</span><b>500MG</b><span>/</span><button type="button" data-facts-open>SUPPLEMENT FACTS</button></div>
 
       <div class="purchase-group">
-        <div class="purchase-label"><h2>Select Quantity</h2><span data-nad-capsules>180 Capsules</span></div>
+        <div class="purchase-label"><h2>Select Quantity</h2><span data-nad-capsules>60 Capsules</span></div>
         <div class="quantity-options">
-          <button type="button" class="quantity-option selected" data-nad-pack data-jars="3" data-variant-id="{{ nad_variant_3.id }}" data-total="98.97" data-one-time-cents="{{ nad_variant_3.price }}" data-subscription-cents="{{ nad_variant_3_subscription.price | default: nad_variant_3.price }}" data-selling-plan-id="{{ nad_variant_3_subscription.selling_plan.id }}" aria-pressed="true">
+          <button type="button" class="quantity-option" data-nad-pack data-jars="3" data-variant-id="{{ nad_variant_3.id }}" data-total="98.97" data-one-time-cents="{{ nad_variant_3.price }}" data-subscription-cents="{{ nad_variant_3_subscription.price | default: nad_variant_3.price }}" data-selling-plan-id="{{ nad_variant_3_subscription.selling_plan.id }}" aria-pressed="false">
             <em>BEST VALUE</em><span class="quantity-bottles quantity-bottles-3" aria-hidden="true">{% for i in (1..3) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>3 Jars</b><span>$32.99/each</span>
           </button>
           <button type="button" class="quantity-option" data-nad-pack data-jars="2" data-variant-id="{{ nad_variant_2.id }}" data-total="69.98" data-one-time-cents="{{ nad_variant_2.price }}" data-subscription-cents="{{ nad_variant_2_subscription.price | default: nad_variant_2.price }}" data-selling-plan-id="{{ nad_variant_2_subscription.selling_plan.id }}" aria-pressed="false">
             <em>MOST POPULAR</em><span class="quantity-bottles quantity-bottles-2" aria-hidden="true">{% for i in (1..2) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>2 Jars</b><span>$34.99/each</span>
           </button>
-          <button type="button" class="quantity-option" data-nad-pack data-jars="1" data-variant-id="{{ nad_variant_1.id }}" data-total="39.99" data-one-time-cents="{{ nad_variant_1.price }}" data-subscription-cents="{{ nad_variant_1_subscription.price | default: nad_variant_1.price }}" data-selling-plan-id="{{ nad_variant_1_subscription.selling_plan.id }}" aria-pressed="false">
-            <span class="quantity-bottles quantity-bottles-1" aria-hidden="true"><img src="{{ nad_main_image }}" alt="" width="120" height="120"></span><b>1 Jar</b><span>$39.99</span>
+          <button type="button" class="quantity-option selected" data-nad-pack data-jars="1" data-variant-id="{{ nad_variant_1.id }}" data-total="{{ nad_variant_1.price | divided_by: 100.0 }}" data-one-time-cents="{{ nad_variant_1.price }}" data-subscription-cents="{{ nad_variant_1_subscription.price | default: nad_variant_1.price }}" data-selling-plan-id="{{ nad_variant_1_subscription.selling_plan.id }}" aria-pressed="true">
+            <span class="quantity-bottles quantity-bottles-1" aria-hidden="true"><img src="{{ nad_main_image }}" alt="" width="120" height="120"></span><b>1 Jar</b><span>{{ nad_variant_1.price | money }}</span>
           </button>
         </div>
       </div>
 
-      {% render 'subscription-plan-selector', product: product, selected_variant: nad_variant_3 %}
+      {% render 'subscription-plan-selector', product: product, selected_variant: nad_variant_1 %}
       <form action="{{ routes.cart_add_url }}" method="post" data-product-form>
-        <input type="hidden" name="id" value="{{ nad_variant_3.id }}" data-variant-input>
+        <input type="hidden" name="id" value="{{ nad_variant_1.id }}" data-variant-input>
         <input type="hidden" name="quantity" value="1">
-        {% if nad_variant_3_subscription %}<input type="hidden" name="selling_plan" value="{{ nad_variant_3_subscription.selling_plan.id }}" data-selling-plan-input disabled>{% endif %}
-        <button type="submit" class="add-to-cart" data-add-to-cart><span data-add-label>ADD TO CART</span><b data-add-price>$98.97</b></button>
+        {% if nad_variant_1_subscription %}<input type="hidden" name="selling_plan" value="{{ nad_variant_1_subscription.selling_plan.id }}" data-selling-plan-input disabled>{% endif %}
+        <button type="submit" class="add-to-cart" data-add-to-cart><span data-add-label>ADD TO CART</span><b data-add-price>{{ nad_variant_1.price | money }}</b></button>
       </form>
       <div class="product-flash-hint" role="note">
         <span class="product-flash-hint__icon" aria-hidden="true">⚡</span>
