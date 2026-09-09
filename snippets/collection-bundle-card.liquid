@@ -3,13 +3,17 @@
   assign bundle_url = '/products/' | append: handle
   assign bundle_available = false
   assign bundle_variant = blank
+  assign bundle_variant_id = variant_id
 
   if bundle_product != blank
     assign bundle_url = bundle_product.url
     assign bundle_variant = bundle_product.selected_or_first_available_variant
+    if bundle_variant_id == blank and bundle_variant != blank
+      assign bundle_variant_id = bundle_variant.id
+    endif
     if force_sold_out == true
       assign bundle_available = false
-    elsif force_available == true and bundle_variant != blank
+    elsif force_available == true and bundle_variant_id != blank
       assign bundle_available = true
     elsif bundle_product.available
       assign bundle_available = true
@@ -40,9 +44,9 @@
   <div class="collection-card-copy">
     <h2>{{ title }}</h2>
     <p>{{ benefit }}</p>
-    {% if bundle_available and bundle_variant != blank %}
+    {% if bundle_available and bundle_variant_id != blank %}
       <form action="{{ routes.cart_add_url }}" method="post" data-product-form>
-        <input type="hidden" name="id" value="{{ bundle_variant.id }}">
+        <input type="hidden" name="id" value="{{ bundle_variant_id }}">
         <input type="hidden" name="quantity" value="1">
         <button class="collection-product-button" type="submit" data-add-to-cart><span data-add-label>Add to cart</span></button>
       </form>
