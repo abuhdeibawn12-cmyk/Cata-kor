@@ -7,7 +7,11 @@
   if bundle_product != blank
     assign bundle_url = bundle_product.url
     assign bundle_variant = bundle_product.selected_or_first_available_variant
-    if bundle_product.available and force_sold_out != true
+    if force_sold_out == true
+      assign bundle_available = false
+    elsif force_available == true and bundle_variant != blank
+      assign bundle_available = true
+    elsif bundle_product.available
       assign bundle_available = true
     endif
   endif

@@ -37,6 +37,14 @@
   <div class="collection-grid" data-collection-grid aria-live="polite">
     {% for desired_handle in desired_handles %}
       {% assign desired_product = all_products[desired_handle] %}
+      {% case desired_handle %}
+        {% when 'nad-advanced-500mg' %}
+          {% assign card_image_url = 'https://cdn.shopify.com/s/files/1/0845/8525/1028/files/Main_NAD.png?v=1785433007' %}
+        {% when 'liposomal-glutathione' %}
+          {% assign card_image_url = 'https://cdn.shopify.com/s/files/1/0845/8525/1028/files/Main_Glu.png?v=1785433008' %}
+        {% when 'nmn' %}
+          {% assign card_image_url = 'https://cdn.shopify.com/s/files/1/0845/8525/1028/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1785433009' %}
+      {% endcase %}
       {% if desired_product != blank %}
         <article
           class="collection-card"
@@ -47,8 +55,17 @@
         >
           <div class="collection-image-wrap">
             <span class="collection-sale-badge">Sale</span>
-            {% if desired_product.featured_image %}
-              {{ desired_product.featured_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '360,600,900,1100,1400', alt: desired_product.title }}
+            {% if card_image_url != blank %}
+              <img
+                src="{{ card_image_url }}&amp;width=900"
+                srcset="{{ card_image_url }}&amp;width=360 360w, {{ card_image_url }}&amp;width=600 600w, {{ card_image_url }}&amp;width=900 900w"
+                sizes="(max-width: 620px) calc(50vw - 32px), (max-width: 800px) calc(50vw - 48px), 350px"
+                alt="{{ desired_product.title | escape }}"
+                width="1097"
+                height="1097"
+                loading="eager"
+                decoding="async"
+              >
             {% endif %}
           </div>
           <div class="collection-card-copy">
@@ -80,10 +97,10 @@
     </article>
 
     {% unless is_best_sellers %}
-      {% render 'collection-bundle-card', handle: 'bundle-nad-nmn', title: 'BUNDLE: LIPOSOMAL NAD+ & NMN COMPLEX', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD.png?v=1783680342', benefit: 'Dual cellular energy support*', order: 5 %}
-      {% render 'collection-bundle-card', handle: 'bundle-nmn-glutathione', title: 'BUNDLE: NMN COMPLEX & LIPOSOMAL GLUTATHIONE', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_GLU.png?v=1783680215', benefit: 'Cellular energy and antioxidant support*', order: 6 %}
-      {% render 'collection-bundle-card', handle: 'bundle-nad-glutathione', title: 'BUNDLE: LIPOSOMAL NAD+ & GLUTATHIONE', image: blank, benefit: 'Cellular energy and antioxidant defense support*', order: 7, composition: 'nad-glutathione' %}
-      {% render 'collection-bundle-card', handle: 'bundle-nad-nmn-glutathione', title: 'BUNDLE: LIPOSOMAL NAD+ & NMN COMPLEX & GLUTATHIONE', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD_GLU.png?v=1783680368', benefit: 'Complete cellular energy and antioxidant support*', order: 8 %}
+      {% render 'collection-bundle-card', handle: 'bundle-nad-nmn', title: 'BUNDLE: LIPOSOMAL NAD+ & NMN COMPLEX', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD.png?v=1783680342', benefit: 'Dual cellular energy support*', order: 5, force_available: true %}
+      {% render 'collection-bundle-card', handle: 'bundle-nmn-glutathione', title: 'BUNDLE: NMN COMPLEX & LIPOSOMAL GLUTATHIONE', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_GLU.png?v=1783680215', benefit: 'Cellular energy and antioxidant support*', order: 6, force_available: true %}
+      {% render 'collection-bundle-card', handle: 'bundle-nad-glutathione', title: 'BUNDLE: LIPOSOMAL NAD+ & GLUTATHIONE', image: blank, benefit: 'Cellular energy and antioxidant defense support*', order: 7, composition: 'nad-glutathione', force_available: true %}
+      {% render 'collection-bundle-card', handle: 'bundle-nad-nmn-glutathione', title: 'BUNDLE: LIPOSOMAL NAD+ & NMN COMPLEX & GLUTATHIONE', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD_GLU.png?v=1783680368', benefit: 'Complete cellular energy and antioxidant support*', order: 8, force_available: true %}
 
       {% render 'collection-bundle-card', handle: 'bundle-nmn-ca-akg', title: 'BUNDLE: Cata-Kor NMN Longevity Support & Beauty Blend', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_Ca_Akg.png?v=1783680150', benefit: 'Longevity and beauty blend*', order: 9, force_sold_out: true %}
       {% render 'collection-bundle-card', handle: 'bundle-nad-nmn-ca-akg', title: 'BUNDLE: Cellular Power Trio', image: 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NAD_NMN_Ca_Akg.png?v=1783680182', benefit: 'NAD+, NMN and CA-AKG support*', order: 10, force_sold_out: true %}
