@@ -21,6 +21,15 @@
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
     })[character]);
   const formatMoney = (cents) => moneyFormatter.format(Number(cents || 0) / 100);
+  const setDynamicText = (element, value) => {
+    if (!element) return;
+    const text = String(value);
+    if (element.childNodes.length === 1 && element.firstChild?.nodeType === 3) {
+      element.firstChild.nodeValue = text;
+      return;
+    }
+    element.textContent = text;
+  };
   const imageUrl = (source, width = 180) => {
     if (!source) return "";
     return `${source}${source.includes("?") ? "&" : "?"}width=${width}`;
@@ -312,10 +321,10 @@
       button.setAttribute("aria-pressed", String(selected));
     });
     product.querySelectorAll("[data-plan-one-time-price], [data-plan-compare-price]").forEach((element) => {
-      element.textContent = formatMoney(oneTimeCents);
+      setDynamicText(element, formatMoney(oneTimeCents));
     });
     product.querySelectorAll("[data-plan-subscription-price]").forEach((element) => {
-      element.textContent = formatMoney(subscriptionCents);
+      setDynamicText(element, formatMoney(subscriptionCents));
     });
 
     const sellingPlanInput = form.querySelector("[data-selling-plan-input]");
@@ -325,7 +334,7 @@
     }
     const selectedPrice = mode === "subscription" ? subscriptionCents : oneTimeCents;
     const addPrice = form.querySelector("[data-add-price]");
-    if (addPrice) addPrice.textContent = formatMoney(selectedPrice);
+    setDynamicText(addPrice, formatMoney(selectedPrice));
     product.classList.toggle("is-subscription-selected", mode === "subscription");
     const flashHint = product.querySelector(".product-flash-hint");
     if (flashHint) flashHint.hidden = mode === "subscription";
@@ -929,7 +938,7 @@
         button.setAttribute("aria-pressed", String(selected));
       });
       product.querySelector("[data-variant-input]").value = packButton.dataset.variantId;
-      product.querySelector("[data-selected-capsules]").textContent = `${Number(packButton.dataset.jars) * 60} Capsules`;
+      setDynamicText(product.querySelector("[data-selected-capsules]"), `${Number(packButton.dataset.jars) * 60} Capsules`);
       refreshPurchaseOptions(product);
     }
     if (nadGalleryThumb || nadGalleryStep || nadThumbnailShift) {
@@ -949,7 +958,7 @@
         button.setAttribute("aria-pressed", String(selected));
       });
       product.querySelector("[data-variant-input]").value = nadPack.dataset.variantId;
-      product.querySelector("[data-nad-capsules]").textContent = `${Number(nadPack.dataset.jars) * 60} Capsules`;
+      setDynamicText(product.querySelector("[data-nad-capsules]"), `${Number(nadPack.dataset.jars) * 60} Capsules`);
       refreshPurchaseOptions(product);
     }
     if (purchaseModeButton) {
@@ -1007,7 +1016,9 @@
         button.setAttribute("aria-pressed", String(selected));
       });
       product.querySelector("[data-variant-input]").value = variantButton.dataset.variantId;
-      product.querySelectorAll("[data-product-price], [data-add-price]").forEach((element) => { element.textContent = variantButton.dataset.priceFormatted; });
+      product.querySelectorAll("[data-product-price], [data-add-price]").forEach((element) => {
+        setDynamicText(element, variantButton.dataset.priceFormatted);
+      });
     }
     if (factsOpen) { document.querySelector("[data-facts-layer]").hidden = false; lockPage(); }
     if (factsClose) { document.querySelector("[data-facts-layer]").hidden = true; unlockPage(); }
