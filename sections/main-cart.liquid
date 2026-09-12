@@ -12,7 +12,7 @@
       {% assign has_regular_discount_item = false %}
       {% for item in cart.items %}
         {% assign is_regular_discount_item = true %}
-        {% if item.properties._flash_offer == 'true' or item.selling_plan_allocation or item.product.type == 'Bundle' or item.product.handle contains 'bundle-' %}
+        {% if item.properties._flash_offer == 'true' or item.product.tags contains 'flash-offer' or item.product.handle contains '-flash-offer' or item.selling_plan_allocation or item.product.type == 'Bundle' or item.product.handle contains 'bundle-' %}
           {% assign is_regular_discount_item = false %}
         {% endif %}
         {% if is_regular_discount_item %}{% assign has_regular_discount_item = true %}{% endif %}
@@ -21,7 +21,7 @@
       <div class="cart-page__lines">
         {% for item in cart.items %}
           {% assign is_flash_item = false %}
-          {% if item.properties._flash_offer == 'true' %}{% assign is_flash_item = true %}{% endif %}
+          {% if item.properties._flash_offer == 'true' or item.product.tags contains 'flash-offer' or item.product.handle contains '-flash-offer' %}{% assign is_flash_item = true %}{% endif %}
           {% assign display_title = item.properties._flash_display_title | default: item.product.title %}
           {% assign display_variant = item.properties._flash_display_variant | default: item.variant.title %}
           <article class="cart-page__line{% if is_flash_item %} is-flash{% endif %}">
@@ -71,7 +71,7 @@
           <span>ORDER SUMMARY</span>
           <p><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></p>
           <small>Taxes and shipping are calculated at checkout.</small>
-          <button class="cart-page__checkout" type="submit" name="checkout" data-start-checkout>CHECKOUT</button>
+          <button class="cart-page__checkout" type="button" data-start-checkout>CHECKOUT</button>
           <button class="cart-page__update" type="submit" name="update">UPDATE BAG</button>
           <a href="{{ routes.collections_url }}/shop-all">CONTINUE SHOPPING</a>
           {% if has_regular_discount_item %}<em>CATA15 can be applied to regular items at checkout.</em>{% endif %}

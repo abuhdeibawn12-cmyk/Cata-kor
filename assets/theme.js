@@ -10,6 +10,7 @@
     "liposomal-glutathione": "liposomal-glutathione-flash-offer",
     nmn: "nmn-flash-offer"
   };
+  const flashHandles = new Set(Object.values(flashProductHandles));
   let productCatalogPromise;
   const moneyFormatter = new Intl.NumberFormat(document.documentElement.lang || "en-US", {
     style: "currency",
@@ -35,7 +36,11 @@
     return `${source}${source.includes("?") ? "&" : "?"}width=${width}`;
   };
   const jarsFromTitle = (title = "") => Math.max(1, Number(String(title).match(/\d+/)?.[0] || 1));
-  const isFlashItem = (item) => item.properties?._flash_offer === "true";
+  const isFlashProduct = (item) => {
+    const handle = String(item?.handle || "");
+    return flashHandles.has(handle) || handle.endsWith("-flash-offer");
+  };
+  const isFlashItem = (item) => item.properties?._flash_offer === "true" || isFlashProduct(item);
   const isSubscriptionItem = (item) => Boolean(item.selling_plan_allocation);
   const isBundleItem = (item) =>
     String(item.product_type || "").toLowerCase() === "bundle" || String(item.handle || "").startsWith("bundle-");
@@ -341,21 +346,25 @@
   };
   document.querySelectorAll("[data-product-root]").forEach(refreshPurchaseOptions);
   const sourceToken = (item) => `${item.handle}:${item.variant_id}`;
-  const removeOrphanFlashItems = async (cart, removedRegular) => {
-    if (!removedRegular || isFlashItem(removedRegular)) return cart;
-    const token = sourceToken(removedRegular);
-    const sourceStillExists = cart.items.some((item) => !isFlashItem(item) && sourceToken(item) === token);
-    if (sourceStillExists) return cart;
+  const orphanFlashItemsFor = (cart) => {
+    const qualifyingTokens = new Set(cart.items.filter(isFlashEligibleItem).map(sourceToken));
+    return cart.items.filter((item) => {
+      if (!isFlashItem(item)) return false;
+      if (item.properties?._flash_offer !== "true") return true;
+      if (item.properties?._flash_replacement === "true") return false;
+      const token = String(item.properties?._flash_source_token || "").trim();
+      return !token || !qualifyingTokens.has(token);
+    });
+  };
+  const sanitizeFlashCart = async (cart) => {
+    const orphans = orphanFlashItemsFor(cart);
     let updated = cart;
-    const orphans = updated.items.filter((item) => item.properties?._flash_source_token === token);
     for (const orphan of orphans) updated = await updateLine(orphan.key, 0);
-    return updated;
+    return { cart: updated, removed: orphans.length };
   };
   const changeCartLine = async (key, quantity) => {
-    const before = await getCart();
-    const changed = before.items.find((item) => item.key === key);
     let updated = await updateLine(key, quantity);
-    if (quantity === 0) updated = await removeOrphanFlashItems(updated, changed);
+    ({ cart: updated } = await sanitizeFlashCart(updated));
     renderCart(updated);
     return updated;
   };
@@ -467,7 +476,14 @@
     </article>`;
   };
   const showFlashOffers = async () => {
-    const cart = await getCart();
+    let cart = await getCart();
+    const sanitized = await sanitizeFlashCart(cart);
+    cart = sanitized.cart;
+    renderCart(cart);
+    if (sanitized.removed || !cart.items.length) {
+      openCart();
+      return;
+    }
     const offers = await buildFlashOffers(cart);
     if (!offers.length) {
       window.location.href = `${root}checkout`;
@@ -492,8 +508,20 @@
     if (!offer || button.disabled) return;
     button.disabled = true;
     button.textContent = "UPDATING…";
+    const latestCart = await getCart();
+    const sourceStillQualifies = latestCart.items.some((item) =>
+      item.key === offer.source.key && isFlashEligibleItem(item)
+    );
+    if (!sourceStillQualifies) {
+      renderCart((await sanitizeFlashCart(latestCart)).cart);
+      flashDialog.hidden = true;
+      unlockPage();
+      openCart();
+      throw new Error("The qualifying product is no longer in your bag.");
+    }
     await addVariant(offer.flashVariant.id, offer.replaces ? offer.source.quantity : 1, {
       _flash_offer: "true",
+      _flash_replacement: String(offer.replaces),
       _flash_discount: String(offer.discount),
       _flash_original_price_cents: String(offer.variant.price),
       _flash_source_token: offer.replaces ? "" : sourceToken(offer.source),
@@ -514,7 +542,7 @@
     if (continueButton) continueButton.textContent = "CONTINUE WITH MY OFFERS";
     renderCart(await getCart());
   };
-  const continueCheckout = () => {
+  const continueCheckout = async () => {
     if (flashDialog) flashDialog.hidden = true;
     unlockPage();
     if (testCartMode) {
@@ -525,6 +553,12 @@
         checkoutButton.textContent = "TEST CART READY";
         checkoutButton.title = "Live checkout will be connected during launch configuration.";
       }
+      return;
+    }
+    const sanitized = await sanitizeFlashCart(await getCart());
+    renderCart(sanitized.cart);
+    if (sanitized.removed || !sanitized.cart.items.length) {
+      openCart();
       return;
     }
     window.location.href = `${root}checkout`;
@@ -890,7 +924,7 @@
 
     if (openButton) {
       event.preventDefault();
-      try { renderCart(await getCart()); } catch (error) { console.error(error); }
+      try { renderCart((await sanitizeFlashCart(await getCart())).cart); } catch (error) { console.error(error); }
       openCart();
     }
     if (closeButton) closeCart();
@@ -912,14 +946,22 @@
       try { await showFlashOffers(); }
       catch (error) {
         console.error(error);
-        window.location.href = `${root}checkout`;
+        try { renderCart((await sanitizeFlashCart(await getCart())).cart); } catch (cartError) { console.error(cartError); }
+        openCart();
       }
     }
     if (flashButton) {
       try { await acceptFlashOffer(Number(flashButton.dataset.acceptFlash), flashButton); }
       catch (error) { console.error(error); flashButton.disabled = false; flashButton.textContent = "PLEASE TRY AGAIN"; }
     }
-    if (flashContinue) continueCheckout();
+    if (flashContinue) {
+      try { await continueCheckout(); }
+      catch (error) {
+        console.error(error);
+        try { renderCart((await sanitizeFlashCart(await getCart())).cart); } catch (cartError) { console.error(cartError); }
+        openCart();
+      }
+    }
     if (flashShopMore) continueShoppingFromOffer();
     if (galleryThumb || galleryStep || thumbnailShift) {
       const gallery = target.closest("[data-secondary-gallery]");
@@ -1096,6 +1138,17 @@
     }
   });
   document.addEventListener("submit", async (event) => {
+    const cartForm = event.target.closest("[data-cart-page] form");
+    if (cartForm && event.submitter?.matches("[data-start-checkout]")) {
+      event.preventDefault();
+      try { await showFlashOffers(); }
+      catch (error) {
+        console.error(error);
+        try { renderCart((await sanitizeFlashCart(await getCart())).cart); } catch (cartError) { console.error(cartError); }
+        openCart();
+      }
+      return;
+    }
     const reviewForm = event.target.closest("[data-review-form]");
     if (reviewForm) {
       event.preventDefault();
@@ -1165,8 +1218,27 @@
   );
   updateCollection();
 
-  getCart().then((cart) => {
-    renderCart(cart);
+  window.addEventListener("pageshow", async (event) => {
+    if (!event.persisted) return;
+    try {
+      const sanitized = await sanitizeFlashCart(await getCart());
+      if (sanitized.removed && document.querySelector("[data-cart-page]") && !testCartMode) {
+        window.location.reload();
+        return;
+      }
+      renderCart(sanitized.cart);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  getCart().then(async (cart) => {
+    const sanitized = await sanitizeFlashCart(cart);
+    if (sanitized.removed && document.querySelector("[data-cart-page]") && !testCartMode) {
+      window.location.reload();
+      return;
+    }
+    renderCart(sanitized.cart);
     if (document.querySelector("[data-cart-page]")) {
       window.requestAnimationFrame(openCart);
     }

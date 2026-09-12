@@ -24,7 +24,7 @@
           {% for item in cart.items %}
             {% assign is_flash_item = false %}
             {% assign is_bundle_item = false %}
-            {% if item.properties._flash_offer == 'true' %}{% assign is_flash_item = true %}{% endif %}
+            {% if item.properties._flash_offer == 'true' or item.product.tags contains 'flash-offer' or item.product.handle contains '-flash-offer' %}{% assign is_flash_item = true %}{% endif %}
             {% if item.product.type == 'Bundle' or item.product.handle contains 'bundle-' %}{% assign is_bundle_item = true %}{% endif %}
             {% unless is_flash_item %}
               {% unless item.selling_plan_allocation or is_bundle_item %}{% assign has_flash_eligible_item = true %}{% endunless %}
