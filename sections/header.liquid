@@ -22,6 +22,7 @@
     <a href="{{ routes.collections_url }}/shop-all?view=best-sellers"{% if template.suffix == 'best-sellers' %} aria-current="page"{% endif %}>Best Sellers</a>
     <a href="/pages/science-benefits"{% if template.suffix == 'science' or request.path == '/pages/science-benefits' %} aria-current="page"{% endif %}>Science</a>
     <a href="/pages/about-us"{% if template.suffix == 'about' or request.path == '/pages/about-us' %} class="is-active" aria-current="page"{% endif %}>About</a>
+    <a href="/apps/track-order"{% if request.path == '/apps/track-order' %} class="is-active" aria-current="page"{% endif %}>Track Order</a>
   </nav>
 
   <div class="header-actions">
