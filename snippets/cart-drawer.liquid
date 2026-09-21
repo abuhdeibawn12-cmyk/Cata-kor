@@ -20,6 +20,7 @@
         </div>
       {% else %}
         {% assign has_flash_eligible_item = false %}
+        {% assign has_discount_eligible_item = false %}
         <div class="global-cart-items" data-cart-items>
           {% for item in cart.items %}
             {% assign is_flash_item = false %}
@@ -27,7 +28,10 @@
             {% if item.properties._flash_offer == 'true' or item.product.tags contains 'flash-offer' or item.product.handle contains '-flash-offer' %}{% assign is_flash_item = true %}{% endif %}
             {% if item.product.type == 'Bundle' or item.product.handle contains 'bundle-' %}{% assign is_bundle_item = true %}{% endif %}
             {% unless is_flash_item %}
-              {% unless item.selling_plan_allocation or is_bundle_item %}{% assign has_flash_eligible_item = true %}{% endunless %}
+              {% unless item.selling_plan_allocation or is_bundle_item %}
+                {% assign has_discount_eligible_item = true %}
+                {% if item.variant.title contains '3' %}{% assign has_flash_eligible_item = true %}{% endif %}
+              {% endunless %}
             {% endunless %}
             <article data-line-key="{{ item.key }}">
               {% if item.image %}<img src="{{ item.image | image_url: width: 180 }}" alt="" width="180" height="180">{% endif %}
@@ -63,15 +67,15 @@
         </div>
         {% if has_flash_eligible_item %}
           <div class="global-cart-offer-hint" role="note">
-            <span>⚡ Limited One-Time Offer</span>
-            <strong>A Private Flash Deal Is Waiting</strong>
-            <p>Use the checkout button below to reveal it. No code required.</p>
+            <span>⚡ Complete Your Routine</span>
+            <strong>One private add-on is waiting</strong>
+            <p>Continue to see your one-time $29.99 add-on. No subscription.</p>
           </div>
         {% endif %}
         <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
         <button class="global-cart-checkout" type="button" data-start-checkout>{% if has_flash_eligible_item %}CHECKOUT &amp; REVEAL OFFER →{% else %}CHECKOUT{% endif %}</button>
         <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
-        {% if has_flash_eligible_item %}<p class="global-cart-note">CATA15 can be applied to one-time items at checkout.</p>{% endif %}
+        {% if has_discount_eligible_item %}<p class="global-cart-note">CATA15 is automatically applied to eligible one-time products. It does not apply to subscriptions or flash offers.</p>{% endif %}
       {% endif %}
     </div>
   </aside>

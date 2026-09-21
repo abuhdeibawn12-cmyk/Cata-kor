@@ -59,7 +59,9 @@
       .map((item) => item.properties?._flash_source_token)
       .filter(Boolean));
     return cart.items.some((item) =>
-      isFlashEligibleItem(item) && !acceptedSourceTokens.has(`${item.handle}:${item.variant_id}`)
+      isFlashEligibleItem(item) &&
+      jarsFromTitle(item.variant_title) === 3 &&
+      !acceptedSourceTokens.has(`${item.handle}:${item.variant_id}`)
     );
   };
 
@@ -141,7 +143,7 @@
          <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>${formatMoney(effectiveSubtotal(cart))}</strong></div>
          <button class="global-cart-checkout" type="button" data-start-checkout>${showFlashTeaser ? "CHECKOUT &amp; REVEAL OFFER →" : "CHECKOUT"}</button>
          <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
-         ${hasOneTimePurchase ? '<p class="global-cart-note">CATA15 can be applied to one-time items at checkout.</p>' : ""}`
+         ${hasOneTimePurchase ? '<p class="global-cart-note">CATA15 is automatically applied to eligible one-time products. It does not apply to subscriptions or flash offers.</p>' : ""}`
       : `<div class="global-empty-cart">
            <span>0</span><h3>Your shopping bag is empty</h3>
            <p>Choose a product and build your daily longevity routine.</p>
@@ -331,6 +333,10 @@
     product.querySelectorAll("[data-plan-subscription-price]").forEach((element) => {
       setDynamicText(element, formatMoney(subscriptionCents));
     });
+    const deliveryDays = Math.max(30, Number(pack.dataset.deliveryDays || 30));
+    product.querySelectorAll("[data-subscription-cadence], [data-subscription-benefit-cadence]").forEach((element) => {
+      setDynamicText(element, `Delivered every ${deliveryDays} days`);
+    });
 
     const sellingPlanInput = form.querySelector("[data-selling-plan-input]");
     if (sellingPlanInput) {
@@ -405,76 +411,62 @@
   const regularItems = (cart) => cart.items.filter(isFlashEligibleItem);
 
   const buildFlashOffers = async (cart) => {
-    const latestByProduct = new Map();
     const acceptedSourceTokens = new Set(cart.items
       .filter(isFlashItem)
       .map((item) => item.properties?._flash_source_token)
       .filter(Boolean));
-    const regular = regularItems(cart).filter((item) => !acceptedSourceTokens.has(sourceToken(item)));
-    regular.forEach((item) => {
-      if (!latestByProduct.has(item.handle)) latestByProduct.set(item.handle, item);
-    });
-    const presentOrProposed = new Set(cart.items.map((item) =>
-      item.properties?._flash_display_handle || item.handle
-    ));
-    const offers = [];
-    for (const source of latestByProduct.values()) {
-      const sourceJars = jarsFromTitle(source.variant_title);
-      if (sourceJars < 3) {
-        const product = await productJson(source.handle);
-        const jars = sourceJars + 1;
-        const variant = normalVariantForJars(product, jars);
-        if (!variant) continue;
-        const discount = 20;
-        const salePrice = Math.round(variant.price * (1 - discount / 100));
-        const flashSelection = await flashSelectionFor(source.handle, jars, salePrice);
-        if (flashSelection) offers.push({
-          source, product, variant,
-          flashProduct: flashSelection.product,
-          flashVariant: flashSelection.variant,
-          jars, discount, salePrice, replaces: true
-        });
-        continue;
-      }
-      const alternatives = productHandles.filter((handle) => handle !== source.handle);
-      let candidates = alternatives.filter((handle) => !presentOrProposed.has(handle));
-      if (!candidates.length) candidates = alternatives;
-      const handle = candidates[Math.floor(Math.random() * candidates.length)];
-      presentOrProposed.add(handle);
-      const product = await productJson(handle);
-      const variant = normalVariantForJars(product, 1);
-      if (!variant) continue;
-      const discount = 25;
-      const salePrice = Math.round(variant.price * (1 - discount / 100));
-      const flashSelection = await flashSelectionFor(handle, 1, salePrice);
-      if (flashSelection) offers.push({
-        source, product, variant,
-        flashProduct: flashSelection.product,
-        flashVariant: flashSelection.variant,
-        jars: 1, discount, salePrice, replaces: false
-      });
-    }
-    return offers;
+    const regular = regularItems(cart).filter((item) =>
+      jarsFromTitle(item.variant_title) === 3 && !acceptedSourceTokens.has(sourceToken(item))
+    );
+    const source = regular.find((item) => item.handle === "nmn") || regular[0];
+    if (!source) return [];
+
+    const complementaryHandle = source.handle === "liposomal-glutathione"
+      ? "nmn"
+      : "liposomal-glutathione";
+    const alreadyInCart = cart.items.some((item) =>
+      (item.properties?._flash_display_handle || item.handle) === complementaryHandle
+    );
+    if (alreadyInCart) return [];
+
+    const product = await productJson(complementaryHandle);
+    const variant = normalVariantForJars(product, 1);
+    if (!variant) return [];
+    const discount = 25;
+    const salePrice = Math.round(variant.price * (1 - discount / 100));
+    const flashSelection = await flashSelectionFor(complementaryHandle, 1, salePrice);
+    if (!flashSelection) return [];
+    return [{
+      source,
+      product,
+      variant,
+      flashProduct: flashSelection.product,
+      flashVariant: flashSelection.variant,
+      jars: 1,
+      discount,
+      salePrice,
+      replaces: false
+    }];
   };
 
   const flashOfferMarkup = (offer, index) => {
-    const sourceName = offer.source.product_title.replace(/\s+\d+\s*MG$/i, "");
     const jarCount = Math.min(3, Math.max(1, Number(offer.jars) || 1));
     const productImage = offer.product.featured_image
       ? `<figure class="global-offer-pack-image jars-${jarCount}" role="img" aria-label="${jarCount} ${jarCount === 1 ? "jar" : "jars"} of ${escapeHtml(offer.product.title)}">${Array.from({ length: jarCount }, () => `<img src="${escapeHtml(imageUrl(offer.product.featured_image, 500))}" alt="">`).join("")}</figure>`
       : "";
     return `<article data-flash-index="${index}">
-      <span>BECAUSE YOU CHOSE ${escapeHtml(sourceName.toUpperCase())}</span>
+      <span>COMPLETE YOUR ROUTINE</span>
       ${productImage}
-      <h3>${escapeHtml(offer.product.title)}</h3>
-      <p>${offer.jars} ${offer.jars === 1 ? "Jar" : "Jars"} · ${offer.discount}% Flash Discount</p>
-      <small class="global-offer-mode">${offer.replaces
-        ? `REPLACES YOUR CURRENT ${escapeHtml(sourceName.toUpperCase())} BUNDLE`
-        : "ADDS A DIFFERENT PRODUCT TO YOUR ORDER"}</small>
+      <h3>Add ${escapeHtml(offer.product.title)}</h3>
+      <p>1 Jar · ${offer.discount}% private add-on saving</p>
+      <small class="global-offer-mode">ONE-TIME ADD-ON · NO SUBSCRIPTION</small>
       <div><del>${formatMoney(offer.variant.price)}</del><strong>${formatMoney(offer.salePrice)}</strong></div>
-      <button type="button" data-accept-flash="${index}">${offer.replaces ? "REPLACE WITH THIS OFFER" : "ADD FLASH OFFER"}</button>
+      <button type="button" data-accept-flash="${index}">ADD TO MY ORDER — ${formatMoney(offer.salePrice)}</button>
     </article>`;
   };
+  const checkoutUrlFor = (cart) => cart.items.some(isFlashEligibleItem)
+    ? `${root}discount/CATA15?redirect=${encodeURIComponent(`${root}checkout`)}`
+    : `${root}checkout`;
   const showFlashOffers = async () => {
     let cart = await getCart();
     const sanitized = await sanitizeFlashCart(cart);
@@ -486,12 +478,12 @@
     }
     const offers = await buildFlashOffers(cart);
     if (!offers.length) {
-      window.location.href = `${root}checkout`;
+      window.location.href = checkoutUrlFor(cart);
       return;
     }
     const grid = flashDialog?.querySelector("[data-flash-offers]");
     if (!flashDialog || !grid) {
-      window.location.href = `${root}checkout`;
+      window.location.href = checkoutUrlFor(cart);
       return;
     }
     grid.innerHTML = offers.map(flashOfferMarkup).join("");
@@ -561,7 +553,7 @@
       openCart();
       return;
     }
-    window.location.href = `${root}checkout`;
+    window.location.href = checkoutUrlFor(sanitized.cart);
   };
   const continueShoppingFromOffer = () => {
     if (flashDialog) flashDialog.hidden = true;

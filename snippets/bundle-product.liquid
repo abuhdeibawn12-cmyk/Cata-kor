@@ -98,7 +98,16 @@
     <ul class="bundle-feature-list">
       {% for bullet in bundle_bullets %}<li>{{ bullet }}</li>{% endfor %}
     </ul>
-    <strong class="bundle-price">{{ product.price | money_with_currency }}</strong>
+    {% if bundle_variant.compare_at_price > bundle_variant.price %}
+      {% assign bundle_savings = bundle_variant.compare_at_price | minus: bundle_variant.price %}
+      <div class="bundle-price bundle-price--saving">
+        <s>{{ bundle_variant.compare_at_price | money_with_currency }}</s>
+        <strong>{{ bundle_variant.price | money_with_currency }}</strong>
+        <span>Save {{ bundle_savings | money }} · 10% bundle saving</span>
+      </div>
+    {% else %}
+      <strong class="bundle-price">{{ product.price | money_with_currency }}</strong>
+    {% endif %}
 
     {% if product.available and bundle_variant != blank %}
       <form action="{{ routes.cart_add_url }}" method="post" data-product-form>

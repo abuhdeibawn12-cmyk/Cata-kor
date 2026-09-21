@@ -1,5 +1,6 @@
 {% liquid
-  assign subscription_allocation = selected_variant.selling_plan_allocations.first
+  assign subscription_allocation = selected_allocation | default: selected_variant.selling_plan_allocations.first
+  assign delivery_days = selected_delivery_days | default: 30
 %}
 
 {% if subscription_allocation %}
@@ -8,9 +9,9 @@
 
     <button class="plan-option plan-option--subscription" type="button" data-purchase-mode="subscription" aria-pressed="false">
       <span class="plan-option__copy">
-        <small>SAVE EXTRA 15%</small>
+        <small>SUBSCRIBE &amp; SAVE 15%</small>
         <b>Subscribe &amp; Save</b>
-        <em>Delivered every month</em>
+        <em data-subscription-cadence>Delivered every {{ delivery_days }} days</em>
       </span>
       <span class="plan-option__price">
         <s data-plan-compare-price>{{ selected_variant.price | money }}</s>
@@ -22,7 +23,7 @@
     <ul class="plan-benefits" aria-label="Subscription benefits">
       <li>Free standard shipping</li>
       <li>15% off every delivery</li>
-      <li>Delivered every month</li>
+      <li data-subscription-benefit-cadence>Delivered every {{ delivery_days }} days</li>
       <li>Manage through your account</li>
     </ul>
 
