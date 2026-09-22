@@ -2,21 +2,21 @@
   <aside class="global-cart-drawer" role="dialog" aria-modal="true" aria-labelledby="global-cart-title">
     <div class="global-cart-heading">
       <div>
-        <h2 id="global-cart-title">YOUR SHOPPING BAG</h2>
+        <h2 id="global-cart-title">{{ 'cart.title' | t }}</h2>
         <p data-cart-summary>
-          {% if cart.items.size > 0 %}{{ cart.items.size }} product selection{% unless cart.items.size == 1 %}s{% endunless %}{% else %}Your bag is empty{% endif %}
+          {% if cart.items.size == 1 %}{{ 'cart.selection_one' | t }}{% elsif cart.items.size > 1 %}{{ 'cart.selection_other' | t: count: cart.items.size }}{% else %}{{ 'cart.empty' | t }}{% endif %}
         </p>
       </div>
-      <button type="button" data-cart-close aria-label="Close shopping bag">×</button>
+      <button type="button" data-cart-close aria-label="{{ 'general.accessibility.close' | t }}">×</button>
     </div>
 
     <div data-cart-content>
       {% if cart.items.size == 0 %}
         <div class="global-empty-cart">
           <span>0</span>
-          <h3>Your shopping bag is empty</h3>
-          <p>Choose a product and build your daily longevity routine.</p>
-          <button type="button" data-cart-close>CONTINUE SHOPPING</button>
+          <h3>{{ 'cart.empty' | t }}</h3>
+          <p>{{ 'cart.empty_copy' | t }}</p>
+          <button type="button" data-cart-close>{{ 'cart.continue' | t }}</button>
         </div>
       {% else %}
         {% assign has_flash_eligible_item = false %}
@@ -40,7 +40,7 @@
                 <h3>{{ item.properties._flash_display_title | default: item.product.title }}</h3>
                 <p>
                   {{ item.properties._flash_display_variant | default: item.variant.title }} ·
-                  {% if item.selling_plan_allocation %}{{ item.selling_plan_allocation.selling_plan.name | default: 'Delivered every month · Save 15%' }}{% else %}One-time purchase{% endif %}
+                  {% if item.selling_plan_allocation %}{{ item.selling_plan_allocation.selling_plan.name }}{% else %}{{ 'cart.one_time' | t }}{% endif %}
                 </p>
                 <div class="global-cart-price">
                   {% if is_flash_item and item.properties._flash_original_price_cents %}
@@ -49,39 +49,39 @@
                   <strong>{{ item.final_line_price | money }}</strong>
                 </div>
                 <div class="global-cart-quantity">
-                  <span>{% if is_flash_item %}Flash bundle quantity{% else %}Bundle quantity{% endif %}</span>
+                  <span>{% if is_flash_item %}{{ 'cart.flash_quantity' | t }}{% else %}{{ 'cart.bundle_quantity' | t }}{% endif %}</span>
                   {% if is_flash_item %}
                     <div><b aria-label="{{ item.quantity }} flash bundles">{{ item.quantity }}</b></div>
                   {% else %}
                     <div>
-                      <button type="button" data-cart-quantity="{{ item.quantity | minus: 1 }}" aria-label="Decrease quantity">−</button>
+                      <button type="button" data-cart-quantity="{{ item.quantity | minus: 1 }}" aria-label="{{ 'cart.decrease' | t }}">−</button>
                       <b aria-label="{{ item.quantity }} bundles">{{ item.quantity }}</b>
-                      <button type="button" data-cart-quantity="{{ item.quantity | plus: 1 }}" aria-label="Increase quantity">+</button>
+                      <button type="button" data-cart-quantity="{{ item.quantity | plus: 1 }}" aria-label="{{ 'cart.increase' | t }}">+</button>
                     </div>
                   {% endif %}
                 </div>
               </div>
-              <button class="global-cart-remove" type="button" data-cart-remove>Remove</button>
+              <button class="global-cart-remove" type="button" data-cart-remove>{{ 'cart.remove' | t }}</button>
             </article>
           {% endfor %}
         </div>
         {% if has_flash_eligible_item %}
           <div class="global-cart-offer-hint" role="note">
-            <span>⚡ Complete Your Routine</span>
-            <strong>One private add-on is waiting</strong>
-            <p>Continue to see your private one-time add-on. No subscription.</p>
+            <span>⚡ {{ 'cart.complete' | t }}</span>
+            <strong>{{ 'cart.waiting' | t }}</strong>
+            <p>{{ 'cart.waiting_copy' | t }}</p>
           </div>
         {% endif %}
         {% if has_discount_eligible_item %}
           <div class="cart-discount-progress" data-discount-progress>
-            <strong>Use CATA10 for 10% off $100+ eligible regular-product orders.</strong>
-            <div class="cart-discount-progress__track" role="progressbar" aria-label="CATA10 discount progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span><b aria-hidden="true">♡</b></div>
+            <strong>{{ 'cart.threshold_note' | t }}</strong>
+            <div class="cart-discount-progress__track" role="progressbar" aria-label="{{ 'cart.progress_label' | t }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span><b aria-hidden="true">♡</b></div>
           </div>
         {% endif %}
-        <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
-        <button class="global-cart-checkout" type="button" data-start-checkout>{% if has_flash_eligible_item %}CHECKOUT &amp; REVEAL OFFER →{% else %}CHECKOUT{% endif %}</button>
-        <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
-        {% if has_discount_eligible_item %}<p class="global-cart-note">Orders with at least $100 USD in eligible regular products receive 10% off with code CATA10.</p>{% endif %}
+        <div class="global-cart-summary"><span>{{ 'cart.subtotal' | t }}</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
+        <button class="global-cart-checkout" type="button" data-start-checkout>{% if has_flash_eligible_item %}{{ 'cart.checkout_offer' | t }}{% else %}{{ 'cart.checkout' | t }}{% endif %}</button>
+        <button class="global-cart-continue" type="button" data-cart-close>{{ 'cart.continue' | t }}</button>
+        {% if has_discount_eligible_item %}<p class="global-cart-note">{{ 'cart.threshold_note' | t }}</p>{% endif %}
       {% endif %}
     </div>
   </aside>

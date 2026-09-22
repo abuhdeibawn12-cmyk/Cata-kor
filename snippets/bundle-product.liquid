@@ -54,6 +54,21 @@
       assign bundle_gallery = bundle_image | append: '|' | append: nad_gallery | append: '|' | append: nmn_gallery | append: '|' | append: glutathione_gallery | append: '|' | append: caakg_image
   endcase
 
+  if request.locale.iso_code == 'es'
+    assign bundle_copy = 'Una combinación complementaria de fórmulas Cata-Kor diseñada para una rutina diaria de bienestar sencilla.'
+    assign bundle_bullets = 'Probado por terceros|Fabricado en EE. UU.|Elaborado con ingredientes de origen internacional' | split: '|'
+    case product.handle
+      when 'bundle-nad-nmn'
+        assign bundle_copy = 'Dos fórmulas complementarias para apoyar la energía celular diaria y el envejecimiento saludable.*'
+      when 'bundle-nmn-glutathione'
+        assign bundle_copy = 'Dos fórmulas complementarias para apoyar la energía celular y la defensa antioxidante.*'
+      when 'bundle-nad-glutathione'
+        assign bundle_copy = 'Dos fórmulas complementarias para apoyar la energía celular y la defensa antioxidante.*'
+      when 'bundle-nad-nmn-glutathione'
+        assign bundle_copy = 'Tres fórmulas complementarias para apoyar la energía celular, el envejecimiento saludable y la defensa antioxidante.*'
+    endcase
+  endif
+
   assign bundle_gallery_items = bundle_gallery | split: '|'
 %}
 
@@ -96,11 +111,11 @@
   </div>
 
   <div class="bundle-product-details">
-    <nav class="bundle-breadcrumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span>/</span><span>{{ product.title }}</span></nav>
+    <nav class="bundle-breadcrumb" aria-label="{{ 'product.breadcrumbs' | t }}"><a href="{{ routes.root_url }}">{{ 'product.home' | t }}</a><span>/</span><span>{{ product.title }}</span></nav>
     <div class="bundle-rating"><span aria-label="5 out of 5 stars">★★★★★</span><b>4.9/5</b></div>
     <div class="bundle-title-row">
       <h1>{{ product.title }}</h1>
-      <span>{{ bundle_badge }}</span>
+      <span>{{ 'product.bundle' | t | upcase }}</span>
     </div>
     <p class="bundle-intro">{{ bundle_copy }}</p>
     <ul class="bundle-feature-list">
@@ -120,7 +135,8 @@
       <div class="bundle-price bundle-price--saving">
         <s>{{ bundle_compare_price | money_with_currency }}</s>
         <strong>{{ bundle_variant.price | money_with_currency }}</strong>
-        <span>Save {{ bundle_savings | money }} · {{ bundle_savings_percent }}% bundle saving</span>
+        {% assign bundle_savings_money = bundle_savings | money %}
+        <span>{{ 'bundle.saving' | t: amount: bundle_savings_money, percent: bundle_savings_percent }}</span>
       </div>
     {% else %}
       <strong class="bundle-price">{{ product.price | money_with_currency }}</strong>
@@ -130,10 +146,10 @@
       <form action="{{ routes.cart_add_url }}" method="post" data-product-form>
         <input type="hidden" name="id" value="{{ bundle_variant.id }}">
         <input type="hidden" name="quantity" value="1">
-        <button class="bundle-buy-button" type="submit" data-add-to-cart><span data-add-label>BUY NOW</span></button>
+        <button class="bundle-buy-button" type="submit" data-add-to-cart><span data-add-label>{{ 'bundle.buy_now' | t }}</span></button>
       </form>
     {% else %}
-      <button class="bundle-buy-button is-disabled" type="button" disabled>SOLD OUT</button>
+      <button class="bundle-buy-button is-disabled" type="button" disabled>{{ 'products.product.sold_out' | t | upcase }}</button>
     {% endif %}
   </div>
 </section>

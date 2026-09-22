@@ -5,15 +5,15 @@
 <section class="products-section" id="products">
   <div class="section-heading products-heading">
     <div>
-      <h2>BUILD YOUR DAILY LONGEVITY ROUTINE*</h2>
-      <p><b>60 day</b> guarantee <span>·</span> <b>1M+</b> consumers</p>
+      <h2>{{ 'home.products_title' | t }}</h2>
+      <p><b>{{ 'home.guarantee' | t }}</b> <span>·</span> <b>{{ 'home.consumers' | t }}</b></p>
     </div>
     <div class="products-actions">
       <div class="carousel-controls" aria-label="Product carousel controls">
         <button type="button" data-product-scroll="-1" aria-label="Previous products">←</button>
         <button type="button" data-product-scroll="1" aria-label="Next products">→</button>
       </div>
-      <a class="lime-button" href="{{ routes.collections_url }}/shop-all">SHOP ALL <span>→</span></a>
+      <a class="lime-button" href="{{ routes.collections_url }}/shop-all">{{ 'home.shop_all' | t }} <span>→</span></a>
     </div>
   </div>
 
@@ -23,29 +23,29 @@
       fallback_image: 'product-nad-hq.png',
       fallback_title: 'Liposomal NAD+',
       fallback_price: '$39.99',
-      benefit: 'Daily cellular energy*',
-      product_url: routes.root_url | append: 'products/nad-advanced-500mg'
+      benefit: 'home.daily_energy' | t,
+      product_url: routes.root_url | remove_last: '/' | append: '/products/nad-advanced-500mg'
     %}
     {% render 'home-product-card',
       product: nmn,
       fallback_image: 'product-nmn.avif',
       fallback_title: 'NMN Complex',
       fallback_price: '$39.99',
-      benefit: 'NAD+ pathway support*',
-      product_url: routes.root_url | append: 'products/nmn'
+      benefit: 'home.pathway' | t,
+      product_url: routes.root_url | remove_last: '/' | append: '/products/nmn'
     %}
     {% render 'home-product-card',
       product: glutathione,
       fallback_image: 'product-glutathione.avif',
       fallback_title: 'Liposomal Glutathione',
       fallback_price: '$39.99',
-      benefit: 'Antioxidant defense*',
-      product_url: routes.root_url | append: 'products/liposomal-glutathione'
+      benefit: 'home.antioxidant' | t,
+      product_url: routes.root_url | remove_last: '/' | append: '/products/liposomal-glutathione'
     %}
     {% render 'home-product-card',
       fallback_image: 'product-caakg.avif',
       fallback_title: 'CA-AKG',
-      benefit: 'Healthy aging support*',
+      benefit: 'home.healthy_aging' | t,
       available: false
     %}
   </div>

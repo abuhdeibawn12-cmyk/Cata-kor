@@ -22,9 +22,9 @@
 {% capture card_inner %}
   <div class="product-card-topline">
     {% if card_available %}
-      <span>Bestsellers</span>
+      <span>{{ 'collection.best_sellers' | t }}</span>
     {% else %}
-      <span class="product-stock-label">Out of stock</span>
+      <span class="product-stock-label">{{ 'collection.out_of_stock' | t }}</span>
     {% endif %}
     <small>CONTENTS<br>CERTIFIED</small>
   </div>
@@ -39,7 +39,7 @@
   <h3>{{ card_title }}</h3>
   <p>{{ benefit }}</p>
   <strong{% unless card_available %} class="is-out-of-stock"{% endunless %}>
-    {% if card_available %}{{ card_price }}{% else %}OUT OF STOCK{% endif %}
+    {% if card_available %}{{ card_price }}{% else %}{{ 'collection.out_of_stock' | t | upcase }}{% endif %}
   </strong>
 {% endcapture %}
 

@@ -2,53 +2,53 @@
   <div class="footer-top">
     <div class="footer-brand">
       <a href="{{ routes.root_url }}"><img class="footer-logo" src="{{ 'logo.svg' | asset_url }}" alt="{{ shop.name }}" width="250" height="60"></a>
-      <p class="footer-tagline">AGE ON YOUR TERMS*</p>
-      <a class="footer-contact-link" href="{{ routes.root_url }}pages/contact" aria-label="Contact CataKor">
+      <p class="footer-tagline">{{ 'footer.tagline' | t }}</p>
+      <a class="footer-contact-link" href="{{ routes.root_url | remove_last: '/' }}/pages/contact" aria-label="{{ 'footer.contact' | t }}">
         {% render 'icon-email' %}
       </a>
     </div>
 
-    <nav class="footer-quick-links" aria-label="Footer navigation">
-      <h2>QUICK LINKS</h2>
-      <a href="{{ routes.root_url }}pages/science-benefits#coa">COA</a>
-      <a href="{{ routes.root_url }}products/nad-advanced-500mg">NAD⁺ ADVANCED</a>
-      <a href="{{ routes.root_url }}products/nmn">NMN SUPPLEMENT</a>
-      <a href="{{ routes.root_url }}products/liposomal-glutathione">LIPOSOMAL GLUTATHIONE</a>
-      <a href="{{ routes.root_url }}pages/science-benefits">SCIENCE AND QUALITY</a>
-      <a href="{{ routes.root_url }}pages/faqs">FAQs</a>
+    <nav class="footer-quick-links" aria-label="{{ 'footer.quick_links' | t }}">
+      <h2>{{ 'footer.quick_links' | t }}</h2>
+      <a href="{{ routes.root_url | remove_last: '/' }}/pages/science-benefits#coa">COA</a>
+      <a href="{{ routes.root_url | remove_last: '/' }}/products/nad-advanced-500mg">{{ 'footer.nad' | t }}</a>
+      <a href="{{ routes.root_url | remove_last: '/' }}/products/nmn">{{ 'footer.nmn' | t }}</a>
+      <a href="{{ routes.root_url | remove_last: '/' }}/products/liposomal-glutathione">{{ 'footer.glutathione' | t }}</a>
+      <a href="{{ routes.root_url | remove_last: '/' }}/pages/science-benefits">{{ 'footer.science_quality' | t }}</a>
+      <a href="{{ routes.root_url | remove_last: '/' }}/pages/faqs">FAQs</a>
     </nav>
 
-    <nav class="footer-policy-links" aria-label="Store policies">
-      <h2>POLICIES</h2>
-      <a href="{{ shop.refund_policy.url | default: '/policies/refund-policy' }}">RETURN AND REFUND POLICY</a>
-      <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}">SHIPPING POLICY</a>
-      <a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">PRIVACY POLICY</a>
-      <a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}">TERMS OF SERVICE</a>
-      <a href="{{ routes.root_url }}pages/contact">CONTACT INFORMATION</a>
+    <nav class="footer-policy-links" aria-label="{{ 'footer.policies' | t }}">
+      <h2>{{ 'footer.policies' | t }}</h2>
+      <a href="{{ shop.refund_policy.url | default: '/policies/refund-policy' }}">{{ 'footer.refund' | t }}</a>
+      <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}">{{ 'footer.shipping' | t }}</a>
+      <a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">{{ 'footer.privacy' | t }}</a>
+      <a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}">{{ 'footer.terms' | t }}</a>
+      <a href="{{ routes.root_url | remove_last: '/' }}/pages/contact">{{ 'footer.contact_info' | t }}</a>
     </nav>
 
     <div class="newsletter">
-      <h2>GET EXCLUSIVE OFFERS</h2>
-      <p>Sign up for our latest news and offers. We won't send spam.</p>
+      <h2>{{ 'footer.offers' | t }}</h2>
+      <p>{{ 'footer.newsletter' | t }}</p>
       {% form 'customer', class: 'footer-newsletter-form' %}
         <input type="hidden" name="contact[tags]" value="newsletter,exclusive-offers">
-        <label class="sr-only" for="FooterNewsletterEmail">Email address</label>
+        <label class="sr-only" for="FooterNewsletterEmail">{{ 'footer.email' | t }}</label>
         <input
           id="FooterNewsletterEmail"
           type="email"
           name="contact[email]"
           value="{% if customer %}{{ customer.email }}{% endif %}"
-          placeholder="Email"
+          placeholder="{{ 'footer.email' | t }}"
           autocomplete="email"
           autocorrect="off"
           autocapitalize="off"
           required
         >
-        <button type="submit">JOIN</button>
+        <button type="submit">{{ 'footer.join' | t }}</button>
         {% if form.posted_successfully? %}
-          <span class="footer-newsletter-message" role="status">Thank you for joining.</span>
+          <span class="footer-newsletter-message" role="status">{{ 'footer.joined' | t }}</span>
         {% elsif form.errors %}
-          <span class="footer-newsletter-message" role="alert">Please enter a valid email.</span>
+          <span class="footer-newsletter-message" role="alert">{{ 'footer.invalid_email' | t }}</span>
         {% endif %}
       {% endform %}
     </div>
@@ -56,14 +56,14 @@
 
   <div class="footer-lower">
     {% if shop.enabled_payment_types.size > 0 %}
-      <div class="payment-icons" role="list" aria-label="Accepted payment methods">
+      <div class="payment-icons" role="list" aria-label="{{ 'footer.payments' | t }}">
         {% for type in shop.enabled_payment_types %}
           <span role="listitem">{{ type | payment_type_svg_tag }}</span>
         {% endfor %}
       </div>
     {% endif %}
 
-    <p class="footer-disclaimer">*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
+    <p class="footer-disclaimer">{{ 'footer.disclaimer' | t }}</p>
   </div>
 
 </footer>

@@ -1,6 +1,6 @@
 <div class="announcement">
   <a href="{{ routes.collections_url }}/shop-all">
-    {{ section.settings.announcement }}
+    {{ 'header.announcement' | t }}
   </a>
 </div>
 
@@ -13,20 +13,20 @@
     {% endif %}
   </a>
 
-  <button class="mobile-menu-button" type="button" data-menu-toggle aria-expanded="false" aria-controls="MainNavigation" aria-label="Menu">
+  <button class="mobile-menu-button" type="button" data-menu-toggle aria-expanded="false" aria-controls="MainNavigation" aria-label="{{ 'header.menu' | t }}">
     <span></span><span></span>
   </button>
 
-  <nav class="main-nav" id="MainNavigation" aria-label="Main navigation">
-    <a href="{{ routes.collections_url }}/shop-all"{% if request.path == '/collections/shop-all' and template.suffix != 'best-sellers' %} aria-current="page"{% endif %}>Shop</a>
-    <a href="{{ routes.collections_url }}/shop-all?view=best-sellers"{% if template.suffix == 'best-sellers' %} aria-current="page"{% endif %}>Best Sellers</a>
-    <a href="{{ routes.root_url }}pages/science-benefits"{% if template.suffix == 'science' or request.path contains '/pages/science-benefits' %} aria-current="page"{% endif %}>Science</a>
-    <a href="{{ routes.root_url }}pages/about-us"{% if template.suffix == 'about' or request.path contains '/pages/about-us' %} class="is-active" aria-current="page"{% endif %}>About</a>
-    <a href="{{ routes.root_url }}apps/track-order"{% if request.path contains '/apps/track-order' %} class="is-active" aria-current="page"{% endif %}>Track Order</a>
+  <nav class="main-nav" id="MainNavigation" aria-label="{{ 'header.menu' | t }}">
+    <a href="{{ routes.collections_url }}/shop-all"{% if request.path contains '/collections/shop-all' and template.suffix != 'best-sellers' %} aria-current="page"{% endif %}>{{ 'header.shop' | t }}</a>
+    <a href="{{ routes.collections_url }}/shop-all?view=best-sellers"{% if template.suffix == 'best-sellers' %} aria-current="page"{% endif %}>{{ 'header.best_sellers' | t }}</a>
+    <a href="{{ routes.root_url | remove_last: '/' }}/pages/science-benefits"{% if template.suffix == 'science' or request.path contains '/pages/science-benefits' %} aria-current="page"{% endif %}>{{ 'header.science' | t }}</a>
+    <a href="{{ routes.root_url | remove_last: '/' }}/pages/about-us"{% if template.suffix == 'about' or request.path contains '/pages/about-us' %} class="is-active" aria-current="page"{% endif %}>{{ 'header.about' | t }}</a>
+    <a href="{{ routes.root_url | remove_last: '/' }}/apps/track-order"{% if request.path contains '/apps/track-order' %} class="is-active" aria-current="page"{% endif %}>{{ 'header.track_order' | t }}</a>
     {% if localization.available_languages.size > 1 %}
       {% form 'localization', id: 'HeaderLanguageForm', class: 'header-language-form' %}
-        <label for="HeaderLanguage">Language</label>
-        <select id="HeaderLanguage" name="locale_code" onchange="this.form.submit()" aria-label="Choose language">
+        <label for="HeaderLanguage">{{ 'general.language' | t }}</label>
+        <select id="HeaderLanguage" name="locale_code" onchange="this.form.submit()" aria-label="{{ 'general.choose_language' | t }}">
           {% for language in localization.available_languages %}
             <option value="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
           {% endfor %}
@@ -40,7 +40,7 @@
       <shopify-account
         class="header-account-component"
         menu="{{ section.settings.customer_account_menu | default: 'customer-account-main-menu' }}"
-        aria-label="{% if customer %}Open customer account{% else %}Sign in to customer account{% endif %}"
+        aria-label="{% if customer %}{{ 'header.account_open' | t }}{% else %}{{ 'header.account_sign_in' | t }}{% endif %}"
       >
         <span class="header-account-trigger" slot="signed-out-avatar">
           {% render 'icon-account' %}
@@ -48,7 +48,7 @@
       </shopify-account>
     {% endif %}
 
-    <button class="header-icon-button cart-icon-link" type="button" data-cart-open aria-label="Open shopping bag with {{ cart.item_count }} items">
+    <button class="header-icon-button cart-icon-link" type="button" data-cart-open aria-label="{{ 'header.cart_open' | t: count: cart.item_count }}">
       {% render 'icon-bag' %}
       <b data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</b>
     </button>

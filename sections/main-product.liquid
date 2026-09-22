@@ -1,7 +1,7 @@
 {% if product.tags contains 'flash-offer' %}
   <section class="flash-product-redirect" aria-live="polite">
-    <p>This private offer is available from the shopping bag.</p>
-    <a href="{{ routes.collections_url }}/shop-all">Continue shopping</a>
+    <p>{{ 'product.private_offer_cart' | t }}</p>
+    <a href="{{ routes.collections_url }}/shop-all">{{ 'cart.continue' | t }}</a>
   </section>
   <script>window.location.replace({{ routes.collections_url | append: '/shop-all' | json }});</script>
 {% elsif product.type == 'Bundle' %}
@@ -58,10 +58,28 @@
     {% assign total_2 = 69.98 %}
     {% assign three_jar_daily_cents = variant_3.price | divided_by: 90.0 %}
   {% endif %}
+  {% if request.locale.iso_code == 'es' %}
+    {% if product.handle == 'nmn' %}
+      {% assign subtitle = 'Diseñado para formar, reciclar, proteger y activar las vías de NAD+.' %}
+      {% assign accordion_titles = 'Modo de uso|Ingredientes|Envío y garantía|Probado por terceros' | split: '|' %}
+      {% assign accordion_copies = 'Toma dos cápsulas al día con agua, con o sin alimentos.|NMN, trimetilglicina (TMG), quercetina y trans-resveratrol. Consulta la etiqueta para ver la lista completa de ingredientes.|Los pedidos incluyen envío con seguimiento y están respaldados por la garantía de devolución de Cata-Kor.|Cada lote se analiza de forma independiente para verificar su identidad, pureza y calidad antes de su distribución.' | split: '|' %}
+    {% else %}
+      {% assign subtitle = 'Suplemento de glutatión' %}
+      {% assign accordion_titles = 'Detalles|Modo de uso|Seguridad|Ingredientes' | split: '|' %}
+      {% assign accordion_copies = 'Fórmula de glutatión liposomal con vitamina C, selenio, vitamina B2 y resveratrol para apoyar la actividad antioxidante y la defensa celular.*|Toma dos cápsulas al día con agua, con o sin alimentos.|Consulta con un profesional sanitario antes de usarlo si estás embarazada, en periodo de lactancia, tomas medicamentos o tienes alguna afección médica.|Glutatión liposomal, vitamina C, selenio, vitamina B2 y trans-resveratrol. Consulta la etiqueta para ver la lista completa de ingredientes.' | split: '|' %}
+    {% endif %}
+  {% endif %}
   {% assign regular_2_cents = variant_1.price | times: 2 %}
   {% assign regular_3_cents = variant_1.price | times: 3 %}
   {% assign save_2_cents = regular_2_cents | minus: variant_2.price %}
   {% assign save_3_cents = regular_3_cents | minus: variant_3.price %}
+  {% assign save_2_money = save_2_cents | money %}
+  {% assign save_3_money = save_3_cents | money %}
+  {% assign three_jar_price = variant_3.price | money %}
+  {% assign two_jar_price = variant_2.price | money %}
+  {% assign one_jar_price = variant_1.price | money %}
+  {% assign three_jar_each = variant_3.price | divided_by: 3 | money %}
+  {% assign three_jar_daily = three_jar_daily_cents | money %}
   {% assign gallery_text = gallery_text | replace: 'width=1100', 'width=1600' | replace: 'width=1445', 'width=1600' %}
   {% assign main_image = main_image | replace: 'width=1100', 'width=1600' %}
   {% assign gallery = gallery_text | split: '|' %}
@@ -107,29 +125,29 @@
       <p class="secondary-subtitle">{{ subtitle }}</p>
 
       <div class="secondary-quantity-heading">
-        <h2>Select Quantity</h2>
-        <span data-selected-capsules>180 Capsules</span>
+        <h2>{{ 'product.select_quantity' | t }}</h2>
+        <span data-selected-capsules>{{ 'product.capsules' | t: count: 180 }}</span>
       </div>
       <div class="secondary-pack-grid">
         <button class="secondary-pack is-selected" type="button" data-secondary-pack data-jars="3" data-variant-id="{{ variant_3.id }}" data-total="{{ total_3 }}" data-one-time-cents="{{ variant_3.price }}" data-subscription-cents="{{ variant_3_subscription.price | default: variant_3.price }}" data-selling-plan-id="{{ variant_3_subscription.selling_plan.id }}" data-delivery-days="90" aria-pressed="true">
-          <em>MOST POPULAR · BEST VALUE</em>
+          <em>{{ 'product.popular_value' | t }}</em>
           <span class="secondary-pack-image jars-3" aria-hidden="true">{% for i in (1..3) %}<img src="{{ main_image }}" alt="" width="160" height="160">{% endfor %}</span>
-          <strong>3 Jars</strong>
-          <span class="pack-total">{{ variant_3.price | money }} total</span>
-          <small class="pack-comparison">Save {{ save_3_cents | money }} · 90-day supply · {{ variant_3.price | divided_by: 3 | money }}/jar</small>
-          <small class="pack-proof">Only {{ three_jar_daily_cents | money }}/day</small>
+          <strong>3 {{ 'product.jars' | t }}</strong>
+          <span class="pack-total">{{ three_jar_price }} {{ 'product.total' | t }}</span>
+          <small class="pack-comparison">{{ 'product.save' | t: amount: save_3_money }} · {{ 'product.day_supply' | t: days: 90 }} · {{ 'product.per_jar' | t: amount: three_jar_each }}</small>
+          <small class="pack-proof">{{ 'product.only_day' | t: amount: three_jar_daily }}</small>
         </button>
         <button class="secondary-pack" type="button" data-secondary-pack data-jars="2" data-variant-id="{{ variant_2.id }}" data-total="{{ total_2 }}" data-one-time-cents="{{ variant_2.price }}" data-subscription-cents="{{ variant_2_subscription.price | default: variant_2.price }}" data-selling-plan-id="{{ variant_2_subscription.selling_plan.id }}" data-delivery-days="60" aria-pressed="false">
           <span class="secondary-pack-image jars-2" aria-hidden="true">{% for i in (1..2) %}<img src="{{ main_image }}" alt="" width="160" height="160">{% endfor %}</span>
-          <strong>2 Jars</strong>
-          <span class="pack-total">{{ variant_2.price | money }} total</span>
-          <small class="pack-comparison">Save {{ save_2_cents | money }} · 60-day supply</small>
+          <strong>2 {{ 'product.jars' | t }}</strong>
+          <span class="pack-total">{{ two_jar_price }} {{ 'product.total' | t }}</span>
+          <small class="pack-comparison">{{ 'product.save' | t: amount: save_2_money }} · {{ 'product.day_supply' | t: days: 60 }}</small>
         </button>
         <button class="secondary-pack" type="button" data-secondary-pack data-jars="1" data-variant-id="{{ variant_1.id }}" data-total="{{ variant_1.price | divided_by: 100.0 }}" data-one-time-cents="{{ variant_1.price }}" data-subscription-cents="{{ variant_1_subscription.price | default: variant_1.price }}" data-selling-plan-id="{{ variant_1_subscription.selling_plan.id }}" data-delivery-days="30" aria-pressed="false">
           <span class="secondary-pack-image jars-1" aria-hidden="true"><img src="{{ main_image }}" alt="" width="160" height="160"></span>
-          <strong>1 Jar</strong>
-          <span class="pack-total">{{ variant_1.price | money }} total</span>
-          <small class="pack-comparison">30-day supply</small>
+          <strong>1 {{ 'product.jar' | t }}</strong>
+          <span class="pack-total">{{ one_jar_price }} {{ 'product.total' | t }}</span>
+          <small class="pack-comparison">{{ 'product.day_supply' | t: days: 30 }}</small>
         </button>
       </div>
 
@@ -139,16 +157,16 @@
         <input type="hidden" name="quantity" value="1">
         {% if variant_3_subscription %}<input type="hidden" name="selling_plan" value="{{ variant_3_subscription.selling_plan.id }}" data-selling-plan-input disabled>{% endif %}
         <button class="secondary-add-button" type="submit" data-add-to-cart>
-          <span data-add-label>Add to Cart</span> <strong data-add-price>{{ variant_3.price | money }}</strong>
+          <span data-add-label>{{ 'product.add' | t }}</span> <strong data-add-price>{{ variant_3.price | money }}</strong>
         </button>
       </form>
       <div class="secondary-delivery">
-        <span>● Free tracked delivery</span>
-        <span>🇺🇸 FREE Shipping to USA</span>
+        <span>● {{ 'product.free_tracked' | t }}</span>
+        <span>🇺🇸 {{ 'product.free_usa' | t }}</span>
       </div>
       <div class="secondary-guarantee">
         <span aria-hidden="true">◎</span>
-        <b>Less than 1%</b> of customers claim our Money Back Guarantee.
+        {{ 'product.guarantee_claim' | t }}
       </div>
 
       <div class="secondary-details-accordions">
@@ -189,6 +207,13 @@
   {% assign nad_save_2_cents = nad_regular_2_cents | minus: nad_variant_2.price %}
   {% assign nad_save_3_cents = nad_regular_3_cents | minus: nad_variant_3.price %}
   {% assign nad_daily_cents = nad_variant_3.price | divided_by: 90.0 %}
+  {% assign nad_save_2_money = nad_save_2_cents | money %}
+  {% assign nad_save_3_money = nad_save_3_cents | money %}
+  {% assign nad_price_3 = nad_variant_3.price | money %}
+  {% assign nad_price_2 = nad_variant_2.price | money %}
+  {% assign nad_price_1 = nad_variant_1.price | money %}
+  {% assign nad_each_3 = nad_variant_3.price | divided_by: 3 | money %}
+  {% assign nad_daily_money = nad_daily_cents | money %}
   {% assign nad_gallery_text = 'https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=1100|https://catakor.com/cdn/shop/files/1_NAD500_f37a2f8b-6fd5-43fe-a035-c83a38d54ec4.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/2_NAD500_0ce4c9f5-fb17-4ac1-88c2-d4c4af74fc81.jpg?v=1783421259&width=1100|https://catakor.com/cdn/shop/files/3_NAD500_284becb5-a117-43e4-88d0-7ef566cd05c9.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/4_NAD500_5964a474-23e5-46af-8174-36317bfd56c5.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/5_NAD500_db73c746-222c-4b71-8b49-e692af53d992.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/6_NAD500_0d0e1d1a-b711-4d81-8c41-95cdd9fa436c.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/7_NAD500_Manufactured_for.jpg?v=1783421258&width=1100|https://catakor.com/cdn/shop/files/5_NAD500_a65fca12-ec33-4c89-9817-0919959280a7.jpg?v=1774889169&width=1100|https://catakor.com/cdn/shop/files/7_NAD500_91bae966-e2fe-499f-9161-0c0f42aca355.jpg?v=1774889169&width=1100|https://catakor.com/cdn/shop/files/8_NAD500-2.jpg?v=1774889110&width=1100|https://catakor.com/cdn/shop/files/3_NAD500_8218ca19-959f-4866-9785-0017cff2f5a0.jpg?v=1774889153&width=1100|https://catakor.com/cdn/shop/files/NAD250_2_jars_5e4c06d5-c927-43b1-9da8-f943028f9ece.jpg?v=1774889110&width=1100|https://catakor.com/cdn/shop/files/NAD250_3_jars_33cd95d4-1a11-40c4-a248-3e99cbee0e30.jpg?v=1774889110&width=1100' %}
   {% assign nad_gallery_text = nad_gallery_text | replace: 'width=1100', 'width=1600' %}
   {% assign nad_gallery = nad_gallery_text | split: '|' %}
@@ -224,23 +249,23 @@
     </div>
 
     <section class="product-info" aria-label="Product information">
-      <nav class="breadcrumbs" aria-label="Breadcrumbs"><a href="{{ routes.root_url }}">Home</a><span>/</span><b>Liposomal NAD+</b></nav>
+      <nav class="breadcrumbs" aria-label="{{ 'product.breadcrumbs' | t }}"><a href="{{ routes.root_url }}">{{ 'product.home' | t }}</a><span>/</span><b>Liposomal NAD+</b></nav>
       <div class="review-line"><span class="stars">★★★★★</span><b>4.9/5</b> (2200+ reviews)</div>
       <div class="product-title-row"><h1>LIPOSOMAL NAD+</h1><span>500MG</span></div>
-      <p class="product-subtitle">Liposomal NAD+ Supplement</p>
-      <div class="product-facts"><b>60 Capsules</b><span>/</span><b>500MG</b><span>/</span><button type="button" data-facts-open>SUPPLEMENT FACTS</button></div>
+      <p class="product-subtitle">{{ 'product.nad_subtitle' | t }}</p>
+      <div class="product-facts"><b>{{ 'product.capsules' | t: count: 60 }}</b><span>/</span><b>500MG</b><span>/</span><button type="button" data-facts-open>{{ 'product.supplement_facts' | t }}</button></div>
 
       <div class="purchase-group">
-        <div class="purchase-label"><h2>Select Quantity</h2><span data-nad-capsules>180 Capsules</span></div>
+        <div class="purchase-label"><h2>{{ 'product.select_quantity' | t }}</h2><span data-nad-capsules>{{ 'product.capsules' | t: count: 180 }}</span></div>
         <div class="quantity-options">
           <button type="button" class="quantity-option selected" data-nad-pack data-jars="3" data-variant-id="{{ nad_variant_3.id }}" data-total="98.97" data-one-time-cents="{{ nad_variant_3.price }}" data-subscription-cents="{{ nad_variant_3_subscription.price | default: nad_variant_3.price }}" data-selling-plan-id="{{ nad_variant_3_subscription.selling_plan.id }}" data-delivery-days="90" aria-pressed="true">
-            <em>MOST POPULAR · BEST VALUE</em><span class="quantity-bottles quantity-bottles-3" aria-hidden="true">{% for i in (1..3) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>3 Jars</b><span class="pack-total">{{ nad_variant_3.price | money }} total</span><small class="pack-comparison">Save {{ nad_save_3_cents | money }} · 90-day supply · {{ nad_variant_3.price | divided_by: 3 | money }}/jar</small><small class="pack-proof">Only {{ nad_daily_cents | money }}/day</small>
+            <em>{{ 'product.popular_value' | t }}</em><span class="quantity-bottles quantity-bottles-3" aria-hidden="true">{% for i in (1..3) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>3 {{ 'product.jars' | t }}</b><span class="pack-total">{{ nad_price_3 }} {{ 'product.total' | t }}</span><small class="pack-comparison">{{ 'product.save' | t: amount: nad_save_3_money }} · {{ 'product.day_supply' | t: days: 90 }} · {{ 'product.per_jar' | t: amount: nad_each_3 }}</small><small class="pack-proof">{{ 'product.only_day' | t: amount: nad_daily_money }}</small>
           </button>
           <button type="button" class="quantity-option" data-nad-pack data-jars="2" data-variant-id="{{ nad_variant_2.id }}" data-total="69.98" data-one-time-cents="{{ nad_variant_2.price }}" data-subscription-cents="{{ nad_variant_2_subscription.price | default: nad_variant_2.price }}" data-selling-plan-id="{{ nad_variant_2_subscription.selling_plan.id }}" data-delivery-days="60" aria-pressed="false">
-            <span class="quantity-bottles quantity-bottles-2" aria-hidden="true">{% for i in (1..2) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>2 Jars</b><span class="pack-total">{{ nad_variant_2.price | money }} total</span><small class="pack-comparison">Save {{ nad_save_2_cents | money }} · 60-day supply</small>
+            <span class="quantity-bottles quantity-bottles-2" aria-hidden="true">{% for i in (1..2) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>2 {{ 'product.jars' | t }}</b><span class="pack-total">{{ nad_price_2 }} {{ 'product.total' | t }}</span><small class="pack-comparison">{{ 'product.save' | t: amount: nad_save_2_money }} · {{ 'product.day_supply' | t: days: 60 }}</small>
           </button>
           <button type="button" class="quantity-option" data-nad-pack data-jars="1" data-variant-id="{{ nad_variant_1.id }}" data-total="{{ nad_variant_1.price | divided_by: 100.0 }}" data-one-time-cents="{{ nad_variant_1.price }}" data-subscription-cents="{{ nad_variant_1_subscription.price | default: nad_variant_1.price }}" data-selling-plan-id="{{ nad_variant_1_subscription.selling_plan.id }}" data-delivery-days="30" aria-pressed="false">
-            <span class="quantity-bottles quantity-bottles-1" aria-hidden="true"><img src="{{ nad_main_image }}" alt="" width="120" height="120"></span><b>1 Jar</b><span class="pack-total">{{ nad_variant_1.price | money }} total</span><small class="pack-comparison">30-day supply</small>
+            <span class="quantity-bottles quantity-bottles-1" aria-hidden="true"><img src="{{ nad_main_image }}" alt="" width="120" height="120"></span><b>1 {{ 'product.jar' | t }}</b><span class="pack-total">{{ nad_price_1 }} {{ 'product.total' | t }}</span><small class="pack-comparison">{{ 'product.day_supply' | t: days: 30 }}</small>
           </button>
         </div>
       </div>
@@ -250,15 +275,15 @@
         <input type="hidden" name="id" value="{{ nad_variant_3.id }}" data-variant-input>
         <input type="hidden" name="quantity" value="1">
         {% if nad_variant_3_subscription %}<input type="hidden" name="selling_plan" value="{{ nad_variant_3_subscription.selling_plan.id }}" data-selling-plan-input disabled>{% endif %}
-        <button type="submit" class="add-to-cart" data-add-to-cart><span data-add-label>ADD TO CART</span><b data-add-price>{{ nad_variant_3.price | money }}</b></button>
+        <button type="submit" class="add-to-cart" data-add-to-cart><span data-add-label>{{ 'product.add' | t }}</span><b data-add-price>{{ nad_variant_3.price | money }}</b></button>
       </form>
-      <div class="delivery-row"><span>🇺🇸 FREE Shipping to USA</span></div>
-      <div class="clinician-box"><b>⌇ CLINICIANS’ CHOICE ⌇</b><p>192 clinicians share this on <i>FrontrowMD</i> without compensation.</p><a href="#reviews">View clinicians &amp; learn more</a></div>
-      <div class="guarantee-strip"><b>Less than 1%</b> of customers claim our Money Back Guarantee.</div>
+      <div class="delivery-row"><span>🇺🇸 {{ 'product.free_usa' | t }}</span></div>
+      <div class="clinician-box"><b>⌇ {{ 'product.clinicians_choice' | t }} ⌇</b><p>{{ 'product.clinicians_line' | t }}</p><a href="#reviews">{{ 'home.learn_more' | t }}</a></div>
+      <div class="guarantee-strip">{{ 'product.guarantee_claim' | t }}</div>
       <div class="product-accordions">
-        <details class="product-accordion"><summary>How to Use<span>＋</span></summary><div><p>Take two capsules daily, with or without food.</p></div></details>
-        <details class="product-accordion"><summary>Safety<span>＋</span></summary><div><p>Use as directed. Consult your healthcare provider before use if needed.</p></div></details>
-        <details class="product-accordion"><summary>How long does it take to notice effects?<span>＋</span></summary><div><p>Many customers report changes within a few weeks of consistent daily use.*</p></div></details>
+        <details class="product-accordion"><summary>{{ 'product.how_use' | t }}<span>＋</span></summary><div><p>{{ 'product.use_copy' | t }}</p></div></details>
+        <details class="product-accordion"><summary>{{ 'product.safety' | t }}<span>＋</span></summary><div><p>{{ 'product.safety_copy' | t }}</p></div></details>
+        <details class="product-accordion"><summary>{{ 'product.effects_question' | t }}<span>＋</span></summary><div><p>{{ 'product.effects_copy' | t }}</p></div></details>
       </div>
 
       <section class="customer-video-section" aria-labelledby="customer-video-title">

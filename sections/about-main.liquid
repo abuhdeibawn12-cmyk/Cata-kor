@@ -2,9 +2,9 @@
 <section class="about-hero" aria-labelledby="about-hero-title">
   <div class="about-hero-copy">
     <div>
-      <h1 id="about-hero-title">Take Charge of Your Aging History!</h1>
-      <p>Experience high-quality ingredients that fuel your body and mind, support your health and fitness goals, and help you to surpass your limits.</p>
-      <a href="{{ routes.collections_url }}/shop-all">SHOP NOW</a>
+      <h1 id="about-hero-title">{{ 'about.hero_title' | t }}</h1>
+      <p>{{ 'about.hero_copy' | t }}</p>
+      <a href="{{ routes.collections_url }}/shop-all">{{ 'about.shop_now' | t }}</a>
     </div>
   </div>
   <div class="about-hero-image">
@@ -15,23 +15,27 @@
 <section class="about-story" aria-labelledby="about-story-title">
   <div class="about-story-inner">
     <span class="about-kicker">Liposomal</span>
-    <h2 id="about-story-title">The Genesis of Cata-Kor: A Journey to Transform Lives</h2>
-    <p>Meet Cata-Kor, a brand of dietary supplements on a mission to make a genuine impact.</p>
-    <p>More than a brand, Cata-Kor is a community—a community committed to healthier, vibrant lives. From groundbreaking formulations in our lab, to positive impacts in households, our brand embodies the transformative power of scientific precision at a cellular level. With the customer’s health and well-being at the forefront of our approach, each of our products undergo rigorous third-party testing to ensure the highest standards of quality, safety, and effectiveness are met.</p>
-    <p>Today, Cata-Kor is a catalyst for change, inspiring individuals to embrace a healthier life through the marriage of science and wellness.</p>
+    <h2 id="about-story-title">{{ 'about.story_title' | t }}</h2>
+    <p>{{ 'about.story_1' | t }}</p>
+    <p>{{ 'about.story_2' | t }}</p>
+    <p>{{ 'about.story_3' | t }}</p>
   </div>
 </section>
 
 <section class="about-faqs" aria-labelledby="about-faq-title">
   <div class="about-faq-heading">
     <span class="about-kicker">FAQs</span>
-    <h2 id="about-faq-title">Frequently Asked Questions</h2>
+    <h2 id="about-faq-title">{{ 'product.faq_title' | t }}</h2>
     <span class="about-faq-arrow" aria-hidden="true">↳</span>
-    <button type="button" data-toggle-all-faqs>View All</button>
+    <button type="button" data-toggle-all-faqs>{{ 'about.view_all' | t }}</button>
   </div>
   <div class="about-faq-list" data-about-faqs>
     {% assign questions = "How long does it take to see results from dietary supplements?|Are there potential side effects of dietary supplements?|How does Cata-Kor ensure the quality of its ingredients?|Are your products gluten-free?|Are your products non-GMO/organic?|Are your products safe to take with medications?|Do you have samples?" | split: "|" %}
     {% assign answers = "The time to experience results varies based on the supplement and individual factors. Consistency in usage is key. Some may notice changes quickly, while others may require more time.|While most people tolerate supplements well, side effects can occur. Report any adverse reactions to a healthcare provider.|We source ingredients carefully and use rigorous testing and industry-leading quality standards.|Yes.|Yes.|Please consult a certified healthcare professional before use if you take medication or have a known medical condition.|Not at this time." | split: "|" %}
+    {% if request.locale.iso_code == 'es' %}
+      {% assign questions = "¿Cuánto se tarda en notar los resultados de los suplementos?|¿Los suplementos pueden producir efectos secundarios?|¿Cómo garantiza Cata-Kor la calidad de sus ingredientes?|¿Los productos contienen gluten?|¿Los productos son no transgénicos u orgánicos?|¿Puedo tomar los productos con medicamentos?|¿Tenéis muestras?" | split: "|" %}
+      {% assign answers = "El tiempo necesario para notar resultados depende del suplemento y de cada persona. La constancia es fundamental: algunas personas notan cambios pronto y otras necesitan más tiempo.|Aunque la mayoría de las personas tolera bien los suplementos, pueden producirse efectos secundarios. Informa a un profesional sanitario si notas una reacción adversa.|Seleccionamos cuidadosamente los ingredientes y aplicamos análisis rigurosos y estándares de calidad líderes en el sector.|Sí.|Sí.|Consulta con un profesional sanitario acreditado antes de usarlos si tomas medicamentos o tienes alguna afección médica conocida.|Por el momento, no." | split: "|" %}
+    {% endif %}
     {% for question in questions %}
       <details>
         <summary><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}.</span><b>{{ question }}</b><i aria-hidden="true">⌄</i></summary>

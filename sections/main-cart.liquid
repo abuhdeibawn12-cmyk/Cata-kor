@@ -2,10 +2,10 @@
   <div class="cart-page__inner">
     <header class="cart-page__heading">
       <div>
-        <span>YOUR CATA-KOR ROUTINE</span>
-        <h1>Your shopping bag</h1>
+        <span>{{ 'cart.routine' | t }}</span>
+        <h1>{{ 'cart.title' | t }}</h1>
       </div>
-      <p>{{ cart.items.size }} product selection{% unless cart.items.size == 1 %}s{% endunless %}</p>
+      <p>{% if cart.items.size == 1 %}{{ 'cart.selection_one' | t }}{% else %}{{ 'cart.selection_other' | t: count: cart.items.size }}{% endif %}</p>
     </header>
 
     {% if cart.item_count > 0 %}
@@ -33,16 +33,16 @@
             <div class="cart-page__details">
               <div class="cart-page__line-heading">
                 <div>
-                  {% if is_flash_item %}<span class="global-flash-label">FLASH SALE · {{ item.properties._flash_discount }}% OFF</span>{% endif %}
+                  {% if is_flash_item %}<span class="global-flash-label">{{ 'cart.flash_sale' | t: discount: item.properties._flash_discount }}</span>{% endif %}
                   {% unless is_flash_item %}<a href="{{ item.url }}">{% endunless %}
                     <h2>{{ display_title }}</h2>
                   {% unless is_flash_item %}</a>{% endunless %}
                   <p>
                     {{ display_variant }} ·
-                    {% if item.selling_plan_allocation %}{{ item.selling_plan_allocation.selling_plan.name | default: 'Delivered every month · Save 15%' }}{% else %}One-time purchase{% endif %}
+                    {% if item.selling_plan_allocation %}{{ item.selling_plan_allocation.selling_plan.name | default: 'Delivered every month · Save 15%' }}{% else %}{{ 'cart.one_time' | t }}{% endif %}
                   </p>
                 </div>
-                <a class="cart-page__remove" href="{{ item.url_to_remove }}" aria-label="Remove {{ display_title }}">Remove</a>
+                <a class="cart-page__remove" href="{{ item.url_to_remove }}" aria-label="{{ 'cart.remove' | t }} {{ display_title }}">{{ 'cart.remove' | t }}</a>
               </div>
 
               <div class="cart-page__line-footer">
@@ -54,10 +54,10 @@
                 </div>
                 {% if is_flash_item %}
                   <input type="hidden" name="updates[]" value="{{ item.quantity }}">
-                  <span class="cart-page__fixed-quantity">Flash bundle quantity: <b>{{ item.quantity }}</b></span>
+                  <span class="cart-page__fixed-quantity">{{ 'cart.flash_quantity' | t }}: <b>{{ item.quantity }}</b></span>
                 {% else %}
                   <label class="cart-page__quantity">
-                    <span>Quantity</span>
+                    <span>{{ 'cart.quantity' | t }}</span>
                     <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric">
                   </label>
                 {% endif %}
@@ -68,27 +68,27 @@
       </div>
 
         <aside class="cart-page__summary">
-          <span>ORDER SUMMARY</span>
+          <span>{{ 'cart.order_summary' | t }}</span>
           {% if has_regular_discount_item %}
             <div class="cart-discount-progress cart-discount-progress--dark" data-discount-progress>
-              <strong>Use CATA10 for 10% off $100+ eligible regular-product orders.</strong>
-              <div class="cart-discount-progress__track" role="progressbar" aria-label="CATA10 discount progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span><b aria-hidden="true">♡</b></div>
+              <strong>{{ 'cart.cata10_summary' | t }}</strong>
+              <div class="cart-discount-progress__track" role="progressbar" aria-label="{{ 'cart.progress_label' | t }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span><b aria-hidden="true">♡</b></div>
             </div>
           {% endif %}
-          <p><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></p>
-          <small>Taxes and shipping are calculated at checkout.</small>
-          <button class="cart-page__checkout" type="button" data-start-checkout>CHECKOUT</button>
-          <button class="cart-page__update" type="submit" name="update">UPDATE BAG</button>
-          <a href="{{ routes.collections_url }}/shop-all">CONTINUE SHOPPING</a>
-          {% if has_regular_discount_item %}<em>Orders with at least $100 USD in eligible regular products receive 10% off with code CATA10.</em>{% endif %}
+          <p><span>{{ 'cart.subtotal' | t }}</span><strong>{{ cart.total_price | money }}</strong></p>
+          <small>{{ 'cart.taxes_shipping' | t }}</small>
+          <button class="cart-page__checkout" type="button" data-start-checkout>{{ 'cart.checkout' | t }}</button>
+          <button class="cart-page__update" type="submit" name="update">{{ 'cart.update' | t }}</button>
+          <a href="{{ routes.collections_url }}/shop-all">{{ 'cart.continue' | t }}</a>
+          {% if has_regular_discount_item %}<em>{{ 'cart.threshold_note' | t }}</em>{% endif %}
         </aside>
       </form>
     {% else %}
       <div class="cart-empty">
         <span>0</span>
-        <h2>Your shopping bag is empty</h2>
-        <p>Choose a product and build your daily longevity routine.</p>
-        <a href="{{ routes.collections_url }}/shop-all">SHOP PRODUCTS</a>
+        <h2>{{ 'cart.empty' | t }}</h2>
+        <p>{{ 'cart.empty_copy' | t }}</p>
+        <a href="{{ routes.collections_url }}/shop-all">{{ 'cart.shop_products' | t }}</a>
       </div>
     {% endif %}
   </div>

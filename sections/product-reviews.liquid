@@ -2,29 +2,35 @@
   {% assign review_names = "Gretchen Yeates,Laura Thompson,Lillian Lee,Aaliyah Ward,Daniel,Grace Hill,Ruth Rodriguez,Barbara Ortiz,Jennifer Ramirez,Leah Richardson,Tara Patel,Zoey Myers,Megan Perez,Brooklyn Young,Sofia Collins,Barbara Collins,Nicole Williams,Linda Jackson,Jasmine Robinson,Stephanie Kim" | split: "," %}
   {% assign review_titles = "Great results with NMN,Best skin hair and energy,Easy capsules anti-aging at 55+,Changes in just five days,Better energy focus less brain fog,Helped my brain fog and fatigue,Skin improving by day three,A difference in just a week,The real deal with consistency,My favorite supplement,Will always take this,Day one of my journey,Nice quality bottle,Improved facial texture,On my fourth bottle,Sealed with clear instructions,Three days in,Others noticed my healthier skin,Less brain fog more energy,Sharper memory" | split: "," %}
   {% assign review_bodies = "I have had great results with the NMN. I was on it before but ran out and I felt the difference. I was so excited to get back on it and add others too. I feel the difference already.|Love NMN—my skin and hair have never been better. My energy has picked up too.|Capsules are easy to consume and digest. I bought the three pack and am eager to see the effects.|I have been taking this for five days and I’m already noticing a difference in my energy and mood.|I’m about two weeks in and already feeling the benefits. My energy is improving and I feel more focused.|Great product and easy to take. If you’re feeling brain fog and exhaustion this has been helpful for me.|My skin already feels better and it’s only day three. I can’t wait to see what a month brings.|So far I love this product. I am one week in and I can see a difference and feel better.|This is my second bottle of NMN and I notice the difference when I take it consistently.|My favorite supplement. It has become an easy part of my daily routine.|I love this product and plan to keep it in my routine.|So excited to start my Cata-Kor NMN supplement journey and track my progress.|The order arrived in good condition and the bottle feels high quality.|I am starting to notice a difference in the overall texture of my skin after taking it consistently.|I’m on my fourth bottle and still love how easy it is to keep up with.|Great product. It came sealed and included simple clear instructions.|I’m three days in and looking forward to reporting back on my progress.|I’m on my second month of taking NMN daily. Friends and family have commented that my skin looks healthier.|Fast delivery and an easy routine. I feel more energetic during the day and have noticed less brain fog.|I have been taking it consistently for three months and feel sharper in my daily routine." | split: "|" %}
+  {% assign review_original_titles = review_titles %}
+  {% assign review_original_bodies = review_bodies %}
+  {% if request.locale.iso_code == 'es' %}
+    {% assign review_titles = "Excelentes resultados con NMN,Mejor piel cabello y energía,Cápsulas fáciles para el envejecimiento saludable a partir de los 55,Cambios en solo cinco días,Más energía y concentración y menos niebla mental,Me ayudó con la niebla mental y el cansancio,Mi piel mejoró al tercer día,Una diferencia en solo una semana,Funciona con constancia,Mi suplemento favorito,Lo seguiré tomando,Primer día de mi experiencia,Envase de buena calidad,Mejor textura facial,Ya voy por el cuarto envase,Sellado y con instrucciones claras,Tres días de uso,Otros notaron mi piel más saludable,Menos niebla mental y más energía,Memoria más aguda" | split: "," %}
+    {% assign review_bodies = "He obtenido excelentes resultados con NMN. Ya lo tomaba antes, pero se me terminó y noté la diferencia. Tenía muchas ganas de volver a tomarlo y añadir otros productos. Ya noto el cambio.|Me encanta el NMN: mi piel y mi cabello nunca habían estado mejor. También tengo más energía.|Las cápsulas son fáciles de tomar y digerir. Compré el pack de tres y tengo ganas de ver los efectos.|Llevo cinco días tomándolo y ya noto una diferencia en mi energía y mi estado de ánimo.|Llevo unas dos semanas y ya noto los beneficios. Tengo más energía y me siento más concentrada.|Es un gran producto y fácil de tomar. Si tienes niebla mental y agotamiento, a mí me ha ayudado.|Mi piel ya se siente mejor y solo es el tercer día. Tengo ganas de ver cómo estaré dentro de un mes.|Hasta ahora me encanta este producto. Llevo una semana y puedo ver y sentir la diferencia.|Este es mi segundo envase de NMN y noto la diferencia cuando lo tomo con constancia.|Mi suplemento favorito. Se ha convertido en una parte sencilla de mi rutina diaria.|Me encanta este producto y pienso mantenerlo en mi rutina.|Estoy muy ilusionada por empezar mi experiencia con el suplemento NMN de Cata-Kor y seguir mi progreso.|El pedido llegó en buen estado y el envase transmite mucha calidad.|Empiezo a notar una diferencia en la textura general de mi piel después de tomarlo con constancia.|Ya voy por el cuarto envase y me sigue encantando lo fácil que es mantener la rutina.|Gran producto. Llegó sellado e incluía instrucciones sencillas y claras.|Llevo tres días y espero poder contar pronto cómo avanzo.|Estoy en mi segundo mes tomando NMN a diario. Amigos y familiares han comentado que mi piel se ve más saludable.|Entrega rápida y una rutina sencilla. Tengo más energía durante el día y he notado menos niebla mental.|Llevo tres meses tomándolo con constancia y siento más agilidad mental en mi rutina diaria." | split: "|" %}
+  {% endif %}
   {% assign review_images = "https://review-images.judgeme.com/cata-kor/1781396011__0___tyEdVLo__debb9f8f7c54e3db4f45658b751371c~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781396012__0__tCXKEyfU__b11f16284534f3dbdd0d3c51e6acdbe~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781396013__0__UBGtu4HW__b87aa7b0c9341439cd654e480772744~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781396015__0__ZiYJYDnH__57553392dcb4c3dba0d7f16321e576d~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781396015__0__qDJpCmwm__f3d631f549e4dc6bb538775052921eb~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781395998__0__p9pvWSwq__99c70eaea5a43b0aeb36e355faf8cff~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781395998__0__XYxwIDV2__4d248f792d64a46a4152a2820cd04dc~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781395998__0__XUfI4Sz6__05ae2f11d7142e395f218bbbbcb52d6~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781395998__0__v-os1O4M__ba680b897f04713a5b2afd60711ee91~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500|https://review-images.judgeme.com/cata-kor/1781396011__0__Is5tb-bp__ee58a81b5de400a9d294110d6a573ad~tplv-fhlh96nyum-origin-jpeg__original.jpeg?quality=90&width=500" | split: "|" %}
 
   <section class="nmn-reviews-section" id="nmn-reviews" data-nmn-reviews>
     <div class="nmn-reviews-inner">
       <div class="nmn-reviews-heading">
         <div>
-          <h2>Customer Reviews</h2>
-          <p><b>5.0</b> <span>392 reviews</span></p>
+          <h2>{{ 'product.reviews' | t }}</h2>
+          <p><b>5.0</b> <span>{{ 'review.count' | t: count: 392 }}</span></p>
         </div>
         <div class="nmn-review-actions">
-          <button type="button" data-review-form-open>Write a review</button>
-          <button type="button" data-nmn-review-filter aria-expanded="false">Filter</button>
-          <select aria-label="Sort customer reviews">
-            <option>Most recent</option>
-            <option>Highest rating</option>
-            <option>Pictures first</option>
+          <button type="button" data-review-form-open>{{ 'product.write_review' | t }}</button>
+          <button type="button" data-nmn-review-filter aria-expanded="false">{{ 'product.filter' | t }}</button>
+          <select aria-label="{{ 'review.sort' | t }}">
+            <option>{{ 'product.most_recent' | t }}</option>
+            <option>{{ 'product.highest' | t }}</option>
+            <option>{{ 'product.pictures_first' | t }}</option>
           </select>
         </div>
       </div>
 
       <label class="nmn-review-filter" data-nmn-review-filter-panel hidden>
         <input type="checkbox" data-pictures-only>
-        Show reviews with pictures
+        {{ 'product.photos_only' | t }}
       </label>
 
       <div class="nmn-review-photo-strip" aria-label="Customer review photos">
@@ -51,18 +57,28 @@
                   <span>{{ review_names[seed_index] | slice: 0 }}</span>
                   <div>
                     <b>{{ review_names[seed_index] }}</b>
-                    {% if item_number == 0 %}<em>Verified</em>{% endif %}
+                    {% if item_number == 0 %}<em>{{ 'product.verified' | t }}</em>{% endif %}
                     <small>{% if page_number == 1 and item_number == 0 %}07/02/2026{% else %}06/14/2026{% endif %}</small>
                   </div>
                 </div>
                 <h3>{{ review_titles[seed_index] }}</h3>
                 <p>{{ review_bodies[seed_index] }}</p>
+                {% if request.locale.iso_code == 'es' %}
+                  <div class="review-translation-note">
+                    <span>{{ 'product.translated' | t }}</span>
+                    <button type="button" data-review-original-toggle aria-expanded="false">{{ 'product.view_original' | t }}</button>
+                  </div>
+                  <div class="review-original-copy" data-review-original hidden>
+                    <h4>{{ review_original_titles[seed_index] }}</h4>
+                    <p>{{ review_original_bodies[seed_index] }}</p>
+                  </div>
+                {% endif %}
                 {% if has_image_mod == 1 %}
                   <img class="nmn-review-image" src="{{ review_images[image_index] }}" alt="{{ review_titles[seed_index] }}" width="500" height="500" loading="lazy">
                 {% endif %}
                 <div class="nmn-reviewed-product">
                   <img src="https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=180" alt="" width="180" height="180">
-                  <span>Review for<br><u>NMN 4-in-1</u></span>
+                  <span>{{ 'product.review_for' | t }}<br><u>NMN 4-in-1</u></span>
                 </div>
               </article>
             {% endfor %}
@@ -71,26 +87,26 @@
       </div>
 
       <nav class="nmn-review-pagination" data-nmn-review-pagination aria-label="Customer review pages"></nav>
-      <p class="nmn-review-page-count" data-nmn-review-page-count>Page 1 of 20</p>
+      <p class="nmn-review-page-count" data-nmn-review-page-count>{{ 'product.page_of' | t: page: 1, pages: 20 }}</p>
     </div>
   </section>
 
   <div class="nmn-review-dialog-layer" data-review-dialog hidden>
     <section class="nmn-review-dialog" role="dialog" aria-modal="true" aria-labelledby="nmn-review-dialog-title">
-      <button type="button" data-review-form-close aria-label="Close review form">×</button>
+      <button type="button" data-review-form-close aria-label="{{ 'general.accessibility.close' | t }}">×</button>
       <div data-review-form-content>
-        <h2 id="nmn-review-dialog-title">Write a review</h2>
+        <h2 id="nmn-review-dialog-title">{{ 'product.write_review' | t }}</h2>
         <p class="nmn-dialog-stars">★★★★★</p>
         <form data-review-form>
-          <label>Name<input type="text" required></label>
-          <label>Review title<input type="text" required></label>
-          <label>Your review<textarea rows="5" required></textarea></label>
-          <button type="submit">Submit review</button>
+          <label>{{ 'review.name' | t }}<input type="text" required></label>
+          <label>{{ 'review.title' | t }}<input type="text" required></label>
+          <label>{{ 'review.body' | t }}<textarea rows="5" required></textarea></label>
+          <button type="submit">{{ 'review.submit' | t }}</button>
         </form>
       </div>
       <div data-review-thanks hidden>
-        <h2>Thank you for your review</h2>
-        <p>Your feedback has been received for moderation.</p>
+        <h2>{{ 'review.thanks' | t }}</h2>
+        <p>{{ 'review.moderation' | t }}</p>
       </div>
     </section>
   </div>

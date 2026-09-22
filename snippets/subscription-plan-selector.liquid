@@ -5,32 +5,32 @@
 
 {% if subscription_allocation %}
   <section class="product-plan-selector" data-purchase-options aria-labelledby="purchase-options-title-{{ product.id }}">
-    <h2 id="purchase-options-title-{{ product.id }}">Choose Plan</h2>
+    <h2 id="purchase-options-title-{{ product.id }}">{{ 'product.choose_plan' | t }}</h2>
 
     <button class="plan-option plan-option--subscription" type="button" data-purchase-mode="subscription" aria-pressed="false">
       <span class="plan-option__copy">
-        <small>SUBSCRIBE &amp; SAVE 15%</small>
-        <b>Subscribe &amp; Save</b>
-        <em data-subscription-cadence>Delivered every {{ delivery_days }} days</em>
+        <small>{{ 'product.subscribe_badge' | t }}</small>
+        <b>{{ 'product.subscribe' | t }}</b>
+        <em data-subscription-cadence>{{ 'product.delivered_days' | t: days: delivery_days }}</em>
       </span>
       <span class="plan-option__price">
         <s data-plan-compare-price>{{ selected_variant.price | money }}</s>
         <strong data-plan-subscription-price>{{ subscription_allocation.price | money }}</strong>
-        <em>per delivery</em>
+        <em>{{ 'product.per_delivery' | t }}</em>
       </span>
     </button>
 
-    <ul class="plan-benefits" aria-label="Subscription benefits">
-      <li>Free standard shipping</li>
-      <li>15% off every delivery</li>
-      <li data-subscription-benefit-cadence>Delivered every {{ delivery_days }} days</li>
-      <li>Manage through your account</li>
+    <ul class="plan-benefits" aria-label="{{ 'product.subscribe' | t }}">
+      <li>{{ 'product.free_shipping' | t }}</li>
+      <li>{{ 'product.delivery_discount' | t }}</li>
+      <li data-subscription-benefit-cadence>{{ 'product.delivered_days' | t: days: delivery_days }}</li>
+      <li>{{ 'product.manage_account' | t }}</li>
     </ul>
 
     <button class="plan-option plan-option--one-time selected" type="button" data-purchase-mode="one-time" aria-pressed="true">
       <span class="plan-option__copy">
-        <b>One-Time Purchase</b>
-        <em>No subscription or recurring charges</em>
+        <b>{{ 'product.one_time' | t }}</b>
+        <em>{{ 'product.no_recurring' | t }}</em>
       </span>
       <strong data-plan-one-time-price>{{ selected_variant.price | money }}</strong>
     </button>

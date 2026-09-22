@@ -17,6 +17,32 @@
     currency: window.Shopify?.currency?.active || "USD"
   });
   const cata10ThresholdUsdCents = 10000;
+  const isSpanish = (document.documentElement.lang || "").toLowerCase().startsWith("es");
+  const ui = isSpanish ? {
+    selection: (count) => count === 1 ? "1 producto seleccionado" : `${count} productos seleccionados`,
+    empty: "Tu cesta está vacía", emptyCopy: "Elige un producto y crea tu rutina diaria de longevidad.", continue: "SEGUIR COMPRANDO",
+    oneTime: "Compra única", bundleQuantity: "Cantidad de packs", flashQuantity: "Cantidad de ofertas flash", remove: "Eliminar", decrease: "Reducir cantidad", increase: "Aumentar cantidad",
+    complete: "Completa tu rutina", waiting: "Tienes una oferta privada disponible", waitingCopy: "Continúa para ver tu complemento de compra única. Sin suscripción.", subtotal: "SUBTOTAL", checkout: "PAGAR", checkoutOffer: "PAGAR Y VER OFERTA →",
+    progressLocked: (amount) => `Añade ${amount} más en productos normales para conseguir un 10% de descuento.`, progressUnlocked: "Has conseguido un 10% de descuento. Usa CATA10 al pagar.", progressLabel: "Progreso del descuento CATA10",
+    progressRules: "Introduce CATA10 manualmente al pagar. Solo se aplica a productos normales elegibles; se excluyen suscripciones, packs y ofertas flash.", thresholdNote: "Los pedidos con al menos $100 USD en productos normales elegibles reciben un 10% de descuento con el código CATA10.",
+    delivered: (days) => `Entrega cada ${days} días`, flashSaving: (discount) => `1 tarro · ${discount}% de ahorro privado`, flashMode: "COMPLEMENTO DE COMPRA ÚNICA · SIN SUSCRIPCIÓN", flashAdd: (price) => `AÑADIR A MI PEDIDO — ${price}`,
+    decline: "NO, GRACIAS. CONTINUAR", updating: "ACTUALIZANDO…", offerAdded: "OFERTA AÑADIDA", bundleUpgraded: "PACK ACTUALIZADO", continueOffers: "CONTINUAR CON MIS OFERTAS", addToCart: "AÑADIR A LA CESTA", adding: "AÑADIENDO…", tryAgain: "INTÉNTALO DE NUEVO",
+    page: (page, pages) => `Página ${page} de ${pages}`, previousReview: "Página anterior de reseñas", nextReview: "Página siguiente de reseñas", showing: (start, end, total) => `Mostrando ${start}–${end} de ${total} reseñas`, noReviews: "Ninguna reseña coincide con este filtro.", verified: "Verificada", anonymous: "Anónimo", stars: (rating) => `${rating} de 5 estrellas`,
+    originalReview: "Original en inglés", viewOriginal: "Ver original", hideOriginal: "Ocultar original", customerPhoto: "Foto de cliente", loadError: "No se pudieron cargar las reseñas. Actualiza la página para intentarlo de nuevo.",
+    products: (count) => count === 1 ? "1 producto" : `${count} productos`, availability: "Disponibilidad", inStock: "Disponible", outOfStock: "Agotado", viewAll: "VER TODO", closeAll: "CERRAR TODO"
+  } : {
+    selection: (count) => `${count} product selection${count === 1 ? "" : "s"}`,
+    empty: "Your shopping bag is empty", emptyCopy: "Choose a product and build your daily longevity routine.", continue: "CONTINUE SHOPPING",
+    oneTime: "One-time purchase", bundleQuantity: "Bundle quantity", flashQuantity: "Flash bundle quantity", remove: "Remove", decrease: "Decrease quantity", increase: "Increase quantity",
+    complete: "Complete Your Routine", waiting: "One private add-on is waiting", waitingCopy: "Continue to see your private one-time add-on. No subscription.", subtotal: "SUBTOTAL", checkout: "CHECKOUT", checkoutOffer: "CHECKOUT & REVEAL OFFER →",
+    progressLocked: (amount) => `Spend ${amount} more on regular products to unlock 10% OFF!`, progressUnlocked: "10% OFF unlocked — use CATA10 at checkout!", progressLabel: "CATA10 discount progress",
+    progressRules: "CATA10 is entered manually at checkout and applies only to eligible regular products. Subscriptions, bundles and flash offers are excluded.", thresholdNote: "Orders with at least $100 USD in eligible regular products receive 10% off with code CATA10.",
+    delivered: (days) => `Delivered every ${days} days`, flashSaving: (discount) => `1 Jar · ${discount}% private add-on saving`, flashMode: "ONE-TIME ADD-ON · NO SUBSCRIPTION", flashAdd: (price) => `ADD TO MY ORDER — ${price}`,
+    decline: "NO THANKS, CONTINUE", updating: "UPDATING…", offerAdded: "OFFER ADDED", bundleUpgraded: "BUNDLE UPGRADED", continueOffers: "CONTINUE WITH MY OFFERS", addToCart: "ADD TO CART", adding: "ADDING…", tryAgain: "PLEASE TRY AGAIN",
+    page: (page, pages) => `Page ${page} of ${pages}`, previousReview: "Previous review page", nextReview: "Next review page", showing: (start, end, total) => `Showing ${start}–${end} of ${total} reviews`, noReviews: "No customer reviews match this filter.", verified: "Verified", anonymous: "Anonymous", stars: (rating) => `${rating} out of 5 stars`,
+    originalReview: "Original in English", viewOriginal: "View original", hideOriginal: "Hide original", customerPhoto: "Customer photo", loadError: "Customer reviews could not be loaded. Please refresh the page to try again.",
+    products: (count) => `${count} product${count === 1 ? "" : "s"}`, availability: "Availability", inStock: "In stock", outOfStock: "Out of stock", viewAll: "View All", closeAll: "Close All"
+  };
 
   const escapeHtml = (value = "") =>
     String(value).replace(/[&<>"']/g, (character) => ({
@@ -64,16 +90,16 @@
       progress.classList.toggle("is-unlocked", unlocked);
       progress.innerHTML = `
         <strong>${unlocked
-          ? "10% OFF unlocked — use CATA10 at checkout!"
-          : `Spend ${formatMoney(remaining)} more on regular products to unlock 10% OFF!`}</strong>
-        <div class="cart-discount-progress__track" role="progressbar" aria-label="CATA10 discount progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percentage}">
+          ? ui.progressUnlocked
+          : ui.progressLocked(formatMoney(remaining))}</strong>
+        <div class="cart-discount-progress__track" role="progressbar" aria-label="${ui.progressLabel}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percentage}">
           <span style="width:${percentage}%"></span><b aria-hidden="true">${unlocked ? "✓" : "♡"}</b>
         </div>
-        <small>CATA10 is entered manually at checkout and applies only to eligible regular products. Subscriptions, bundles and flash offers are excluded.</small>`;
+        <small>${ui.progressRules}</small>`;
     });
   };
   const purchaseLabel = (item) => {
-    if (!isSubscriptionItem(item)) return "One-time purchase";
+    if (!isSubscriptionItem(item)) return ui.oneTime;
     return item.selling_plan_allocation?.selling_plan?.name || "Delivered every month · Save 15%";
   };
   const effectiveLinePrice = (item) => Number(item.final_line_price || 0);
@@ -121,7 +147,7 @@
       <article data-line-key="${escapeHtml(item.key)}">
         ${item.image ? `<img src="${escapeHtml(imageUrl(item.image))}" alt="">` : ""}
         <div class="global-cart-item-copy">
-          ${flash ? `<span class="global-flash-label">FLASH SALE · ${escapeHtml(item.properties?._flash_discount || "")}% OFF</span>` : ""}
+          ${flash ? `<span class="global-flash-label">${isSpanish ? "OFERTA FLASH" : "FLASH SALE"} · ${escapeHtml(item.properties?._flash_discount || "")}% ${isSpanish ? "DTO." : "OFF"}</span>` : ""}
           <h3>${escapeHtml(displayTitle)}</h3>
           <p>${escapeHtml(displayVariant)} · ${escapeHtml(purchaseLabel(item))}</p>
           <div class="global-cart-price">
@@ -129,17 +155,17 @@
             <strong>${formatMoney(lineSale)}</strong>
           </div>
           <div class="global-cart-quantity">
-            <span>${flash ? "Flash bundle quantity" : "Bundle quantity"}</span>
+            <span>${flash ? ui.flashQuantity : ui.bundleQuantity}</span>
             ${flash
               ? `<div><b aria-label="${item.quantity} flash bundles">${item.quantity}</b></div>`
               : `<div>
-                  <button type="button" data-cart-quantity="${Math.max(0, item.quantity - 1)}" aria-label="Decrease quantity">−</button>
+                  <button type="button" data-cart-quantity="${Math.max(0, item.quantity - 1)}" aria-label="${ui.decrease}">−</button>
                   <b aria-label="${item.quantity} bundles">${item.quantity}</b>
-                  <button type="button" data-cart-quantity="${item.quantity + 1}" aria-label="Increase quantity">+</button>
+                  <button type="button" data-cart-quantity="${item.quantity + 1}" aria-label="${ui.increase}">+</button>
                 </div>`}
           </div>
         </div>
-        <button class="global-cart-remove" type="button" data-cart-remove>Remove</button>
+        <button class="global-cart-remove" type="button" data-cart-remove>${ui.remove}</button>
       </article>`;
   };
 
@@ -152,9 +178,7 @@
     const content = drawer.querySelector("[data-cart-content]");
     const summary = drawer.querySelector("[data-cart-summary]");
     if (summary) {
-      summary.textContent = cart.items.length
-        ? `${cart.items.length} product selection${cart.items.length === 1 ? "" : "s"}`
-        : "Your bag is empty";
+      summary.textContent = cart.items.length ? ui.selection(cart.items.length) : ui.empty;
     }
     if (!content) return;
     const showFlashTeaser = hasPendingFlashOffer(cart);
@@ -162,19 +186,19 @@
     content.innerHTML = cart.items.length
       ? `<div class="global-cart-items" data-cart-items>${cart.items.map(cartLineMarkup).join("")}</div>
          ${showFlashTeaser ? `<div class="global-cart-offer-hint" role="note">
-           <span>⚡ Limited One-Time Offer</span>
-           <strong>A Private Flash Deal Is Waiting</strong>
-           <p>Use the checkout button below to reveal it. No code required.</p>
+           <span>⚡ ${ui.complete}</span>
+           <strong>${ui.waiting}</strong>
+           <p>${ui.waitingCopy}</p>
          </div>` : ""}
          ${hasOneTimePurchase ? '<div class="cart-discount-progress" data-discount-progress></div>' : ""}
-         <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>${formatMoney(effectiveSubtotal(cart))}</strong></div>
-         <button class="global-cart-checkout" type="button" data-start-checkout>${showFlashTeaser ? "CHECKOUT &amp; REVEAL OFFER →" : "CHECKOUT"}</button>
-         <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
-         ${hasOneTimePurchase ? '<p class="global-cart-note">Orders with at least $100 USD in eligible regular products receive 10% off with code CATA10.</p>' : ""}`
+         <div class="global-cart-summary"><span>${ui.subtotal}</span><strong data-cart-total>${formatMoney(effectiveSubtotal(cart))}</strong></div>
+         <button class="global-cart-checkout" type="button" data-start-checkout>${showFlashTeaser ? ui.checkoutOffer : ui.checkout}</button>
+         <button class="global-cart-continue" type="button" data-cart-close>${ui.continue}</button>
+         ${hasOneTimePurchase ? `<p class="global-cart-note">${ui.thresholdNote}</p>` : ""}`
       : `<div class="global-empty-cart">
-           <span>0</span><h3>Your shopping bag is empty</h3>
-           <p>Choose a product and build your daily longevity routine.</p>
-           <button type="button" data-cart-close>CONTINUE SHOPPING</button>
+           <span>0</span><h3>${ui.empty}</h3>
+           <p>${ui.emptyCopy}</p>
+           <button type="button" data-cart-close>${ui.continue}</button>
          </div>`;
     updateDiscountProgress(cart);
   };
@@ -363,7 +387,7 @@
     });
     const deliveryDays = Math.max(30, Number(pack.dataset.deliveryDays || 30));
     product.querySelectorAll("[data-subscription-cadence], [data-subscription-benefit-cadence]").forEach((element) => {
-      setDynamicText(element, `Delivered every ${deliveryDays} days`);
+      setDynamicText(element, ui.delivered(deliveryDays));
     });
 
     const sellingPlanInput = form.querySelector("[data-selling-plan-input]");
@@ -500,10 +524,10 @@
       <span>COMPLETE YOUR ROUTINE</span>
       ${productImage}
       <h3>Add ${escapeHtml(offer.product.title)}</h3>
-      <p>1 Jar · ${offer.discount}% private add-on saving</p>
-      <small class="global-offer-mode">ONE-TIME ADD-ON · NO SUBSCRIPTION</small>
+      <p>${ui.flashSaving(offer.discount)}</p>
+      <small class="global-offer-mode">${ui.flashMode}</small>
       <div><del>${formatMoney(offer.variant.price)}</del><strong>${formatMoney(offer.salePrice)}</strong></div>
-      <button type="button" data-accept-flash="${index}">ADD TO MY ORDER — ${formatMoney(offer.salePrice)}</button>
+      <button type="button" data-accept-flash="${index}">${ui.flashAdd(formatMoney(offer.salePrice))}</button>
     </article>`;
   };
   const checkoutUrlFor = () => `${root}checkout`;
@@ -530,7 +554,7 @@
     flashDialog._offers = offers;
     flashDialog._accepted = new Set();
     const continueButton = flashDialog.querySelector("[data-flash-continue]");
-    if (continueButton) continueButton.textContent = "NO THANKS, CONTINUE";
+    if (continueButton) continueButton.textContent = ui.decline;
     closeCart();
     flashDialog.hidden = false;
     lockPage();
@@ -539,7 +563,7 @@
     const offer = flashDialog?._offers?.[index];
     if (!offer || button.disabled) return;
     button.disabled = true;
-    button.textContent = "UPDATING…";
+    button.textContent = ui.updating;
     const latestCart = await getCart();
     const sourceStillQualifies = latestCart.items.some((item) =>
       item.key === offer.source.key &&
@@ -571,9 +595,9 @@
     });
     if (offer.replaces) await updateLine(offer.source.key, 0);
     flashDialog._accepted.add(index);
-    button.textContent = offer.replaces ? "BUNDLE UPGRADED" : "OFFER ADDED";
+    button.textContent = offer.replaces ? ui.bundleUpgraded : ui.offerAdded;
     const continueButton = flashDialog.querySelector("[data-flash-continue]");
-    if (continueButton) continueButton.textContent = "CONTINUE WITH MY OFFERS";
+    if (continueButton) continueButton.textContent = ui.continueOffers;
     renderCart(await getCart());
   };
   const continueCheckout = async () => {
@@ -761,15 +785,15 @@
         ? [1, "ellipsis", 17, 18, 19, 20]
         : [1, "ellipsis", page - 1, page, page + 1, "ellipsis", 20];
     if (pagination) {
-      pagination.innerHTML = `<button type="button" data-nmn-review-go="${page - 1}" ${page === 1 ? "disabled" : ""} aria-label="Previous review page">←</button>
+      pagination.innerHTML = `<button type="button" data-nmn-review-go="${page - 1}" ${page === 1 ? "disabled" : ""} aria-label="${ui.previousReview}">←</button>
         ${items.map((item, index) => item === "ellipsis"
           ? `<span>…</span>`
           : `<button type="button" class="${page === item ? "is-active" : ""}" data-nmn-review-go="${item}" ${page === item ? 'aria-current="page"' : ""}>${item}</button>`
         ).join("")}
-        <button type="button" data-nmn-review-go="${page + 1}" ${page === 20 ? "disabled" : ""} aria-label="Next review page">→</button>`;
+        <button type="button" data-nmn-review-go="${page + 1}" ${page === 20 ? "disabled" : ""} aria-label="${ui.nextReview}">→</button>`;
     }
     const count = section.querySelector("[data-nmn-review-page-count]");
-    if (count) count.textContent = `Page ${page} of 20`;
+    if (count) count.textContent = ui.page(page, 20);
     const picturesOnly = section.querySelector("[data-pictures-only]")?.checked;
     section.querySelectorAll(`[data-nmn-review-page="${page}"] article`).forEach((article) => {
       article.hidden = Boolean(picturesOnly && article.dataset.hasReviewImage !== "true");
@@ -818,30 +842,30 @@
       const pageReviews = visibleReviews.slice(start, start + perPage);
 
       status.textContent = visibleReviews.length
-        ? `Showing ${start + 1}\u2013${Math.min(start + perPage, visibleReviews.length)} of ${visibleReviews.length} reviews`
-        : "No customer reviews match this filter.";
+        ? ui.showing(start + 1, Math.min(start + perPage, visibleReviews.length), visibleReviews.length)
+        : ui.noReviews;
       list.innerHTML = pageReviews.map((review) => {
         const initial = Array.from(review.name || "A")[0] || "A";
         const photos = (review.pictures || []).map(safeImageUrl).filter(Boolean);
         return `<article class="nad-customer-review" data-review-uuid="${escapeHtml(review.uuid)}">
-          <div class="nad-customer-review__stars" role="img" aria-label="${review.rating} out of 5 stars">${starsMarkup(review.rating)}</div>
+          <div class="nad-customer-review__stars" role="img" aria-label="${ui.stars(review.rating)}">${starsMarkup(review.rating)}</div>
           <div class="nad-customer-review__person">
             <span aria-hidden="true">${escapeHtml(initial.toUpperCase())}</span>
-            <div><strong>${escapeHtml(review.name || "Anonymous")}</strong>${review.verified ? '<em>Verified</em>' : ""}<small>${escapeHtml(review.date)}</small></div>
+            <div><strong>${escapeHtml(review.name || ui.anonymous)}</strong>${review.verified ? `<em>${ui.verified}</em>` : ""}<small>${escapeHtml(review.date)}</small></div>
           </div>
           ${review.title ? `<h3>${escapeHtml(review.title)}</h3>` : ""}
-          ${review.body ? `<p>${escapeHtml(review.body)}</p>` : ""}
-          ${photos.length ? `<div class="nad-customer-review__media">${photos.map((url) => `<a href="${escapeHtml(url)}" target="_blank" rel="noopener"><img src="${escapeHtml(url)}" alt="Customer photo from ${escapeHtml(review.name || "a reviewer")}" width="360" height="360" loading="lazy"></a>`).join("")}</div>` : ""}
+          ${review.body ? `<p>${escapeHtml(review.body)}</p>${isSpanish ? `<small class="review-translation-note">${ui.originalReview}</small>` : ""}` : ""}
+          ${photos.length ? `<div class="nad-customer-review__media">${photos.map((url) => `<a href="${escapeHtml(url)}" target="_blank" rel="noopener"><img src="${escapeHtml(url)}" alt="${ui.customerPhoto}" width="360" height="360" loading="lazy"></a>`).join("")}</div>` : ""}
         </article>`;
       }).join("");
 
       pagination.hidden = visibleReviews.length <= perPage;
-      pagination.innerHTML = `<button type="button" data-nad-customer-page="${currentPage - 1}" ${currentPage === 1 ? "disabled" : ""} aria-label="Previous review page">&#8592;</button>
+      pagination.innerHTML = `<button type="button" data-nad-customer-page="${currentPage - 1}" ${currentPage === 1 ? "disabled" : ""} aria-label="${ui.previousReview}">&#8592;</button>
         ${compactPaginationItems(currentPage, totalPages).map((item) => item === "ellipsis"
           ? '<span aria-hidden="true">&hellip;</span>'
           : `<button type="button" class="${currentPage === item ? "is-active" : ""}" data-nad-customer-page="${item}" ${currentPage === item ? 'aria-current="page"' : ""}>${item}</button>`
         ).join("")}
-        <button type="button" data-nad-customer-page="${currentPage + 1}" ${currentPage === totalPages ? "disabled" : ""} aria-label="Next review page">&#8594;</button>`;
+        <button type="button" data-nad-customer-page="${currentPage + 1}" ${currentPage === totalPages ? "disabled" : ""} aria-label="${ui.nextReview}">&#8594;</button>`;
     };
 
     try {
@@ -891,7 +915,7 @@
       render();
     } catch (error) {
       console.error(error);
-      status.textContent = "Customer reviews could not be loaded. Please refresh the page to try again.";
+      status.textContent = ui.loadError;
     }
   };
   document.querySelectorAll("[data-nad-customer-reviews]").forEach(initializeNadCustomerReviews);
@@ -955,6 +979,7 @@
     const storyPlay = target.closest("[data-story-play]");
     const nadReviewGo = target.closest("[data-nad-review-go]");
     const nadReviewStep = target.closest("[data-nad-review-step]");
+    const originalReviewToggle = target.closest("[data-review-original-toggle]");
 
     if (openButton) {
       event.preventDefault();
@@ -962,6 +987,15 @@
       openCart();
     }
     if (closeButton) closeCart();
+    if (originalReviewToggle) {
+      const original = originalReviewToggle.closest("article")?.querySelector("[data-review-original]");
+      if (original) {
+        const open = original.hidden;
+        original.hidden = !open;
+        originalReviewToggle.setAttribute("aria-expanded", String(open));
+        originalReviewToggle.textContent = open ? ui.hideOriginal : ui.viewOriginal;
+      }
+    }
     if (target === drawer) closeCart();
     if (menuButton) {
       const navigation = document.querySelector("#MainNavigation");
@@ -986,7 +1020,7 @@
     }
     if (flashButton) {
       try { await acceptFlashOffer(Number(flashButton.dataset.acceptFlash), flashButton); }
-      catch (error) { console.error(error); flashButton.disabled = false; flashButton.textContent = "PLEASE TRY AGAIN"; }
+      catch (error) { console.error(error); flashButton.disabled = false; flashButton.textContent = ui.tryAgain; }
     }
     if (flashContinue) {
       try { await continueCheckout(); }
@@ -1119,7 +1153,7 @@
       const details = [...document.querySelectorAll("[data-about-faqs] details")];
       const shouldOpen = details.some((detail) => !detail.open);
       details.forEach((detail) => { detail.open = shouldOpen; });
-      toggleAllFaqs.textContent = shouldOpen ? "Close All" : "View All";
+      toggleAllFaqs.textContent = shouldOpen ? ui.closeAll : ui.viewAll;
     }
     if (reviewScroll) {
       const section = reviewScroll.closest("[data-science-reviews]");
@@ -1197,7 +1231,7 @@
     const label = form.querySelector("[data-add-label]");
     if (button?.disabled) return;
     button.disabled = true;
-    if (label) label.textContent = "ADDING…";
+    if (label) label.textContent = ui.adding;
     try {
       const variantId = Number(form.querySelector("[name='id']")?.value || 0);
       const quantity = Number(form.querySelector("[name='quantity']")?.value || 1);
@@ -1208,12 +1242,12 @@
     } catch (error) {
       console.error(error);
       if (label) {
-        label.textContent = error?.message || "PLEASE TRY AGAIN";
+        label.textContent = error?.message || ui.tryAgain;
         label.title = error?.message || "";
       }
     } finally {
       button.disabled = false;
-      window.setTimeout(() => { if (label) label.textContent = "ADD TO CART"; }, 900);
+      window.setTimeout(() => { if (label) label.textContent = ui.addToCart; }, 900);
     }
   });
   document.addEventListener("keydown", (event) => {
@@ -1244,8 +1278,8 @@
     const visible = cards.filter((card) => !card.hidden).length;
     const count = document.querySelector("[data-visible-count]");
     const label = document.querySelector("[data-filter-label]");
-    if (count) count.textContent = `${visible} product${visible === 1 ? "" : "s"}`;
-    if (label) label.textContent = availability === "all" ? "Availability" : availability === "in-stock" ? "In stock" : "Out of stock";
+    if (count) count.textContent = ui.products(visible);
+    if (label) label.textContent = availability === "all" ? ui.availability : availability === "in-stock" ? ui.inStock : ui.outOfStock;
   };
   document.querySelectorAll('input[name="availability"], [data-collection-sort]').forEach((control) =>
     control.addEventListener("change", updateCollection)

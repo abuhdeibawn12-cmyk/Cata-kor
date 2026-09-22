@@ -3,20 +3,20 @@
   <div class="science-page-container science-coa-grid">
     <div class="science-coa-copy">
       <span class="science-kicker">COA</span>
-      <h1>Certificate of Analysis (COA)</h1>
-      <p>As part of our commitment to quality and transparency, we provide official Certificates of Analysis issued by independent third-party laboratories to verify purity, potency, and safety.</p>
+      <h1>{{ 'science.coa_title' | t }}</h1>
+      <p>{{ 'science.coa_copy' | t }}</p>
     </div>
     <div class="science-product-grid">
       <article class="science-product-card">
         <a class="science-product-image" href="{{ routes.collections_url }}/shop-all"><img src="{{ 'science-nad-core.png' | asset_url }}" alt="NAD+ Core LipoNAD 250mg" width="900" height="900"></a>
         <a class="science-product-name" href="{{ routes.collections_url }}/shop-all">NAD⁺ Core LipoNAD™ 250mg</a>
-        <a class="science-pill-button" href="{{ 'science-coa-nad-core.jpg' | asset_url }}" target="_blank">COA CERTIFICATE</a>
+        <a class="science-pill-button" href="{{ 'science-coa-nad-core.jpg' | asset_url }}" target="_blank">{{ 'science.coa_button' | t }}</a>
       </article>
       <article class="science-product-card">
-        <a class="science-product-image" href="{{ routes.root_url }}products/nad-advanced-500mg"><img src="{{ 'product-nad-hq.png' | asset_url }}" alt="NAD+ Advanced LipoNAD 500mg" width="900" height="900"><span>Sale</span></a>
-        <a class="science-product-name" href="{{ routes.root_url }}products/nad-advanced-500mg">NAD⁺ Advanced LipoNAD™ 500mg</a>
-        <p>Daily cellular energy*</p>
-        <a class="science-pill-button" href="{{ 'science-coa-nad-advanced.jpg' | asset_url }}" target="_blank">COA CERTIFICATE</a>
+        <a class="science-product-image" href="{{ routes.root_url | remove_last: '/' }}/products/nad-advanced-500mg"><img src="{{ 'product-nad-hq.png' | asset_url }}" alt="NAD+ Advanced LipoNAD 500mg" width="900" height="900"><span>{{ 'product.sale' | t }}</span></a>
+        <a class="science-product-name" href="{{ routes.root_url | remove_last: '/' }}/products/nad-advanced-500mg">NAD⁺ Advanced LipoNAD™ 500mg</a>
+        <p>{{ 'home.daily_energy' | t }}</p>
+        <a class="science-pill-button" href="{{ 'science-coa-nad-advanced.jpg' | asset_url }}" target="_blank">{{ 'science.coa_button' | t }}</a>
       </article>
     </div>
   </div>
@@ -24,16 +24,16 @@
 
 <section class="science-feature science-feature-nmn"><div class="science-page-container science-feature-grid">
   <div class="science-feature-art"><img src="{{ 'science-nmn.png' | asset_url }}" alt="Cata-Kor NMN Supplement" width="1200" height="1200"></div>
-  <div class="science-feature-copy"><h2>Cata-Kor NMN Supplement</h2><p>Cata-Kor’s NMN Supplement with Resveratrol, TMG and Quercetin is a high-purity NAD+ supplement designed to support cellular energy and healthy aging.</p><a class="science-pill-button" href="{{ 'science-coa-nmn.png' | asset_url }}" target="_blank">COA CERTIFICATE</a></div>
+  <div class="science-feature-copy"><h2>{{ 'science.nmn_title' | t }}</h2><p>{{ 'science.nmn_copy' | t }}</p><a class="science-pill-button" href="{{ 'science-coa-nmn.png' | asset_url }}" target="_blank">{{ 'science.coa_button' | t }}</a></div>
 </div></section>
 
 <section class="science-feature science-feature-akg"><div class="science-page-container science-feature-grid">
-  <div class="science-feature-copy"><h2>CA AKG</h2><p>AKG supports lasting energy, biotin supports hair, skin, and nails, and MSM supports comfortable movement—designed as a thoughtful daily nudge toward feeling strong and balanced.</p><a class="science-pill-button" href="{{ 'science-coa-ca-akg.png' | asset_url }}" target="_blank">COA CERTIFICATE</a></div>
+  <div class="science-feature-copy"><h2>CA AKG</h2><p>{{ 'science.akg_copy' | t }}</p><a class="science-pill-button" href="{{ 'science-coa-ca-akg.png' | asset_url }}" target="_blank">{{ 'science.coa_button' | t }}</a></div>
   <div class="science-feature-art"><img src="{{ 'science-ca-akg.png' | asset_url }}" alt="Cata-Kor CA AKG supplement" width="1200" height="1200"></div>
 </div></section>
 
 <section class="science-quality-section" id="quality"><div class="science-page-container science-quality-grid">
-  <div class="science-quality-copy"><span class="science-kicker">Liposomal</span><h2>Science and Quality</h2><p>In a preclinical animal study, our LipoNAD™ preserved NAD+ levels in the liver at 9.31x higher than regular NAD+.**</p><a class="science-pill-button" href="{{ 'science-liponad-study.pdf' | asset_url }}" target="_blank">READ THE SCIENTIFIC STUDY</a></div>
+  <div class="science-quality-copy"><span class="science-kicker">Liposomal</span><h2>{{ 'science.quality_title' | t }}</h2><p>{{ 'science.quality_copy' | t }}</p><a class="science-pill-button" href="{{ 'science-liponad-study.pdf' | asset_url }}" target="_blank">{{ 'science.study_button' | t }}</a></div>
   <img class="science-quality-chart" src="{{ 'science-bioavailability.png' | asset_url }}" alt="Liposomal NAD+ test results" width="1000" height="700">
 </div></section>
 
@@ -54,18 +54,19 @@
     </div>
     <button type="button" data-review-scroll="1" aria-label="Next reviews">&rarr;</button>
   </div>
-  <p class="science-review-disclosure">*These individuals partner with Cata-Kor as compensated endorsers, sharing their personal opinions and experiences.</p>
+  <p class="science-review-disclosure">{{ 'science.endorser_disclosure' | t }}</p>
 </section>
 
 <section class="science-video-section">
-  <video controls playsinline poster="{{ 'science-video-poster.jpg' | asset_url }}" preload="metadata"><source src="{{ 'science-nad-story.mp4' | asset_url }}" type="video/mp4">Your browser does not support HTML video.</video>
+  <video controls playsinline poster="{{ 'science-video-poster.jpg' | asset_url }}" preload="metadata"><source src="{{ 'science-nad-story.mp4' | asset_url }}" type="video/mp4">{{ 'science.video_fallback' | t }}</video>
 </section>
 
 <section class="science-faq-section" id="science-faq">
-  <div class="science-faq-heading"><span class="science-kicker">FAQs</span><h2>Questions We Receive Often</h2><a class="science-pill-button" href="#science-faq-list">VIEW ALL</a></div>
+  <div class="science-faq-heading"><span class="science-kicker">FAQs</span><h2>{{ 'science.faq_heading' | t }}</h2><a class="science-pill-button" href="#science-faq-list">{{ 'about.view_all' | t }}</a></div>
   <div class="science-faq-list" id="science-faq-list">
     {% assign questions = "How long does it take to see results from dietary supplements?|Are there potential side effects of dietary supplements?|What makes this supplement unique?|Are your products gluten-free?|Are your products non-GMO/organic?|Are your products safe to take with medications?|Do you have samples?" | split: "|" %}
-    {% for question in questions %}<details class="science-faq-item"><summary><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}.</span><b>{{ question }}</b><i>⌄</i></summary><p>Individual results and circumstances vary. Follow the product label and consult a qualified healthcare professional when appropriate.</p></details>{% endfor %}
+    {% if request.locale.iso_code == 'es' %}{% assign questions = "¿Cuánto se tarda en notar los resultados de los suplementos?|¿Los suplementos pueden producir efectos secundarios?|¿Qué hace que este suplemento sea diferente?|¿Los productos contienen gluten?|¿Los productos son no transgénicos u orgánicos?|¿Puedo tomar los productos con medicamentos?|¿Tenéis muestras?" | split: "|" %}{% endif %}
+    {% for question in questions %}<details class="science-faq-item"><summary><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}.</span><b>{{ question }}</b><i>⌄</i></summary><p>{{ 'science.faq_answer' | t }}</p></details>{% endfor %}
   </div>
 </section>
 </div>

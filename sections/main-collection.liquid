@@ -4,31 +4,31 @@
 {% endif %}
 
 <section class="collection-hero">
-  <span class="eyebrow">CATA-KOR LONGEVITY SUPPORT</span>
-  <h1>{% if is_best_sellers %}BEST SELLERS{% else %}SHOP ALL{% endif %}</h1>
-  <p>Science-driven daily formulas made with transparent dosing and trusted quality.</p>
+  <span class="eyebrow">{{ 'collection.eyebrow' | t }}</span>
+  <h1>{% if is_best_sellers %}{{ 'collection.best_sellers' | t }}{% else %}{{ 'collection.shop_all' | t }}{% endif %}</h1>
+  <p>{{ 'collection.intro' | t }}</p>
 </section>
 
 <section class="collection-shell" id="products">
   <div class="collection-toolbar">
     <div class="collection-filter-wrap">
       <button class="collection-filter-button" type="button" data-filter-toggle aria-expanded="false">
-        Filter: <b data-filter-label>Availability</b><span>+</span>
+        {{ 'collection.filter' | t }}: <b data-filter-label>{{ 'collection.availability' | t }}</b><span>+</span>
       </button>
       <fieldset class="collection-filter-menu" data-filter-menu hidden>
-        <legend>Availability</legend>
-        <label><input type="radio" name="availability" value="all" checked> <span>All products</span></label>
-        <label><input type="radio" name="availability" value="in-stock"> <span>In stock</span></label>
-        <label><input type="radio" name="availability" value="out-of-stock"> <span>Out of stock</span></label>
+        <legend>{{ 'collection.availability' | t }}</legend>
+        <label><input type="radio" name="availability" value="all" checked> <span>{{ 'collection.all' | t }}</span></label>
+        <label><input type="radio" name="availability" value="in-stock"> <span>{{ 'collection.in_stock' | t }}</span></label>
+        <label><input type="radio" name="availability" value="out-of-stock"> <span>{{ 'collection.out_of_stock' | t }}</span></label>
       </fieldset>
     </div>
     <div class="collection-sort">
-      <span data-visible-count>Products</span>
-      <label for="CollectionSort">Sort by:</label>
+      <span data-visible-count>{{ 'collection.products' | t }}</span>
+      <label for="CollectionSort">{{ 'collection.sort_by' | t }}:</label>
       <select id="CollectionSort" data-collection-sort>
-        <option value="featured">Best selling</option>
-        <option value="a-z">Alphabetically, A–Z</option>
-        <option value="z-a">Alphabetically, Z–A</option>
+        <option value="featured">{{ 'collection.best_selling' | t }}</option>
+        <option value="a-z">{{ 'collection.a_z' | t }}</option>
+        <option value="z-a">{{ 'collection.z_a' | t }}</option>
       </select>
     </div>
   </div>
@@ -54,7 +54,7 @@
           data-original-order="{{ forloop.index }}"
         >
           <div class="collection-image-wrap">
-            <span class="collection-sale-badge">Sale</span>
+            <span class="collection-sale-badge">{{ 'product.sale' | t }}</span>
             {% if card_image_url != blank %}
               <img
                 src="{{ card_image_url }}&amp;width=900"
@@ -71,7 +71,7 @@
           <div class="collection-card-copy">
             <h2>{{ desired_product.title }}</h2>
             <p>{{ desired_product.metafields.custom.benefit | default: desired_product.description | strip_html | truncatewords: 10 }}</p>
-            <a class="collection-product-button" href="{{ desired_product.url }}">View Product</a>
+            <a class="collection-product-button" href="{{ desired_product.url }}">{{ 'collection.view_product' | t }}</a>
           </div>
         </article>
       {% endif %}
@@ -85,14 +85,14 @@
       data-original-order="4"
     >
       <div class="collection-image-wrap">
-        <span class="collection-sale-badge">Sale</span>
-        <span class="collection-stock-badge">Sold out</span>
+        <span class="collection-sale-badge">{{ 'product.sale' | t }}</span>
+        <span class="collection-stock-badge">{{ 'products.product.sold_out' | t }}</span>
         <img src="{{ 'product-caakg.avif' | asset_url }}" alt="Skin, Hair &amp; Nails Supplement" width="1000" height="1000" loading="lazy">
       </div>
       <div class="collection-card-copy">
         <h2>Skin, Hair &amp; Nails Supplement</h2>
         <p>Healthy aging support*</p>
-        <button class="collection-product-button is-disabled" type="button" disabled>Out of stock</button>
+        <button class="collection-product-button is-disabled" type="button" disabled>{{ 'collection.out_of_stock' | t }}</button>
       </div>
     </article>
 
