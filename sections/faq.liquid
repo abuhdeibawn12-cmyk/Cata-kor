@@ -1,44 +1,53 @@
 {% if product.type == 'Bundle' %}
+  {% assign faq_questions = 'How should I take the products in this bundle?|Can I use the formulas together?|How is the bundle shipped?|What is the return policy?' | split: '|' %}
+  {% assign faq_answers = 'Follow the directions on each product label. If you take medication or manage a medical condition, consult a qualified healthcare professional before use.|The products are bundled as complementary daily formulas. Follow each label and do not exceed the stated serving size.|The products are packed together and shipped with tracking. Current delivery estimates are shown during checkout.|Please review the Return and Refund Policy linked in the footer for the current eligibility requirements.' | split: '|' %}
+  {% if request.locale.iso_code == 'es' %}
+    {% assign faq_questions = '¿Cómo debo tomar los productos de este pack?|¿Puedo usar las fórmulas juntas?|¿Cómo se envía el pack?|¿Cuál es la política de devoluciones?' | split: '|' %}
+    {% assign faq_answers = 'Sigue las instrucciones de la etiqueta de cada producto. Si tomas medicamentos o tienes alguna afección médica, consulta con un profesional sanitario antes de usarlo.|Los productos se agrupan como fórmulas diarias complementarias. Sigue las indicaciones de cada etiqueta y no superes la dosis recomendada.|Los productos se empaquetan juntos y se envían con seguimiento. La fecha estimada aparece durante el pago.|Consulta la Política de devoluciones y reembolsos enlazada en el pie de página para conocer los requisitos vigentes.' | split: '|' %}
+  {% endif %}
   <section class="secondary-faq bundle-faq" id="faq">
-    <h2>FREQUENTLY ASK QUESTION</h2>
+    <h2>{{ 'product.faq_title' | t }}</h2>
     <div>
-      <details open><summary>How should I take the products in this bundle?<span aria-hidden="true">+</span></summary><p>Follow the directions on each product label. If you take medication or manage a medical condition, consult a qualified healthcare professional before use.</p></details>
-      <details><summary>Can I use the formulas together?<span aria-hidden="true">+</span></summary><p>The products are bundled as complementary daily formulas. Follow each label and do not exceed the stated serving size.</p></details>
-      <details><summary>How is the bundle shipped?<span aria-hidden="true">+</span></summary><p>The products are packed together and shipped with tracking. Current delivery estimates are shown during checkout.</p></details>
-      <details><summary>What is the return policy?<span aria-hidden="true">+</span></summary><p>Please review the Return and Refund Policy linked in the footer for the current eligibility requirements.</p></details>
+      {% for question in faq_questions %}<details{% if forloop.first %} open{% endif %}><summary>{{ question }}<span aria-hidden="true">+</span></summary><p>{{ faq_answers[forloop.index0] }}</p></details>{% endfor %}
     </div>
   </section>
 {% elsif product.handle == 'nmn' %}
+  {% assign faq_questions = 'How long does it take to see results from dietary supplements?|Are there potential side effects of dietary supplements?|How does Cata-Kor ensure the quality of its ingredients?|Are your products gluten-free?|Are your products non-GMO/organic?|Are your products safe to take with medications?|Do you have samples?' | split: '|' %}
+  {% assign faq_answers = 'The time to experience results varies based on the supplement and individual factors. Consistency in usage is key. Some may notice changes quickly, while others may require more time.|Individual responses vary. Stop use and consult a qualified healthcare professional if you experience an unwanted reaction.|Cata-Kor uses transparent formulas and independent testing to verify ingredient identity, purity and product quality.|Review the current ingredient label for product-specific allergen information, and contact our support team if you have a specific sensitivity.|Ingredient sourcing varies by formula. The current product label and quality documentation provide the most up-to-date sourcing details.|If you take prescription medication or manage a medical condition, speak with your healthcare professional before starting any dietary supplement.|Samples are not currently listed. Contact Cata-Kor support for the latest availability.' | split: '|' %}
+  {% if request.locale.iso_code == 'es' %}
+    {% assign faq_questions = '¿Cuánto se tarda en notar los resultados de los suplementos?|¿Los suplementos pueden producir efectos secundarios?|¿Cómo garantiza Cata-Kor la calidad de sus ingredientes?|¿Los productos contienen gluten?|¿Los productos son no transgénicos u orgánicos?|¿Puedo tomar los productos con medicamentos?|¿Tenéis muestras?' | split: '|' %}
+    {% assign faq_answers = 'El tiempo necesario depende del suplemento y de cada persona. La constancia es fundamental: algunas personas notan cambios pronto y otras necesitan más tiempo.|La respuesta varía de una persona a otra. Deja de usarlo y consulta con un profesional sanitario si notas una reacción no deseada.|Cata-Kor utiliza fórmulas transparentes y análisis independientes para verificar la identidad, pureza y calidad de los ingredientes.|Consulta la etiqueta actual para ver la información específica sobre alérgenos y contacta con nuestro equipo si tienes alguna sensibilidad.|El origen de los ingredientes varía según la fórmula. La etiqueta y la documentación de calidad contienen la información más reciente.|Si tomas medicamentos con receta o tienes una afección médica, consulta con tu profesional sanitario antes de empezar cualquier suplemento.|Actualmente no ofrecemos muestras. Contacta con Cata-Kor para conocer la disponibilidad más reciente.' | split: '|' %}
+  {% endif %}
   <section class="nmn-faq-section">
-    <h2>Questions? We<br>have answers!</h2>
+    <h2>{{ 'product.questions' | t }}</h2>
     <div class="nmn-faq-list">
-      <details open><summary>How long does it take to see results from dietary supplements?<span aria-hidden="true">+</span></summary><p>The time to experience results varies based on the supplement and individual factors. Consistency in usage is key. Some may notice changes quickly, while others may require more time.</p></details>
-      <details><summary>Are there potential side effects of dietary supplements?<span aria-hidden="true">+</span></summary><p>Individual responses vary. Stop use and consult a qualified healthcare professional if you experience an unwanted reaction.</p></details>
-      <details><summary>How does Cata-Kor ensure the quality of its ingredients?<span aria-hidden="true">+</span></summary><p>Cata-Kor uses transparent formulas and independent testing to verify ingredient identity, purity and product quality.</p></details>
-      <details><summary>Are your products gluten-free?<span aria-hidden="true">+</span></summary><p>Review the current ingredient label for product-specific allergen information, and contact our support team if you have a specific sensitivity.</p></details>
-      <details><summary>Are your products non-GMO/organic?<span aria-hidden="true">+</span></summary><p>Ingredient sourcing varies by formula. The current product label and quality documentation provide the most up-to-date sourcing details.</p></details>
-      <details><summary>Are your products safe to take with medications?<span aria-hidden="true">+</span></summary><p>If you take prescription medication or manage a medical condition, speak with your healthcare professional before starting any dietary supplement.</p></details>
-      <details><summary>Do you have samples?<span aria-hidden="true">+</span></summary><p>Samples are not currently listed. Contact Cata-Kor support for the latest availability.</p></details>
+      {% for question in faq_questions %}<details{% if forloop.first %} open{% endif %}><summary>{{ question }}<span aria-hidden="true">+</span></summary><p>{{ faq_answers[forloop.index0] }}</p></details>{% endfor %}
     </div>
   </section>
 {% elsif product.handle == 'liposomal-glutathione' %}
+  {% assign faq_questions = 'What makes this glutathione supplement unique?|What is liposomal delivery?|How should I take this supplement?|Are there any side effects?' | split: '|' %}
+  {% assign faq_answers = 'This formula combines liposomal glutathione with complementary antioxidant cofactors, including vitamin C, selenium, vitamin B2 and resveratrol.|Liposomal delivery surrounds an ingredient with phospholipids to support stability and absorption.|Take two capsules daily, or follow the guidance of your healthcare professional.|Individual responses vary. Stop use and consult a healthcare professional if you experience an unwanted reaction.' | split: '|' %}
+  {% if request.locale.iso_code == 'es' %}
+    {% assign faq_questions = '¿Qué hace que este suplemento de glutatión sea diferente?|¿Qué es la administración liposomal?|¿Cómo debo tomar este suplemento?|¿Puede producir efectos secundarios?' | split: '|' %}
+    {% assign faq_answers = 'Esta fórmula combina glutatión liposomal con cofactores antioxidantes complementarios, como vitamina C, selenio, vitamina B2 y resveratrol.|La administración liposomal rodea el ingrediente con fosfolípidos para favorecer su estabilidad y absorción.|Toma dos cápsulas al día o sigue las indicaciones de tu profesional sanitario.|La respuesta varía de una persona a otra. Deja de usarlo y consulta con un profesional sanitario si notas una reacción no deseada.' | split: '|' %}
+  {% endif %}
   <section class="secondary-faq">
-    <h2>FREQUENTLY ASK QUESTION</h2>
+    <h2>{{ 'product.faq_title' | t }}</h2>
     <div>
-      <details open><summary>What makes this glutathione supplement unique?<span aria-hidden="true">+</span></summary><p>This formula combines liposomal glutathione with complementary antioxidant cofactors, including vitamin C, selenium, vitamin B2 and resveratrol.</p></details>
-      <details><summary>What is liposomal delivery?<span aria-hidden="true">+</span></summary><p>Liposomal delivery surrounds an ingredient with phospholipids to support stability and absorption.</p></details>
-      <details><summary>How should I take this supplement?<span aria-hidden="true">+</span></summary><p>Take two capsules daily, or follow the guidance of your healthcare professional.</p></details>
-      <details><summary>Are there any side effects?<span aria-hidden="true">+</span></summary><p>Individual responses vary. Stop use and consult a healthcare professional if you experience an unwanted reaction.</p></details>
+      {% for question in faq_questions %}<details{% if forloop.first %} open{% endif %}><summary>{{ question }}<span aria-hidden="true">+</span></summary><p>{{ faq_answers[forloop.index0] }}</p></details>{% endfor %}
     </div>
   </section>
 {% elsif product.handle == 'nad-advanced-500mg' %}
+  {% assign faq_questions = 'How should I take the NAD supplement?|How long does it take to see results?|Are there side effects?|Is this NAD+ made in the USA?' | split: '|' %}
+  {% assign faq_answers = 'Take 2 capsules every day with or without food.|Results vary, but many customers report changes within a few weeks of daily use.*|The formula is designed for everyday use. Follow the label and consult your clinician if you have questions.|Yes. Cata-Kor supplements are manufactured in the USA and third-party tested.' | split: '|' %}
+  {% if request.locale.iso_code == 'es' %}
+    {% assign faq_questions = '¿Cómo debo tomar el suplemento de NAD+?|¿Cuánto se tarda en notar los resultados?|¿Puede producir efectos secundarios?|¿Este NAD+ se fabrica en EE. UU.?' | split: '|' %}
+    {% assign faq_answers = 'Toma dos cápsulas al día, con o sin alimentos.|Los resultados varían, pero muchos clientes informan de cambios tras unas semanas de uso diario.*|La fórmula está diseñada para uso diario. Sigue la etiqueta y consulta con tu profesional sanitario si tienes dudas.|Sí. Los suplementos Cata-Kor se fabrican en EE. UU. y se someten a análisis independientes.' | split: '|' %}
+  {% endif %}
   <section class="faq-section" id="faq">
-    <h2>FREQUENTLY ASK QUESTION</h2>
+    <h2>{{ 'product.faq_title' | t }}</h2>
     <div class="faq-accordion-list">
-      <details class="product-accordion" open><summary>How should I take the NAD supplement?<span>＋</span></summary><div><p>Take 2 capsules every day with or without food.</p></div></details>
-      <details class="product-accordion"><summary>How long does it take to see results?<span>＋</span></summary><div><p>Results vary, but many customers report changes within a few weeks of daily use.*</p></div></details>
-      <details class="product-accordion"><summary>Are there side effects?<span>＋</span></summary><div><p>The formula is designed for everyday use. Follow the label and consult your clinician if you have questions.</p></div></details>
-      <details class="product-accordion"><summary>Is this NAD+ made in the USA?<span>＋</span></summary><div><p>Yes. Cata-Kor supplements are manufactured in the USA and third-party tested.</p></div></details>
+      {% for question in faq_questions %}<details class="product-accordion"{% if forloop.first %} open{% endif %}><summary>{{ question }}<span>＋</span></summary><div><p>{{ faq_answers[forloop.index0] }}</p></div></details>{% endfor %}
     </div>
   </section>
 {% else %}
