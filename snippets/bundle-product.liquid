@@ -6,6 +6,10 @@
   assign bundle_copy = 'A complementary Cata-Kor formula pairing designed for a simple daily wellness routine.'
   assign bundle_bullets = 'Third-party tested|Made in the USA|Manufactured from globally sourced ingredients' | split: '|'
   assign bundle_composition = blank
+  assign bundle_reference_price = 0
+  assign nad_single_price = all_products['nad-advanced-500mg'].price_min
+  assign nmn_single_price = all_products['nmn'].price_min
+  assign glutathione_single_price = all_products['liposomal-glutathione'].price_min
   assign nad_gallery = 'https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&width=1600|https://catakor.com/cdn/shop/files/1_NAD500_f37a2f8b-6fd5-43fe-a035-c83a38d54ec4.jpg?v=1783421258&width=1600|https://catakor.com/cdn/shop/files/2_NAD500_0ce4c9f5-fb17-4ac1-88c2-d4c4af74fc81.jpg?v=1783421259&width=1600|https://catakor.com/cdn/shop/files/3_NAD500_284becb5-a117-43e4-88d0-7ef566cd05c9.jpg?v=1783421258&width=1600|https://catakor.com/cdn/shop/files/4_NAD500_5964a474-23e5-46af-8174-36317bfd56c5.jpg?v=1783421258&width=1600|https://catakor.com/cdn/shop/files/5_NAD500_db73c746-222c-4b71-8b49-e692af53d992.jpg?v=1783421258&width=1600|https://catakor.com/cdn/shop/files/6_NAD500_0d0e1d1a-b711-4d81-8c41-95cdd9fa436c.jpg?v=1783421258&width=1600|https://catakor.com/cdn/shop/files/7_NAD500_Manufactured_for.jpg?v=1783421258&width=1600|https://catakor.com/cdn/shop/files/5_NAD500_a65fca12-ec33-4c89-9817-0919959280a7.jpg?v=1774889169&width=1600|https://catakor.com/cdn/shop/files/7_NAD500_91bae966-e2fe-499f-9161-0c0f42aca355.jpg?v=1774889169&width=1600|https://catakor.com/cdn/shop/files/8_NAD500-2.jpg?v=1774889110&width=1600|https://catakor.com/cdn/shop/files/3_NAD500_8218ca19-959f-4866-9785-0017cff2f5a0.jpg?v=1774889153&width=1600|https://catakor.com/cdn/shop/files/NAD250_2_jars_5e4c06d5-c927-43b1-9da8-f943028f9ece.jpg?v=1774889110&width=1600|https://catakor.com/cdn/shop/files/NAD250_3_jars_33cd95d4-1a11-40c4-a248-3e99cbee0e30.jpg?v=1774889110&width=1600'
   assign nmn_gallery = 'https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=1600|https://catakor.com/cdn/shop/files/3_NMN_bbce3af2-5504-48dc-970c-fe25fff2a0ad.jpg?v=1783426601&width=1600|https://catakor.com/cdn/shop/files/2_NMN_053d7393-a9db-469d-8ecb-51880935753c.jpg?v=1783426601&width=1600|https://catakor.com/cdn/shop/files/4_NMN_e27e16fe-9161-41bc-b268-0ce9f64cfd55.jpg?v=1783426609&width=1600|https://catakor.com/cdn/shop/files/7_NMN_1352f876-5cda-4e43-a370-8d14e63d9883.jpg?v=1783426609&width=1600'
   assign glutathione_gallery = 'https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=1600|https://catakor.com/cdn/shop/files/2_180af383-77a1-4658-bad6-6f56081aea14.jpg?v=1777301848&width=1600|https://catakor.com/cdn/shop/files/Glu_2.jpg?v=1784023438&width=1600|https://catakor.com/cdn/shop/files/4_76de2ec1-d8f9-4fb4-a973-bcde17ca02e4.jpg?v=1777301849&width=1600|https://catakor.com/cdn/shop/files/Glu_4.jpg?v=1784023438&width=1600|https://catakor.com/cdn/shop/files/32.jpg?v=1783426405&width=1600|https://catakor.com/cdn/shop/files/7139FNgEiTL._AC_SL1500.jpg?v=1784023470&width=1600|https://catakor.com/cdn/shop/files/Glu_7.jpg?v=1784023437&width=1600|https://catakor.com/cdn/shop/files/5_1_b1becfa8-499f-4364-95d8-53ede377bb0a.jpg?v=1780499486&width=1600|https://catakor.com/cdn/shop/files/8_COA_test.png?v=1777037332&width=1600|https://catakor.com/cdn/shop/files/9_2d951678-cb63-4457-94bc-e2479151a650.jpg?v=1780499486&width=1600'
@@ -13,21 +17,25 @@
 
   case product.handle
     when 'bundle-nad-nmn'
+      assign bundle_reference_price = nad_single_price | plus: nmn_single_price
       assign bundle_image = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD.png?v=1783680342'
       assign bundle_gallery = 'https://catakor.com/cdn/shop/files/Main_NMN_NAD.png?v=1783680342&width=1600|https://catakor.com/cdn/shop/files/2_265dc661-93dd-4723-8cf6-3c9138f9c018.jpg?v=1783169420&width=1600|https://catakor.com/cdn/shop/files/61JmcdKRxyL._AC_SL1500_299f1d09-6053-4757-bb18-7240b3d34490.jpg?v=1783169420&width=1600|https://catakor.com/cdn/shop/files/3_9fc18715-b342-4262-840f-d76f4248430d.jpg?v=1783169420&width=1600|https://catakor.com/cdn/shop/files/5_b5ce6d01-0b3e-4657-8bb4-791e3e192e01.jpg?v=1783169420&width=1600|https://catakor.com/cdn/shop/files/4_449778d2-09cd-4819-8bc6-1eb19219f0b7.jpg?v=1783169420&width=1600|https://catakor.com/cdn/shop/files/10_5c1f1e8d-0111-4a8b-9f5c-8185e4e07b79.jpg?v=1783169420&width=1600|https://catakor.com/cdn/shop/files/6_2d23cc6b-9acf-43b1-a05f-1fc698e87294.jpg?v=1783169420&width=1600'
       assign bundle_copy = 'A two-formula pairing for daily cellular energy and healthy-aging support.*'
       assign bundle_bullets = 'NMN: Supports NAD+ levels*|Quercetin: Supports cellular renewal*|TMG: Supports methylation balance*|Resveratrol: Supports SIRT1 activity*' | split: '|'
     when 'bundle-nmn-glutathione'
+      assign bundle_reference_price = nmn_single_price | plus: glutathione_single_price
       assign bundle_image = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_GLU.png?v=1783680215'
       assign bundle_gallery = 'https://catakor.com/cdn/shop/files/Main_NMN_GLU.png?v=1783680215&width=1600|https://catakor.com/cdn/shop/files/1_a4492c5f-0598-4b82-adf0-9bf3547ee037.png?v=1780411784&width=1600|https://catakor.com/cdn/shop/files/2_91acbaea-daa9-4c27-96df-b5caf0741a56.jpg?v=1780411783&width=1600|https://catakor.com/cdn/shop/files/3_cc69d014-2422-4a31-b5bb-174fbe4c8de6.jpg?v=1780411783&width=1600|https://catakor.com/cdn/shop/files/4_e18eb971-bab3-41a4-a2fc-786b37257b8f.jpg?v=1780411784&width=1600|https://catakor.com/cdn/shop/files/5_c57db8f4-becd-4e63-8172-d92e3d574e37.jpg?v=1780411784&width=1600|https://catakor.com/cdn/shop/files/6_7921366a-2559-483b-b9ad-3227de5db08e.jpg?v=1780411783&width=1600|https://catakor.com/cdn/shop/files/7_Glutathione_Manufactured_for-2.jpg?v=1781634843&width=1600|https://catakor.com/cdn/shop/files/8_06d3defd-88b6-4af2-b4b7-e895dd7aee6b.jpg?v=1780411784&width=1600|https://catakor.com/cdn/shop/files/9_08e19dde-9676-41fa-9c7c-78f66a04d6cc.jpg?v=1780411784&width=1600'
       assign bundle_copy = 'A two-formula pairing for cellular energy and antioxidant defense support.*'
       assign bundle_bullets = 'NMN: Supports NAD+ levels*|TMG: Supports methylation balance*|Liposomal glutathione: Supports antioxidant defenses*|Vitamin C: Supports normal immune function*' | split: '|'
     when 'bundle-nad-glutathione'
+      assign bundle_reference_price = nad_single_price | plus: glutathione_single_price
       assign bundle_composition = 'nad-glutathione'
       assign bundle_gallery = '__bundle_composition__|https://catakor.com/cdn/shop/files/20.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/21.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/26.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/27.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/28.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/31.jpg?v=1783169994&width=1600'
       assign bundle_copy = 'A two-formula pairing for cellular energy and antioxidant defense support.*'
       assign bundle_bullets = 'LipoNAD™: Supports cellular energy production*|Resveratrol: Supports healthy cellular function*|Liposomal glutathione: Supports antioxidant defenses*|Vitamin C: Supports normal immune function*' | split: '|'
     when 'bundle-nad-nmn-glutathione'
+      assign bundle_reference_price = nad_single_price | plus: nmn_single_price | plus: glutathione_single_price
       assign bundle_image = 'https://cdn.shopify.com/s/files/1/0918/3667/8454/files/Main_NMN_NAD_GLU.png?v=1783680368'
       assign bundle_gallery = 'https://catakor.com/cdn/shop/files/Main_NMN_NAD_GLU.png?v=1783680368&width=1600|https://catakor.com/cdn/shop/files/20.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/21.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/22.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/23.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/26.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/27.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/28.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/29.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/31.jpg?v=1783169994&width=1600|https://catakor.com/cdn/shop/files/8_bb2c329e-9771-4220-8260-0d7082e4563d.jpg?v=1783169994&width=1600'
       assign bundle_copy = 'Three complementary formulas for cellular energy, healthy aging and antioxidant defense support.*'
@@ -98,12 +106,21 @@
     <ul class="bundle-feature-list">
       {% for bullet in bundle_bullets %}<li>{{ bullet }}</li>{% endfor %}
     </ul>
-    {% if bundle_variant.compare_at_price > bundle_variant.price %}
-      {% assign bundle_savings = bundle_variant.compare_at_price | minus: bundle_variant.price %}
+    {% assign bundle_compare_price = bundle_variant.compare_at_price %}
+    {% if bundle_compare_price == blank or bundle_compare_price <= bundle_variant.price %}
+      {% if bundle_reference_price > bundle_variant.price %}
+        {% assign bundle_compare_price = bundle_reference_price %}
+      {% else %}
+        {% assign bundle_compare_price = bundle_variant.price | times: 100.0 | divided_by: 90 | round %}
+      {% endif %}
+    {% endif %}
+    {% assign bundle_savings = bundle_compare_price | minus: bundle_variant.price %}
+    {% assign bundle_savings_percent = bundle_savings | times: 100.0 | divided_by: bundle_compare_price | round %}
+    {% if bundle_savings > 0 %}
       <div class="bundle-price bundle-price--saving">
-        <s>{{ bundle_variant.compare_at_price | money_with_currency }}</s>
+        <s>{{ bundle_compare_price | money_with_currency }}</s>
         <strong>{{ bundle_variant.price | money_with_currency }}</strong>
-        <span>Save {{ bundle_savings | money }} · 10% bundle saving</span>
+        <span>Save {{ bundle_savings | money }} · {{ bundle_savings_percent }}% bundle saving</span>
       </div>
     {% else %}
       <strong class="bundle-price">{{ product.price | money_with_currency }}</strong>

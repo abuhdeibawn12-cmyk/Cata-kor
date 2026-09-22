@@ -117,7 +117,7 @@
           <strong>3 Jars</strong>
           <span class="pack-total">{{ variant_3.price | money }} total</span>
           <small class="pack-comparison">Save {{ save_3_cents | money }} · 90-day supply · {{ variant_3.price | divided_by: 3 | money }}/jar</small>
-          <small class="pack-proof">Only {{ three_jar_daily_cents | money }}/day · Free US shipping · 60-day guarantee</small>
+          <small class="pack-proof">Only {{ three_jar_daily_cents | money }}/day</small>
         </button>
         <button class="secondary-pack" type="button" data-secondary-pack data-jars="2" data-variant-id="{{ variant_2.id }}" data-total="{{ total_2 }}" data-one-time-cents="{{ variant_2.price }}" data-subscription-cents="{{ variant_2_subscription.price | default: variant_2.price }}" data-selling-plan-id="{{ variant_2_subscription.selling_plan.id }}" data-delivery-days="60" aria-pressed="false">
           <span class="secondary-pack-image jars-2" aria-hidden="true">{% for i in (1..2) %}<img src="{{ main_image }}" alt="" width="160" height="160">{% endfor %}</span>
@@ -234,7 +234,7 @@
         <div class="purchase-label"><h2>Select Quantity</h2><span data-nad-capsules>180 Capsules</span></div>
         <div class="quantity-options">
           <button type="button" class="quantity-option selected" data-nad-pack data-jars="3" data-variant-id="{{ nad_variant_3.id }}" data-total="98.97" data-one-time-cents="{{ nad_variant_3.price }}" data-subscription-cents="{{ nad_variant_3_subscription.price | default: nad_variant_3.price }}" data-selling-plan-id="{{ nad_variant_3_subscription.selling_plan.id }}" data-delivery-days="90" aria-pressed="true">
-            <em>MOST POPULAR · BEST VALUE</em><span class="quantity-bottles quantity-bottles-3" aria-hidden="true">{% for i in (1..3) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>3 Jars</b><span class="pack-total">{{ nad_variant_3.price | money }} total</span><small class="pack-comparison">Save {{ nad_save_3_cents | money }} · 90-day supply · {{ nad_variant_3.price | divided_by: 3 | money }}/jar</small><small class="pack-proof">Only {{ nad_daily_cents | money }}/day · Free US shipping · 60-day guarantee</small>
+            <em>MOST POPULAR · BEST VALUE</em><span class="quantity-bottles quantity-bottles-3" aria-hidden="true">{% for i in (1..3) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>3 Jars</b><span class="pack-total">{{ nad_variant_3.price | money }} total</span><small class="pack-comparison">Save {{ nad_save_3_cents | money }} · 90-day supply · {{ nad_variant_3.price | divided_by: 3 | money }}/jar</small><small class="pack-proof">Only {{ nad_daily_cents | money }}/day</small>
           </button>
           <button type="button" class="quantity-option" data-nad-pack data-jars="2" data-variant-id="{{ nad_variant_2.id }}" data-total="69.98" data-one-time-cents="{{ nad_variant_2.price }}" data-subscription-cents="{{ nad_variant_2_subscription.price | default: nad_variant_2.price }}" data-selling-plan-id="{{ nad_variant_2_subscription.selling_plan.id }}" data-delivery-days="60" aria-pressed="false">
             <span class="quantity-bottles quantity-bottles-2" aria-hidden="true">{% for i in (1..2) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>2 Jars</b><span class="pack-total">{{ nad_variant_2.price | money }} total</span><small class="pack-comparison">Save {{ nad_save_2_cents | money }} · 60-day supply</small>

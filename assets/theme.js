@@ -143,7 +143,7 @@
          <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>${formatMoney(effectiveSubtotal(cart))}</strong></div>
          <button class="global-cart-checkout" type="button" data-start-checkout>${showFlashTeaser ? "CHECKOUT &amp; REVEAL OFFER →" : "CHECKOUT"}</button>
          <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
-         ${hasOneTimePurchase ? '<p class="global-cart-note">CATA15 is automatically applied to eligible one-time products. It does not apply to subscriptions or flash offers.</p>' : ""}`
+         ${hasOneTimePurchase ? '<p class="global-cart-note">Use code CATA15 at checkout for 15% off eligible one-time products. It does not apply to subscriptions or flash offers.</p>' : ""}`
       : `<div class="global-empty-cart">
            <span>0</span><h3>Your shopping bag is empty</h3>
            <p>Choose a product and build your daily longevity routine.</p>
@@ -353,7 +353,9 @@
   document.querySelectorAll("[data-product-root]").forEach(refreshPurchaseOptions);
   const sourceToken = (item) => `${item.handle}:${item.variant_id}`;
   const orphanFlashItemsFor = (cart) => {
-    const qualifyingTokens = new Set(cart.items.filter(isFlashEligibleItem).map(sourceToken));
+    const qualifyingTokens = new Set(cart.items
+      .filter((item) => isFlashEligibleItem(item) && jarsFromTitle(item.variant_title) === 3)
+      .map(sourceToken));
     return cart.items.filter((item) => {
       if (!isFlashItem(item)) return false;
       if (item.properties?._flash_offer !== "true") return true;
@@ -386,12 +388,12 @@
       (testCartMode || variant.available) &&
       !/flash/i.test(variant.title)
     ) || product.variants.find((variant) => (testCartMode || variant.available) && !/flash/i.test(variant.title));
-  const flashVariantForJars = (product, jars, expectedPrice) =>
-    product.variants.find((variant) =>
-      jarsFromTitle(variant.title) === jars &&
-      (testCartMode || variant.available) &&
-      Number(variant.price) === expectedPrice
+  const flashVariantForJars = (product, jars, expectedPrice) => {
+    const availableVariants = product.variants.filter((variant) =>
+      jarsFromTitle(variant.title) === jars && (testCartMode || variant.available)
     );
+    return availableVariants.find((variant) => Number(variant.price) === Number(expectedPrice)) || availableVariants[0];
+  };
   const flashSelectionFor = async (regularHandle, jars, expectedPrice) => {
     const handle = flashProductHandles[regularHandle];
     if (!handle) return null;
@@ -409,6 +411,11 @@
     }
   };
   const regularItems = (cart) => cart.items.filter(isFlashEligibleItem);
+  const flashTargetPriority = {
+    nmn: ["liposomal-glutathione", "nad-advanced-500mg"],
+    "nad-advanced-500mg": ["liposomal-glutathione", "nmn"],
+    "liposomal-glutathione": ["nmn", "nad-advanced-500mg"]
+  };
 
   const buildFlashOffers = async (cart) => {
     const acceptedSourceTokens = new Set(cart.items
@@ -418,35 +425,42 @@
     const regular = regularItems(cart).filter((item) =>
       jarsFromTitle(item.variant_title) === 3 && !acceptedSourceTokens.has(sourceToken(item))
     );
-    const source = regular.find((item) => item.handle === "nmn") || regular[0];
-    if (!source) return [];
+    if (!regular.length) return [];
 
-    const complementaryHandle = source.handle === "liposomal-glutathione"
-      ? "nmn"
-      : "liposomal-glutathione";
-    const alreadyInCart = cart.items.some((item) =>
-      (item.properties?._flash_display_handle || item.handle) === complementaryHandle
-    );
-    if (alreadyInCart) return [];
+    const cartHandles = new Set(cart.items.map((item) =>
+      item.properties?._flash_display_handle || item.handle
+    ));
+    const orderedSources = [
+      ...regular.filter((item) => item.handle === "nmn"),
+      ...regular.filter((item) => item.handle !== "nmn")
+    ];
 
-    const product = await productJson(complementaryHandle);
-    const variant = normalVariantForJars(product, 1);
-    if (!variant) return [];
-    const discount = 25;
-    const salePrice = Math.round(variant.price * (1 - discount / 100));
-    const flashSelection = await flashSelectionFor(complementaryHandle, 1, salePrice);
-    if (!flashSelection) return [];
-    return [{
-      source,
-      product,
-      variant,
-      flashProduct: flashSelection.product,
-      flashVariant: flashSelection.variant,
-      jars: 1,
-      discount,
-      salePrice,
-      replaces: false
-    }];
+    for (const source of orderedSources) {
+      const candidateHandles = (flashTargetPriority[source.handle] || productHandles)
+        .filter((handle) => !cartHandles.has(handle));
+      for (const complementaryHandle of candidateHandles) {
+        const product = await productJson(complementaryHandle);
+        const variant = normalVariantForJars(product, 1);
+        if (!variant) continue;
+        const expectedPrice = Math.round(variant.price * 0.75);
+        const flashSelection = await flashSelectionFor(complementaryHandle, 1, expectedPrice);
+        if (!flashSelection) continue;
+        const salePrice = Number(flashSelection.variant.price);
+        const discount = Math.max(0, Math.round((1 - (salePrice / Number(variant.price))) * 100));
+        return [{
+          source,
+          product,
+          variant,
+          flashProduct: flashSelection.product,
+          flashVariant: flashSelection.variant,
+          jars: 1,
+          discount,
+          salePrice,
+          replaces: false
+        }];
+      }
+    }
+    return [];
   };
 
   const flashOfferMarkup = (offer, index) => {
@@ -464,9 +478,7 @@
       <button type="button" data-accept-flash="${index}">ADD TO MY ORDER — ${formatMoney(offer.salePrice)}</button>
     </article>`;
   };
-  const checkoutUrlFor = (cart) => cart.items.some(isFlashEligibleItem)
-    ? `${root}discount/CATA15?redirect=${encodeURIComponent(`${root}checkout`)}`
-    : `${root}checkout`;
+  const checkoutUrlFor = () => `${root}checkout`;
   const showFlashOffers = async () => {
     let cart = await getCart();
     const sanitized = await sanitizeFlashCart(cart);
@@ -502,7 +514,9 @@
     button.textContent = "UPDATING…";
     const latestCart = await getCart();
     const sourceStillQualifies = latestCart.items.some((item) =>
-      item.key === offer.source.key && isFlashEligibleItem(item)
+      item.key === offer.source.key &&
+      isFlashEligibleItem(item) &&
+      jarsFromTitle(item.variant_title) === 3
     );
     if (!sourceStillQualifies) {
       renderCart((await sanitizeFlashCart(latestCart)).cart);

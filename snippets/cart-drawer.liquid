@@ -69,13 +69,13 @@
           <div class="global-cart-offer-hint" role="note">
             <span>⚡ Complete Your Routine</span>
             <strong>One private add-on is waiting</strong>
-            <p>Continue to see your one-time $29.99 add-on. No subscription.</p>
+            <p>Continue to see your private one-time add-on. No subscription.</p>
           </div>
         {% endif %}
         <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
         <button class="global-cart-checkout" type="button" data-start-checkout>{% if has_flash_eligible_item %}CHECKOUT &amp; REVEAL OFFER →{% else %}CHECKOUT{% endif %}</button>
         <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
-        {% if has_discount_eligible_item %}<p class="global-cart-note">CATA15 is automatically applied to eligible one-time products. It does not apply to subscriptions or flash offers.</p>{% endif %}
+        {% if has_discount_eligible_item %}<p class="global-cart-note">Use code CATA15 at checkout for 15% off eligible one-time products. It does not apply to subscriptions or flash offers.</p>{% endif %}
       {% endif %}
     </div>
   </aside>
