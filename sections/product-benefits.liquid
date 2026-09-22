@@ -2,7 +2,7 @@
   <section class="nmn-cellular-section">
     <div class="nmn-cellular-copy">
       <span>NMN</span>
-      <h2>{{ 'benefits.cellular_title' | t | replace: '<br>', ' ' }}</h2>
+      <h2>{{ 'benefits.cellular_title' | t | replace: '<br>', ' ' | replace: '&lt;br&gt;', ' ' }}</h2>
       <p>{{ 'benefits.cellular_copy' | t }}</p>
       <ul>
         <li><span aria-hidden="true">✓</span>{{ 'benefits.energy_support' | t }}</li>

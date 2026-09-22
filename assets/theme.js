@@ -498,7 +498,7 @@
           const flashSelection = await flashSelectionFor(source.handle, jars, expectedPrice);
           if (!flashSelection) continue;
           const salePrice = Number(flashSelection.variant.price);
-          const discount = Math.max(0, Math.round((1 - (salePrice / Number(variant.price))) * 100));
+          const discount = 20;
           offers.push({ source, sourceJars, product, variant, flashProduct: flashSelection.product,
             flashVariant: flashSelection.variant, jars, discount, salePrice, replaces: true });
         } catch (error) {
@@ -521,7 +521,7 @@
           const flashSelection = await flashSelectionFor(complementaryHandle, 1, expectedPrice);
           if (!flashSelection) continue;
           const salePrice = Number(flashSelection.variant.price);
-          const discount = Math.max(0, Math.round((1 - (salePrice / Number(variant.price))) * 100));
+          const discount = 25;
           offers.push({ source, sourceJars, product, variant, flashProduct: flashSelection.product,
             flashVariant: flashSelection.variant, jars: 1, discount, salePrice, replaces: false });
           presentOrProposed.add(complementaryHandle);
