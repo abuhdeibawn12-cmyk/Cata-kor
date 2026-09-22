@@ -1,21 +1,23 @@
+{% assign locale_root = routes.root_url %}
+{% if locale_root == '/' %}{% assign locale_root = '' %}{% endif %}
 <footer class="footer" id="footer">
   <div class="footer-top">
     <div class="footer-brand">
       <a href="{{ routes.root_url }}"><img class="footer-logo" src="{{ 'logo.svg' | asset_url }}" alt="{{ shop.name }}" width="250" height="60"></a>
       <p class="footer-tagline">{{ 'footer.tagline' | t }}</p>
-      <a class="footer-contact-link" href="{{ routes.root_url | remove_last: '/' }}/pages/contact" aria-label="{{ 'footer.contact' | t }}">
+      <a class="footer-contact-link" href="{{ locale_root }}/pages/contact" aria-label="{{ 'footer.contact' | t }}">
         {% render 'icon-email' %}
       </a>
     </div>
 
     <nav class="footer-quick-links" aria-label="{{ 'footer.quick_links' | t }}">
       <h2>{{ 'footer.quick_links' | t }}</h2>
-      <a href="{{ routes.root_url | remove_last: '/' }}/pages/science-benefits#coa">COA</a>
-      <a href="{{ routes.root_url | remove_last: '/' }}/products/nad-advanced-500mg">{{ 'footer.nad' | t }}</a>
-      <a href="{{ routes.root_url | remove_last: '/' }}/products/nmn">{{ 'footer.nmn' | t }}</a>
-      <a href="{{ routes.root_url | remove_last: '/' }}/products/liposomal-glutathione">{{ 'footer.glutathione' | t }}</a>
-      <a href="{{ routes.root_url | remove_last: '/' }}/pages/science-benefits">{{ 'footer.science_quality' | t }}</a>
-      <a href="{{ routes.root_url | remove_last: '/' }}/pages/faqs">FAQs</a>
+      <a href="{{ locale_root }}/pages/science-benefits#coa">COA</a>
+      <a href="{{ locale_root }}/products/nad-advanced-500mg">{{ 'footer.nad' | t }}</a>
+      <a href="{{ locale_root }}/products/nmn">{{ 'footer.nmn' | t }}</a>
+      <a href="{{ locale_root }}/products/liposomal-glutathione">{{ 'footer.glutathione' | t }}</a>
+      <a href="{{ locale_root }}/pages/science-benefits">{{ 'footer.science_quality' | t }}</a>
+      <a href="{{ locale_root }}/pages/faqs">FAQs</a>
     </nav>
 
     <nav class="footer-policy-links" aria-label="{{ 'footer.policies' | t }}">
@@ -24,7 +26,7 @@
       <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}">{{ 'footer.shipping' | t }}</a>
       <a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">{{ 'footer.privacy' | t }}</a>
       <a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}">{{ 'footer.terms' | t }}</a>
-      <a href="{{ routes.root_url | remove_last: '/' }}/pages/contact">{{ 'footer.contact_info' | t }}</a>
+      <a href="{{ locale_root }}/pages/contact">{{ 'footer.contact_info' | t }}</a>
     </nav>
 
     <div class="newsletter">

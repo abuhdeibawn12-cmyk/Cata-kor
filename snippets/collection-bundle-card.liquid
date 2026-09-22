@@ -1,6 +1,9 @@
 {% liquid
   assign bundle_product = all_products[handle]
-  assign locale_root = routes.root_url | remove_last: '/'
+  assign locale_root = routes.root_url
+  if locale_root == '/'
+    assign locale_root = ''
+  endif
   assign bundle_url = locale_root | append: '/products/' | append: handle
   assign bundle_available = false
   assign bundle_variant = blank

@@ -1,3 +1,5 @@
+{% assign locale_root = routes.root_url %}
+{% if locale_root == '/' %}{% assign locale_root = '' %}{% endif %}
 <div data-route-fallback-page="science"{% if template.name == '404' %} hidden{% endif %}>
 <section class="science-coa-section" id="coa">
   <div class="science-page-container science-coa-grid">
@@ -13,8 +15,8 @@
         <a class="science-pill-button" href="{{ 'science-coa-nad-core.jpg' | asset_url }}" target="_blank">{{ 'science.coa_button' | t }}</a>
       </article>
       <article class="science-product-card">
-        <a class="science-product-image" href="{{ routes.root_url | remove_last: '/' }}/products/nad-advanced-500mg"><img src="{{ 'product-nad-hq.png' | asset_url }}" alt="NAD+ Advanced LipoNAD 500mg" width="900" height="900"><span>{{ 'product.sale' | t }}</span></a>
-        <a class="science-product-name" href="{{ routes.root_url | remove_last: '/' }}/products/nad-advanced-500mg">NAD⁺ Advanced LipoNAD™ 500mg</a>
+        <a class="science-product-image" href="{{ locale_root }}/products/nad-advanced-500mg"><img src="{{ 'product-nad-hq.png' | asset_url }}" alt="NAD+ Advanced LipoNAD 500mg" width="900" height="900"><span>{{ 'product.sale' | t }}</span></a>
+        <a class="science-product-name" href="{{ locale_root }}/products/nad-advanced-500mg">NAD⁺ Advanced LipoNAD™ 500mg</a>
         <p>{{ 'home.daily_energy' | t }}</p>
         <a class="science-pill-button" href="{{ 'science-coa-nad-advanced.jpg' | asset_url }}" target="_blank">{{ 'science.coa_button' | t }}</a>
       </article>

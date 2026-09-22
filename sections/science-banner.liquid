@@ -1,3 +1,5 @@
+{% assign locale_root = routes.root_url %}
+{% if locale_root == '/' %}{% assign locale_root = '' %}{% endif %}
 <section class="science-section" id="science">
   <div class="science-live-copy">
     <h2>{{ 'home.science_title' | t }}</h2>
@@ -7,7 +9,7 @@
       <div><img src="{{ 'science-dose.svg' | asset_url }}" alt="" width="64" height="64"><b>{{ 'home.transparent' | t }}</b></div>
       <div><img src="{{ 'science-tested.svg' | asset_url }}" alt="" width="64" height="64"><b>{{ 'home.tested' | t }}</b></div>
     </div>
-    <a class="primary-button" href="{{ routes.root_url | remove_last: '/' }}/pages/science-benefits">{{ 'home.explore' | t }}</a>
+    <a class="primary-button" href="{{ locale_root }}/pages/science-benefits">{{ 'home.explore' | t }}</a>
   </div>
   <img class="science-bottle" src="{{ 'science-nmn.webp' | asset_url }}" alt="Cata-Kor NMN Complex" loading="lazy" width="900" height="900">
 </section>

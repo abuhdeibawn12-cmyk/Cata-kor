@@ -1,3 +1,5 @@
+{% assign locale_root = routes.root_url %}
+{% if locale_root == '/' %}{% assign locale_root = '' %}{% endif %}
 <div class="announcement">
   <a href="{{ routes.collections_url }}/shop-all">
     {{ 'header.announcement' | t }}
@@ -20,9 +22,9 @@
   <nav class="main-nav" id="MainNavigation" aria-label="{{ 'header.menu' | t }}">
     <a href="{{ routes.collections_url }}/shop-all"{% if request.path contains '/collections/shop-all' and template.suffix != 'best-sellers' %} aria-current="page"{% endif %}>{{ 'header.shop' | t }}</a>
     <a href="{{ routes.collections_url }}/shop-all?view=best-sellers"{% if template.suffix == 'best-sellers' %} aria-current="page"{% endif %}>{{ 'header.best_sellers' | t }}</a>
-    <a href="{{ routes.root_url | remove_last: '/' }}/pages/science-benefits"{% if template.suffix == 'science' or request.path contains '/pages/science-benefits' %} aria-current="page"{% endif %}>{{ 'header.science' | t }}</a>
-    <a href="{{ routes.root_url | remove_last: '/' }}/pages/about-us"{% if template.suffix == 'about' or request.path contains '/pages/about-us' %} class="is-active" aria-current="page"{% endif %}>{{ 'header.about' | t }}</a>
-    <a href="{{ routes.root_url | remove_last: '/' }}/apps/track-order"{% if request.path contains '/apps/track-order' %} class="is-active" aria-current="page"{% endif %}>{{ 'header.track_order' | t }}</a>
+    <a href="{{ locale_root }}/pages/science-benefits"{% if template.suffix == 'science' or request.path contains '/pages/science-benefits' %} aria-current="page"{% endif %}>{{ 'header.science' | t }}</a>
+    <a href="{{ locale_root }}/pages/about-us"{% if template.suffix == 'about' or request.path contains '/pages/about-us' %} class="is-active" aria-current="page"{% endif %}>{{ 'header.about' | t }}</a>
+    <a href="{{ locale_root }}/apps/track-order"{% if request.path contains '/apps/track-order' %} class="is-active" aria-current="page"{% endif %}>{{ 'header.track_order' | t }}</a>
     {% if localization.available_languages.size > 1 %}
       {% form 'localization', id: 'HeaderLanguageForm', class: 'header-language-form' %}
         <label for="HeaderLanguage">{{ 'general.language' | t }}</label>
