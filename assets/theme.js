@@ -23,9 +23,9 @@
     empty: "Tu cesta está vacía", emptyCopy: "Elige un producto y crea tu rutina diaria de longevidad.", continue: "SEGUIR COMPRANDO",
     oneTime: "Compra única", bundleQuantity: "Cantidad de packs", flashQuantity: "Cantidad de ofertas flash", remove: "Eliminar", decrease: "Reducir cantidad", increase: "Aumentar cantidad",
     complete: "Completa tu rutina", waiting: "Tienes una oferta privada disponible", waitingCopy: "Continúa para ver tu complemento de compra única. Sin suscripción.", subtotal: "SUBTOTAL", checkout: "PAGAR", checkoutOffer: "PAGAR Y VER OFERTA →",
-    progressLocked: (amount) => `Añade ${amount} más en productos normales para conseguir un 10% de descuento.`, progressUnlocked: "Has conseguido un 10% de descuento. Usa CATA10 al pagar.", progressLabel: "Progreso del descuento CATA10",
-    progressRules: "Introduce CATA10 manualmente al pagar. Solo se aplica a productos normales elegibles; se excluyen suscripciones, packs y ofertas flash.", thresholdNote: "Los pedidos con al menos $100 USD en productos normales elegibles reciben un 10% de descuento con el código CATA10.",
-    delivered: (days) => `Entrega cada ${days} días`, flashSaving: (discount) => `1 tarro · ${discount}% de ahorro privado`, flashMode: "COMPLEMENTO DE COMPRA ÚNICA · SIN SUSCRIPCIÓN", flashAdd: (price) => `AÑADIR A MI PEDIDO — ${price}`,
+    progressLocked: (amount) => `Añade ${amount} más para conseguir un 10% de descuento.`, progressUnlocked: "Has conseguido un 10% de descuento. Usa CATA10 al pagar.", progressLabel: "Progreso del descuento CATA10",
+    progressRules: "Introduce CATA10 manualmente al pagar. Cualquier cesta de $100 USD o más cumple los requisitos.", thresholdNote: "Compra por un total de $100 USD o más y usa CATA10 al pagar para obtener un 10% de descuento.",
+    delivered: (days) => `Entrega cada ${days} días`, becauseChosen: (name) => `PORQUE ELEGISTE ${name}`, flashDetail: (jars, discount) => `${jars} ${jars === 1 ? "tarro" : "tarros"} · ${discount}% de descuento flash`, flashReplaceMode: (name) => `SUSTITUYE TU PACK ACTUAL DE ${name}`, flashAddMode: "AÑADE UN PRODUCTO DIFERENTE A TU PEDIDO", flashReplace: "SUSTITUIR POR ESTA OFERTA", flashAddShort: "AÑADIR OFERTA FLASH",
     decline: "NO, GRACIAS. CONTINUAR", updating: "ACTUALIZANDO…", offerAdded: "OFERTA AÑADIDA", bundleUpgraded: "PACK ACTUALIZADO", continueOffers: "CONTINUAR CON MIS OFERTAS", addToCart: "AÑADIR A LA CESTA", adding: "AÑADIENDO…", tryAgain: "INTÉNTALO DE NUEVO",
     page: (page, pages) => `Página ${page} de ${pages}`, previousReview: "Página anterior de reseñas", nextReview: "Página siguiente de reseñas", showing: (start, end, total) => `Mostrando ${start}–${end} de ${total} reseñas`, noReviews: "Ninguna reseña coincide con este filtro.", verified: "Verificada", anonymous: "Anónimo", stars: (rating) => `${rating} de 5 estrellas`,
     originalReview: "Original en inglés", viewOriginal: "Ver original", hideOriginal: "Ocultar original", customerPhoto: "Foto de cliente", loadError: "No se pudieron cargar las reseñas. Actualiza la página para intentarlo de nuevo.",
@@ -35,9 +35,9 @@
     empty: "Your shopping bag is empty", emptyCopy: "Choose a product and build your daily longevity routine.", continue: "CONTINUE SHOPPING",
     oneTime: "One-time purchase", bundleQuantity: "Bundle quantity", flashQuantity: "Flash bundle quantity", remove: "Remove", decrease: "Decrease quantity", increase: "Increase quantity",
     complete: "Complete Your Routine", waiting: "One private add-on is waiting", waitingCopy: "Continue to see your private one-time add-on. No subscription.", subtotal: "SUBTOTAL", checkout: "CHECKOUT", checkoutOffer: "CHECKOUT & REVEAL OFFER →",
-    progressLocked: (amount) => `Spend ${amount} more on regular products to unlock 10% OFF!`, progressUnlocked: "10% OFF unlocked — use CATA10 at checkout!", progressLabel: "CATA10 discount progress",
-    progressRules: "CATA10 is entered manually at checkout and applies only to eligible regular products. Subscriptions, bundles and flash offers are excluded.", thresholdNote: "Orders with at least $100 USD in eligible regular products receive 10% off with code CATA10.",
-    delivered: (days) => `Delivered every ${days} days`, flashSaving: (discount) => `1 Jar · ${discount}% private add-on saving`, flashMode: "ONE-TIME ADD-ON · NO SUBSCRIPTION", flashAdd: (price) => `ADD TO MY ORDER — ${price}`,
+    progressLocked: (amount) => `Spend ${amount} more to unlock 10% OFF!`, progressUnlocked: "10% OFF unlocked — use CATA10 at checkout!", progressLabel: "CATA10 discount progress",
+    progressRules: "Enter CATA10 manually at checkout. Every cart of $100 USD or more qualifies.", thresholdNote: "Spend $100 USD or more and use CATA10 at checkout for 10% off.",
+    delivered: (days) => `Delivered every ${days} days`, becauseChosen: (name) => `BECAUSE YOU CHOSE ${name}`, flashDetail: (jars, discount) => `${jars} ${jars === 1 ? "Jar" : "Jars"} · ${discount}% Flash Discount`, flashReplaceMode: (name) => `REPLACES YOUR CURRENT ${name} BUNDLE`, flashAddMode: "ADDS A DIFFERENT PRODUCT TO YOUR ORDER", flashReplace: "REPLACE WITH THIS OFFER", flashAddShort: "ADD FLASH OFFER",
     decline: "NO THANKS, CONTINUE", updating: "UPDATING…", offerAdded: "OFFER ADDED", bundleUpgraded: "BUNDLE UPGRADED", continueOffers: "CONTINUE WITH MY OFFERS", addToCart: "ADD TO CART", adding: "ADDING…", tryAgain: "PLEASE TRY AGAIN",
     page: (page, pages) => `Page ${page} of ${pages}`, previousReview: "Previous review page", nextReview: "Next review page", showing: (start, end, total) => `Showing ${start}–${end} of ${total} reviews`, noReviews: "No customer reviews match this filter.", verified: "Verified", anonymous: "Anonymous", stars: (rating) => `${rating} out of 5 stars`,
     originalReview: "Original in English", viewOriginal: "View original", hideOriginal: "Hide original", customerPhoto: "Customer photo", loadError: "Customer reviews could not be loaded. Please refresh the page to try again.",
@@ -74,7 +74,6 @@
   const isFlashEligibleItem = (item) =>
     !isFlashItem(item) && !isSubscriptionItem(item) && !isBundleItem(item);
   const discountEligibleSubtotal = (cart) => cart.items
-    .filter(isFlashEligibleItem)
     .reduce((total, item) => total + effectiveLinePrice(item), 0);
   const cata10ThresholdCents = () => {
     const presentmentRate = Number(window.Shopify?.currency?.rate || 1);
@@ -110,11 +109,13 @@
       .filter(isFlashItem)
       .map((item) => item.properties?._flash_source_token)
       .filter(Boolean));
-    return cart.items.some((item) =>
-      isFlashEligibleItem(item) &&
-      jarsFromTitle(item.variant_title) === 3 &&
-      !acceptedSourceTokens.has(`${item.handle}:${item.variant_id}`)
-    );
+    return cart.items.some((item) => {
+      const jars = jarsFromTitle(item.variant_title);
+      return isFlashEligibleItem(item) &&
+        productHandles.includes(item.handle) &&
+        jars >= 1 && jars <= 3 &&
+        !acceptedSourceTokens.has(`${item.handle}:${item.variant_id}`);
+    });
   };
 
   const lockPage = () => document.body.classList.add("is-locked");
@@ -182,7 +183,6 @@
     }
     if (!content) return;
     const showFlashTeaser = hasPendingFlashOffer(cart);
-    const hasOneTimePurchase = cart.items.some(isFlashEligibleItem);
     content.innerHTML = cart.items.length
       ? `<div class="global-cart-items" data-cart-items>${cart.items.map(cartLineMarkup).join("")}</div>
          ${showFlashTeaser ? `<div class="global-cart-offer-hint" role="note">
@@ -190,11 +190,11 @@
            <strong>${ui.waiting}</strong>
            <p>${ui.waitingCopy}</p>
          </div>` : ""}
-         ${hasOneTimePurchase ? '<div class="cart-discount-progress" data-discount-progress></div>' : ""}
+         <div class="cart-discount-progress" data-discount-progress></div>
          <div class="global-cart-summary"><span>${ui.subtotal}</span><strong data-cart-total>${formatMoney(effectiveSubtotal(cart))}</strong></div>
          <button class="global-cart-checkout" type="button" data-start-checkout>${showFlashTeaser ? ui.checkoutOffer : ui.checkout}</button>
          <button class="global-cart-continue" type="button" data-cart-close>${ui.continue}</button>
-         ${hasOneTimePurchase ? `<p class="global-cart-note">${ui.thresholdNote}</p>` : ""}`
+         <p class="global-cart-note">${ui.thresholdNote}</p>`
       : `<div class="global-empty-cart">
            <span>0</span><h3>${ui.empty}</h3>
            <p>${ui.emptyCopy}</p>
@@ -406,7 +406,7 @@
   const sourceToken = (item) => `${item.handle}:${item.variant_id}`;
   const orphanFlashItemsFor = (cart) => {
     const qualifyingTokens = new Set(cart.items
-      .filter((item) => isFlashEligibleItem(item) && jarsFromTitle(item.variant_title) === 3)
+      .filter((item) => isFlashEligibleItem(item) && productHandles.includes(item.handle) && jarsFromTitle(item.variant_title) === 3)
       .map(sourceToken));
     return cart.items.filter((item) => {
       if (!isFlashItem(item)) return false;
@@ -439,7 +439,7 @@
       jarsFromTitle(variant.title) === jars &&
       (testCartMode || variant.available) &&
       !/flash/i.test(variant.title)
-    ) || product.variants.find((variant) => (testCartMode || variant.available) && !/flash/i.test(variant.title));
+    );
   const flashVariantForJars = (product, jars, expectedPrice) => {
     const availableVariants = product.variants.filter((variant) =>
       jarsFromTitle(variant.title) === jars && (testCartMode || variant.available)
@@ -474,60 +474,80 @@
       .filter(isFlashItem)
       .map((item) => item.properties?._flash_source_token)
       .filter(Boolean));
-    const regular = regularItems(cart).filter((item) =>
-      jarsFromTitle(item.variant_title) === 3 && !acceptedSourceTokens.has(sourceToken(item))
-    );
+    const regular = regularItems(cart).filter((item) => {
+      const jars = jarsFromTitle(item.variant_title);
+      return productHandles.includes(item.handle) &&
+        jars >= 1 && jars <= 3 &&
+        !acceptedSourceTokens.has(sourceToken(item));
+    });
     if (!regular.length) return [];
 
-    const cartHandles = new Set(cart.items.map((item) =>
+    const presentOrProposed = new Set(cart.items.map((item) =>
       item.properties?._flash_display_handle || item.handle
     ));
-    const orderedSources = [
-      ...regular.filter((item) => item.handle === "nmn"),
-      ...regular.filter((item) => item.handle !== "nmn")
-    ];
+    const offers = [];
+    for (const source of regular) {
+      const sourceJars = jarsFromTitle(source.variant_title);
+      if (sourceJars < 3) {
+        try {
+          const product = await productJson(source.handle);
+          const jars = sourceJars + 1;
+          const variant = normalVariantForJars(product, jars);
+          if (!variant) continue;
+          const expectedPrice = Math.round(Number(variant.price) * 0.8);
+          const flashSelection = await flashSelectionFor(source.handle, jars, expectedPrice);
+          if (!flashSelection) continue;
+          const salePrice = Number(flashSelection.variant.price);
+          const discount = Math.max(0, Math.round((1 - (salePrice / Number(variant.price))) * 100));
+          offers.push({ source, sourceJars, product, variant, flashProduct: flashSelection.product,
+            flashVariant: flashSelection.variant, jars, discount, salePrice, replaces: true });
+        } catch (error) {
+          console.warn(`Unable to prepare the ${sourceJars + 1}-jar upgrade for ${source.handle}.`, error);
+        }
+        continue;
+      }
 
-    for (const source of orderedSources) {
-      const candidateHandles = (flashTargetPriority[source.handle] || productHandles)
-        .filter((handle) => !cartHandles.has(handle));
-      for (const complementaryHandle of candidateHandles) {
-        const product = await productJson(complementaryHandle);
-        const variant = normalVariantForJars(product, 1);
-        if (!variant) continue;
-        const expectedPrice = Math.round(variant.price * 0.75);
-        const flashSelection = await flashSelectionFor(complementaryHandle, 1, expectedPrice);
-        if (!flashSelection) continue;
-        const salePrice = Number(flashSelection.variant.price);
-        const discount = Math.max(0, Math.round((1 - (salePrice / Number(variant.price))) * 100));
-        return [{
-          source,
-          product,
-          variant,
-          flashProduct: flashSelection.product,
-          flashVariant: flashSelection.variant,
-          jars: 1,
-          discount,
-          salePrice,
-          replaces: false
-        }];
+      const priority = flashTargetPriority[source.handle] || productHandles.filter((handle) => handle !== source.handle);
+      const candidateHandles = [
+        ...priority.filter((handle) => handle !== source.handle && !presentOrProposed.has(handle)),
+        ...priority.filter((handle) => handle !== source.handle && presentOrProposed.has(handle))
+      ];
+      for (const complementaryHandle of [...new Set(candidateHandles)]) {
+        try {
+          const product = await productJson(complementaryHandle);
+          const variant = normalVariantForJars(product, 1);
+          if (!variant) continue;
+          const expectedPrice = Math.round(Number(variant.price) * 0.75);
+          const flashSelection = await flashSelectionFor(complementaryHandle, 1, expectedPrice);
+          if (!flashSelection) continue;
+          const salePrice = Number(flashSelection.variant.price);
+          const discount = Math.max(0, Math.round((1 - (salePrice / Number(variant.price))) * 100));
+          offers.push({ source, sourceJars, product, variant, flashProduct: flashSelection.product,
+            flashVariant: flashSelection.variant, jars: 1, discount, salePrice, replaces: false });
+          presentOrProposed.add(complementaryHandle);
+          break;
+        } catch (error) {
+          console.warn(`Unable to prepare a complementary offer for ${complementaryHandle}.`, error);
+        }
       }
     }
-    return [];
+    return offers;
   };
 
   const flashOfferMarkup = (offer, index) => {
+    const sourceName = String(offer.source.product_title || "").replace(/\s+\d+\s*MG$/i, "");
     const jarCount = Math.min(3, Math.max(1, Number(offer.jars) || 1));
     const productImage = offer.product.featured_image
       ? `<figure class="global-offer-pack-image jars-${jarCount}" role="img" aria-label="${jarCount} ${jarCount === 1 ? "jar" : "jars"} of ${escapeHtml(offer.product.title)}">${Array.from({ length: jarCount }, () => `<img src="${escapeHtml(imageUrl(offer.product.featured_image, 500))}" alt="">`).join("")}</figure>`
       : "";
     return `<article data-flash-index="${index}">
-      <span>COMPLETE YOUR ROUTINE</span>
+      <span>${escapeHtml(ui.becauseChosen(sourceName.toUpperCase()))}</span>
       ${productImage}
-      <h3>Add ${escapeHtml(offer.product.title)}</h3>
-      <p>${ui.flashSaving(offer.discount)}</p>
-      <small class="global-offer-mode">${ui.flashMode}</small>
+      <h3>${escapeHtml(offer.product.title)}</h3>
+      <p>${escapeHtml(ui.flashDetail(offer.jars, offer.discount))}</p>
+      <small class="global-offer-mode">${offer.replaces ? escapeHtml(ui.flashReplaceMode(sourceName.toUpperCase())) : ui.flashAddMode}</small>
       <div><del>${formatMoney(offer.variant.price)}</del><strong>${formatMoney(offer.salePrice)}</strong></div>
-      <button type="button" data-accept-flash="${index}">${ui.flashAdd(formatMoney(offer.salePrice))}</button>
+      <button type="button" data-accept-flash="${index}">${offer.replaces ? ui.flashReplace : ui.flashAddShort}</button>
     </article>`;
   };
   const checkoutUrlFor = () => `${root}checkout`;
@@ -568,7 +588,8 @@
     const sourceStillQualifies = latestCart.items.some((item) =>
       item.key === offer.source.key &&
       isFlashEligibleItem(item) &&
-      jarsFromTitle(item.variant_title) === 3
+      productHandles.includes(item.handle) &&
+      jarsFromTitle(item.variant_title) === offer.sourceJars
     );
     if (!sourceStillQualifies) {
       renderCart((await sanitizeFlashCart(latestCart)).cart);

@@ -20,7 +20,6 @@
         </div>
       {% else %}
         {% assign has_flash_eligible_item = false %}
-        {% assign has_discount_eligible_item = false %}
         <div class="global-cart-items" data-cart-items>
           {% for item in cart.items %}
             {% assign is_flash_item = false %}
@@ -29,8 +28,7 @@
             {% if item.product.type == 'Bundle' or item.product.handle contains 'bundle-' %}{% assign is_bundle_item = true %}{% endif %}
             {% unless is_flash_item %}
               {% unless item.selling_plan_allocation or is_bundle_item %}
-                {% assign has_discount_eligible_item = true %}
-                {% if item.variant.title contains '3' %}{% assign has_flash_eligible_item = true %}{% endif %}
+                {% if item.product.handle == 'nad-advanced-500mg' or item.product.handle == 'liposomal-glutathione' or item.product.handle == 'nmn' %}{% assign has_flash_eligible_item = true %}{% endif %}
               {% endunless %}
             {% endunless %}
             <article data-line-key="{{ item.key }}">
@@ -72,16 +70,14 @@
             <p>{{ 'cart.waiting_copy' | t }}</p>
           </div>
         {% endif %}
-        {% if has_discount_eligible_item %}
-          <div class="cart-discount-progress" data-discount-progress>
-            <strong>{{ 'cart.threshold_note' | t }}</strong>
-            <div class="cart-discount-progress__track" role="progressbar" aria-label="{{ 'cart.progress_label' | t }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span><b aria-hidden="true">♡</b></div>
-          </div>
-        {% endif %}
+        <div class="cart-discount-progress" data-discount-progress>
+          <strong>{{ 'cart.threshold_note' | t }}</strong>
+          <div class="cart-discount-progress__track" role="progressbar" aria-label="{{ 'cart.progress_label' | t }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span><b aria-hidden="true">♡</b></div>
+        </div>
         <div class="global-cart-summary"><span>{{ 'cart.subtotal' | t }}</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
         <button class="global-cart-checkout" type="button" data-start-checkout>{% if has_flash_eligible_item %}{{ 'cart.checkout_offer' | t }}{% else %}{{ 'cart.checkout' | t }}{% endif %}</button>
         <button class="global-cart-continue" type="button" data-cart-close>{{ 'cart.continue' | t }}</button>
-        {% if has_discount_eligible_item %}<p class="global-cart-note">{{ 'cart.threshold_note' | t }}</p>{% endif %}
+        <p class="global-cart-note">{{ 'cart.threshold_note' | t }}</p>
       {% endif %}
     </div>
   </aside>
