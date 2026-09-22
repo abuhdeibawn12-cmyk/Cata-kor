@@ -1952,6 +1952,109 @@
   width: 250px;
 }
 
+.cart-discount-progress {
+  color: #173d25;
+  margin: 18px 0 2px;
+  text-align: center;
+}
+
+.cart-discount-progress > strong {
+  display: block;
+  font-family: "Adieu", sans-serif;
+  font-size: 13px;
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+.cart-discount-progress__track {
+  background: #edf0ed;
+  border-radius: 999px;
+  height: 12px;
+  margin: 0 9px;
+  overflow: visible;
+  position: relative;
+}
+
+.cart-discount-progress__track > span {
+  background: repeating-linear-gradient(135deg, #173d25 0 5px, #4c794f 5px 8px);
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+  min-width: 0;
+  transition: width 0.25s ease;
+}
+
+.cart-discount-progress__track > b {
+  align-items: center;
+  background: #fff;
+  border: 2px solid #173d25;
+  border-radius: 50%;
+  display: flex;
+  font-size: 18px;
+  font-weight: 500;
+  height: 34px;
+  justify-content: center;
+  line-height: 1;
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+}
+
+.cart-discount-progress > small {
+  color: #68736b;
+  display: block;
+  font-size: 9px;
+  line-height: 1.4;
+  margin-top: 14px;
+}
+
+.cart-discount-progress.is-unlocked .cart-discount-progress__track > span {
+  background: #dcff72;
+}
+
+.cart-discount-progress--dark {
+  color: #fff;
+  margin: 18px 0 24px;
+}
+
+.cart-discount-progress--dark .cart-discount-progress__track {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.cart-discount-progress--dark > small {
+  color: #c8d4ca;
+}
+
+.header-language-form {
+  align-items: center;
+  display: flex;
+  gap: 7px;
+}
+
+.header-language-form label {
+  font-size: 11px;
+  position: absolute;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.header-language-form select {
+  background: #f6f8f3;
+  border: 1px solid #c8d1c9;
+  border-radius: 999px;
+  color: #173d25;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  padding: 8px 28px 8px 11px;
+}
+
 .global-offer-pack-image img {
   height: 160px;
   left: 50%;
@@ -4766,6 +4869,16 @@ h3 {
   .newsletter {
     justify-self: center;
     max-width: 410px;
+    width: 100%;
+  }
+
+  .header-language-form {
+    border-bottom: 1px solid var(--line);
+    padding: 12px 0;
+    width: 100%;
+  }
+
+  .header-language-form select {
     width: 100%;
   }
 

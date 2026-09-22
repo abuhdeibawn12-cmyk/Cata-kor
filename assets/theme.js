@@ -16,6 +16,7 @@
     style: "currency",
     currency: window.Shopify?.currency?.active || "USD"
   });
+  const cata10ThresholdUsdCents = 10000;
 
   const escapeHtml = (value = "") =>
     String(value).replace(/[&<>"']/g, (character) => ({
@@ -46,6 +47,31 @@
     String(item.product_type || "").toLowerCase() === "bundle" || String(item.handle || "").startsWith("bundle-");
   const isFlashEligibleItem = (item) =>
     !isFlashItem(item) && !isSubscriptionItem(item) && !isBundleItem(item);
+  const discountEligibleSubtotal = (cart) => cart.items
+    .filter(isFlashEligibleItem)
+    .reduce((total, item) => total + effectiveLinePrice(item), 0);
+  const cata10ThresholdCents = () => {
+    const presentmentRate = Number(window.Shopify?.currency?.rate || 1);
+    return Math.max(1, Math.round(cata10ThresholdUsdCents * presentmentRate));
+  };
+  const updateDiscountProgress = (cart) => {
+    const eligibleSubtotal = discountEligibleSubtotal(cart);
+    const threshold = cata10ThresholdCents();
+    const remaining = Math.max(0, threshold - eligibleSubtotal);
+    const unlocked = remaining === 0;
+    const percentage = Math.min(100, Math.round((eligibleSubtotal / threshold) * 100));
+    document.querySelectorAll("[data-discount-progress]").forEach((progress) => {
+      progress.classList.toggle("is-unlocked", unlocked);
+      progress.innerHTML = `
+        <strong>${unlocked
+          ? "10% OFF unlocked — use CATA10 at checkout!"
+          : `Spend ${formatMoney(remaining)} more on regular products to unlock 10% OFF!`}</strong>
+        <div class="cart-discount-progress__track" role="progressbar" aria-label="CATA10 discount progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percentage}">
+          <span style="width:${percentage}%"></span><b aria-hidden="true">${unlocked ? "✓" : "♡"}</b>
+        </div>
+        <small>CATA10 is entered manually at checkout and applies only to eligible regular products. Subscriptions, bundles and flash offers are excluded.</small>`;
+    });
+  };
   const purchaseLabel = (item) => {
     if (!isSubscriptionItem(item)) return "One-time purchase";
     return item.selling_plan_allocation?.selling_plan?.name || "Delivered every month · Save 15%";
@@ -140,15 +166,17 @@
            <strong>A Private Flash Deal Is Waiting</strong>
            <p>Use the checkout button below to reveal it. No code required.</p>
          </div>` : ""}
+         ${hasOneTimePurchase ? '<div class="cart-discount-progress" data-discount-progress></div>' : ""}
          <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>${formatMoney(effectiveSubtotal(cart))}</strong></div>
          <button class="global-cart-checkout" type="button" data-start-checkout>${showFlashTeaser ? "CHECKOUT &amp; REVEAL OFFER →" : "CHECKOUT"}</button>
          <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
-         ${hasOneTimePurchase ? '<p class="global-cart-note">Use code CATA15 at checkout for 15% off eligible one-time products. It does not apply to subscriptions or flash offers.</p>' : ""}`
+         ${hasOneTimePurchase ? '<p class="global-cart-note">Orders with at least $100 USD in eligible regular products receive 10% off with code CATA10.</p>' : ""}`
       : `<div class="global-empty-cart">
            <span>0</span><h3>Your shopping bag is empty</h3>
            <p>Choose a product and build your daily longevity routine.</p>
            <button type="button" data-cart-close>CONTINUE SHOPPING</button>
          </div>`;
+    updateDiscountProgress(cart);
   };
 
   const buildCart = (items = []) => ({

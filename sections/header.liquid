@@ -20,9 +20,19 @@
   <nav class="main-nav" id="MainNavigation" aria-label="Main navigation">
     <a href="{{ routes.collections_url }}/shop-all"{% if request.path == '/collections/shop-all' and template.suffix != 'best-sellers' %} aria-current="page"{% endif %}>Shop</a>
     <a href="{{ routes.collections_url }}/shop-all?view=best-sellers"{% if template.suffix == 'best-sellers' %} aria-current="page"{% endif %}>Best Sellers</a>
-    <a href="/pages/science-benefits"{% if template.suffix == 'science' or request.path == '/pages/science-benefits' %} aria-current="page"{% endif %}>Science</a>
-    <a href="/pages/about-us"{% if template.suffix == 'about' or request.path == '/pages/about-us' %} class="is-active" aria-current="page"{% endif %}>About</a>
-    <a href="/apps/track-order"{% if request.path == '/apps/track-order' %} class="is-active" aria-current="page"{% endif %}>Track Order</a>
+    <a href="{{ routes.root_url }}pages/science-benefits"{% if template.suffix == 'science' or request.path contains '/pages/science-benefits' %} aria-current="page"{% endif %}>Science</a>
+    <a href="{{ routes.root_url }}pages/about-us"{% if template.suffix == 'about' or request.path contains '/pages/about-us' %} class="is-active" aria-current="page"{% endif %}>About</a>
+    <a href="{{ routes.root_url }}apps/track-order"{% if request.path contains '/apps/track-order' %} class="is-active" aria-current="page"{% endif %}>Track Order</a>
+    {% if localization.available_languages.size > 1 %}
+      {% form 'localization', id: 'HeaderLanguageForm', class: 'header-language-form' %}
+        <label for="HeaderLanguage">Language</label>
+        <select id="HeaderLanguage" name="locale_code" onchange="this.form.submit()" aria-label="Choose language">
+          {% for language in localization.available_languages %}
+            <option value="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
+          {% endfor %}
+        </select>
+      {% endform %}
+    {% endif %}
   </nav>
 
   <div class="header-actions">
@@ -64,7 +74,7 @@
       "type": "text",
       "id": "announcement",
       "label": "Announcement",
-      "default": "EXTRA 15% OFF AT CHECKOUT · USE CODE CATA15"
+      "default": "10% OFF $100+ ELIGIBLE ORDERS · USE CODE CATA10"
     }
   ]
 }

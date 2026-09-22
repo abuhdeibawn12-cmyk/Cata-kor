@@ -58,13 +58,27 @@ the drawer from advertising a price Shopify checkout will not honor.
 
 ## Discounts
 
-- `CATA15`: 15% off regular products only.
+- `CATA10`: 10% off regular products only, with a $100 USD minimum eligible purchase.
 - Do not create `FLASH20` or `FLASH25` codes. The private flash variants already
   contain their final checkout prices.
-- Exclude all products tagged `flash-offer` from `CATA15` and any automatic
+- Exclude all products tagged `flash-offer`, subscriptions, and bundles from `CATA10` and any automatic
   promotion so discounts cannot stack.
 - For stricter offer-eligibility enforcement, use Shopify Functions or a
   compatible upsell app; theme code cannot prevent direct cart API requests.
+
+## Spanish storefront
+
+- In Shopify Admin, go to **Settings → Languages**, add Spanish, and assign it
+  to both the Spain and Mexico markets.
+- Use Shopify Translate & Adapt to translate products, collections, pages,
+  policies, navigation, and theme content. Review medical, legal, shipping, and
+  guarantee wording manually before publishing.
+- Publish Spanish after review. The header language selector is conditional and
+  appears automatically as soon as Shopify exposes more than one published
+  storefront language.
+- Shopify will serve the Spanish storefront from a localized URL such as `/es`.
+  Theme-owned internal links use the localized `routes.root_url` so customers
+  remain in Spanish while navigating.
 
 ## Pages
 

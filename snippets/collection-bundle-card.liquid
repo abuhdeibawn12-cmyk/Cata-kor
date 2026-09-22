@@ -1,6 +1,6 @@
 {% liquid
   assign bundle_product = all_products[handle]
-  assign bundle_url = '/products/' | append: handle
+  assign bundle_url = routes.root_url | append: 'products/' | append: handle
   assign bundle_available = false
   assign bundle_variant = blank
   assign bundle_variant_id = variant_id

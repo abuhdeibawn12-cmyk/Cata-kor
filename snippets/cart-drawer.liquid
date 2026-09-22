@@ -72,10 +72,16 @@
             <p>Continue to see your private one-time add-on. No subscription.</p>
           </div>
         {% endif %}
+        {% if has_discount_eligible_item %}
+          <div class="cart-discount-progress" data-discount-progress>
+            <strong>Use CATA10 for 10% off $100+ eligible regular-product orders.</strong>
+            <div class="cart-discount-progress__track" role="progressbar" aria-label="CATA10 discount progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span><b aria-hidden="true">♡</b></div>
+          </div>
+        {% endif %}
         <div class="global-cart-summary"><span>SUBTOTAL</span><strong data-cart-total>{{ cart.total_price | money }}</strong></div>
         <button class="global-cart-checkout" type="button" data-start-checkout>{% if has_flash_eligible_item %}CHECKOUT &amp; REVEAL OFFER →{% else %}CHECKOUT{% endif %}</button>
         <button class="global-cart-continue" type="button" data-cart-close>CONTINUE SHOPPING</button>
-        {% if has_discount_eligible_item %}<p class="global-cart-note">Use code CATA15 at checkout for 15% off eligible one-time products. It does not apply to subscriptions or flash offers.</p>{% endif %}
+        {% if has_discount_eligible_item %}<p class="global-cart-note">Orders with at least $100 USD in eligible regular products receive 10% off with code CATA10.</p>{% endif %}
       {% endif %}
     </div>
   </aside>

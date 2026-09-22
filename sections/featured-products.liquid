@@ -24,7 +24,7 @@
       fallback_title: 'Liposomal NAD+',
       fallback_price: '$39.99',
       benefit: 'Daily cellular energy*',
-      product_url: '/products/nad-advanced-500mg'
+      product_url: routes.root_url | append: 'products/nad-advanced-500mg'
     %}
     {% render 'home-product-card',
       product: nmn,
@@ -32,7 +32,7 @@
       fallback_title: 'NMN Complex',
       fallback_price: '$39.99',
       benefit: 'NAD+ pathway support*',
-      product_url: '/products/nmn'
+      product_url: routes.root_url | append: 'products/nmn'
     %}
     {% render 'home-product-card',
       product: glutathione,
@@ -40,7 +40,7 @@
       fallback_title: 'Liposomal Glutathione',
       fallback_price: '$39.99',
       benefit: 'Antioxidant defense*',
-      product_url: '/products/liposomal-glutathione'
+      product_url: routes.root_url | append: 'products/liposomal-glutathione'
     %}
     {% render 'home-product-card',
       fallback_image: 'product-caakg.avif',

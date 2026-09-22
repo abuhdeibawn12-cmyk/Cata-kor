@@ -46,9 +46,9 @@ variant prices so the amount shown in the bag is preserved at checkout.
 
 ## Promotions and apps
 
-- Create the `CATA15` discount code in Shopify Admin as 15% off eligible regular
-  products. Configure its combinations so it cannot stack with flash-sale or
-  subscription discounts.
+- Create the `CATA10` discount code in Shopify Admin as 10% off eligible regular
+  products with a $100 USD minimum purchase. Configure its combinations so it
+  cannot stack with flash-sale, bundle, or subscription discounts.
 - The product and reviews sections accept Shopify app blocks. Subscription and
   verified-reviews apps can therefore be installed later without rewriting the
   theme.
