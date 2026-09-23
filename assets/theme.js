@@ -390,11 +390,11 @@
     product.querySelectorAll("[data-subscription-cadence], [data-subscription-benefit-cadence]").forEach((element) => {
       setDynamicText(element, ui.delivered(deliveryDays));
     });
-    if (pack.dataset.subscriptionBadge) {
-      setDynamicText(product.querySelector("[data-subscription-badge]"), pack.dataset.subscriptionBadge);
+    if (pack.dataset.packSubscriptionBadge) {
+      setDynamicText(product.querySelector("[data-subscription-badge]"), pack.dataset.packSubscriptionBadge);
     }
-    if (pack.dataset.subscriptionSavingCopy) {
-      setDynamicText(product.querySelector("[data-subscription-saving-copy]"), pack.dataset.subscriptionSavingCopy);
+    if (pack.dataset.packSubscriptionSavingCopy) {
+      setDynamicText(product.querySelector("[data-subscription-saving-copy]"), pack.dataset.packSubscriptionSavingCopy);
     }
 
     const sellingPlanInput = form.querySelector("[data-selling-plan-input]");
