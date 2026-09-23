@@ -411,6 +411,46 @@
   };
   document.querySelectorAll("[data-product-root]").forEach(refreshPurchaseOptions);
   const sourceToken = (item) => `${item.handle}:${item.variant_id}`;
+  const sellingPlanIdentity = (item) => Number(item?.selling_plan_allocation?.selling_plan?.id || 0);
+  const sameCartLine = (candidate, target) => {
+    if (!candidate || !target) return false;
+    if (candidate.key && target.key && candidate.key === target.key) return true;
+    if (Number(candidate.variant_id) !== Number(target.variant_id)) return false;
+    if (isFlashItem(candidate) !== isFlashItem(target)) return false;
+    if (!isFlashItem(candidate)) return sellingPlanIdentity(candidate) === sellingPlanIdentity(target);
+    const candidateProperties = candidate.properties || {};
+    const targetProperties = target.properties || {};
+    return String(candidateProperties._flash_replacement || "") === String(targetProperties._flash_replacement || "") &&
+      String(candidateProperties._flash_source_variant_id || "") === String(targetProperties._flash_source_variant_id || "") &&
+      String(candidateProperties._flash_source_token || "") === String(targetProperties._flash_source_token || "") &&
+      String(candidateProperties._flash_display_handle || "") === String(targetProperties._flash_display_handle || "") &&
+      String(candidateProperties._flash_display_variant || "") === String(targetProperties._flash_display_variant || "");
+  };
+  const changeCartLineByPosition = async (line, quantity) => {
+    if (testCartMode) throw new Error("Line-position fallback is not available in test cart mode");
+    const response = await fetch(`${root}cart/change.js`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ line, quantity })
+    });
+    if (!response.ok) throw new Error("Unable to update cart by line position");
+    return response.json();
+  };
+  const removeCartLineSafely = async (target, cart) => {
+    let currentCart = cart || await getCart();
+    let current = currentCart.items.find((item) => sameCartLine(item, target));
+    if (!current) return currentCart;
+    try {
+      return await updateLine(current.key, 0);
+    } catch (keyError) {
+      currentCart = await getCart();
+      current = currentCart.items.find((item) => sameCartLine(item, target));
+      if (!current) return currentCart;
+      const lineIndex = currentCart.items.findIndex((item) => item.key === current.key);
+      if (lineIndex < 0) throw keyError;
+      return changeCartLineByPosition(lineIndex + 1, 0);
+    }
+  };
   const orphanFlashItemsFor = (cart) => {
     const qualifyingTokens = new Set(cart.items
       .filter((item) => isFlashEligibleItem(item) && productHandles.includes(item.handle) && jarsFromTitle(item.variant_title) === featuredJarsFor(item.handle))
@@ -423,11 +463,34 @@
       return !token || !qualifyingTokens.has(token);
     });
   };
+  const incompleteReplacementSourcesFor = (cart) => {
+    const replacementFlashItems = cart.items.filter((item) =>
+      isFlashItem(item) &&
+      item.properties?._flash_offer === "true" &&
+      item.properties?._flash_replacement === "true"
+    );
+    const sources = [];
+    replacementFlashItems.forEach((flashItem) => {
+      const sourceVariantId = Number(flashItem.properties?._flash_source_variant_id || 0);
+      const sourceHandle = String(flashItem.properties?._flash_source_handle || flashItem.properties?._flash_display_handle || "");
+      const replacementJars = jarsFromTitle(flashItem.properties?._flash_display_variant || flashItem.variant_title);
+      cart.items.forEach((item) => {
+        if (!isFlashEligibleItem(item)) return;
+        const explicitMatch = sourceVariantId && Number(item.variant_id) === sourceVariantId;
+        const legacyMatch = !sourceVariantId && item.handle === sourceHandle && jarsFromTitle(item.variant_title) < replacementJars;
+        if ((explicitMatch || legacyMatch) && !sources.some((source) => sameCartLine(source, item))) sources.push(item);
+      });
+    });
+    return sources;
+  };
   const sanitizeFlashCart = async (cart) => {
     const orphans = orphanFlashItemsFor(cart);
+    const incompleteReplacementSources = incompleteReplacementSourcesFor(cart);
+    const invalidLines = [...orphans, ...incompleteReplacementSources]
+      .filter((item, index, all) => all.findIndex((candidate) => sameCartLine(candidate, item)) === index);
     let updated = cart;
-    for (const orphan of orphans) updated = await updateLine(orphan.key, 0);
-    return { cart: updated, removed: orphans.length };
+    for (const invalidLine of invalidLines) updated = await removeCartLineSafely(invalidLine, updated);
+    return { cart: updated, removed: invalidLines.length };
   };
   const changeCartLine = async (key, quantity) => {
     let updated = await updateLine(key, quantity);
@@ -592,42 +655,62 @@
     if (!offer || button.disabled) return;
     button.disabled = true;
     button.textContent = ui.updating;
-    const latestCart = await getCart();
-    const sourceStillQualifies = latestCart.items.some((item) =>
-      item.key === offer.source.key &&
+    let latestCart = await getCart();
+    const currentSourceForOffer = (cart) => cart.items.find((item) =>
+      sameCartLine(item, offer.source) &&
       isFlashEligibleItem(item) &&
       productHandles.includes(item.handle) &&
       jarsFromTitle(item.variant_title) === offer.sourceJars
     );
-    if (!sourceStillQualifies) {
+    const acceptedReplacementForOffer = (cart) => cart.items.find((item) => {
+      if (!isFlashItem(item) || item.properties?._flash_offer !== "true" || item.properties?._flash_replacement !== "true") return false;
+      if (Number(item.variant_id) !== Number(offer.flashVariant.id)) return false;
+      const recordedSourceVariant = Number(item.properties?._flash_source_variant_id || 0);
+      return recordedSourceVariant
+        ? recordedSourceVariant === Number(offer.source.variant_id)
+        : String(item.properties?._flash_display_handle || "") === String(offer.product.handle || "");
+    });
+    const sourceStillQualifies = currentSourceForOffer(latestCart);
+    const existingReplacement = offer.replaces ? acceptedReplacementForOffer(latestCart) : null;
+    if (!sourceStillQualifies && !existingReplacement) {
       renderCart((await sanitizeFlashCart(latestCart)).cart);
       flashDialog.hidden = true;
       unlockPage();
       openCart();
       throw new Error("The qualifying product is no longer in your bag.");
     }
-    await addVariant(offer.flashVariant.id, offer.replaces ? offer.source.quantity : 1, {
-      _flash_offer: "true",
-      _flash_replacement: String(offer.replaces),
-      _flash_discount: String(offer.discount),
-      _flash_original_price_cents: String(offer.variant.price),
-      _flash_source_token: offer.replaces ? "" : sourceToken(offer.source),
-      _flash_display_handle: offer.product.handle,
-      _flash_display_title: offer.product.title,
-      _flash_display_variant: offer.variant.title
-    }, {
-      handle: offer.flashProduct.handle,
-      title: offer.flashProduct.title,
-      variantTitle: offer.flashVariant.title,
-      price: offer.flashVariant.price,
-      image: offer.product.featured_image
-    });
-    if (offer.replaces) await updateLine(offer.source.key, 0);
+    if (!existingReplacement) {
+      await addVariant(offer.flashVariant.id, offer.replaces ? offer.source.quantity : 1, {
+        _flash_offer: "true",
+        _flash_replacement: String(offer.replaces),
+        _flash_discount: String(offer.discount),
+        _flash_original_price_cents: String(offer.variant.price),
+        _flash_source_token: offer.replaces ? "" : sourceToken(offer.source),
+        _flash_source_handle: offer.source.handle,
+        _flash_source_variant_id: String(offer.source.variant_id),
+        _flash_source_jars: String(offer.sourceJars),
+        _flash_display_handle: offer.product.handle,
+        _flash_display_title: offer.product.title,
+        _flash_display_variant: offer.variant.title
+      }, {
+        handle: offer.flashProduct.handle,
+        title: offer.flashProduct.title,
+        variantTitle: offer.flashVariant.title,
+        price: offer.flashVariant.price,
+        image: offer.product.featured_image
+      });
+      latestCart = await getCart();
+    }
+    if (offer.replaces) latestCart = await removeCartLineSafely(offer.source, latestCart);
+    latestCart = await getCart();
+    if (offer.replaces && (currentSourceForOffer(latestCart) || !acceptedReplacementForOffer(latestCart))) {
+      throw new Error("The bundle upgrade could not be completed safely.");
+    }
     flashDialog._accepted.add(index);
     button.textContent = offer.replaces ? ui.bundleUpgraded : ui.offerAdded;
     const continueButton = flashDialog.querySelector("[data-flash-continue]");
     if (continueButton) continueButton.textContent = ui.continueOffers;
-    renderCart(await getCart());
+    renderCart(latestCart);
   };
   const continueCheckout = async () => {
     if (flashDialog) flashDialog.hidden = true;
