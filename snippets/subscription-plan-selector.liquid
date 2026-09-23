@@ -1,6 +1,10 @@
 {% liquid
   assign subscription_allocation = selected_allocation | default: selected_variant.selling_plan_allocations.first
   assign delivery_days = selected_delivery_days | default: 30
+  assign subscription_savings = selected_subscription_savings
+  if subscription_savings == blank and subscription_allocation
+    assign subscription_savings = selected_variant.price | minus: subscription_allocation.price | money
+  endif
 %}
 
 {% if subscription_allocation %}
@@ -9,7 +13,7 @@
 
     <button class="plan-option plan-option--subscription" type="button" data-purchase-mode="subscription" aria-pressed="false">
       <span class="plan-option__copy">
-        <small>{{ 'product.subscribe_badge' | t }}</small>
+        <small data-subscription-badge>{% if enhanced_nmn %}{{ 'product.nmn_subscribe_badge' | t }}{% else %}{{ 'product.subscribe_badge' | t }}{% endif %}</small>
         <b>{{ 'product.subscribe' | t }}</b>
         <em data-subscription-cadence>{{ 'product.delivered_days' | t: days: delivery_days }}</em>
       </span>
@@ -22,7 +26,7 @@
 
     <ul class="plan-benefits" aria-label="{{ 'product.subscribe' | t }}">
       <li>{{ 'product.free_shipping' | t }}</li>
-      <li>{{ 'product.delivery_discount' | t }}</li>
+      <li{% if enhanced_nmn %} data-subscription-saving-copy{% endif %}>{% if enhanced_nmn %}{{ 'product.save_every_delivery' | t: amount: subscription_savings }}{% else %}{{ 'product.delivery_discount' | t }}{% endif %}</li>
       <li data-subscription-benefit-cadence>{{ 'product.delivered_days' | t: days: delivery_days }}</li>
       <li>{{ 'product.manage_account' | t }}</li>
     </ul>

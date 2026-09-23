@@ -63,6 +63,7 @@
     return `${source}${source.includes("?") ? "&" : "?"}width=${width}`;
   };
   const jarsFromTitle = (title = "") => Math.max(1, Number(String(title).match(/\d+/)?.[0] || 1));
+  const featuredJarsFor = (handle) => handle === "nmn" ? 4 : 3;
   const isFlashProduct = (item) => {
     const handle = String(item?.handle || "");
     return flashHandles.has(handle) || handle.endsWith("-flash-offer");
@@ -113,7 +114,7 @@
       const jars = jarsFromTitle(item.variant_title);
       return isFlashEligibleItem(item) &&
         productHandles.includes(item.handle) &&
-        jars >= 1 && jars <= 3 &&
+        jars >= 1 && jars <= featuredJarsFor(item.handle) &&
         !acceptedSourceTokens.has(`${item.handle}:${item.variant_id}`);
     });
   };
@@ -389,6 +390,12 @@
     product.querySelectorAll("[data-subscription-cadence], [data-subscription-benefit-cadence]").forEach((element) => {
       setDynamicText(element, ui.delivered(deliveryDays));
     });
+    if (pack.dataset.subscriptionBadge) {
+      setDynamicText(product.querySelector("[data-subscription-badge]"), pack.dataset.subscriptionBadge);
+    }
+    if (pack.dataset.subscriptionSavingCopy) {
+      setDynamicText(product.querySelector("[data-subscription-saving-copy]"), pack.dataset.subscriptionSavingCopy);
+    }
 
     const sellingPlanInput = form.querySelector("[data-selling-plan-input]");
     if (sellingPlanInput) {
@@ -406,7 +413,7 @@
   const sourceToken = (item) => `${item.handle}:${item.variant_id}`;
   const orphanFlashItemsFor = (cart) => {
     const qualifyingTokens = new Set(cart.items
-      .filter((item) => isFlashEligibleItem(item) && productHandles.includes(item.handle) && jarsFromTitle(item.variant_title) === 3)
+      .filter((item) => isFlashEligibleItem(item) && productHandles.includes(item.handle) && jarsFromTitle(item.variant_title) === featuredJarsFor(item.handle))
       .map(sourceToken));
     return cart.items.filter((item) => {
       if (!isFlashItem(item)) return false;
@@ -477,7 +484,7 @@
     const regular = regularItems(cart).filter((item) => {
       const jars = jarsFromTitle(item.variant_title);
       return productHandles.includes(item.handle) &&
-        jars >= 1 && jars <= 3 &&
+        jars >= 1 && jars <= featuredJarsFor(item.handle) &&
         !acceptedSourceTokens.has(sourceToken(item));
     });
     if (!regular.length) return [];
@@ -488,21 +495,22 @@
     const offers = [];
     for (const source of regular) {
       const sourceJars = jarsFromTitle(source.variant_title);
-      if (sourceJars < 3) {
+      const featuredJars = featuredJarsFor(source.handle);
+      if (sourceJars < featuredJars) {
         try {
           const product = await productJson(source.handle);
-          const jars = sourceJars + 1;
+          const jars = sourceJars === 1 ? 2 : featuredJars;
           const variant = normalVariantForJars(product, jars);
           if (!variant) continue;
-          const expectedPrice = Math.round(Number(variant.price) * 0.8);
+          const discount = source.handle === "nmn" ? 10 : 20;
+          const expectedPrice = Math.round(Number(variant.price) * (1 - discount / 100));
           const flashSelection = await flashSelectionFor(source.handle, jars, expectedPrice);
           if (!flashSelection) continue;
           const salePrice = Number(flashSelection.variant.price);
-          const discount = 20;
           offers.push({ source, sourceJars, product, variant, flashProduct: flashSelection.product,
             flashVariant: flashSelection.variant, jars, discount, salePrice, replaces: true });
         } catch (error) {
-          console.warn(`Unable to prepare the ${sourceJars + 1}-jar upgrade for ${source.handle}.`, error);
+          console.warn(`Unable to prepare the ${sourceJars === 1 ? 2 : featuredJars}-jar upgrade for ${source.handle}.`, error);
         }
         continue;
       }
@@ -536,7 +544,7 @@
 
   const flashOfferMarkup = (offer, index) => {
     const sourceName = String(offer.source.product_title || "").replace(/\s+\d+\s*MG$/i, "");
-    const jarCount = Math.min(3, Math.max(1, Number(offer.jars) || 1));
+    const jarCount = Math.min(4, Math.max(1, Number(offer.jars) || 1));
     const productImage = offer.product.featured_image
       ? `<figure class="global-offer-pack-image jars-${jarCount}" role="img" aria-label="${jarCount} ${jarCount === 1 ? "jar" : "jars"} of ${escapeHtml(offer.product.title)}">${Array.from({ length: jarCount }, () => `<img src="${escapeHtml(imageUrl(offer.product.featured_image, 500))}" alt="">`).join("")}</figure>`
       : "";

@@ -8,17 +8,28 @@
   {% render 'bundle-product', product: product %}
 {% elsif product.handle == 'nmn' or product.handle == 'liposomal-glutathione' %}
   {% for variant in product.variants %}
+    {% if variant.title contains '4' %}{% assign variant_4 = variant %}{% endif %}
     {% if variant.title contains '3' %}{% assign variant_3 = variant %}{% endif %}
     {% if variant.title contains '2' %}{% assign variant_2 = variant %}{% endif %}
     {% if variant.title contains '1' %}{% assign variant_1 = variant %}{% endif %}
   {% endfor %}
 
-  {% assign variant_3_subscription = variant_3.selling_plan_allocations.first %}
+  {% if product.handle == 'nmn' %}
+    {% assign featured_variant = variant_4 | default: variant_3 %}
+    {% assign featured_jar_count = 4 %}
+    {% assign featured_delivery_days = 120 %}
+  {% else %}
+    {% assign featured_variant = variant_3 %}
+    {% assign featured_jar_count = 3 %}
+    {% assign featured_delivery_days = 90 %}
+  {% endif %}
+
+  {% assign featured_subscription = featured_variant.selling_plan_allocations.first %}
   {% assign variant_2_subscription = variant_2.selling_plan_allocations.first %}
   {% assign variant_1_subscription = variant_1.selling_plan_allocations.first %}
   {% for allocation in variant_1.selling_plan_allocations %}
     {% assign plan_name = allocation.selling_plan.name | downcase %}
-    {% unless plan_name contains '2 month' or plan_name contains '3 month' or plan_name contains '60 day' or plan_name contains '90 day' %}
+    {% unless plan_name contains '2 month' or plan_name contains '3 month' or plan_name contains '4 month' or plan_name contains '60 day' or plan_name contains '90 day' or plan_name contains '120 day' %}
       {% assign variant_1_subscription = allocation %}
     {% endunless %}
   {% endfor %}
@@ -26,9 +37,13 @@
     {% assign plan_name = allocation.selling_plan.name | downcase %}
     {% if plan_name contains '2 month' or plan_name contains '60 day' %}{% assign variant_2_subscription = allocation %}{% endif %}
   {% endfor %}
-  {% for allocation in variant_3.selling_plan_allocations %}
+  {% for allocation in featured_variant.selling_plan_allocations %}
     {% assign plan_name = allocation.selling_plan.name | downcase %}
-    {% if plan_name contains '3 month' or plan_name contains '90 day' %}{% assign variant_3_subscription = allocation %}{% endif %}
+    {% if product.handle == 'nmn' %}
+      {% if plan_name contains '4 month' or plan_name contains '120 day' %}{% assign featured_subscription = allocation %}{% endif %}
+    {% elsif plan_name contains '3 month' or plan_name contains '90 day' %}
+      {% assign featured_subscription = allocation %}
+    {% endif %}
   {% endfor %}
 
   {% if product.handle == 'nmn' %}
@@ -41,9 +56,7 @@
     {% assign gallery_text = 'https://catakor.com/cdn/shop/files/Main_NMN_42c0bc37-5c6c-48ca-a3cc-4ca3790dca55.png?v=1783680309&width=1100|https://catakor.com/cdn/shop/files/3_NMN_bbce3af2-5504-48dc-970c-fe25fff2a0ad.jpg?v=1783426601&width=1100|https://catakor.com/cdn/shop/files/2_NMN_053d7393-a9db-469d-8ecb-51880935753c.jpg?v=1783426601&width=1445|https://catakor.com/cdn/shop/files/4_NMN_e27e16fe-9161-41bc-b268-0ce9f64cfd55.jpg?v=1783426609&width=1445|https://catakor.com/cdn/shop/files/7_NMN_1352f876-5cda-4e43-a370-8d14e63d9883.jpg?v=1783426609&width=1445|https://catakor.com/cdn/shop/files/5_NMN_4123d42c-2f4a-4c6b-8eed-14ecea140918.jpg?v=1783426444&width=1445|https://catakor.com/cdn/shop/files/5_NMN_4f364f54-6fc8-4ef4-9ab8-3c10b1b05739.jpg?v=1783426609&width=1445|https://catakor.com/cdn/shop/files/9_NMN_bbefea93-83dd-486d-b27d-7f9277d60fb8.jpg?v=1783426608&width=1445|https://catakor.com/cdn/shop/files/8_NMN_d6190cf0-d0a6-46c0-aa2a-4e5e73e22bca.jpg?v=1783426608&width=1445|https://catakor.com/cdn/shop/files/9_NMN.jpg?v=1774889070&width=1445|https://catakor.com/cdn/shop/files/NMN_2_pack-2.png?v=1774889070&width=1445|https://catakor.com/cdn/shop/files/NMN_3_pack-2.png?v=1774889070&width=1445' %}
     {% assign accordion_titles = 'How to Use|Ingredients|Shipping & Guarantee|Third-Party Tested' | split: '|' %}
     {% assign accordion_copies = 'Take two capsules daily with water, with or without food.|NMN, trimethylglycine (TMG), quercetin and trans-resveratrol. See the product label for the complete ingredient list.|Orders include tracked U.S. delivery and are backed by the Cata-Kor money-back guarantee.|Every batch is independently tested for identity, purity and quality before release.' | split: '|' %}
-    {% assign total_3 = 101.97 %}
-    {% assign total_2 = 71.98 %}
-    {% assign three_jar_daily_cents = variant_3.price | divided_by: 90.0 %}
+    {% assign featured_daily_cents = featured_variant.price | divided_by: 120.0 %}
   {% else %}
     {% assign product_id = 'glutathione' %}
     {% assign exact_title = 'LIPOSOMAL GLUTATHIONE' %}
@@ -54,9 +67,7 @@
     {% assign gallery_text = 'https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&width=1100|https://catakor.com/cdn/shop/files/2_180af383-77a1-4658-bad6-6f56081aea14.jpg?v=1777301848&width=1100|https://catakor.com/cdn/shop/files/Glu_2.jpg?v=1784023438&width=1445|https://catakor.com/cdn/shop/files/4_76de2ec1-d8f9-4fb4-a973-bcde17ca02e4.jpg?v=1777301849&width=1445|https://catakor.com/cdn/shop/files/Glu_4.jpg?v=1784023438&width=1445|https://catakor.com/cdn/shop/files/32.jpg?v=1783426405&width=1445|https://catakor.com/cdn/shop/files/7139FNgEiTL._AC_SL1500.jpg?v=1784023470&width=1445|https://catakor.com/cdn/shop/files/Glu_7.jpg?v=1784023437&width=1445|https://catakor.com/cdn/shop/files/5_1_b1becfa8-499f-4364-95d8-53ede377bb0a.jpg?v=1780499486&width=1445|https://catakor.com/cdn/shop/files/8_COA_test.png?v=1777037332&width=1445|https://catakor.com/cdn/shop/files/9_2d951678-cb63-4457-94bc-e2479151a650.jpg?v=1780499486&width=1445' %}
     {% assign accordion_titles = 'Details|How to Use|Safety|Ingredients' | split: '|' %}
     {% assign accordion_copies = 'A liposomal glutathione formula with vitamin C, selenium, vitamin B2 and resveratrol to support antioxidant activity and cellular defense.*|Take two capsules daily with water, with or without food.|Consult a qualified healthcare professional before use if you are pregnant, nursing, taking medication or managing a medical condition.|Liposomal glutathione, vitamin C, selenium, vitamin B2 and trans-resveratrol. See the product label for the complete ingredient list.' | split: '|' %}
-    {% assign total_3 = 98.97 %}
-    {% assign total_2 = 69.98 %}
-    {% assign three_jar_daily_cents = variant_3.price | divided_by: 90.0 %}
+    {% assign featured_daily_cents = featured_variant.price | divided_by: 90.0 %}
   {% endif %}
   {% if request.locale.iso_code == 'es' %}
     {% if product.handle == 'nmn' %}
@@ -70,16 +81,25 @@
     {% endif %}
   {% endif %}
   {% assign regular_2_cents = variant_1.price | times: 2 %}
-  {% assign regular_3_cents = variant_1.price | times: 3 %}
+  {% assign regular_featured_cents = variant_1.price | times: featured_jar_count %}
   {% assign save_2_cents = regular_2_cents | minus: variant_2.price %}
-  {% assign save_3_cents = regular_3_cents | minus: variant_3.price %}
+  {% assign save_featured_cents = regular_featured_cents | minus: featured_variant.price %}
   {% assign save_2_money = save_2_cents | money %}
-  {% assign save_3_money = save_3_cents | money %}
-  {% assign three_jar_price = variant_3.price | money %}
+  {% assign save_featured_money = save_featured_cents | money %}
+  {% assign regular_featured_money = regular_featured_cents | money %}
+  {% assign regular_2_money = regular_2_cents | money %}
+  {% assign featured_price = featured_variant.price | money %}
   {% assign two_jar_price = variant_2.price | money %}
   {% assign one_jar_price = variant_1.price | money %}
-  {% assign three_jar_each = variant_3.price | divided_by: 3 | money %}
-  {% assign three_jar_daily = three_jar_daily_cents | money %}
+  {% assign featured_each = featured_variant.price | divided_by: featured_jar_count | money %}
+  {% assign two_jar_each = variant_2.price | divided_by: 2 | money %}
+  {% assign featured_daily = featured_daily_cents | money %}
+  {% assign two_jar_daily = variant_2.price | divided_by: 60.0 | money %}
+  {% assign one_jar_daily = variant_1.price | divided_by: 30.0 | money %}
+  {% assign featured_subscription_savings = featured_variant.price | minus: featured_subscription.price | money %}
+  {% assign variant_2_subscription_savings = variant_2.price | minus: variant_2_subscription.price | money %}
+  {% assign variant_1_subscription_savings = variant_1.price | minus: variant_1_subscription.price | money %}
+  {% assign featured_capsules = featured_jar_count | times: 60 %}
   {% assign gallery_text = gallery_text | replace: 'width=1100', 'width=1600' | replace: 'width=1445', 'width=1600' %}
   {% assign main_image = main_image | replace: 'width=1100', 'width=1600' %}
   {% assign gallery = gallery_text | split: '|' %}
@@ -126,38 +146,51 @@
 
       <div class="secondary-quantity-heading">
         <h2>{{ 'product.select_quantity' | t }}</h2>
-        <span data-selected-capsules>{{ 'product.capsules' | t: count: 180 }}</span>
+        <span data-selected-capsules>{{ 'product.capsules' | t: count: featured_capsules }}</span>
       </div>
       <div class="secondary-pack-grid">
-        <button class="secondary-pack is-selected" type="button" data-secondary-pack data-jars="3" data-variant-id="{{ variant_3.id }}" data-total="{{ total_3 }}" data-one-time-cents="{{ variant_3.price }}" data-subscription-cents="{{ variant_3_subscription.price | default: variant_3.price }}" data-selling-plan-id="{{ variant_3_subscription.selling_plan.id }}" data-delivery-days="90" aria-pressed="true">
-          <em>{{ 'product.popular_value' | t }}</em>
-          <span class="secondary-pack-image jars-3" aria-hidden="true">{% for i in (1..3) %}<img src="{{ main_image }}" alt="" width="160" height="160">{% endfor %}</span>
-          <strong>3 {{ 'product.jars' | t }}</strong>
-          <span class="pack-total">{{ three_jar_price }} {{ 'product.total' | t }}</span>
-          <small class="pack-comparison">{{ 'product.save' | t: amount: save_3_money }} · {{ 'product.day_supply' | t: days: 90 }} · {{ 'product.per_jar' | t: amount: three_jar_each }}</small>
-          <small class="pack-proof">{{ 'product.only_day' | t: amount: three_jar_daily }}</small>
+        <button class="secondary-pack is-selected" type="button" data-secondary-pack data-jars="{{ featured_jar_count }}" data-variant-id="{{ featured_variant.id }}" data-total="{{ featured_variant.price | divided_by: 100.0 }}" data-one-time-cents="{{ featured_variant.price }}" data-subscription-cents="{{ featured_subscription.price | default: featured_variant.price }}" data-selling-plan-id="{{ featured_subscription.selling_plan.id }}" data-delivery-days="{{ featured_delivery_days }}"{% if product.handle == 'nmn' %} data-subscription-badge="{{ 'product.nmn_subscribe_badge' | t | escape }}" data-subscription-saving-copy="{{ 'product.save_every_delivery' | t: amount: featured_subscription_savings | escape }}"{% endif %} aria-pressed="true">
+          <em>{% if product.handle == 'nmn' %}{{ 'product.best_value' | t }}{% else %}{{ 'product.popular_value' | t }}{% endif %}</em>
+          <span class="secondary-pack-image jars-{{ featured_jar_count }}" aria-hidden="true">{% for i in (1..featured_jar_count) %}<img src="{{ main_image }}" alt="" width="160" height="160">{% endfor %}</span>
+          {% if product.handle == 'nmn' %}
+            <strong class="pack-offer-title">{{ 'product.buy_three_get_one' | t }}</strong>
+            <span class="pack-delivery">{{ 'product.jars_delivered' | t: count: 4 }}</span>
+            <span class="pack-total"><del>{{ regular_featured_money }}</del> {{ featured_price }} {{ 'product.total' | t }}</span>
+          {% else %}
+            <strong>3 {{ 'product.jars' | t }}</strong>
+            <span class="pack-total">{{ featured_price }} {{ 'product.total' | t }}</span>
+          {% endif %}
+          <small class="pack-comparison">{{ 'product.save' | t: amount: save_featured_money }} · {{ 'product.per_jar' | t: amount: featured_each }}</small>
+          <small class="pack-proof">{{ 'product.only_day' | t: amount: featured_daily }}</small>
         </button>
-        <button class="secondary-pack" type="button" data-secondary-pack data-jars="2" data-variant-id="{{ variant_2.id }}" data-total="{{ total_2 }}" data-one-time-cents="{{ variant_2.price }}" data-subscription-cents="{{ variant_2_subscription.price | default: variant_2.price }}" data-selling-plan-id="{{ variant_2_subscription.selling_plan.id }}" data-delivery-days="60" aria-pressed="false">
+        <button class="secondary-pack" type="button" data-secondary-pack data-jars="2" data-variant-id="{{ variant_2.id }}" data-total="{{ variant_2.price | divided_by: 100.0 }}" data-one-time-cents="{{ variant_2.price }}" data-subscription-cents="{{ variant_2_subscription.price | default: variant_2.price }}" data-selling-plan-id="{{ variant_2_subscription.selling_plan.id }}" data-delivery-days="60"{% if product.handle == 'nmn' %} data-subscription-badge="{{ 'product.subscribe_badge' | t | escape }}" data-subscription-saving-copy="{{ 'product.save_every_delivery' | t: amount: variant_2_subscription_savings | escape }}"{% endif %} aria-pressed="false">
+          {% if product.handle == 'nmn' %}<em>{{ 'product.save_percent' | t: percent: 25 }}</em>{% endif %}
           <span class="secondary-pack-image jars-2" aria-hidden="true">{% for i in (1..2) %}<img src="{{ main_image }}" alt="" width="160" height="160">{% endfor %}</span>
           <strong>2 {{ 'product.jars' | t }}</strong>
-          <span class="pack-total">{{ two_jar_price }} {{ 'product.total' | t }}</span>
-          <small class="pack-comparison">{{ 'product.save' | t: amount: save_2_money }} · {{ 'product.day_supply' | t: days: 60 }}</small>
+          <span class="pack-total">{% if product.handle == 'nmn' %}<del>{{ regular_2_money }}</del> {% endif %}{{ two_jar_price }} {{ 'product.total' | t }}</span>
+          <small class="pack-comparison">{{ 'product.save' | t: amount: save_2_money }} · {% if product.handle == 'nmn' %}{{ 'product.per_jar' | t: amount: two_jar_each }}{% else %}{{ 'product.day_supply' | t: days: 60 }}{% endif %}</small>
+          {% if product.handle == 'nmn' %}<small class="pack-proof">{{ 'product.only_day' | t: amount: two_jar_daily }}</small>{% endif %}
         </button>
-        <button class="secondary-pack" type="button" data-secondary-pack data-jars="1" data-variant-id="{{ variant_1.id }}" data-total="{{ variant_1.price | divided_by: 100.0 }}" data-one-time-cents="{{ variant_1.price }}" data-subscription-cents="{{ variant_1_subscription.price | default: variant_1.price }}" data-selling-plan-id="{{ variant_1_subscription.selling_plan.id }}" data-delivery-days="30" aria-pressed="false">
+        <button class="secondary-pack" type="button" data-secondary-pack data-jars="1" data-variant-id="{{ variant_1.id }}" data-total="{{ variant_1.price | divided_by: 100.0 }}" data-one-time-cents="{{ variant_1.price }}" data-subscription-cents="{{ variant_1_subscription.price | default: variant_1.price }}" data-selling-plan-id="{{ variant_1_subscription.selling_plan.id }}" data-delivery-days="30"{% if product.handle == 'nmn' %} data-subscription-badge="{{ 'product.subscribe_badge' | t | escape }}" data-subscription-saving-copy="{{ 'product.save_every_delivery' | t: amount: variant_1_subscription_savings | escape }}"{% endif %} aria-pressed="false">
           <span class="secondary-pack-image jars-1" aria-hidden="true"><img src="{{ main_image }}" alt="" width="160" height="160"></span>
           <strong>1 {{ 'product.jar' | t }}</strong>
           <span class="pack-total">{{ one_jar_price }} {{ 'product.total' | t }}</span>
-          <small class="pack-comparison">{{ 'product.day_supply' | t: days: 30 }}</small>
+          <small class="pack-comparison">{% if product.handle == 'nmn' %}{{ 'product.per_jar' | t: amount: one_jar_price }} · {% endif %}{{ 'product.day_supply' | t: days: 30 }}</small>
+          {% if product.handle == 'nmn' %}<small class="pack-proof">{{ 'product.only_day' | t: amount: one_jar_daily }}</small>{% endif %}
         </button>
       </div>
 
-      {% render 'subscription-plan-selector', product: product, selected_variant: variant_3, selected_allocation: variant_3_subscription, selected_delivery_days: 90 %}
+      {% if product.handle == 'nmn' %}
+        {% render 'subscription-plan-selector', product: product, selected_variant: featured_variant, selected_allocation: featured_subscription, selected_delivery_days: featured_delivery_days, enhanced_nmn: true, selected_subscription_savings: featured_subscription_savings %}
+      {% else %}
+        {% render 'subscription-plan-selector', product: product, selected_variant: featured_variant, selected_allocation: featured_subscription, selected_delivery_days: featured_delivery_days %}
+      {% endif %}
       <form action="{{ routes.cart_add_url }}" method="post" data-product-form>
-        <input type="hidden" name="id" value="{{ variant_3.id }}" data-variant-input>
+        <input type="hidden" name="id" value="{{ featured_variant.id }}" data-variant-input>
         <input type="hidden" name="quantity" value="1">
-        {% if variant_3_subscription %}<input type="hidden" name="selling_plan" value="{{ variant_3_subscription.selling_plan.id }}" data-selling-plan-input disabled>{% endif %}
+        {% if featured_subscription %}<input type="hidden" name="selling_plan" value="{{ featured_subscription.selling_plan.id }}" data-selling-plan-input disabled>{% endif %}
         <button class="secondary-add-button" type="submit" data-add-to-cart>
-          <span data-add-label>{{ 'product.add' | t }}</span> <strong data-add-price>{{ variant_3.price | money }}</strong>
+          <span data-add-label>{{ 'product.add' | t }}</span> <strong data-add-price>{{ featured_variant.price | money }}</strong>
         </button>
       </form>
       <div class="secondary-delivery">
