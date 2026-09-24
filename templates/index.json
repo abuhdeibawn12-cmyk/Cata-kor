@@ -21,5 +21,11 @@
       "settings": {}
     }
   },
-  "order": ["hero", "products", "experts", "science", "founder"]
+  "order": [
+    "hero",
+    "products",
+    "experts",
+    "science",
+    "founder"
+  ]
 }
