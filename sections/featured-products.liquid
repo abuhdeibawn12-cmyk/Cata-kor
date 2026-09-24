@@ -3,6 +3,13 @@
 {% assign glutathione = all_products['liposomal-glutathione'] %}
 {% assign locale_root = routes.root_url %}
 {% if locale_root == '/' %}{% assign locale_root = '' %}{% endif %}
+{% assign nad_benefit = 'home.daily_energy' | t %}
+{% assign nmn_benefit = 'home.pathway' | t %}
+{% assign glutathione_benefit = 'home.antioxidant' | t %}
+{% assign caakg_benefit = 'home.healthy_aging' | t %}
+{% assign nad_url = locale_root | append: '/products/nad-advanced-500mg' %}
+{% assign nmn_url = locale_root | append: '/products/nmn' %}
+{% assign glutathione_url = locale_root | append: '/products/liposomal-glutathione' %}
 
 <section class="products-section" id="products">
   <div class="section-heading products-heading">
@@ -25,29 +32,29 @@
       fallback_image: 'product-nad-hq.png',
       fallback_title: 'Liposomal NAD+',
       fallback_price: '$39.99',
-      benefit: 'home.daily_energy' | t,
-      product_url: locale_root | append: '/products/nad-advanced-500mg'
+      benefit: nad_benefit,
+      product_url: nad_url
     %}
     {% render 'home-product-card',
       product: nmn,
       fallback_image: 'product-nmn.avif',
       fallback_title: 'NMN Complex',
       fallback_price: '$39.99',
-      benefit: 'home.pathway' | t,
-      product_url: locale_root | append: '/products/nmn'
+      benefit: nmn_benefit,
+      product_url: nmn_url
     %}
     {% render 'home-product-card',
       product: glutathione,
       fallback_image: 'product-glutathione.avif',
       fallback_title: 'Liposomal Glutathione',
       fallback_price: '$39.99',
-      benefit: 'home.antioxidant' | t,
-      product_url: locale_root | append: '/products/liposomal-glutathione'
+      benefit: glutathione_benefit,
+      product_url: glutathione_url
     %}
     {% render 'home-product-card',
       fallback_image: 'product-caakg.avif',
       fallback_title: 'CA-AKG',
-      benefit: 'home.healthy_aging' | t,
+      benefit: caakg_benefit,
       available: false
     %}
   </div>
