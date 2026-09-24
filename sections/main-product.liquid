@@ -29,19 +29,19 @@
   {% assign variant_1_subscription = variant_1.selling_plan_allocations.first %}
   {% for allocation in variant_1.selling_plan_allocations %}
     {% assign plan_name = allocation.selling_plan.name | downcase %}
-    {% unless plan_name contains '2 month' or plan_name contains '3 month' or plan_name contains '4 month' or plan_name contains '60 day' or plan_name contains '90 day' or plan_name contains '120 day' %}
+    {% unless plan_name contains '2 month' or plan_name contains '3 month' or plan_name contains '4 month' or plan_name contains '60 day' or plan_name contains '90 day' or plan_name contains '120 day' or plan_name contains '2 mes' or plan_name contains '3 mes' or plan_name contains '4 mes' or plan_name contains '60 día' or plan_name contains '90 día' or plan_name contains '120 día' %}
       {% assign variant_1_subscription = allocation %}
     {% endunless %}
   {% endfor %}
   {% for allocation in variant_2.selling_plan_allocations %}
     {% assign plan_name = allocation.selling_plan.name | downcase %}
-    {% if plan_name contains '2 month' or plan_name contains '60 day' %}{% assign variant_2_subscription = allocation %}{% endif %}
+    {% if plan_name contains '2 month' or plan_name contains '60 day' or plan_name contains '2 mes' or plan_name contains '60 día' %}{% assign variant_2_subscription = allocation %}{% endif %}
   {% endfor %}
   {% for allocation in featured_variant.selling_plan_allocations %}
     {% assign plan_name = allocation.selling_plan.name | downcase %}
     {% if product.handle == 'nmn' %}
-      {% if plan_name contains '4 month' or plan_name contains '120 day' %}{% assign featured_subscription = allocation %}{% endif %}
-    {% elsif plan_name contains '3 month' or plan_name contains '90 day' %}
+      {% if plan_name contains '4 month' or plan_name contains '120 day' or plan_name contains '4 mes' or plan_name contains '120 día' %}{% assign featured_subscription = allocation %}{% endif %}
+    {% elsif plan_name contains '3 month' or plan_name contains '90 day' or plan_name contains '3 mes' or plan_name contains '90 día' %}
       {% assign featured_subscription = allocation %}
     {% endif %}
   {% endfor %}
@@ -214,26 +214,27 @@
   </section>
 {% elsif product.handle == 'nad-advanced-500mg' %}
   {% for variant in product.variants %}
-    {% if variant.title contains '3' and variant.title contains 'Jar' %}{% assign nad_variant_3 = variant %}{% endif %}
-    {% if variant.title contains '2' and variant.title contains 'Jar' %}{% assign nad_variant_2 = variant %}{% endif %}
-    {% if variant.title contains '1' and variant.title contains 'Jar' %}{% assign nad_variant_1 = variant %}{% endif %}
+    {% comment %}Match the numeric pack size only so translated option values such as Tarro/Tarros remain valid.{% endcomment %}
+    {% if variant.title contains '3' %}{% assign nad_variant_3 = variant %}{% endif %}
+    {% if variant.title contains '2' %}{% assign nad_variant_2 = variant %}{% endif %}
+    {% if variant.title contains '1' %}{% assign nad_variant_1 = variant %}{% endif %}
   {% endfor %}
   {% assign nad_variant_3_subscription = nad_variant_3.selling_plan_allocations.first %}
   {% assign nad_variant_2_subscription = nad_variant_2.selling_plan_allocations.first %}
   {% assign nad_variant_1_subscription = nad_variant_1.selling_plan_allocations.first %}
   {% for allocation in nad_variant_1.selling_plan_allocations %}
     {% assign plan_name = allocation.selling_plan.name | downcase %}
-    {% unless plan_name contains '2 month' or plan_name contains '3 month' or plan_name contains '60 day' or plan_name contains '90 day' %}
+    {% unless plan_name contains '2 month' or plan_name contains '3 month' or plan_name contains '60 day' or plan_name contains '90 day' or plan_name contains '2 mes' or plan_name contains '3 mes' or plan_name contains '60 día' or plan_name contains '90 día' %}
       {% assign nad_variant_1_subscription = allocation %}
     {% endunless %}
   {% endfor %}
   {% for allocation in nad_variant_2.selling_plan_allocations %}
     {% assign plan_name = allocation.selling_plan.name | downcase %}
-    {% if plan_name contains '2 month' or plan_name contains '60 day' %}{% assign nad_variant_2_subscription = allocation %}{% endif %}
+    {% if plan_name contains '2 month' or plan_name contains '60 day' or plan_name contains '2 mes' or plan_name contains '60 día' %}{% assign nad_variant_2_subscription = allocation %}{% endif %}
   {% endfor %}
   {% for allocation in nad_variant_3.selling_plan_allocations %}
     {% assign plan_name = allocation.selling_plan.name | downcase %}
-    {% if plan_name contains '3 month' or plan_name contains '90 day' %}{% assign nad_variant_3_subscription = allocation %}{% endif %}
+    {% if plan_name contains '3 month' or plan_name contains '90 day' or plan_name contains '3 mes' or plan_name contains '90 día' %}{% assign nad_variant_3_subscription = allocation %}{% endif %}
   {% endfor %}
   {% assign nad_regular_2_cents = nad_variant_1.price | times: 2 %}
   {% assign nad_regular_3_cents = nad_variant_1.price | times: 3 %}
@@ -291,10 +292,10 @@
       <div class="purchase-group">
         <div class="purchase-label"><h2>{{ 'product.select_quantity' | t }}</h2><span data-nad-capsules>{{ 'product.capsules' | t: count: 180 }}</span></div>
         <div class="quantity-options">
-          <button type="button" class="quantity-option selected" data-nad-pack data-jars="3" data-variant-id="{{ nad_variant_3.id }}" data-total="98.97" data-one-time-cents="{{ nad_variant_3.price }}" data-subscription-cents="{{ nad_variant_3_subscription.price | default: nad_variant_3.price }}" data-selling-plan-id="{{ nad_variant_3_subscription.selling_plan.id }}" data-delivery-days="90" aria-pressed="true">
+          <button type="button" class="quantity-option selected" data-nad-pack data-jars="3" data-variant-id="{{ nad_variant_3.id }}" data-total="{{ nad_variant_3.price | divided_by: 100.0 }}" data-one-time-cents="{{ nad_variant_3.price }}" data-subscription-cents="{{ nad_variant_3_subscription.price | default: nad_variant_3.price }}" data-selling-plan-id="{{ nad_variant_3_subscription.selling_plan.id }}" data-delivery-days="90" aria-pressed="true">
             <em>{{ 'product.popular_value' | t }}</em><span class="quantity-bottles quantity-bottles-3" aria-hidden="true">{% for i in (1..3) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>3 {{ 'product.jars' | t }}</b><span class="pack-total">{{ nad_price_3 }} {{ 'product.total' | t }}</span><small class="pack-comparison">{{ 'product.save' | t: amount: nad_save_3_money }} · {{ 'product.day_supply' | t: days: 90 }} · {{ 'product.per_jar' | t: amount: nad_each_3 }}</small><small class="pack-proof">{{ 'product.only_day' | t: amount: nad_daily_money }}</small>
           </button>
-          <button type="button" class="quantity-option" data-nad-pack data-jars="2" data-variant-id="{{ nad_variant_2.id }}" data-total="69.98" data-one-time-cents="{{ nad_variant_2.price }}" data-subscription-cents="{{ nad_variant_2_subscription.price | default: nad_variant_2.price }}" data-selling-plan-id="{{ nad_variant_2_subscription.selling_plan.id }}" data-delivery-days="60" aria-pressed="false">
+          <button type="button" class="quantity-option" data-nad-pack data-jars="2" data-variant-id="{{ nad_variant_2.id }}" data-total="{{ nad_variant_2.price | divided_by: 100.0 }}" data-one-time-cents="{{ nad_variant_2.price }}" data-subscription-cents="{{ nad_variant_2_subscription.price | default: nad_variant_2.price }}" data-selling-plan-id="{{ nad_variant_2_subscription.selling_plan.id }}" data-delivery-days="60" aria-pressed="false">
             <span class="quantity-bottles quantity-bottles-2" aria-hidden="true">{% for i in (1..2) %}<img src="{{ nad_main_image }}" alt="" width="120" height="120">{% endfor %}</span><b>2 {{ 'product.jars' | t }}</b><span class="pack-total">{{ nad_price_2 }} {{ 'product.total' | t }}</span><small class="pack-comparison">{{ 'product.save' | t: amount: nad_save_2_money }} · {{ 'product.day_supply' | t: days: 60 }}</small>
           </button>
           <button type="button" class="quantity-option" data-nad-pack data-jars="1" data-variant-id="{{ nad_variant_1.id }}" data-total="{{ nad_variant_1.price | divided_by: 100.0 }}" data-one-time-cents="{{ nad_variant_1.price }}" data-subscription-cents="{{ nad_variant_1_subscription.price | default: nad_variant_1.price }}" data-selling-plan-id="{{ nad_variant_1_subscription.selling_plan.id }}" data-delivery-days="30" aria-pressed="false">
