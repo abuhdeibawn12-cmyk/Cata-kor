@@ -6,6 +6,8 @@
   assign subscription_display_price = subscription_preview_price
   if subscription_allocation
     assign subscription_display_price = subscription_allocation.price
+  else
+    assign subscription_savings = selected_variant.price | minus: subscription_preview_price | money
   endif
   if subscription_savings == blank and subscription_allocation
     assign subscription_savings = selected_variant.price | minus: subscription_allocation.price | money

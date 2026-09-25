@@ -25,7 +25,7 @@
     complete: "Completa tu rutina", waiting: "Tienes una oferta privada disponible", waitingCopy: "Continúa para ver tu complemento de compra única. Sin suscripción.", subtotal: "SUBTOTAL", checkout: "PAGAR", checkoutOffer: "PAGAR Y VER OFERTA →",
     progressLocked: (amount) => `Añade ${amount} más para conseguir un 10% de descuento.`, progressUnlocked: "Has conseguido un 10% de descuento. Usa CATA10 al pagar.", progressLabel: "Progreso del descuento CATA10",
     progressRules: "Introduce CATA10 manualmente al pagar. Cualquier cesta de $100 USD o más cumple los requisitos.", thresholdNote: "Compra por un total de $100 USD o más y usa CATA10 al pagar para obtener un 10% de descuento.",
-    delivered: (days) => `Entrega cada ${days} días`, becauseChosen: (name) => `PORQUE ELEGISTE ${name}`, flashDetail: (jars, discount) => `${jars} ${jars === 1 ? "tarro" : "tarros"} · ${discount}% de descuento flash`, flashReplaceMode: (name) => `SUSTITUYE TU PACK ACTUAL DE ${name}`, flashAddMode: "AÑADE UN PRODUCTO DIFERENTE A TU PEDIDO", flashReplace: "SUSTITUIR POR ESTA OFERTA", flashAddShort: "AÑADIR OFERTA FLASH",
+    delivered: (days) => `Entrega cada ${days} días`, saveEveryDelivery: (amount) => `Ahorra ${amount} en cada entrega`, becauseChosen: (name) => `PORQUE ELEGISTE ${name}`, flashDetail: (jars, discount) => `${jars} ${jars === 1 ? "tarro" : "tarros"} · ${discount}% de descuento flash`, flashReplaceMode: (name) => `SUSTITUYE TU PACK ACTUAL DE ${name}`, flashAddMode: "AÑADE UN PRODUCTO DIFERENTE A TU PEDIDO", flashReplace: "SUSTITUIR POR ESTA OFERTA", flashAddShort: "AÑADIR OFERTA FLASH",
     decline: "NO, GRACIAS. CONTINUAR", updating: "ACTUALIZANDO…", offerAdded: "OFERTA AÑADIDA", bundleUpgraded: "PACK ACTUALIZADO", continueOffers: "CONTINUAR CON MIS OFERTAS", addToCart: "AÑADIR A LA CESTA", adding: "AÑADIENDO…", tryAgain: "INTÉNTALO DE NUEVO",
     page: (page, pages) => `Página ${page} de ${pages}`, previousReview: "Página anterior de reseñas", nextReview: "Página siguiente de reseñas", showing: (start, end, total) => `Mostrando ${start}–${end} de ${total} reseñas`, noReviews: "Ninguna reseña coincide con este filtro.", verified: "Verificada", anonymous: "Anónimo", stars: (rating) => `${rating} de 5 estrellas`,
     originalReview: "Original en inglés", viewOriginal: "Ver original", hideOriginal: "Ocultar original", customerPhoto: "Foto de cliente", loadError: "No se pudieron cargar las reseñas. Actualiza la página para intentarlo de nuevo.",
@@ -37,7 +37,7 @@
     complete: "Complete Your Routine", waiting: "One private add-on is waiting", waitingCopy: "Continue to see your private one-time add-on. No subscription.", subtotal: "SUBTOTAL", checkout: "CHECKOUT", checkoutOffer: "CHECKOUT & REVEAL OFFER →",
     progressLocked: (amount) => `Spend ${amount} more to unlock 10% OFF!`, progressUnlocked: "10% OFF unlocked — use CATA10 at checkout!", progressLabel: "CATA10 discount progress",
     progressRules: "Enter CATA10 manually at checkout. Every cart of $100 USD or more qualifies.", thresholdNote: "Spend $100 USD or more and use CATA10 at checkout for 10% off.",
-    delivered: (days) => `Delivered every ${days} days`, becauseChosen: (name) => `BECAUSE YOU CHOSE ${name}`, flashDetail: (jars, discount) => `${jars} ${jars === 1 ? "Jar" : "Jars"} · ${discount}% Flash Discount`, flashReplaceMode: (name) => `REPLACES YOUR CURRENT ${name} BUNDLE`, flashAddMode: "ADDS A DIFFERENT PRODUCT TO YOUR ORDER", flashReplace: "REPLACE WITH THIS OFFER", flashAddShort: "ADD FLASH OFFER",
+    delivered: (days) => `Delivered every ${days} days`, saveEveryDelivery: (amount) => `Save ${amount} every delivery`, becauseChosen: (name) => `BECAUSE YOU CHOSE ${name}`, flashDetail: (jars, discount) => `${jars} ${jars === 1 ? "Jar" : "Jars"} · ${discount}% Flash Discount`, flashReplaceMode: (name) => `REPLACES YOUR CURRENT ${name} BUNDLE`, flashAddMode: "ADDS A DIFFERENT PRODUCT TO YOUR ORDER", flashReplace: "REPLACE WITH THIS OFFER", flashAddShort: "ADD FLASH OFFER",
     decline: "NO THANKS, CONTINUE", updating: "UPDATING…", offerAdded: "OFFER ADDED", bundleUpgraded: "BUNDLE UPGRADED", continueOffers: "CONTINUE WITH MY OFFERS", addToCart: "ADD TO CART", adding: "ADDING…", tryAgain: "PLEASE TRY AGAIN",
     page: (page, pages) => `Page ${page} of ${pages}`, previousReview: "Previous review page", nextReview: "Next review page", showing: (start, end, total) => `Showing ${start}–${end} of ${total} reviews`, noReviews: "No customer reviews match this filter.", verified: "Verified", anonymous: "Anonymous", stars: (rating) => `${rating} out of 5 stars`,
     originalReview: "Original in English", viewOriginal: "View original", hideOriginal: "Hide original", customerPhoto: "Customer photo", loadError: "Customer reviews could not be loaded. Please refresh the page to try again.",
@@ -396,7 +396,10 @@
       setDynamicText(product.querySelector("[data-subscription-badge]"), pack.dataset.packSubscriptionBadge);
     }
     if (pack.dataset.packSubscriptionSavingCopy) {
-      setDynamicText(product.querySelector("[data-subscription-saving-copy]"), pack.dataset.packSubscriptionSavingCopy);
+      const savingCopy = sellingPlanId
+        ? pack.dataset.packSubscriptionSavingCopy
+        : ui.saveEveryDelivery(formatMoney(oneTimeCents - subscriptionCents));
+      setDynamicText(product.querySelector("[data-subscription-saving-copy]"), savingCopy);
     }
 
     const sellingPlanInput = form.querySelector("[data-selling-plan-input]");
