@@ -24,7 +24,7 @@
     <a href="{{ routes.collections_url }}/shop-all?view=best-sellers"{% if template.suffix == 'best-sellers' %} aria-current="page"{% endif %}>{{ 'header.best_sellers' | t }}</a>
     <a href="{{ locale_root }}/pages/science-benefits"{% if template.suffix == 'science' or request.path contains '/pages/science-benefits' %} aria-current="page"{% endif %}>{{ 'header.science' | t }}</a>
     <a href="{{ locale_root }}/pages/about-us"{% if template.suffix == 'about' or request.path contains '/pages/about-us' %} class="is-active" aria-current="page"{% endif %}>{{ 'header.about' | t }}</a>
-    <a href="{{ locale_root }}/apps/track-order"{% if request.path contains '/apps/track-order' %} class="is-active" aria-current="page"{% endif %}>{{ 'header.track_order' | t }}</a>
+    <a href="{{ locale_root }}/apps/parcelpanel"{% if request.path contains '/apps/parcelpanel' %} class="is-active" aria-current="page"{% endif %}>{{ 'header.track_order' | t }}</a>
     {% if localization.available_languages.size > 1 %}
       {% form 'localization', id: 'HeaderLanguageForm', class: 'header-language-form' %}
         <label for="HeaderLanguage">{{ 'general.language' | t }}</label>
