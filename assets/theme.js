@@ -369,8 +369,10 @@
     const form = product.querySelector("[data-product-form]");
     if (!pack || !form) return;
     const oneTimeCents = Number(pack.dataset.oneTimeCents || Math.round(Number(pack.dataset.total || 0) * 100));
-    const subscriptionCents = Number(pack.dataset.subscriptionCents || oneTimeCents);
     const sellingPlanId = Number(pack.dataset.sellingPlanId || 0);
+    const subscriptionCents = sellingPlanId
+      ? Number(pack.dataset.subscriptionCents || oneTimeCents)
+      : Math.round(oneTimeCents * 0.85);
     const requestedMode = product.dataset.purchaseMode || "one-time";
     const mode = requestedMode === "subscription" && sellingPlanId ? "subscription" : "one-time";
     product.dataset.purchaseMode = mode;

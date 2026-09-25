@@ -2,16 +2,22 @@
   assign subscription_allocation = selected_allocation | default: selected_variant.selling_plan_allocations.first
   assign delivery_days = selected_delivery_days | default: 30
   assign subscription_savings = selected_subscription_savings
+  assign subscription_preview_price = selected_variant.price | times: 85 | divided_by: 100
+  assign subscription_display_price = subscription_preview_price
+  if subscription_allocation
+    assign subscription_display_price = subscription_allocation.price
+  endif
   if subscription_savings == blank and subscription_allocation
     assign subscription_savings = selected_variant.price | minus: subscription_allocation.price | money
+  elsif subscription_savings == blank
+    assign subscription_savings = selected_variant.price | minus: subscription_preview_price | money
   endif
 %}
 
-{% if subscription_allocation %}
-  <section class="product-plan-selector" data-purchase-options aria-labelledby="purchase-options-title-{{ product.id }}">
+<section class="product-plan-selector{% unless subscription_allocation %} is-preview-only{% endunless %}" data-purchase-options aria-labelledby="purchase-options-title-{{ product.id }}">
     <h2 id="purchase-options-title-{{ product.id }}">{{ 'product.choose_plan' | t }}</h2>
 
-    <button class="plan-option plan-option--subscription" type="button" data-purchase-mode="subscription" aria-pressed="false">
+    <button class="plan-option plan-option--subscription" type="button" data-purchase-mode="subscription" aria-pressed="false"{% unless subscription_allocation %} disabled aria-disabled="true"{% endunless %}>
       <span class="plan-option__copy">
         <small data-subscription-badge>{% if enhanced_nmn %}{{ 'product.nmn_subscribe_badge' | t }}{% else %}{{ 'product.subscribe_badge' | t }}{% endif %}</small>
         <b>{{ 'product.subscribe' | t }}</b>
@@ -19,7 +25,7 @@
       </span>
       <span class="plan-option__price">
         <s data-plan-compare-price>{{ selected_variant.price | money }}</s>
-        <strong data-plan-subscription-price>{{ subscription_allocation.price | money }}</strong>
+        <strong data-plan-subscription-price>{{ subscription_display_price | money }}</strong>
         <em>{{ 'product.per_delivery' | t }}</em>
       </span>
     </button>
@@ -39,4 +45,3 @@
       <strong data-plan-one-time-price>{{ selected_variant.price | money }}</strong>
     </button>
   </section>
-{% endif %}

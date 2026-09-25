@@ -17,8 +17,8 @@
       </button>
       <fieldset class="collection-filter-menu" data-filter-menu hidden>
         <legend>{{ 'collection.availability' | t }}</legend>
-        <label><input type="radio" name="availability" value="all" checked> <span>{{ 'collection.all' | t }}</span></label>
-        <label><input type="radio" name="availability" value="in-stock"> <span>{{ 'collection.in_stock' | t }}</span></label>
+        <label><input type="radio" name="availability" value="all"> <span>{{ 'collection.all' | t }}</span></label>
+        <label><input type="radio" name="availability" value="in-stock" checked> <span>{{ 'collection.in_stock' | t }}</span></label>
         <label><input type="radio" name="availability" value="out-of-stock"> <span>{{ 'collection.out_of_stock' | t }}</span></label>
       </fieldset>
     </div>
@@ -50,7 +50,7 @@
           class="collection-card"
           data-collection-card
           data-title="{{ desired_product.title | escape }}"
-          data-available="true"
+          data-available="{{ desired_product.available }}"
           data-original-order="{{ forloop.index }}"
         >
           <div class="collection-image-wrap">

@@ -3893,10 +3893,230 @@ h3 {
   padding-top: 18px;
 }
 
+.product-plan-selector.is-preview-only .plan-option--subscription {
+  cursor: not-allowed;
+}
+
+.product-plan-selector.is-preview-only .plan-option--subscription:disabled {
+  color: inherit;
+  opacity: 1;
+}
+
 .plan-option__copy,
 .plan-option__price {
   display: flex;
   flex-direction: column;
+}
+
+/* CWILL tracking page — match the CataKor storefront instead of the app defaults. */
+#pp-tracking-page-app {
+  background: #f6f7f1;
+  color: var(--ink);
+  font-family: "Cata Sans", Arial, sans-serif;
+  padding: 64px 28px 92px;
+}
+
+#pp-tracking-page-app .pp_tracking_content {
+  margin: 0 auto;
+  max-width: 1120px;
+}
+
+#pp-tracking-page-app .pp_tracking_title {
+  color: var(--forest);
+  font-family: "Cata Display", "Cata Sans", Arial, sans-serif;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  margin: 0 0 14px;
+  text-align: center;
+}
+
+#pp-tracking-page-app .pp_tracking_above {
+  color: #627066;
+  font-size: 16px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+
+#pp-tracking-page-app .pp_tracking_form_div {
+  background: #fff;
+  border: 1px solid #dce3d8;
+  border-radius: 28px;
+  box-shadow: 0 22px 55px rgba(30, 61, 20, 0.1);
+  overflow: hidden;
+  padding: 38px;
+}
+
+#pp-tracking-page-app .pp_tracking_form_desktop {
+  align-items: stretch;
+  display: grid;
+  gap: 34px;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+#pp-tracking-page-app .pp_tracking_form,
+#pp-tracking-page-app .pp_tracking_form_order,
+#pp-tracking-page-app .pp_tracking_form_number {
+  width: 100%;
+}
+
+#pp-tracking-page-app .pp_tracking_parent {
+  margin: 0 0 18px;
+}
+
+#pp-tracking-page-app .pp_tracking_span {
+  color: var(--forest);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+#pp-tracking-page-app .PP-TextField__Input {
+  background: #f9faf6;
+  border: 1px solid #b8c4b7;
+  border-radius: 14px;
+  box-shadow: none;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 16px;
+  min-height: 54px;
+  outline: none;
+  padding: 0 16px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  width: 100%;
+}
+
+#pp-tracking-page-app .PP-TextField__Input:focus {
+  background: #fff;
+  border-color: var(--forest);
+  box-shadow: 0 0 0 3px rgba(220, 250, 121, 0.55);
+}
+
+#pp-tracking-page-app .pp-button-enter {
+  align-items: center;
+  background: var(--forest);
+  border: 1px solid var(--forest);
+  border-radius: 14px;
+  color: var(--lime);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "Cata Display", "Cata Sans", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  justify-content: center;
+  min-height: 54px;
+  padding: 0 28px;
+  text-transform: uppercase;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  width: 100%;
+}
+
+#pp-tracking-page-app .pp-button-enter:hover {
+  background: #285420;
+  box-shadow: 0 10px 24px rgba(30, 61, 20, 0.18);
+  transform: translateY(-1px);
+}
+
+#pp-tracking-page-app .pp_tracking_line_center {
+  align-items: center;
+  color: #788379;
+  display: flex;
+  font-size: 12px;
+  font-weight: 800;
+  justify-content: center;
+  letter-spacing: 0.12em;
+  position: relative;
+  text-transform: uppercase;
+  width: 1px;
+}
+
+#pp-tracking-page-app .pp_tracking_line_center::before {
+  background: #dce3d8;
+  content: "";
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 1px;
+}
+
+#pp-tracking-page-app .pp_tracking_word {
+  background: #fff;
+  padding: 12px 0;
+  position: relative;
+  z-index: 1;
+}
+
+#pp-tracking-page-app .pp-link {
+  color: #7b837c;
+  display: block;
+  font-size: 11px;
+  margin: 10px 2px 0 auto;
+  text-align: right;
+}
+
+#pp-tracking-page-app .pp_tracking_below {
+  color: #56635a;
+  font-size: 15px;
+  margin: 26px auto 0;
+  text-align: center;
+}
+
+#pp-tracking-page-app .pp_tracking_tab {
+  background: #edf1e9;
+  border-radius: 14px;
+  display: none;
+  gap: 4px;
+  margin: 0 0 20px;
+  padding: 4px;
+}
+
+#pp-tracking-page-app .pp_tracking_tab_left {
+  border-radius: 10px;
+  color: #667267;
+  cursor: pointer;
+  flex: 1;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 12px 10px;
+  text-align: center;
+}
+
+#pp-tracking-page-app .pp_tracking_tab_left.pp_active {
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(30, 61, 20, 0.09);
+  color: var(--forest);
+}
+
+@media (max-width: 760px) {
+  #pp-tracking-page-app {
+    padding: 40px 16px 68px;
+  }
+
+  #pp-tracking-page-app .pp_tracking_title {
+    font-size: 40px;
+  }
+
+  #pp-tracking-page-app .pp_tracking_form_div {
+    border-radius: 22px;
+    padding: 22px 18px 24px;
+  }
+
+  #pp-tracking-page-app .pp_tracking_form_desktop {
+    display: none;
+  }
+
+  #pp-tracking-page-app .pp_tracking_form_mobile,
+  #pp-tracking-page-app .pp_tracking_tab {
+    display: block;
+  }
+
+  #pp-tracking-page-app .pp_tracking_tab {
+    display: flex;
+  }
 }
 
 .plan-option__copy {
