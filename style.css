@@ -1,0 +1,172 @@
+/*
+Theme Name: Catakor Original for WooCommerce
+Theme URI: https://getcatakor.com/
+Author: Catakor
+Description: A faithful WooCommerce port of the original Catakor Shopify storefront.
+Version: 1.0.0
+Requires at least: 6.4
+Requires PHP: 8.0
+Text Domain: catakor-original
+*/
+
+:root {
+  --catakor-ink: #151515;
+  --catakor-green: #173f20;
+  --catakor-lime: #e6f792;
+  --catakor-paper: #fff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.catakor-original {
+  margin: 0;
+  color: var(--catakor-ink);
+  background: var(--catakor-paper);
+}
+
+body.admin-bar .section-header.shopify-section-group-header-group {
+  top: 32px;
+}
+
+.catakor-wc-shell {
+  min-height: 60vh;
+  padding: clamp(36px, 6vw, 96px) max(24px, calc((100vw - 1280px) / 2));
+}
+
+.catakor-wc-shell .woocommerce-breadcrumb {
+  margin-bottom: 32px;
+  color: #5a5a5a;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.catakor-wc-shell .woocommerce-products-header__title,
+.catakor-wc-shell .product_title,
+.catakor-page__title {
+  font-family: var(--font-heading-family, "Space Grotesk", sans-serif);
+  color: var(--catakor-green);
+  letter-spacing: -.04em;
+  text-transform: uppercase;
+}
+
+.catakor-wc-shell .button,
+.catakor-wc-shell button,
+.catakor-wc-shell input[type="submit"] {
+  border: 0;
+  border-radius: 999px;
+  background: var(--catakor-green);
+  color: #fff;
+  min-height: 48px;
+  padding: 12px 24px;
+  font-family: inherit;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.catakor-wc-shell ul.products {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.catakor-wc-shell ul.products::before,
+.catakor-wc-shell ul.products::after {
+  display: none;
+}
+
+.catakor-wc-shell ul.products li.product {
+  float: none;
+  width: auto;
+  margin: 0;
+}
+
+.catakor-wc-shell ul.products li.product img {
+  border-radius: 18px;
+  background: #f3f3ef;
+}
+
+.catakor-wc-shell ul.products li.product .woocommerce-loop-product__title {
+  color: var(--catakor-green);
+  font-size: clamp(18px, 1.5vw, 25px);
+  text-transform: uppercase;
+}
+
+.catakor-wc-shell .price {
+  color: var(--catakor-green) !important;
+  font-weight: 700;
+}
+
+.catakor-page {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.catakor-page__title {
+  margin: 0 0 36px;
+  font-size: clamp(40px, 6vw, 80px);
+}
+
+.catakor-page__content {
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.catakor-page__content h2,
+.catakor-page__content h3 {
+  color: var(--catakor-green);
+  text-transform: uppercase;
+}
+
+.catakor-faq-page {
+  padding-top: clamp(70px, 8vw, 130px);
+  padding-bottom: clamp(70px, 8vw, 130px);
+}
+
+.catakor-faq-page h1 {
+  color: #030504;
+  font-size: clamp(38px, 3.2vw, 52px);
+  letter-spacing: -.05em;
+  line-height: 1.06;
+  margin: 0;
+}
+
+.secondary-product-details form.cart {
+  margin: 0;
+}
+
+.secondary-product-details form.cart input[type="number"] {
+  border: 1px solid #d7d7d0;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  min-height: 48px;
+  padding: 8px 16px;
+  width: 90px;
+}
+
+.footer .newsletter-form__button[disabled] {
+  opacity: .7;
+}
+
+@media (max-width: 989px) {
+  body.admin-bar .section-header.shopify-section-group-header-group {
+    top: 46px;
+  }
+
+  .catakor-wc-shell ul.products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .catakor-wc-shell {
+    padding-inline: 18px;
+  }
+
+  .catakor-wc-shell ul.products {
+    gap: 18px 12px;
+  }
+}
