@@ -1202,6 +1202,12 @@ h3 {
   display: none;
 }
 
+/* Shopify's custom element normally applies this transition state in JavaScript. */
+.catakor-original #Details-menu-drawer-container[open] > #menu-drawer {
+  transform: translateX(0) !important;
+  visibility: visible !important;
+}
+
 .primary-button,
 .lime-button {
   align-items: center;
