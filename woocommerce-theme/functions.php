@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.0.3' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.1.0' );
 
 function catakor_original_setup() {
 	add_theme_support( 'title-tag' );
@@ -86,8 +86,12 @@ function catakor_original_assets() {
 		array(
 			'homeUrl'    => home_url( '/' ),
 			'cartUrl'    => function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ),
+			'checkoutUrl'=> function_exists( 'wc_get_checkout_url' ) ? wc_get_checkout_url() : home_url( '/checkout/' ),
 			'accountUrl' => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : home_url( '/my-account/' ),
 			'cartCount'  => function_exists( 'WC' ) && WC()->cart ? WC()->cart->get_cart_contents_count() : 0,
+			'addToCartUrl' => class_exists( 'WC_AJAX' ) ? WC_AJAX::get_endpoint( 'add_to_cart' ) : home_url( '/?wc-ajax=add_to_cart' ),
+			'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
+			'cartNonce'    => wp_create_nonce( 'catakor-cart' ),
 		)
 	);
 }
@@ -117,7 +121,10 @@ remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
 
 function catakor_original_cart_count_fragment( $fragments ) {
 	$count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0;
-	$fragments['span.catakor-cart-count'] = '<span class="catakor-cart-count">' . absint( $count ) . '</span>';
+	$hidden = 0 === $count ? ' hidden' : '';
+	$fragments['span.catakor-cart-count'] = '<span class="catakor-cart-count"' . $hidden . '>' . absint( $count ) . '</span>';
+	$fragments['p[data-cart-summary]'] = '<p data-cart-summary>' . esc_html( catakor_original_cart_summary() ) . '</p>';
+	$fragments['div[data-cart-content]'] = '<div data-cart-content>' . catakor_original_cart_content() . '</div>';
 	return $fragments;
 }
 add_filter( 'woocommerce_add_to_cart_fragments', 'catakor_original_cart_count_fragment' );
@@ -125,3 +132,124 @@ add_filter( 'woocommerce_add_to_cart_fragments', 'catakor_original_cart_count_fr
 function catakor_original_asset( $file ) {
 	return get_template_directory_uri() . '/assets/original/' . ltrim( $file, '/' );
 }
+
+/**
+ * Human-readable drawer summary matching the original Shopify cart.
+ *
+ * @return string
+ */
+function catakor_original_cart_summary() {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
+		return __( 'Your bag is empty', 'catakor-original' );
+	}
+	$selections = count( WC()->cart->get_cart() );
+	return sprintf(
+		/* translators: %d is the number of distinct cart selections. */
+		_n( '%d product selection', '%d product selections', $selections, 'catakor-original' ),
+		$selections
+	);
+}
+
+/**
+ * Render the live cart contents inside the shared drawer.
+ *
+ * @return string
+ */
+function catakor_original_cart_content() {
+	ob_start();
+	if ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) :
+		?>
+		<div class="global-empty-cart">
+			<span>0</span>
+			<h3><?php esc_html_e( 'Your shopping bag is empty', 'catakor-original' ); ?></h3>
+			<p><?php esc_html_e( 'Choose a product and build your daily longevity routine.', 'catakor-original' ); ?></p>
+			<button type="button" data-cart-close><?php esc_html_e( 'CONTINUE SHOPPING', 'catakor-original' ); ?></button>
+		</div>
+		<?php
+	else :
+		?>
+		<div class="global-cart-items" data-cart-items>
+			<?php foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) : ?>
+				<?php
+				$item_product = $cart_item['data'];
+				if ( ! $item_product || ! $item_product->exists() || $cart_item['quantity'] < 1 ) {
+					continue;
+				}
+				$variation_label = wc_get_formatted_cart_item_data( $cart_item, true );
+				?>
+				<article data-line-key="<?php echo esc_attr( $cart_item_key ); ?>">
+					<?php echo wp_kses_post( $item_product->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ) ); ?>
+					<div class="global-cart-item-copy">
+						<h3><?php echo esc_html( $item_product->get_name() ); ?></h3>
+						<p><?php echo $variation_label ? wp_kses_post( $variation_label ) . ' · ' : ''; ?><?php esc_html_e( 'One-time purchase', 'catakor-original' ); ?></p>
+						<div class="global-cart-price"><strong><?php echo wp_kses_post( WC()->cart->get_product_subtotal( $item_product, $cart_item['quantity'] ) ); ?></strong></div>
+						<div class="global-cart-quantity">
+							<span><?php esc_html_e( 'Bundle quantity', 'catakor-original' ); ?></span>
+							<div>
+								<button type="button" data-cart-key="<?php echo esc_attr( $cart_item_key ); ?>" data-cart-quantity="<?php echo esc_attr( max( 0, $cart_item['quantity'] - 1 ) ); ?>" aria-label="<?php esc_attr_e( 'Decrease quantity', 'catakor-original' ); ?>">−</button>
+								<b><?php echo esc_html( $cart_item['quantity'] ); ?></b>
+								<button type="button" data-cart-key="<?php echo esc_attr( $cart_item_key ); ?>" data-cart-quantity="<?php echo esc_attr( $cart_item['quantity'] + 1 ); ?>" aria-label="<?php esc_attr_e( 'Increase quantity', 'catakor-original' ); ?>">+</button>
+							</div>
+						</div>
+					</div>
+					<button class="global-cart-remove" type="button" data-cart-key="<?php echo esc_attr( $cart_item_key ); ?>" data-cart-remove><?php esc_html_e( 'Remove', 'catakor-original' ); ?></button>
+				</article>
+			<?php endforeach; ?>
+		</div>
+		<div class="global-cart-summary"><span><?php esc_html_e( 'SUBTOTAL', 'catakor-original' ); ?></span><strong data-cart-total><?php echo wp_kses_post( WC()->cart->get_cart_subtotal() ); ?></strong></div>
+		<a class="global-cart-checkout" href="<?php echo esc_url( wc_get_checkout_url() ); ?>"><?php esc_html_e( 'CHECKOUT', 'catakor-original' ); ?></a>
+		<button class="global-cart-continue" type="button" data-cart-close><?php esc_html_e( 'CONTINUE SHOPPING', 'catakor-original' ); ?></button>
+		<p class="global-cart-note"><?php esc_html_e( 'Discount codes can be applied at checkout.', 'catakor-original' ); ?></p>
+		<?php
+	endif;
+	return (string) ob_get_clean();
+}
+
+/**
+ * Render the global cart drawer on every storefront page.
+ */
+function catakor_original_cart_drawer() {
+	if ( ! class_exists( 'WooCommerce' ) ) {
+		return;
+	}
+	?>
+	<div class="global-cart-layer" id="CartDrawer" role="presentation" aria-hidden="true" hidden>
+		<aside class="global-cart-drawer" role="dialog" aria-modal="true" aria-labelledby="global-cart-title">
+			<div class="global-cart-heading">
+				<div><h2 id="global-cart-title"><?php esc_html_e( 'YOUR SHOPPING BAG', 'catakor-original' ); ?></h2><p data-cart-summary><?php echo esc_html( catakor_original_cart_summary() ); ?></p></div>
+				<button type="button" data-cart-close aria-label="<?php esc_attr_e( 'Close shopping bag', 'catakor-original' ); ?>">×</button>
+			</div>
+			<div data-cart-content><?php echo catakor_original_cart_content(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+		</aside>
+	</div>
+	<?php
+}
+
+/**
+ * Update or remove a cart line from the drawer without leaving the page.
+ */
+function catakor_original_ajax_update_cart() {
+	check_ajax_referer( 'catakor-cart', 'nonce' );
+	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+		wp_send_json_error( array( 'message' => __( 'The shopping bag is unavailable.', 'catakor-original' ) ), 400 );
+	}
+
+	$key      = isset( $_POST['cart_item_key'] ) ? wc_clean( wp_unslash( $_POST['cart_item_key'] ) ) : '';
+	$quantity = isset( $_POST['quantity'] ) ? max( 0, absint( $_POST['quantity'] ) ) : 0;
+	$cart     = WC()->cart->get_cart();
+	if ( ! $key || ! isset( $cart[ $key ] ) ) {
+		wp_send_json_error( array( 'message' => __( 'That shopping-bag item could not be found.', 'catakor-original' ) ), 404 );
+	}
+
+	WC()->cart->set_quantity( $key, $quantity, true );
+	WC()->cart->calculate_totals();
+	wp_send_json_success(
+		array(
+			'content' => catakor_original_cart_content(),
+			'summary' => catakor_original_cart_summary(),
+			'count'   => WC()->cart->get_cart_contents_count(),
+		)
+	);
+}
+add_action( 'wp_ajax_catakor_update_cart', 'catakor_original_ajax_update_cart' );
+add_action( 'wp_ajax_nopriv_catakor_update_cart', 'catakor_original_ajax_update_cart' );

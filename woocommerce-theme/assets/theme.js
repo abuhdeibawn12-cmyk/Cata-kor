@@ -12,9 +12,148 @@
       link.href = window.catakorStore.accountUrl;
     });
 
-    document.querySelectorAll('.cart-count-bubble span[aria-hidden="true"]').forEach(function (count) {
-      count.textContent = String(window.catakorStore.cartCount || 0);
+    document.querySelectorAll('.catakor-cart-count, .cart-count-bubble span[aria-hidden="true"]').forEach(function (count) {
+      var cartCount = Number(window.catakorStore.cartCount || 0);
+      count.textContent = String(cartCount);
       count.classList.add('catakor-cart-count');
+      count.hidden = cartCount === 0;
+    });
+  }
+
+  function initialiseCartDrawer() {
+    var drawer = document.querySelector('#CartDrawer');
+    if (!drawer || !window.catakorStore) return;
+
+    function lockPage() {
+      document.body.classList.add('is-locked');
+    }
+
+    function unlockPage() {
+      document.body.classList.remove('is-locked');
+    }
+
+    function openCart() {
+      drawer.hidden = false;
+      drawer.setAttribute('aria-hidden', 'false');
+      lockPage();
+      var closeButton = drawer.querySelector('[data-cart-close]');
+      if (closeButton) closeButton.focus();
+    }
+
+    function closeCart() {
+      drawer.hidden = true;
+      drawer.setAttribute('aria-hidden', 'true');
+      unlockPage();
+    }
+
+    function updateCount(count) {
+      window.catakorStore.cartCount = Number(count || 0);
+      document.querySelectorAll('.catakor-cart-count').forEach(function (node) {
+        node.textContent = String(window.catakorStore.cartCount);
+        node.hidden = window.catakorStore.cartCount === 0;
+      });
+    }
+
+    function applyFragments(fragments) {
+      Object.keys(fragments || {}).forEach(function (selector) {
+        var template = document.createElement('template');
+        template.innerHTML = String(fragments[selector]).trim();
+        var replacement = template.content.firstElementChild;
+        if (!replacement) return;
+        document.querySelectorAll(selector).forEach(function (node) {
+          node.replaceWith(replacement.cloneNode(true));
+        });
+      });
+      var countNode = document.querySelector('.catakor-cart-count');
+      if (countNode) updateCount(Number(countNode.textContent || 0));
+    }
+
+    function applyCartPayload(payload) {
+      var content = drawer.querySelector('[data-cart-content]');
+      var summary = drawer.querySelector('[data-cart-summary]');
+      if (content && typeof payload.content === 'string') content.innerHTML = payload.content;
+      if (summary && payload.summary) summary.textContent = payload.summary;
+      updateCount(payload.count);
+    }
+
+    async function changeCartLine(button, quantity) {
+      var body = new URLSearchParams();
+      body.set('action', 'catakor_update_cart');
+      body.set('nonce', window.catakorStore.cartNonce);
+      body.set('cart_item_key', button.dataset.cartKey || '');
+      body.set('quantity', String(quantity));
+      button.disabled = true;
+      var response = await fetch(window.catakorStore.ajaxUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+        body: body.toString()
+      });
+      var result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.data && result.data.message ? result.data.message : 'Unable to update the shopping bag.');
+      applyCartPayload(result.data);
+    }
+
+    document.addEventListener('click', function (event) {
+      var openButton = event.target.closest('[data-cart-open], #cart-icon-bubble, .menu-drawer__topbar-icon--cart');
+      var closeButton = event.target.closest('[data-cart-close]');
+      var quantityButton = event.target.closest('[data-cart-quantity]');
+      var removeButton = event.target.closest('[data-cart-remove]');
+
+      if (openButton) {
+        event.preventDefault();
+        openCart();
+        return;
+      }
+      if (closeButton || event.target === drawer) {
+        event.preventDefault();
+        closeCart();
+        return;
+      }
+      if (quantityButton || removeButton) {
+        event.preventDefault();
+        var button = quantityButton || removeButton;
+        var quantity = removeButton ? 0 : Number(button.dataset.cartQuantity || 0);
+        changeCartLine(button, quantity).catch(function (error) {
+          button.disabled = false;
+          window.console.error(error);
+        });
+      }
+    });
+
+    document.addEventListener('submit', function (event) {
+      var form = event.target.closest('[data-woo-product-form]');
+      if (!form) return;
+      event.preventDefault();
+      var button = form.querySelector('[type="submit"]');
+      var label = form.querySelector('[data-add-label]');
+      if (button && button.disabled) return;
+      if (button) button.disabled = true;
+      if (label) label.textContent = 'ADDING…';
+
+      fetch(window.catakorStore.addToCartUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: new FormData(form)
+      })
+        .then(function (response) { return response.json(); })
+        .then(function (result) {
+          if (result.error) throw new Error('This selection could not be added to the shopping bag.');
+          applyFragments(result.fragments || {});
+          openCart();
+        })
+        .catch(function (error) {
+          window.console.error(error);
+          if (label) label.textContent = 'PLEASE TRY AGAIN';
+        })
+        .finally(function () {
+          if (button) button.disabled = false;
+          window.setTimeout(function () { if (label) label.textContent = 'ADD TO CART'; }, 1000);
+        });
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && !drawer.hidden) closeCart();
     });
   }
 
@@ -91,20 +230,43 @@
       var images;
       try { images = JSON.parse(data.textContent); } catch (error) { return; }
       var index = 0;
+      var thumbnailStart = 0;
+      var thumbnails = Array.from(gallery.querySelectorAll('[data-gallery-index]'));
+      var visibleThumbnails = 6;
+
+      function renderThumbnails() {
+        thumbnails.forEach(function (button, buttonIndex) {
+          button.hidden = buttonIndex < thumbnailStart || buttonIndex >= thumbnailStart + visibleThumbnails;
+        });
+        gallery.querySelectorAll('[data-thumbnail-shift]').forEach(function (button) {
+          var direction = Number(button.dataset.thumbnailShift || 0);
+          button.disabled = direction < 0 ? thumbnailStart === 0 : thumbnailStart >= Math.max(0, thumbnails.length - visibleThumbnails);
+        });
+      }
 
       function select(nextIndex) {
         index = (nextIndex + images.length) % images.length;
         image.src = images[index];
-        gallery.querySelectorAll('[data-gallery-index]').forEach(function (button) {
+        if (index < thumbnailStart) thumbnailStart = index;
+        if (index >= thumbnailStart + visibleThumbnails) thumbnailStart = index - visibleThumbnails + 1;
+        thumbnails.forEach(function (button) {
           button.classList.toggle('is-active', Number(button.dataset.galleryIndex) === index);
         });
+        renderThumbnails();
       }
-      gallery.querySelectorAll('[data-gallery-index]').forEach(function (button) {
+      thumbnails.forEach(function (button) {
         button.addEventListener('click', function () { select(Number(button.dataset.galleryIndex)); });
       });
       gallery.querySelectorAll('[data-gallery-step]').forEach(function (button) {
         button.addEventListener('click', function () { select(index + Number(button.dataset.galleryStep)); });
       });
+      gallery.querySelectorAll('[data-thumbnail-shift]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          thumbnailStart = Math.max(0, Math.min(thumbnailStart + Number(button.dataset.thumbnailShift || 0), Math.max(0, thumbnails.length - visibleThumbnails)));
+          renderThumbnails();
+        });
+      });
+      renderThumbnails();
     });
   }
 
@@ -137,6 +299,8 @@
           product.querySelectorAll('[data-secondary-total], [data-add-price]').forEach(function (node) {
             node.textContent = '$' + price;
           });
+          var capsuleCount = product.querySelector('[data-selected-capsules]');
+          if (capsuleCount && button.dataset.jars) capsuleCount.textContent = String(Number(button.dataset.jars) * 60) + ' Capsules';
         });
       });
     });
@@ -174,6 +338,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     updateCommerceLinks();
     initialiseDetailsMenus();
+	initialiseCartDrawer();
     initialiseFaqs();
     initialiseScienceReviews();
     initialiseProductGallery();

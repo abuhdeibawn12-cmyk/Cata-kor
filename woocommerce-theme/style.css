@@ -3,7 +3,7 @@ Theme Name: Catakor Original for WooCommerce
 Theme URI: https://getcatakor.com/
 Author: Catakor
 Description: A faithful WooCommerce port of the original Catakor Shopify storefront.
-Version: 1.0.3
+Version: 1.1.0
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: catakor-original
@@ -24,6 +24,52 @@ body.catakor-original {
   margin: 0;
   color: var(--catakor-ink);
   background: var(--catakor-paper);
+}
+
+body.catakor-original.is-locked {
+  overflow: hidden;
+}
+
+.catakor-original .header_right-side-container {
+  align-items: center;
+  display: flex !important;
+  gap: 14px;
+  justify-content: flex-end;
+}
+
+.catakor-original .header_right-side-container > .header__icon,
+.catakor-original .header_right-side-container #cart-icon-bubble {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 44px;
+  height: 44px;
+  justify-content: center;
+  margin: 0;
+  position: relative;
+  width: 44px;
+}
+
+.catakor-original .catakor-cart-count {
+  align-items: center;
+  background: #e6f792;
+  border: 1px solid #173f20;
+  border-radius: 999px;
+  color: #173f20;
+  display: flex;
+  font-size: 10px;
+  font-weight: 700;
+  height: 18px;
+  justify-content: center;
+  line-height: 1;
+  min-width: 18px;
+  padding: 0 4px;
+  position: absolute;
+  right: -2px;
+  top: 2px;
+}
+
+.catakor-original .catakor-cart-count[hidden] {
+  display: none;
 }
 
 body.admin-bar .section-header.shopify-section-group-header-group {
@@ -136,6 +182,59 @@ body.admin-bar .section-header.shopify-section-group-header-group {
 
 .secondary-product-details form.cart {
   margin: 0;
+}
+
+.is-nmn-product .secondary-pack strong {
+  font-size: 13px;
+  line-height: 1.15;
+  min-height: 30px;
+  text-align: center;
+}
+
+.secondary-pack-image.jars-4 img:nth-child(1) {
+  transform: translateX(-96%) scale(.84);
+}
+
+.secondary-pack-image.jars-4 img:nth-child(2) {
+  transform: translateX(-66%) scale(.94);
+  z-index: 2;
+}
+
+.secondary-pack-image.jars-4 img:nth-child(3) {
+  transform: translateX(-34%) scale(.94);
+  z-index: 2;
+}
+
+.secondary-pack-image.jars-4 img:nth-child(4) {
+  transform: translateX(-4%) scale(.84);
+}
+
+.secondary-details-accordions summary {
+  color: #17382a;
+  font-family: "Cata Sans", Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.secondary-details-accordions details > p,
+.secondary-details-accordions details > div,
+.secondary-details-accordions details > div p {
+  color: #58665d;
+  font-family: "Cata Sans", Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.65;
+  text-transform: none;
+}
+
+.global-cart-checkout {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .secondary-product-details form.cart input[type="number"] {
