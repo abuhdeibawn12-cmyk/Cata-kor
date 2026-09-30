@@ -20,7 +20,16 @@
 
   function initialiseDetailsMenus() {
     document.querySelectorAll('details').forEach(function (details) {
+      var summary = details.querySelector(':scope > summary');
+      if (details.classList.contains('menu-drawer-container') && summary) {
+        summary.addEventListener('click', function (event) {
+          event.preventDefault();
+          details.open = !details.open;
+        });
+      }
+
       details.addEventListener('toggle', function () {
+        if (summary) summary.setAttribute('aria-expanded', details.open ? 'true' : 'false');
         if (!details.open) return;
         details.parentElement.querySelectorAll(':scope > details[open]').forEach(function (other) {
           if (other !== details) other.open = false;
