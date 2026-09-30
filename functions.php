@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.0.1' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.0.2' );
 
 function catakor_original_setup() {
 	add_theme_support( 'title-tag' );
