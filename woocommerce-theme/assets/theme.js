@@ -29,6 +29,9 @@
       }
 
       details.addEventListener('toggle', function () {
+        if (details.classList.contains('menu-drawer-container')) {
+          details.classList.toggle('menu-opening', details.open);
+        }
         if (summary) summary.setAttribute('aria-expanded', details.open ? 'true' : 'false');
         if (!details.open) return;
         details.parentElement.querySelectorAll(':scope > details[open]').forEach(function (other) {
