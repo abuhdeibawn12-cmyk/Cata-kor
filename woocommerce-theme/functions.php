@@ -9,7 +9,91 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.1.0' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.1.1' );
+
+/**
+ * Serve Revolut's Apple Pay domain-verification file on managed hosts.
+ *
+ * Pressable does not allow the Revolut plugin's PHP process to create the
+ * required .well-known directory in ABSPATH. Keeping the official file in the
+ * theme and serving it through WordPress gives Apple and Revolut the exact
+ * public URL they require without depending on document-root write access.
+ */
+function catakor_original_apple_pay_verification_file() {
+	$request_uri  = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+	$request_path = wp_parse_url( $request_uri, PHP_URL_PATH );
+	$verify_path  = '/.well-known/apple-developer-merchantid-domain-association';
+
+	if ( $verify_path !== $request_path ) {
+		return;
+	}
+
+	$file = get_template_directory() . '/assets/apple-developer-merchantid-domain-association';
+	if ( ! is_readable( $file ) ) {
+		status_header( 404 );
+		exit;
+	}
+
+	status_header( 200 );
+	header( 'Content-Type: text/plain; charset=utf-8' );
+	header( 'Cache-Control: public, max-age=3600' );
+	header( 'Content-Length: ' . (string) filesize( $file ) );
+	readfile( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_readfile
+	exit;
+}
+add_action( 'template_redirect', 'catakor_original_apple_pay_verification_file', -1000 );
+
+/**
+ * Complete Revolut Apple Pay onboarding after the verification URL is live.
+ *
+ * This mirrors the official gateway's domain-registration step while avoiding
+ * its failed attempt to write the verification file into ABSPATH.
+ */
+function catakor_original_register_revolut_apple_pay_domain() {
+	if ( ! is_admin() || ! current_user_can( 'manage_woocommerce' ) ) {
+		return;
+	}
+
+	$merchant_api_class    = '\\Revolut\\Plugin\\Infrastructure\\Api\\MerchantApi';
+	$service_provider_class = '\\Revolut\\Wordpress\\ServiceProvider';
+	if ( ! class_exists( $merchant_api_class ) || ! class_exists( $service_provider_class ) ) {
+		return;
+	}
+
+	$domain = wp_parse_url( home_url( '/' ), PHP_URL_HOST );
+	if ( ! is_string( $domain ) || '' === $domain ) {
+		return;
+	}
+
+	$config_provider = $service_provider_class::apiConfigProvider();
+	$config          = $config_provider->getConfig();
+	$secret_key      = $config->getSecretKey();
+	$settings        = get_option( 'woocommerce_revolut_payment_request_settings', array() );
+
+	if (
+		'yes' === ( $settings['apple_pay_merchant_onboarded'] ?? '' ) &&
+		$domain === ( $settings['apple_pay_merchant_onboarded_domain'] ?? '' ) &&
+		$secret_key === ( $settings['apple_pay_merchant_onboarded_api_key'] ?? '' )
+	) {
+		return;
+	}
+
+	try {
+		$merchant_api_class::private()->post(
+			'/apple-pay/domains/register',
+			array( 'domain' => $domain )
+		);
+	} catch ( Throwable $error ) {
+		error_log( 'Catakor Revolut Apple Pay onboarding failed: ' . $error->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		return;
+	}
+
+	$settings['apple_pay_merchant_onboarded_domain']  = $domain;
+	$settings['apple_pay_merchant_onboarded_api_key'] = $secret_key;
+	$settings['apple_pay_merchant_onboarded']         = 'yes';
+	update_option( 'woocommerce_revolut_payment_request_settings', $settings );
+}
+add_action( 'admin_init', 'catakor_original_register_revolut_apple_pay_domain', 1000 );
 
 function catakor_original_setup() {
 	add_theme_support( 'title-tag' );
