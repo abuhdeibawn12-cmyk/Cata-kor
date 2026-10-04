@@ -404,6 +404,12 @@ body.woocommerce-checkout {
   border-radius: 0;
 }
 
+/* Keep checkout focused on payment, without Revolut acquisition banners. */
+.woocommerce-checkout iframe[src*="merchant.revolut.com/upsell/"],
+.woocommerce-checkout #payment .payment_method_revolut_pay {
+  display: none !important;
+}
+
 .woocommerce-checkout #payment::before {
   color: #78857b;
   content: "PAYMENT METHOD";

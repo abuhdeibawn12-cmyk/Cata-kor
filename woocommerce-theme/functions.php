@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.2.0' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.2.1' );
 
 /**
  * Serve Revolut's Apple Pay domain-verification file on managed hosts.
