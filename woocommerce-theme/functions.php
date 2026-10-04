@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.1.1' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.2.0' );
 
 /**
  * Serve Revolut's Apple Pay domain-verification file on managed hosts.
@@ -157,6 +157,9 @@ function catakor_original_assets() {
 	wp_enqueue_style( 'catakor-inline-original', get_template_directory_uri() . '/assets/original-inline.css', array( 'catakor-base' ), CATAKOR_ORIGINAL_VERSION );
 	wp_enqueue_style( 'catakor-shopify-port', get_template_directory_uri() . '/assets/shopify-port.css', array( 'catakor-inline-original' ), CATAKOR_ORIGINAL_VERSION );
 	wp_enqueue_style( 'catakor-original', get_stylesheet_uri(), array( 'catakor-shopify-port' ), CATAKOR_ORIGINAL_VERSION );
+	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+		wp_enqueue_style( 'catakor-checkout', get_template_directory_uri() . '/assets/checkout.css', array( 'catakor-original' ), CATAKOR_ORIGINAL_VERSION );
+	}
 	wp_enqueue_style( 'catakor-swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', array(), '11' );
 
 	wp_enqueue_script( 'catakor-swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11', true );
