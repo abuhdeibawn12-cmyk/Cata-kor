@@ -8,6 +8,12 @@
 get_header();
 
 $is_confirmation = function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' );
+
+// Remove stale add-to-cart notices from direct checkout links. Real checkout
+// validation notices are generated after this point and remain visible.
+if ( ! $is_confirmation && 'GET' === strtoupper( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) && function_exists( 'wc_clear_notices' ) ) {
+	wc_clear_notices();
+}
 ?>
 <main id="MainContent" class="catakor-checkout-shell content-for-layout focus-none" role="main">
 	<section class="catakor-checkout-hero" aria-labelledby="catakor-checkout-title">
@@ -35,6 +41,8 @@ $is_confirmation = function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url
 		<span><i aria-hidden="true">↗</i><?php esc_html_e( 'Tracked US delivery', 'catakor-original' ); ?></span>
 		<span><i aria-hidden="true">30</i><?php esc_html_e( '30-day guarantee', 'catakor-original' ); ?></span>
 	</div>
+
+	<?php if ( ! $is_confirmation ) { catakor_original_checkout_bag(); } ?>
 
 	<?php while ( have_posts() ) : the_post(); ?>
 		<article <?php post_class( 'catakor-checkout-page' ); ?>>

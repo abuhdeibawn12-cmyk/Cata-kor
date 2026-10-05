@@ -10,7 +10,13 @@ while ( have_posts() ) :
 	the_post();
 	global $product;
 
-	$is_nmn = false !== stripos( $product->get_slug(), 'nmn' ) || false !== stripos( $product->get_name(), 'nmn' );
+	$bundle_config = catakor_original_bundle_config( $product );
+	if ( $bundle_config ) {
+		get_template_part( 'template-parts/single', 'bundle', array( 'product' => $product, 'config' => $bundle_config ) );
+		continue;
+	}
+
+	$is_nmn = catakor_original_is_nmn_product( $product );
 
 	$image_ids = array_values( array_filter( array_merge( array( $product->get_image_id() ), $product->get_gallery_image_ids() ) ) );
 	$images    = array_map( static fn( $id ) => wp_get_attachment_image_url( $id, 'full' ), $image_ids );

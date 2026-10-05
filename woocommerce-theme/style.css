@@ -3,7 +3,7 @@ Theme Name: Catakor Original for WooCommerce
 Theme URI: https://getcatakor.com/
 Author: Catakor
 Description: A faithful WooCommerce port of the original Catakor Shopify storefront.
-Version: 1.2.1
+Version: 1.3.1
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: catakor-original
@@ -237,6 +237,334 @@ body.admin-bar .section-header.shopify-section-group-header-group {
   text-decoration: none;
 }
 
+.global-cart-layer.is-updating .global-cart-items,
+.global-cart-layer.is-updating .global-cart-summary {
+  opacity: .48;
+  pointer-events: none;
+}
+
+.global-cart-visual {
+  align-items: center;
+  background: #f4f6f2;
+  border-radius: 10px;
+  display: flex;
+  height: 92px;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: 92px;
+}
+
+.global-cart-visual > img {
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.catakor-bundle-composition {
+  display: block;
+  height: 100%;
+  min-height: 120px;
+  position: relative;
+  width: 100%;
+}
+
+.catakor-bundle-composition img {
+  height: 69% !important;
+  object-fit: contain;
+  position: absolute;
+  width: 58% !important;
+}
+
+.catakor-bundle-composition .is-nad {
+  left: 5%;
+  top: 3%;
+}
+
+.catakor-bundle-composition .is-glutathione {
+  bottom: 3%;
+  right: 4%;
+}
+
+.collection-card {
+  position: relative;
+}
+
+.collection-card-hitbox {
+  inset: 0;
+  position: absolute;
+  z-index: 2;
+}
+
+.collection-card-copy .collection-product-button {
+  position: relative;
+  z-index: 3;
+}
+
+.collection-image-wrap > .catakor-bundle-composition {
+  height: 260px;
+  max-width: 340px;
+  width: 88%;
+}
+
+.best-sellers-toolbar {
+  align-items: center;
+  color: #647066;
+  display: flex;
+  font-size: 12px;
+  justify-content: space-between;
+}
+
+.best-sellers-toolbar p {
+  margin: 0;
+}
+
+.best-sellers-grid {
+  margin-top: 28px;
+}
+
+.secondary-details-accordions {
+  overflow-anchor: none;
+}
+
+.secondary-details-accordions details {
+  scroll-margin-top: 130px;
+}
+
+/* Final Shopify bundle product layout. */
+.bundle-product-page {
+  background: #fff;
+  color: #18382a;
+}
+
+.bundle-product-hero {
+  display: grid;
+  gap: clamp(42px, 5vw, 86px);
+  grid-template-columns: minmax(0, 1.45fr) minmax(410px, 1fr);
+  margin: 0 auto;
+  max-width: 1580px;
+  min-height: 700px;
+  padding: 54px clamp(30px, 4.6vw, 78px) 72px;
+}
+
+.bundle-product-gallery {
+  display: grid;
+  gap: clamp(18px, 2vw, 34px);
+  grid-template-columns: 82px minmax(0, 1fr);
+  min-width: 0;
+}
+
+.bundle-thumbnail-composition {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.secondary-thumbnails .bundle-thumbnail-composition img {
+  height: 68%;
+  object-fit: contain;
+  position: absolute;
+  width: 58%;
+}
+
+.secondary-thumbnails .bundle-thumbnail-composition img:first-child {
+  left: 1%;
+  top: 1%;
+}
+
+.secondary-thumbnails .bundle-thumbnail-composition img:last-child {
+  bottom: 1%;
+  right: 0;
+}
+
+.bundle-main-image {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 560px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bundle-gallery-star {
+  background: #efffc0;
+  clip-path: polygon(44% 0, 56% 0, 60% 40%, 100% 44%, 100% 56%, 60% 60%, 56% 100%, 44% 100%, 40% 60%, 0 56%, 0 44%, 40% 40%);
+  height: min(620px, 92%);
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(620px, 92%);
+}
+
+.bundle-main-image > img {
+  height: min(540px, 92%);
+  object-fit: contain;
+  position: relative;
+  width: 96%;
+  z-index: 1;
+}
+
+.bundle-product-composition {
+  display: block;
+  height: min(500px, 86%);
+  position: relative;
+  width: min(590px, 90%);
+  z-index: 1;
+}
+
+.bundle-product-composition img {
+  height: 70%;
+  object-fit: contain;
+  position: absolute;
+  width: 58%;
+}
+
+.bundle-product-composition .is-nad {
+  left: 5%;
+  top: 3%;
+}
+
+.bundle-product-composition .is-glutathione {
+  bottom: 3%;
+  right: 4%;
+}
+
+.bundle-main-image .secondary-image-nav {
+  opacity: 1;
+}
+
+.bundle-product-details {
+  align-self: center;
+  max-width: 560px;
+}
+
+.bundle-breadcrumb {
+  color: #727a72;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 12px;
+  gap: 7px;
+  margin-bottom: 17px;
+}
+
+.bundle-breadcrumb a {
+  color: inherit;
+}
+
+.bundle-rating {
+  align-items: center;
+  display: flex;
+  font-size: 12px;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.bundle-rating span {
+  color: #daf56e;
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+.bundle-title-row {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.bundle-title-row h1 {
+  font-family: "Cata Sans", Arial, sans-serif;
+  font-size: clamp(24px, 2vw, 34px);
+  line-height: 1.06;
+  margin: 0;
+  max-width: 450px;
+}
+
+.bundle-title-row > span {
+  background: #ddfb70;
+  border-radius: 999px;
+  font-size: 11px;
+  padding: 6px 15px;
+  white-space: nowrap;
+}
+
+.bundle-intro {
+  color: #4e5c52;
+  line-height: 1.55;
+  margin: 20px 0 12px;
+}
+
+.bundle-feature-list {
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0 0 26px;
+  padding-left: 21px;
+}
+
+.bundle-feature-list li + li {
+  margin-top: 7px;
+}
+
+.bundle-price {
+  display: block;
+  font-size: 22px;
+  margin: 0 0 28px;
+}
+
+.bundle-price--saving {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+
+.bundle-price--saving s {
+  color: #6d776f;
+  font-size: 14px;
+}
+
+.bundle-price--saving strong {
+  font-size: 24px;
+}
+
+.bundle-price--saving span {
+  color: #35642e;
+  flex-basis: 100%;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.bundle-buy-button {
+  align-items: center;
+  background: #35642e;
+  border: 1px solid #35642e;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 52px;
+  width: 100%;
+}
+
+.bundle-buy-button:hover {
+  background: #173f20;
+}
+
+.bundle-buy-button.is-disabled {
+  background: #d5d8d1;
+  border-color: #d5d8d1;
+  color: #687066;
+  cursor: not-allowed;
+}
+
 .secondary-product-details form.cart input[type="number"] {
   border: 1px solid #d7d7d0;
   border-radius: 999px;
@@ -260,6 +588,16 @@ body.admin-bar .section-header.shopify-section-group-header-group {
   }
 }
 
+@media (max-width: 900px) {
+  .bundle-product-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .bundle-product-details {
+    max-width: none;
+  }
+}
+
 @media (max-width: 600px) {
   .catakor-wc-shell {
     padding-inline: 18px;
@@ -267,5 +605,44 @@ body.admin-bar .section-header.shopify-section-group-header-group {
 
   .catakor-wc-shell ul.products {
     gap: 18px 12px;
+  }
+
+  .global-cart-visual {
+    height: 72px;
+    width: 72px;
+  }
+
+  .bundle-product-hero {
+    gap: 24px;
+    min-height: 0;
+    padding: 24px 16px 54px;
+  }
+
+  .bundle-product-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .bundle-main-image {
+    min-height: 390px;
+  }
+
+  .bundle-product-composition {
+    height: 330px;
+    width: min(430px, 94%);
+  }
+
+  .bundle-title-row h1 {
+    font-size: 25px;
+  }
+
+  .bundle-title-row > span {
+    font-size: 9px;
+    padding: 5px 10px;
+  }
+
+  .best-sellers-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
   }
 }

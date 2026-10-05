@@ -23,6 +23,7 @@
   function initialiseCartDrawer() {
     var drawer = document.querySelector('#CartDrawer');
     if (!drawer || !window.catakorStore) return;
+    var cartBusy = false;
 
     function lockPage() {
       document.body.classList.add('is-locked');
@@ -76,13 +77,23 @@
       updateCount(payload.count);
     }
 
+    function setCartBusy(busy) {
+      cartBusy = busy;
+      drawer.classList.toggle('is-updating', busy);
+      drawer.setAttribute('aria-busy', busy ? 'true' : 'false');
+      drawer.querySelectorAll('[data-cart-quantity], [data-cart-remove]').forEach(function (control) {
+        control.disabled = busy;
+      });
+    }
+
     async function changeCartLine(button, quantity) {
+	  if (cartBusy) return;
       var body = new URLSearchParams();
       body.set('action', 'catakor_update_cart');
       body.set('nonce', window.catakorStore.cartNonce);
       body.set('cart_item_key', button.dataset.cartKey || '');
       body.set('quantity', String(quantity));
-      button.disabled = true;
+      setCartBusy(true);
       var response = await fetch(window.catakorStore.ajaxUrl, {
         method: 'POST',
         credentials: 'same-origin',
@@ -114,10 +125,9 @@
         event.preventDefault();
         var button = quantityButton || removeButton;
         var quantity = removeButton ? 0 : Number(button.dataset.cartQuantity || 0);
-        changeCartLine(button, quantity).catch(function (error) {
-          button.disabled = false;
-          window.console.error(error);
-        });
+        changeCartLine(button, quantity)
+          .catch(function (error) { window.console.error(error); })
+          .finally(function () { setCartBusy(false); });
       }
     });
 
@@ -128,27 +138,44 @@
       var button = form.querySelector('[type="submit"]');
       var label = form.querySelector('[data-add-label]');
       if (button && button.disabled) return;
+      var originalLabel = label ? label.textContent : 'ADD TO CART';
       if (button) button.disabled = true;
       if (label) label.textContent = 'ADDING…';
 
-      fetch(window.catakorStore.addToCartUrl, {
+	  var payload = new FormData();
+	  new FormData(form).forEach(function (value, name) {
+		if (name !== 'add-to-cart') payload.append(name, value);
+	  });
+	  payload.append('action', 'catakor_add_to_cart');
+	  payload.append('nonce', window.catakorStore.cartNonce);
+
+	  fetch(window.catakorStore.ajaxUrl, {
         method: 'POST',
         credentials: 'same-origin',
-        body: new FormData(form)
+		headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: payload
       })
-        .then(function (response) { return response.json(); })
+		.then(function (response) {
+		  return response.text().then(function (text) {
+			var result;
+			try { result = JSON.parse(text); } catch (error) { throw new Error('The store returned an invalid cart response.'); }
+			if (!response.ok) throw new Error('The selection could not be added to the shopping bag.');
+			return result;
+		  });
+		})
         .then(function (result) {
           if (result.error) throw new Error('This selection could not be added to the shopping bag.');
           applyFragments(result.fragments || {});
+		  if (label) label.textContent = 'ADDED';
           openCart();
         })
         .catch(function (error) {
           window.console.error(error);
-          if (label) label.textContent = 'PLEASE TRY AGAIN';
+		  if (label) label.textContent = 'TRY AGAIN';
         })
         .finally(function () {
           if (button) button.disabled = false;
-          window.setTimeout(function () { if (label) label.textContent = 'ADD TO CART'; }, 1000);
+		  window.setTimeout(function () { if (label) label.textContent = originalLabel; }, 1300);
         });
     });
 
@@ -170,12 +197,13 @@
       details.addEventListener('toggle', function () {
         if (details.classList.contains('menu-drawer-container')) {
           details.classList.toggle('menu-opening', details.open);
+		  if (details.open && details.parentElement) {
+			details.parentElement.querySelectorAll(':scope > details.menu-drawer-container[open]').forEach(function (other) {
+			  if (other !== details) other.open = false;
+			});
+		  }
         }
         if (summary) summary.setAttribute('aria-expanded', details.open ? 'true' : 'false');
-        if (!details.open) return;
-        details.parentElement.querySelectorAll(':scope > details[open]').forEach(function (other) {
-          if (other !== details) other.open = false;
-        });
       });
     });
   }
@@ -246,7 +274,11 @@
 
       function select(nextIndex) {
         index = (nextIndex + images.length) % images.length;
-        image.src = images[index];
+		var composition = gallery.querySelector('[data-bundle-composition]');
+		var isComposition = images[index] === '__bundle_composition__';
+		if (composition) composition.hidden = !isComposition;
+		image.hidden = isComposition;
+		if (!isComposition) image.src = images[index];
         if (index < thumbnailStart) thumbnailStart = index;
         if (index >= thumbnailStart + visibleThumbnails) thumbnailStart = index - visibleThumbnails + 1;
         thumbnails.forEach(function (button) {

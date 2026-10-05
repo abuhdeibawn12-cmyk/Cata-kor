@@ -174,6 +174,185 @@ body.woocommerce-checkout {
   margin-top: 28px;
 }
 
+.catakor-checkout-bag {
+  background: rgba(255, 255, 255, .94);
+  border: 1px solid var(--checkout-line);
+  border-radius: 22px;
+  box-shadow: 0 18px 58px rgba(21, 48, 28, .065);
+  margin: 24px auto 0;
+  max-width: 1180px;
+  overflow: hidden;
+}
+
+.catakor-checkout-bag > header {
+  align-items: center;
+  border-bottom: 1px solid var(--checkout-line);
+  display: flex;
+  justify-content: space-between;
+  padding: 22px 26px;
+}
+
+.catakor-checkout-bag > header span {
+  color: #7b887e;
+  display: block;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.catakor-checkout-bag h2 {
+  color: var(--checkout-forest-deep);
+  font-family: var(--font-heading-family, "Adieu", "Space Grotesk", sans-serif);
+  font-size: 21px;
+  letter-spacing: -.025em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.catakor-checkout-bag > header button {
+  background: transparent;
+  border: 1px solid #bdc9ba;
+  border-radius: 999px;
+  color: var(--checkout-forest);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 900;
+  min-height: 39px;
+  padding: 9px 18px;
+  text-transform: uppercase;
+}
+
+.catakor-checkout-bag-items {
+  display: grid;
+  gap: 0;
+  padding: 0 26px;
+}
+
+.catakor-checkout-bag-items article {
+  align-items: center;
+  border-bottom: 1px solid #edf0eb;
+  display: grid;
+  gap: 17px;
+  grid-template-columns: 78px minmax(0, 1fr) auto;
+  padding: 18px 0;
+}
+
+.catakor-checkout-bag-image {
+  align-items: center;
+  background: #f6f8f3;
+  border-radius: 12px;
+  display: flex;
+  height: 78px;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: 78px;
+}
+
+.catakor-checkout-bag-image > img {
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.catakor-checkout-bag-image .catakor-bundle-composition {
+  min-height: 78px;
+}
+
+.catakor-checkout-bag-items h3 {
+  color: #1b3221;
+  font-size: 13px;
+  line-height: 1.35;
+  margin: 0 0 6px;
+}
+
+.catakor-checkout-bag-items p {
+  color: #7b867e;
+  font-size: 10px;
+  margin: 0;
+}
+
+.catakor-checkout-bag-items article > strong {
+  color: var(--checkout-forest-deep);
+  font-size: 14px;
+}
+
+.woocommerce-checkout form.catakor-checkout-promo {
+  align-items: end;
+  background: #f8faf6;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  display: grid !important;
+  gap: 9px;
+  grid-template-columns: 1fr;
+  margin: 0;
+  padding: 18px 26px 22px;
+}
+
+.catakor-checkout-promo label {
+  color: #4e5d52;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.catakor-checkout-promo > div {
+  display: grid;
+  gap: 9px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  max-width: 500px;
+}
+
+.woocommerce-checkout .catakor-checkout-promo input {
+  background: #fff;
+  border: 1px solid #ced8cb;
+  border-radius: 11px;
+  min-height: 46px;
+  padding: 10px 13px;
+}
+
+.woocommerce-checkout .catakor-checkout-promo button {
+  background: var(--checkout-forest);
+  border: 0;
+  border-radius: 11px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 900;
+  min-width: 92px;
+  padding: 10px 18px;
+  text-transform: uppercase;
+}
+
+.woocommerce-checkout .woocommerce-notices-wrapper:empty {
+  display: none;
+}
+
+.woocommerce-checkout .woocommerce-error,
+.woocommerce-checkout .woocommerce-message,
+.woocommerce-checkout .woocommerce-info {
+  background: #fff;
+  border: 1px solid var(--checkout-line);
+  border-left: 4px solid var(--checkout-forest);
+  border-radius: 13px;
+  color: #34463a;
+  margin: 0 0 18px;
+  padding: 15px 18px 15px 46px;
+}
+
+.woocommerce-checkout .woocommerce-error {
+  border-left-color: #a94343;
+}
+
+.woocommerce-checkout .woocommerce-message .button,
+.woocommerce-checkout .woocommerce-info .button {
+  display: none;
+}
+
 .catakor-checkout-content {
   color: #17251b;
   font-size: 14px;
@@ -739,6 +918,35 @@ body.woocommerce-checkout {
 
   .catakor-checkout-assurance span {
     justify-content: flex-start;
+  }
+
+  .catakor-checkout-bag {
+    border-radius: 18px;
+  }
+
+  .catakor-checkout-bag > header,
+  .catakor-checkout-bag-items {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .catakor-checkout-bag-items article {
+    gap: 12px;
+    grid-template-columns: 62px minmax(0, 1fr) auto;
+  }
+
+  .catakor-checkout-bag-image {
+    height: 62px;
+    width: 62px;
+  }
+
+  .catakor-checkout-bag-items h3 {
+    font-size: 11px;
+  }
+
+  .woocommerce-checkout form.catakor-checkout-promo {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .woocommerce-checkout #customer_details {

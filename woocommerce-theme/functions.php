@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.2.1' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.3.1' );
 
 /**
  * Serve Revolut's Apple Pay domain-verification file on managed hosts.
@@ -130,6 +130,10 @@ function catakor_original_body_classes( $classes ) {
 	if ( is_page( array( 'science', 'science-benefits' ) ) ) {
 		$classes[] = 'science-page';
 	}
+	if ( get_query_var( 'catakor_best_sellers' ) ) {
+		$classes[] = 'collection-page';
+		$classes[] = 'best-sellers-page';
+	}
 	return $classes;
 }
 add_filter( 'body_class', 'catakor_original_body_classes' );
@@ -216,8 +220,276 @@ function catakor_original_cart_count_fragment( $fragments ) {
 }
 add_filter( 'woocommerce_add_to_cart_fragments', 'catakor_original_cart_count_fragment' );
 
+/**
+ * Add a product or variation to the cart and return the refreshed theme drawer.
+ *
+ * WooCommerce's generic wc-ajax endpoint is intended primarily for simple
+ * catalogue buttons. Handling the product-page form here keeps variation IDs
+ * and attributes together, so the NMN pack choices add cleanly without a page
+ * reload or a false error state.
+ */
+function catakor_original_ajax_add_to_cart() {
+	check_ajax_referer( 'catakor-cart', 'nonce' );
+	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+		wp_send_json( array( 'error' => true, 'message' => __( 'The shopping bag is unavailable.', 'catakor-original' ) ), 400 );
+	}
+
+	$product_id   = isset( $_POST['product_id'] ) ? absint( $_POST['product_id'] ) : 0;
+	$variation_id = isset( $_POST['variation_id'] ) ? absint( $_POST['variation_id'] ) : 0;
+	$quantity     = isset( $_POST['quantity'] ) ? max( 1, wc_stock_amount( wp_unslash( $_POST['quantity'] ) ) ) : 1;
+	$product      = wc_get_product( $variation_id ?: $product_id );
+	$variation    = array();
+
+	foreach ( $_POST as $key => $value ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Checked above.
+		if ( 0 === strpos( $key, 'attribute_' ) ) {
+			$variation[ wc_clean( wp_unslash( $key ) ) ] = wc_clean( wp_unslash( $value ) );
+		}
+	}
+
+	if ( ! $product_id || ! $product || ! $product->exists() || ! $product->is_purchasable() ) {
+		wp_send_json( array( 'error' => true, 'message' => __( 'This selection is not available.', 'catakor-original' ) ), 400 );
+	}
+
+	$cart_item_key = WC()->cart->add_to_cart( $product_id, $quantity, $variation_id, $variation );
+	if ( ! $cart_item_key ) {
+		wp_send_json( array( 'error' => true, 'message' => __( 'This selection could not be added to the shopping bag.', 'catakor-original' ) ), 400 );
+	}
+
+	WC()->cart->calculate_totals();
+	WC()->cart->set_session();
+	WC()->cart->maybe_set_cart_cookies();
+	wp_send_json(
+		array(
+			'error'     => false,
+			'fragments' => apply_filters( 'woocommerce_add_to_cart_fragments', array() ),
+			'cart_hash' => WC()->cart->get_cart_hash(),
+		)
+	);
+}
+add_action( 'wp_ajax_catakor_add_to_cart', 'catakor_original_ajax_add_to_cart' );
+add_action( 'wp_ajax_nopriv_catakor_add_to_cart', 'catakor_original_ajax_add_to_cart' );
+
 function catakor_original_asset( $file ) {
 	return get_template_directory_uri() . '/assets/original/' . ltrim( $file, '/' );
+}
+
+/**
+ * Exact non-CA-AKG bundles from the final Catakor Shopify catalogue.
+ *
+ * @return array<string,array<string,mixed>>
+ */
+function catakor_original_bundle_configs() {
+	return array(
+		'nad-nmn' => array(
+			'slugs'   => array( 'bundle-nad-nmn', 'bundle-liposomal-nad-nmn-complex' ),
+			'sku'     => 'bundle-nad-nmn',
+			'title'   => 'BUNDLE: LIPOSOMAL NAD+ & NMN COMPLEX',
+			'intro'   => 'A two-formula pairing for daily cellular energy and healthy-aging support.*',
+			'benefit' => 'Dual cellular energy support*',
+			'compare' => 89.98,
+			'image'   => 'https://catakor.com/cdn/shop/files/Main_NMN_NAD.png?v=1783680342&width=1600',
+			'gallery' => array(
+				'https://catakor.com/cdn/shop/files/Main_NMN_NAD.png?v=1783680342&width=1600',
+				'https://catakor.com/cdn/shop/files/2_265dc661-93dd-4723-8cf6-3c9138f9c018.jpg?v=1783169420&width=1600',
+				'https://catakor.com/cdn/shop/files/61JmcdKRxyL._AC_SL1500_299f1d09-6053-4757-bb18-7240b3d34490.jpg?v=1783169420&width=1600',
+				'https://catakor.com/cdn/shop/files/3_9fc18715-b342-4262-840f-d76f4248430d.jpg?v=1783169420&width=1600',
+			),
+			'bullets' => array( 'NMN supports NAD+ levels*', 'Quercetin supports cellular renewal*', 'TMG supports methylation balance*', 'Resveratrol supports SIRT1 activity*' ),
+		),
+		'nmn-glutathione' => array(
+			'slugs'   => array( 'bundle-nmn-glutathione', 'bundle-ultimate-longevity-nmn-1000-mg-liposomal-glutathione-500-mg-ca-akg-biotin-hyaluronic-acid-msm-vitamin-c' ),
+			'sku'     => 'bundle-nmn-glu',
+			'title'   => 'BUNDLE: NMN COMPLEX & LIPOSOMAL GLUTATHIONE',
+			'intro'   => 'A two-formula pairing for cellular energy and antioxidant defense support.*',
+			'benefit' => 'Cellular energy and antioxidant support*',
+			'compare' => 89.98,
+			'image'   => 'https://catakor.com/cdn/shop/files/Main_NMN_GLU.png?v=1783680215&width=1600',
+			'gallery' => array(
+				'https://catakor.com/cdn/shop/files/Main_NMN_GLU.png?v=1783680215&width=1600',
+				'https://catakor.com/cdn/shop/files/1_a4492c5f-0598-4b82-adf0-9bf3547ee037.png?v=1780411784&width=1600',
+				'https://catakor.com/cdn/shop/files/2_91acbaea-daa9-4c27-96df-b5caf0741a56.jpg?v=1780411783&width=1600',
+				'https://catakor.com/cdn/shop/files/3_cc69d014-2422-4a31-b5bb-174fbe4c8de6.jpg?v=1780411783&width=1600',
+			),
+			'bullets' => array( 'NMN supports NAD+ levels*', 'TMG supports methylation balance*', 'Liposomal glutathione supports antioxidant defenses*', 'Vitamin C supports normal immune function*' ),
+		),
+		'nad-glutathione' => array(
+			'slugs'   => array( 'bundle-nad-glutathione' ),
+			'sku'     => 'bundle-nad-glu',
+			'title'   => 'BUNDLE: LIPOSOMAL NAD+ & GLUTATHIONE',
+			'intro'   => 'A two-formula pairing for cellular energy and antioxidant defense support.*',
+			'benefit' => 'Cellular energy and antioxidant defense support*',
+			'compare' => 79.98,
+			'image'   => '__bundle_composition__',
+			'gallery' => array(
+				'__bundle_composition__',
+				'https://catakor.com/cdn/shop/files/20.jpg?v=1783169994&width=1600',
+				'https://catakor.com/cdn/shop/files/21.jpg?v=1783169994&width=1600',
+				'https://catakor.com/cdn/shop/files/26.jpg?v=1783169994&width=1600',
+			),
+			'bullets' => array( 'LipoNAD supports cellular energy production*', 'Resveratrol supports healthy cellular function*', 'Liposomal glutathione supports antioxidant defenses*', 'Vitamin C supports normal immune function*' ),
+		),
+		'nad-nmn-glutathione' => array(
+			'slugs'   => array( 'bundle-nad-nmn-glutathione', 'bundle-cellular-power-trio-nad-advanced-500-mg-nmn-1000-mg-ca-akg-1000-mg-resveratrol-tmg-msm' ),
+			'sku'     => 'bundle-nad-nmn-glu',
+			'title'   => 'BUNDLE: LIPOSOMAL NAD+ & NMN COMPLEX & GLUTATHIONE',
+			'intro'   => 'Three complementary formulas for cellular energy, healthy aging and antioxidant defense support.*',
+			'benefit' => 'Complete cellular energy and antioxidant support*',
+			'compare' => 129.97,
+			'image'   => 'https://catakor.com/cdn/shop/files/Main_NMN_NAD_GLU.png?v=1783680368&width=1600',
+			'gallery' => array(
+				'https://catakor.com/cdn/shop/files/Main_NMN_NAD_GLU.png?v=1783680368&width=1600',
+				'https://catakor.com/cdn/shop/files/20.jpg?v=1783169994&width=1600',
+				'https://catakor.com/cdn/shop/files/21.jpg?v=1783169994&width=1600',
+				'https://catakor.com/cdn/shop/files/22.jpg?v=1783169994&width=1600',
+			),
+			'bullets' => array( 'Third-party tested for identity, purity and quality', 'Three complementary daily formulas', 'Made in the USA', 'Manufactured from globally sourced ingredients' ),
+		),
+	);
+}
+
+/** Match a WooCommerce product to a verified final-store bundle. */
+function catakor_original_bundle_config( $product ) {
+	if ( ! $product instanceof WC_Product ) {
+		return null;
+	}
+	$slug = $product->get_slug();
+	$sku  = strtolower( $product->get_sku() );
+	foreach ( catakor_original_bundle_configs() as $key => $config ) {
+		if ( in_array( $slug, $config['slugs'], true ) || $config['sku'] === $sku ) {
+			$config['key'] = $key;
+			return $config;
+		}
+	}
+	return null;
+}
+
+/** Classify the three core products without treating NMN bundles as NMN. */
+function catakor_original_product_role( $product ) {
+	if ( catakor_original_bundle_config( $product ) ) {
+		return 'bundle';
+	}
+	$name = strtolower( $product->get_name() );
+	if ( false !== strpos( $name, 'liposomal nad' ) ) {
+		return 'nad';
+	}
+	if ( false !== strpos( $name, 'glutathione' ) ) {
+		return 'glutathione';
+	}
+	if ( false !== strpos( $name, 'nmn' ) ) {
+		return 'nmn';
+	}
+	return '';
+}
+
+/** Exact NMN check used by the product template. */
+function catakor_original_is_nmn_product( $product ) {
+	return 'nmn' === catakor_original_product_role( $product );
+}
+
+/** Render a product or bundle visual consistently. */
+function catakor_original_product_visual( $product, $size = 'woocommerce_single' ) {
+	$config = catakor_original_bundle_config( $product );
+	if ( $config && '__bundle_composition__' === $config['image'] ) {
+		return '<span class="catakor-bundle-composition" role="img" aria-label="' . esc_attr( $config['title'] ) . '"><img class="is-nad" src="https://catakor.com/cdn/shop/files/Main_NAD.png?v=1783679981&amp;width=800" alt=""><img class="is-glutathione" src="https://catakor.com/cdn/shop/files/Main_Glu.png?v=1783680082&amp;width=800" alt=""></span>';
+	}
+	if ( $config ) {
+		return '<img src="' . esc_url( $config['image'] ) . '" alt="' . esc_attr( $config['title'] ) . '" loading="lazy">';
+	}
+	if ( catakor_original_is_nmn_product( $product ) ) {
+		return '<img src="' . esc_url( catakor_original_asset( 'nmn-gallery/01-main.png' ) ) . '" alt="' . esc_attr( $product->get_name() ) . '" loading="lazy">';
+	}
+	return $product->get_image( $size, array( 'loading' => 'lazy', 'alt' => $product->get_name() ) );
+}
+
+/** Return only the intended storefront catalogue in the intended order. */
+function catakor_original_sort_catalogue( $products, $best_sellers = false ) {
+	$ranked       = array();
+	$core_order   = array( 'nad', 'glutathione', 'nmn' );
+	$bundle_order = array_keys( catakor_original_bundle_configs() );
+	foreach ( $products as $product ) {
+		if ( ! $product instanceof WC_Product ) {
+			continue;
+		}
+		$role   = catakor_original_product_role( $product );
+		$config = catakor_original_bundle_config( $product );
+		if ( in_array( $role, $core_order, true ) ) {
+			$ranked[ array_search( $role, $core_order, true ) + 1 ] = $product;
+		} elseif ( ! $best_sellers && $config ) {
+			$ranked[ 10 + array_search( $config['key'], $bundle_order, true ) ] = $product;
+		}
+	}
+	ksort( $ranked );
+	return array_values( $ranked );
+}
+
+/** Shared collection card. */
+function catakor_original_product_card( $product, $order ) {
+	$config      = catakor_original_bundle_config( $product );
+	$title       = $config ? $config['title'] : $product->get_name();
+	$description = $config ? $config['benefit'] : wp_trim_words( wp_strip_all_tags( $product->get_short_description() ?: $product->get_description() ), 12 );
+	?>
+	<article class="collection-card<?php echo $product->is_in_stock() ? '' : ' is-sold-out'; ?><?php echo $config ? ' collection-bundle-card' : ''; ?>" data-collection-card data-title="<?php echo esc_attr( $title ); ?>" data-available="<?php echo $product->is_in_stock() ? 'true' : 'false'; ?>" data-original-order="<?php echo esc_attr( $order ); ?>">
+		<a class="collection-card-hitbox" href="<?php echo esc_url( $product->get_permalink() ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'View %s', 'catakor-original' ), $title ) ); ?>"></a>
+		<div class="collection-image-wrap"><span class="collection-sale-badge"><?php echo $config ? esc_html__( 'Bundle', 'catakor-original' ) : ( $product->is_on_sale() ? esc_html__( 'Sale', 'catakor-original' ) : esc_html__( 'Cata-Kor', 'catakor-original' ) ); ?></span><?php if ( ! $product->is_in_stock() ) : ?><span class="collection-stock-badge"><?php esc_html_e( 'Sold out', 'catakor-original' ); ?></span><?php endif; ?><?php echo wp_kses_post( catakor_original_product_visual( $product ) ); ?></div>
+		<div class="collection-card-copy"><h2><?php echo esc_html( $title ); ?></h2><p><?php echo esc_html( $description ); ?></p><a class="collection-product-button" href="<?php echo esc_url( $product->get_permalink() ); ?>"><?php echo $product->is_in_stock() ? esc_html__( 'View Product', 'catakor-original' ) : esc_html__( 'Out of stock', 'catakor-original' ); ?></a></div>
+	</article>
+	<?php
+}
+
+/** Virtual Best Sellers collection. */
+function catakor_original_best_sellers_rewrite() {
+	add_rewrite_rule( '^best-sellers/?$', 'index.php?catakor_best_sellers=1', 'top' );
+	if ( get_option( 'catakor_rewrite_version' ) !== CATAKOR_ORIGINAL_VERSION ) {
+		flush_rewrite_rules( false );
+		update_option( 'catakor_rewrite_version', CATAKOR_ORIGINAL_VERSION, false );
+	}
+}
+add_action( 'init', 'catakor_original_best_sellers_rewrite' );
+add_filter( 'query_vars', static function ( $vars ) { $vars[] = 'catakor_best_sellers'; return $vars; } );
+add_filter( 'template_include', static function ( $template ) { return get_query_var( 'catakor_best_sellers' ) ? get_template_directory() . '/page-best-sellers.php' : $template; } );
+add_filter( 'pre_get_document_title', static function ( $title ) { return get_query_var( 'catakor_best_sellers' ) ? __( 'Best Sellers – Cata-Kor', 'catakor-original' ) : $title; } );
+add_filter( 'redirect_canonical', static function ( $redirect ) { return get_query_var( 'catakor_best_sellers' ) ? false : $redirect; } );
+add_action(
+	'template_redirect',
+	static function () {
+		if ( get_query_var( 'catakor_best_sellers' ) ) {
+			global $wp_query;
+			$wp_query->is_404 = false;
+			status_header( 200 );
+		}
+	},
+	1
+);
+
+/** Replace WooCommerce's collapsed coupon prompt with the visible theme field. */
+function catakor_original_remove_default_checkout_coupon() {
+	remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
+}
+add_action( 'wp', 'catakor_original_remove_default_checkout_coupon' );
+
+/** Modern bag summary displayed before checkout details. */
+function catakor_original_checkout_bag() {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
+		return;
+	}
+	?>
+	<section class="catakor-checkout-bag" aria-labelledby="catakor-checkout-bag-title">
+		<header><div><span><?php esc_html_e( 'Your shopping bag', 'catakor-original' ); ?></span><h2 id="catakor-checkout-bag-title"><?php esc_html_e( 'Review your items', 'catakor-original' ); ?></h2></div><button type="button" data-cart-open><?php esc_html_e( 'Edit bag', 'catakor-original' ); ?></button></header>
+		<div class="catakor-checkout-bag-items">
+			<?php foreach ( WC()->cart->get_cart() as $cart_item ) : $item_product = $cart_item['data']; if ( ! $item_product || ! $item_product->exists() || $cart_item['quantity'] < 1 ) { continue; } ?>
+				<article>
+					<a class="catakor-checkout-bag-image" href="<?php echo esc_url( $item_product->get_permalink() ); ?>"><?php echo wp_kses_post( catakor_original_product_visual( $item_product, 'woocommerce_thumbnail' ) ); ?></a>
+					<div><h3><?php echo esc_html( $item_product->get_name() ); ?></h3><p><?php echo esc_html( sprintf( _n( '%d item', '%d items', $cart_item['quantity'], 'catakor-original' ), $cart_item['quantity'] ) ); ?></p></div>
+					<strong><?php echo wp_kses_post( WC()->cart->get_product_subtotal( $item_product, $cart_item['quantity'] ) ); ?></strong>
+				</article>
+			<?php endforeach; ?>
+		</div>
+		<form class="checkout_coupon catakor-checkout-promo" method="post">
+			<label for="catakor_coupon_code"><?php esc_html_e( 'Promo code', 'catakor-original' ); ?></label>
+			<div><input id="catakor_coupon_code" type="text" name="coupon_code" placeholder="<?php esc_attr_e( 'Enter your code', 'catakor-original' ); ?>" autocomplete="off"><button type="submit" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'catakor-original' ); ?>"><?php esc_html_e( 'Apply', 'catakor-original' ); ?></button></div>
+		</form>
+	</section>
+	<?php
 }
 
 /**
@@ -265,7 +537,7 @@ function catakor_original_cart_content() {
 				$variation_label = wc_get_formatted_cart_item_data( $cart_item, true );
 				?>
 				<article data-line-key="<?php echo esc_attr( $cart_item_key ); ?>">
-					<?php echo wp_kses_post( $item_product->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ) ); ?>
+					<div class="global-cart-visual"><?php echo wp_kses_post( catakor_original_product_visual( $item_product, 'woocommerce_thumbnail' ) ); ?></div>
 					<div class="global-cart-item-copy">
 						<h3><?php echo esc_html( $item_product->get_name() ); ?></h3>
 						<p><?php echo $variation_label ? wp_kses_post( $variation_label ) . ' · ' : ''; ?><?php esc_html_e( 'One-time purchase', 'catakor-original' ); ?></p>
@@ -330,6 +602,8 @@ function catakor_original_ajax_update_cart() {
 
 	WC()->cart->set_quantity( $key, $quantity, true );
 	WC()->cart->calculate_totals();
+	WC()->cart->set_session();
+	WC()->cart->maybe_set_cart_cookies();
 	wp_send_json_success(
 		array(
 			'content' => catakor_original_cart_content(),
