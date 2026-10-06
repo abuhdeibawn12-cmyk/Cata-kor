@@ -3,7 +3,7 @@ Theme Name: Catakor Original for WooCommerce
 Theme URI: https://getcatakor.com/
 Author: Catakor
 Description: A faithful WooCommerce port of the original Catakor Shopify storefront.
-Version: 1.4.2
+Version: 1.4.3
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: catakor-original
@@ -665,8 +665,33 @@ body.admin-bar .section-header.shopify-section-group-header-group {
 }
 
 body.woocommerce-account .catakor-wc-shell {
-  max-width: 1180px;
+  max-width: none;
   margin-inline: auto;
+  padding: clamp(52px, 6vw, 92px) 0 100px;
+  width: min(1180px, calc(100% - 48px));
+}
+
+body.woocommerce-account .catakor-page {
+  margin: 0;
+  max-width: none;
+  width: 100%;
+}
+
+body.woocommerce-account .catakor-page__title {
+  font-family: var(--font-heading-family, "Adieu", "Space Grotesk", sans-serif);
+  font-size: clamp(42px, 5vw, 72px);
+  line-height: .94;
+  margin: 0 0 38px;
+  max-width: 100%;
+  overflow-wrap: normal;
+  white-space: normal;
+  word-break: normal;
+}
+
+.woocommerce-account .catakor-page__content,
+.woocommerce-account .woocommerce {
+  min-width: 0;
+  width: 100%;
 }
 
 .woocommerce-account .woocommerce h2 {
@@ -679,19 +704,27 @@ body.woocommerce-account .catakor-wc-shell {
 }
 
 .woocommerce-account .woocommerce .u-columns.col2-set {
+  align-items: start;
   display: grid;
-  gap: 24px;
+  gap: clamp(22px, 3vw, 36px);
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
 }
 
 .woocommerce-account .woocommerce .u-column1,
 .woocommerce-account .woocommerce .u-column2,
 .woocommerce-account .woocommerce-MyAccount-navigation,
 .woocommerce-account .woocommerce-MyAccount-content {
-  background: #f8faf5;
-  border: 1px solid #dce3d8;
-  border-radius: 18px;
-  padding: clamp(24px, 4vw, 40px);
+  background: linear-gradient(145deg, #fbfcf8 0%, #f2f6ed 100%);
+  border: 1px solid #d9e2d4;
+  border-radius: 24px;
+  box-shadow: 0 20px 55px rgba(23, 63, 32, .08);
+  box-sizing: border-box;
+  float: none !important;
+  margin: 0;
+  min-width: 0;
+  padding: clamp(26px, 4vw, 44px);
+  width: 100% !important;
 }
 
 .woocommerce-account form.login,
@@ -701,20 +734,104 @@ body.woocommerce-account .catakor-wc-shell {
   padding: 0;
 }
 
+.woocommerce-account form .form-row {
+  margin: 0 0 18px;
+  padding: 0;
+}
+
+.woocommerce-account form .form-row label {
+  color: #24432d;
+  display: block;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: .055em;
+  line-height: 1.35;
+  margin-bottom: 7px;
+  text-transform: uppercase;
+}
+
+.woocommerce-account form .password-input {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+.woocommerce-account form .password-input .input-text {
+  padding-right: 48px;
+}
+
+.woocommerce-account form .show-password-input {
+  cursor: pointer;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .woocommerce-account form .input-text {
   background: #fff;
   border: 1px solid #bdc9ba;
-  border-radius: 9px;
-  min-height: 48px;
-  padding: 10px 13px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  font: inherit;
+  min-height: 52px;
+  padding: 12px 15px;
+  transition: border-color .2s ease, box-shadow .2s ease;
+  width: 100%;
+}
+
+.woocommerce-account form .input-text:focus {
+  border-color: var(--catakor-green);
+  box-shadow: 0 0 0 4px rgba(230, 247, 146, .55);
+  outline: 0;
 }
 
 .woocommerce-account form .woocommerce-button {
   background: var(--catakor-green);
-  border-radius: 9px;
+  border-radius: 12px;
   color: var(--catakor-lime);
-  min-height: 48px;
-  padding: 11px 24px;
+  min-height: 52px;
+  padding: 12px 28px;
+  transition: transform .2s ease, box-shadow .2s ease;
+  width: 100%;
+}
+
+.woocommerce-account form .woocommerce-button:hover,
+.woocommerce-account form .woocommerce-button:focus-visible {
+  box-shadow: 0 12px 28px rgba(23, 63, 32, .2);
+  transform: translateY(-1px);
+}
+
+.woocommerce-account .woocommerce-form-login__rememberme {
+  align-items: center;
+  display: flex !important;
+  gap: 8px;
+  margin: 0 0 16px !important;
+  text-transform: none !important;
+}
+
+.woocommerce-account .woocommerce-form-login__rememberme input {
+  accent-color: var(--catakor-green);
+  height: 17px;
+  margin: 0;
+  width: 17px;
+}
+
+.woocommerce-account .woocommerce-LostPassword {
+  font-size: 13px;
+  margin: 16px 0 0;
+}
+
+.woocommerce-account .woocommerce-LostPassword a,
+.woocommerce-account .woocommerce-privacy-policy-text a {
+  color: var(--catakor-green);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+
+.woocommerce-account .woocommerce-privacy-policy-text {
+  color: #647066;
+  font-size: 12px;
+  line-height: 1.55;
 }
 
 .woocommerce-account .woocommerce-MyAccount-navigation ul {
@@ -755,6 +872,16 @@ body.woocommerce-account .catakor-wc-shell {
 
   .woocommerce-account .woocommerce .u-columns.col2-set {
     grid-template-columns: 1fr;
+  }
+
+  body.woocommerce-account .catakor-wc-shell {
+    padding-block: 38px 72px;
+    width: min(calc(100% - 32px), 680px);
+  }
+
+  body.woocommerce-account .catakor-page__title {
+    font-size: clamp(38px, 12vw, 58px);
+    margin-bottom: 28px;
   }
 }
 
