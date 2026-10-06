@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.4.7' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.4.8' );
 
 /** Supply the Catakor browser-tab mark when WordPress has no Site Icon set. */
 function catakor_original_favicon() {
