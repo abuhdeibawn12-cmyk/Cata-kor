@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.4.4' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.4.5' );
 
 /** Supply the Catakor browser-tab mark when WordPress has no Site Icon set. */
 function catakor_original_favicon() {
@@ -770,8 +770,29 @@ function catakor_original_usa_free_shipping_rate( $rates, $package ) {
 }
 add_filter( 'woocommerce_package_rates', 'catakor_original_usa_free_shipping_rate', 100, 2 );
 
+/** Keep the single free-delivery promise visible before the address is complete. */
+function catakor_original_show_shipping_before_address() {
+	return 'no';
+}
+add_filter( 'option_woocommerce_shipping_cost_requires_address', 'catakor_original_show_shipping_before_address' );
+
+/** Use customer-friendly labels in the compact checkout totals card. */
+function catakor_original_shipping_package_name() {
+	return __( 'Delivery', 'catakor-original' );
+}
+add_filter( 'woocommerce_shipping_package_name', 'catakor_original_shipping_package_name' );
+
+function catakor_original_coupon_label( $label, $coupon ) {
+	if ( ! $coupon instanceof WC_Coupon ) {
+		return $label;
+	}
+	return sprintf( __( 'Savings (%s)', 'catakor-original' ), strtoupper( $coupon->get_code() ) );
+}
+add_filter( 'woocommerce_cart_totals_coupon_label', 'catakor_original_coupon_label', 20, 2 );
+
 /** Invalidate stored package rates when this storefront version is activated. */
 function catakor_original_refresh_shipping_rates() {
+	update_option( 'woocommerce_shipping_cost_requires_address', 'no' );
 	if ( class_exists( 'WC_Cache_Helper' ) ) {
 		WC_Cache_Helper::get_transient_version( 'shipping', true );
 	}
@@ -910,10 +931,10 @@ function catakor_original_checkout_bag() {
 	<section class="catakor-checkout-bag" data-checkout-bag aria-labelledby="catakor-checkout-bag-title">
 		<header><div><span><?php esc_html_e( 'Your shopping bag', 'catakor-original' ); ?></span><h2 id="catakor-checkout-bag-title"><?php esc_html_e( 'Review your items', 'catakor-original' ); ?></h2></div><button type="button" data-cart-open><?php esc_html_e( 'Edit bag', 'catakor-original' ); ?></button></header>
 		<div class="catakor-checkout-bag-items">
-			<?php foreach ( WC()->cart->get_cart() as $cart_item ) : $item_product = $cart_item['data']; if ( ! $item_product || ! $item_product->exists() || $cart_item['quantity'] < 1 ) { continue; } ?>
+			<?php foreach ( WC()->cart->get_cart() as $cart_item ) : $item_product = $cart_item['data']; if ( ! $item_product || ! $item_product->exists() || $cart_item['quantity'] < 1 ) { continue; } $item_name = catakor_original_checkout_item_name( $item_product->get_name(), $cart_item ); ?>
 				<article>
 					<a class="catakor-checkout-bag-image" href="<?php echo esc_url( $item_product->get_permalink() ); ?>"><?php echo wp_kses_post( catakor_original_product_visual( $item_product, 'woocommerce_thumbnail' ) ); ?></a>
-					<div><?php if ( ! empty( $cart_item['_catakor_flash_offer'] ) ) : ?><span class="global-flash-label"><?php echo esc_html( sprintf( __( 'FLASH SALE · %d%% OFF', 'catakor-original' ), absint( $cart_item['_catakor_flash_discount'] ?? 0 ) ) ); ?></span><?php endif; ?><h3><?php echo esc_html( $item_product->get_name() ); ?></h3><p><?php echo esc_html( sprintf( _n( '%d item', '%d items', $cart_item['quantity'], 'catakor-original' ), $cart_item['quantity'] ) ); ?></p></div>
+					<div><?php if ( ! empty( $cart_item['_catakor_flash_offer'] ) ) : ?><span class="global-flash-label"><?php echo esc_html( sprintf( __( 'FLASH SALE · %d%% OFF', 'catakor-original' ), absint( $cart_item['_catakor_flash_discount'] ?? 0 ) ) ); ?></span><?php endif; ?><h3><?php echo wp_kses_post( $item_name ); ?></h3><p><?php echo esc_html( sprintf( _n( '%d item', '%d items', $cart_item['quantity'], 'catakor-original' ), $cart_item['quantity'] ) ); ?></p></div>
 					<strong><?php echo wp_kses_post( WC()->cart->get_product_subtotal( $item_product, $cart_item['quantity'] ) ); ?></strong>
 				</article>
 			<?php endforeach; ?>

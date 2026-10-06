@@ -579,9 +579,9 @@ body.woocommerce-checkout {
 
 .woocommerce-checkout .woocommerce-checkout-review-order-table tfoot th {
   color: #627067;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
-  letter-spacing: .045em;
+  letter-spacing: .03em;
   text-transform: uppercase;
 }
 
@@ -593,7 +593,7 @@ body.woocommerce-checkout {
 .woocommerce-checkout .woocommerce-checkout-review-order-table .shipping td {
   background: #f4f8ed;
   color: var(--checkout-forest);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -609,9 +609,23 @@ body.woocommerce-checkout {
 
 .woocommerce-checkout .woocommerce-shipping-methods label {
   color: var(--checkout-forest);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: .02em;
+}
+
+.woocommerce-checkout .woocommerce-checkout-review-order-table .coupon td {
+  color: #567015;
+}
+
+.woocommerce-checkout .woocommerce-remove-coupon {
+  color: #637262;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: 6px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .woocommerce-checkout .woocommerce-shipping-methods input[type="radio"] {
