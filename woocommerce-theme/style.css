@@ -3,7 +3,7 @@ Theme Name: Catakor Original for WooCommerce
 Theme URI: https://getcatakor.com/
 Author: Catakor
 Description: A faithful WooCommerce port of the original Catakor Shopify storefront.
-Version: 1.4.6
+Version: 1.4.7
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: catakor-original
@@ -851,6 +851,163 @@ body.woocommerce-account .catakor-page__title {
   padding: 12px 0;
 }
 
+/* Logged-in account workspace: compact navigation and modern payment cards. */
+.woocommerce-account .woocommerce:has(.woocommerce-MyAccount-navigation) {
+  align-items: start;
+  display: grid;
+  gap: clamp(20px, 3vw, 34px);
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation {
+  padding: 18px 22px;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content {
+  min-height: 310px;
+  padding: clamp(28px, 4vw, 46px);
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation li {
+  border: 0;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation li + li {
+  border-top: 1px solid #dce3d8;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation li.is-active {
+  background: var(--catakor-green);
+  border-radius: 12px;
+  margin: 5px -9px;
+  padding: 0 9px;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation li.is-active a {
+  color: #fff;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .woocommerce-info {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #dbe4d7;
+  border-left: 5px solid var(--catakor-lime);
+  border-radius: 17px;
+  box-shadow: 0 14px 34px rgba(23, 63, 32, .08);
+  color: #526057;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 15px;
+  gap: 18px;
+  justify-content: space-between;
+  line-height: 1.5;
+  margin: 0;
+  padding: 22px 24px;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .woocommerce-info::before {
+  display: none;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .button,
+.woocommerce-account #add_payment_method #place_order {
+  align-items: center;
+  background: var(--catakor-green);
+  border: 0;
+  border-radius: 999px;
+  box-shadow: 0 10px 24px rgba(23, 63, 32, .16);
+  color: #fff;
+  display: inline-flex;
+  float: none;
+  font-size: 11px;
+  font-weight: 900;
+  justify-content: center;
+  letter-spacing: .075em;
+  min-height: 46px;
+  padding: 12px 22px;
+  text-transform: uppercase;
+  transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .button:hover,
+.woocommerce-account .woocommerce-MyAccount-content .button:focus-visible,
+.woocommerce-account #add_payment_method #place_order:hover,
+.woocommerce-account #add_payment_method #place_order:focus-visible {
+  background: #0f2d17;
+  box-shadow: 0 14px 28px rgba(23, 63, 32, .22);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.woocommerce-account #add_payment_method #payment {
+  background: transparent;
+  border-radius: 0;
+}
+
+.woocommerce-account #add_payment_method #payment ul.payment_methods {
+  border: 0;
+  display: grid;
+  gap: 12px;
+  margin: 0 0 22px;
+  padding: 0;
+}
+
+.woocommerce-account #add_payment_method #payment ul.payment_methods > li {
+  background: #fff;
+  border: 1px solid #dbe4d7;
+  border-radius: 17px;
+  box-shadow: 0 9px 25px rgba(23, 63, 32, .06);
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.woocommerce-account #add_payment_method #payment ul.payment_methods > li > input {
+  accent-color: var(--catakor-green);
+  margin: 22px 0 0 20px;
+}
+
+.woocommerce-account #add_payment_method #payment ul.payment_methods > li > label {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  font-size: 14px;
+  font-weight: 800;
+  min-height: 64px;
+  padding: 14px 18px 14px 48px;
+}
+
+.woocommerce-account #add_payment_method #payment ul.payment_methods > li > label img:first-of-type {
+  margin-left: auto;
+}
+
+.woocommerce-account #add_payment_method #payment div.payment_box {
+  background: #f5f8f2;
+  border-top: 1px solid #e1e8de;
+  color: #5f6c62;
+  margin: 0;
+  padding: 20px;
+}
+
+.woocommerce-account #add_payment_method #payment div.payment_box::before {
+  display: none;
+}
+
+/* Make order tracking a clear utility action without overpowering the shop. */
+.catakor-original #HeaderMenu-track-order > span {
+  border: 1px solid #b8c5b5;
+  border-radius: 999px;
+  padding: 8px 13px;
+  transition: background .18s ease, border-color .18s ease, color .18s ease;
+}
+
+.catakor-original #HeaderMenu-track-order:hover > span,
+.catakor-original #HeaderMenu-track-order:focus-visible > span {
+  background: var(--catakor-green);
+  border-color: var(--catakor-green);
+  color: #fff;
+}
+
 @media (max-width: 989px) {
   body.admin-bar .section-header.shopify-section-group-header-group {
     top: 46px;
@@ -871,6 +1028,10 @@ body.woocommerce-account .catakor-page__title {
   }
 
   .woocommerce-account .woocommerce .u-columns.col2-set {
+    grid-template-columns: 1fr;
+  }
+
+  .woocommerce-account .woocommerce:has(.woocommerce-MyAccount-navigation) {
     grid-template-columns: 1fr;
   }
 

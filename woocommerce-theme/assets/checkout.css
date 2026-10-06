@@ -268,10 +268,30 @@ body.woocommerce-checkout {
   margin: 0 0 6px;
 }
 
-.catakor-checkout-bag-items p {
-  color: #7b867e;
+.catakor-checkout-bag-meta {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 9px;
+}
+
+.catakor-checkout-bag-meta strong {
+  background: #edf5dc;
+  border: 1px solid #d8e8b5;
+  border-radius: 999px;
+  color: var(--checkout-forest);
   font-size: 10px;
-  margin: 0;
+  font-weight: 900;
+  letter-spacing: .025em;
+  line-height: 1.25;
+  padding: 5px 9px;
+  text-transform: uppercase;
+}
+
+.catakor-checkout-bag-meta span {
+  color: #707d73;
+  font-size: 10px;
+  line-height: 1.35;
 }
 
 .catakor-checkout-bag-items article > strong {
@@ -672,9 +692,10 @@ body.woocommerce-checkout {
 }
 
 .woocommerce-checkout #payment ul.payment_methods > li {
-  background: #f8faf6;
-  border: 1px solid #e0e6dd;
-  border-radius: 15px;
+  background: #fff;
+  border: 1px solid #d9e2d6;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(23, 63, 32, .055);
   line-height: 1.4;
   margin: 0;
   overflow: hidden;
@@ -683,15 +704,27 @@ body.woocommerce-checkout {
 }
 
 .woocommerce-checkout #payment ul.payment_methods > li:has(> input:checked) {
-  background: #fbfff0;
-  border-color: #a7bd5c;
-  box-shadow: 0 0 0 3px rgba(230, 247, 146, .42);
+  background: linear-gradient(135deg, #fbfff0 0%, #f5f9ed 100%);
+  border-color: #9caf59;
+  box-shadow: 0 0 0 3px rgba(230, 247, 146, .42), 0 14px 32px rgba(23, 63, 32, .09);
 }
 
 .woocommerce-checkout #payment ul.payment_methods > li > input[type="radio"] {
-  accent-color: var(--checkout-forest);
+  -webkit-appearance: none;
+  appearance: none;
+  background: #fff;
+  border: 1.5px solid #9aaa9b;
+  border-radius: 50%;
   float: left;
-  margin: 20px 0 0 17px;
+  height: 18px;
+  margin: 22px 0 0 18px;
+  position: relative;
+  width: 18px;
+}
+
+.woocommerce-checkout #payment ul.payment_methods > li > input[type="radio"]:checked {
+  background: radial-gradient(circle, var(--checkout-forest) 0 42%, transparent 45%);
+  border-color: var(--checkout-forest);
 }
 
 .woocommerce-checkout #payment ul.payment_methods > li > label {
@@ -699,17 +732,21 @@ body.woocommerce-checkout {
   color: #1a2d20;
   cursor: pointer;
   display: flex;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
-  min-height: 62px;
-  padding: 13px 16px 13px 44px;
+  min-height: 66px;
+  padding: 14px 18px 14px 48px;
   width: 100%;
 }
 
 .woocommerce-checkout #payment ul.payment_methods > li > label img {
+  background: #fff;
+  border: 1px solid #e1e6df;
+  border-radius: 6px;
   float: none;
-  margin: 0 0 0 7px;
-  max-height: 22px;
+  margin: 0 0 0 6px;
+  max-height: 25px;
+  padding: 3px 5px;
   width: auto;
 }
 
@@ -718,12 +755,13 @@ body.woocommerce-checkout {
 }
 
 .woocommerce-checkout #payment div.payment_box {
-  background: transparent;
+  background: rgba(255, 255, 255, .72);
+  border-top: 1px solid #e2e8df;
   color: #546259;
   font-size: 13px;
   line-height: 1.55;
   margin: 0;
-  padding: 0 18px 20px;
+  padding: 20px;
 }
 
 .woocommerce-checkout #payment div.payment_box::before {

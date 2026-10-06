@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.4.6' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.4.7' );
 
 /** Supply the Catakor browser-tab mark when WordPress has no Site Icon set. */
 function catakor_original_favicon() {
@@ -414,6 +414,9 @@ function catakor_original_flash_jar_count( $product ) {
 		$parts = array_merge( $parts, array_values( $product->get_attributes() ) );
 	}
 	$label = strtolower( implode( ' ', array_filter( $parts ) ) );
+	if ( preg_match( '/3\s*(?:jar|jars|bottle|bottles)?\s*\+\s*1\s*(?:free)?/i', $label ) ) {
+		return 4;
+	}
 	if ( preg_match( '/(\d+)\s*(?:jar|jars|bottle|bottles)/i', $label, $matches ) ) {
 		return max( 1, absint( $matches[1] ) );
 	}
@@ -751,6 +754,22 @@ function catakor_original_enable_customer_accounts() {
 }
 add_action( 'after_switch_theme', 'catakor_original_enable_customer_accounts' );
 
+/** Remove the digital-download endpoint from this physical-products store. */
+function catakor_original_account_menu_items( $items ) {
+	unset( $items['downloads'] );
+	return $items;
+}
+add_filter( 'woocommerce_account_menu_items', 'catakor_original_account_menu_items', 100 );
+
+/** Keep bookmarked download URLs inside the customer account dashboard. */
+function catakor_original_redirect_account_downloads() {
+	if ( function_exists( 'is_account_page' ) && function_exists( 'is_wc_endpoint_url' ) && is_account_page() && is_wc_endpoint_url( 'downloads' ) ) {
+		wp_safe_redirect( wc_get_page_permalink( 'myaccount' ) );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'catakor_original_redirect_account_downloads', 20 );
+
 /** Keep checkout delivery to the single service offered by Catakor. */
 function catakor_original_usa_free_shipping_rate( $rates, $package ) {
 	$country = strtoupper( (string) ( $package['destination']['country'] ?? '' ) );
@@ -843,6 +862,52 @@ function catakor_original_checkout_item_name( $name, $cart_item ) {
 	return isset( $names[ $role ] ) ? esc_html( $names[ $role ] ) : $name;
 }
 add_filter( 'woocommerce_cart_item_name', 'catakor_original_checkout_item_name', 20, 2 );
+
+/**
+ * Give the checkout summary an unambiguous customer-facing pack label.
+ *
+ * WooCommerce normally renders variation attributes in its order table, but
+ * the Catakor checkout replaces that table with a visual bag. Keep the
+ * selected one-, two-, three- or four-jar tier visible there so the customer
+ * can confirm exactly what they are buying before payment.
+ */
+function catakor_original_checkout_pack_label( $cart_item ) {
+	if ( empty( $cart_item['data'] ) || ! $cart_item['data'] instanceof WC_Product ) {
+		return '';
+	}
+
+	$item_product = $cart_item['data'];
+	$product      = catakor_original_parent_product( $item_product );
+	$role         = catakor_original_product_role( $product );
+
+	if ( $item_product instanceof WC_Product_Variation ) {
+		$jars = catakor_original_flash_jar_count( $item_product );
+		if ( 'nmn' === $role && $jars >= 4 ) {
+			return __( 'Selected pack: 4 jars (3 + 1 FREE)', 'catakor-original' );
+		}
+		return sprintf(
+			/* translators: %d is the number of supplement jars selected. */
+			_n( 'Selected pack: %d jar', 'Selected pack: %d jars', $jars, 'catakor-original' ),
+			$jars
+		);
+	}
+
+	if ( in_array( $role, array( 'nad', 'nmn', 'glutathione' ), true ) ) {
+		return __( 'Selected pack: 1 jar', 'catakor-original' );
+	}
+
+	$config = catakor_original_bundle_config( $product );
+	if ( $config ) {
+		$product_count = substr_count( $config['key'], '-' ) + 1;
+		return sprintf(
+			/* translators: %d is the number of products included in a bundle. */
+			_n( 'Selected bundle: %d product', 'Selected bundle: %d products', $product_count, 'catakor-original' ),
+			$product_count
+		);
+	}
+
+	return __( 'Selected option: Standard', 'catakor-original' );
+}
 
 /** Short, clear privacy wording for the final payment card. */
 function catakor_original_checkout_privacy_text( $text, $type ) {
@@ -955,10 +1020,10 @@ function catakor_original_checkout_bag() {
 	<section class="catakor-checkout-bag" data-checkout-bag aria-labelledby="catakor-checkout-bag-title">
 		<header><div><span><?php esc_html_e( 'Your shopping bag', 'catakor-original' ); ?></span><h2 id="catakor-checkout-bag-title"><?php esc_html_e( 'Review your items', 'catakor-original' ); ?></h2></div><button type="button" data-cart-open><?php esc_html_e( 'Edit bag', 'catakor-original' ); ?></button></header>
 		<div class="catakor-checkout-bag-items">
-			<?php foreach ( WC()->cart->get_cart() as $cart_item ) : $item_product = $cart_item['data']; if ( ! $item_product || ! $item_product->exists() || $cart_item['quantity'] < 1 ) { continue; } $item_name = catakor_original_checkout_item_name( $item_product->get_name(), $cart_item ); ?>
+			<?php foreach ( WC()->cart->get_cart() as $cart_item ) : $item_product = $cart_item['data']; if ( ! $item_product || ! $item_product->exists() || $cart_item['quantity'] < 1 ) { continue; } $item_name = catakor_original_checkout_item_name( $item_product->get_name(), $cart_item ); $pack_label = catakor_original_checkout_pack_label( $cart_item ); ?>
 				<article>
 					<a class="catakor-checkout-bag-image" href="<?php echo esc_url( $item_product->get_permalink() ); ?>"><?php echo wp_kses_post( catakor_original_product_visual( $item_product, 'woocommerce_thumbnail' ) ); ?></a>
-					<div><?php if ( ! empty( $cart_item['_catakor_flash_offer'] ) ) : ?><span class="global-flash-label"><?php echo esc_html( sprintf( __( 'FLASH SALE · %d%% OFF', 'catakor-original' ), absint( $cart_item['_catakor_flash_discount'] ?? 0 ) ) ); ?></span><?php endif; ?><h3><?php echo wp_kses_post( $item_name ); ?></h3><p><?php echo esc_html( sprintf( _n( '%d item', '%d items', $cart_item['quantity'], 'catakor-original' ), $cart_item['quantity'] ) ); ?></p></div>
+					<div><?php if ( ! empty( $cart_item['_catakor_flash_offer'] ) ) : ?><span class="global-flash-label"><?php echo esc_html( sprintf( __( 'FLASH SALE · %d%% OFF', 'catakor-original' ), absint( $cart_item['_catakor_flash_discount'] ?? 0 ) ) ); ?></span><?php endif; ?><h3><?php echo wp_kses_post( $item_name ); ?></h3><div class="catakor-checkout-bag-meta"><strong><?php echo esc_html( $pack_label ); ?></strong><span><?php echo esc_html( sprintf( __( 'Order quantity: %d', 'catakor-original' ), $cart_item['quantity'] ) ); ?></span></div></div>
 					<strong><?php echo wp_kses_post( WC()->cart->get_product_subtotal( $item_product, $cart_item['quantity'] ) ); ?></strong>
 				</article>
 			<?php endforeach; ?>
