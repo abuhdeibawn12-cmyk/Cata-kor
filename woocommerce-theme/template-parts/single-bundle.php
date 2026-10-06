@@ -50,9 +50,9 @@ $percent = $compare > 0 ? (int) round( ( $saving / $compare ) * 100 ) : 0;
 			<p class="bundle-intro"><?php echo esc_html( $config['intro'] ); ?></p>
 			<ul class="bundle-feature-list"><?php foreach ( $config['bullets'] as $bullet ) : ?><li><?php echo esc_html( $bullet ); ?></li><?php endforeach; ?></ul>
 			<?php if ( $saving > 0 ) : ?>
-				<div class="bundle-price bundle-price--saving"><s><?php echo wp_kses_post( wc_price( $compare ) ); ?></s><strong><?php echo wp_kses_post( $product->get_price_html() ); ?></strong><span><?php echo esc_html( sprintf( __( 'Save %1$s (%2$d%%)', 'catakor-original' ), wp_strip_all_tags( wc_price( $saving ) ), $percent ) ); ?></span></div>
+				<div class="bundle-price bundle-price--saving"><s><?php echo wp_kses_post( wc_price( $compare ) ); ?></s><strong><?php echo wp_kses_post( wc_price( $price ) ); ?></strong><span><?php echo esc_html( sprintf( __( 'Save %1$s (%2$d%%)', 'catakor-original' ), wp_strip_all_tags( wc_price( $saving ) ), $percent ) ); ?></span></div>
 			<?php else : ?>
-				<strong class="bundle-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></strong>
+				<strong class="bundle-price"><?php echo wp_kses_post( wc_price( $price ) ); ?></strong>
 			<?php endif; ?>
 			<?php if ( $product->is_purchasable() && $product->is_in_stock() ) : ?>
 				<form class="cart" action="<?php echo esc_url( $product->get_permalink() ); ?>" method="post" data-woo-product-form><input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>"><input type="hidden" name="product_id" value="<?php echo esc_attr( $product->get_id() ); ?>"><input type="hidden" name="quantity" value="1"><button class="bundle-buy-button" type="submit"><span data-add-label><?php esc_html_e( 'Add bundle to bag', 'catakor-original' ); ?></span></button></form>

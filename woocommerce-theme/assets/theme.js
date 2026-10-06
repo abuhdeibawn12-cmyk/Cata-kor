@@ -22,15 +22,31 @@
 
   function initialiseCartDrawer() {
     var drawer = document.querySelector('#CartDrawer');
+    var flashDialog = document.querySelector('#FlashOfferDialog');
     if (!drawer || !window.catakorStore) return;
     var cartBusy = false;
+    var flashOffers = [];
+    var moneyFormatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: window.catakorStore.currency || 'USD'
+    });
+
+    function escapeHtml(value) {
+      return String(value == null ? '' : value).replace(/[&<>"']/g, function (character) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[character];
+      });
+    }
+
+    function formatMoney(value) {
+      return moneyFormatter.format(Number(value || 0));
+    }
 
     function lockPage() {
       document.body.classList.add('is-locked');
     }
 
     function unlockPage() {
-      document.body.classList.remove('is-locked');
+      if (drawer.hidden && (!flashDialog || flashDialog.hidden)) document.body.classList.remove('is-locked');
     }
 
     function openCart() {
@@ -105,11 +121,90 @@
       applyCartPayload(result.data);
     }
 
+    function flashOfferMarkup(offer, index) {
+      var sourceName = String(offer.source_name || '').replace(/\s+\d+\s*MG$/i, '');
+      return '<article data-flash-index="' + index + '">' +
+        '<span>BECAUSE YOU CHOSE ' + escapeHtml(sourceName.toUpperCase()) + '</span>' +
+        (offer.image ? '<img src="' + escapeHtml(offer.image) + '" alt="' + escapeHtml(offer.product_name) + '">' : '') +
+        '<h3>' + escapeHtml(offer.product_name) + '</h3>' +
+        '<p>' + escapeHtml(offer.pack_label) + ' · ' + escapeHtml(offer.discount) + '% Flash Discount</p>' +
+        '<small class="global-offer-mode">' + (offer.replaces
+          ? 'REPLACES YOUR CURRENT ' + escapeHtml(sourceName.toUpperCase()) + ' BUNDLE'
+          : 'ADDS A DIFFERENT PRODUCT TO YOUR ORDER') + '</small>' +
+        '<div><del>' + formatMoney(offer.original_price) + '</del><strong>' + formatMoney(offer.sale_price) + '</strong></div>' +
+        '<button type="button" data-accept-flash="' + index + '">' + (offer.replaces ? 'REPLACE WITH THIS OFFER' : 'ADD FLASH OFFER') + '</button>' +
+      '</article>';
+    }
+
+    async function showFlashOffers() {
+      var body = new URLSearchParams();
+      body.set('action', 'catakor_flash_offers');
+      body.set('nonce', window.catakorStore.cartNonce);
+      var response = await fetch(window.catakorStore.ajaxUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+        body: body.toString()
+      });
+      var result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.data && result.data.message ? result.data.message : 'Unable to prepare private offers.');
+      flashOffers = result.data.offers || [];
+      if (!flashOffers.length || !flashDialog) {
+        window.location.href = window.catakorStore.checkoutUrl;
+        return;
+      }
+      var grid = flashDialog.querySelector('[data-flash-offers]');
+      var continueButton = flashDialog.querySelector('[data-flash-continue]');
+      if (grid) grid.innerHTML = flashOffers.map(flashOfferMarkup).join('');
+      if (continueButton) continueButton.textContent = 'NO THANKS, CONTINUE';
+      closeCart();
+      flashDialog.hidden = false;
+      flashDialog.setAttribute('aria-hidden', 'false');
+      lockPage();
+      var firstOffer = flashDialog.querySelector('[data-accept-flash]');
+      if (firstOffer) firstOffer.focus();
+    }
+
+    async function acceptFlashOffer(index, button) {
+      var offer = flashOffers[index];
+      if (!offer || button.disabled) return;
+      button.disabled = true;
+      button.textContent = 'UPDATING…';
+      var body = new URLSearchParams();
+      body.set('action', 'catakor_accept_flash_offer');
+      body.set('nonce', window.catakorStore.cartNonce);
+      body.set('offer_token', offer.token);
+      var response = await fetch(window.catakorStore.ajaxUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+        body: body.toString()
+      });
+      var result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.data && result.data.message ? result.data.message : 'Unable to add the private offer.');
+      applyCartPayload(result.data);
+      button.textContent = offer.replaces ? 'BUNDLE UPGRADED' : 'OFFER ADDED';
+      var continueButton = flashDialog.querySelector('[data-flash-continue]');
+      if (continueButton) continueButton.textContent = 'CONTINUE WITH MY OFFERS';
+    }
+
+    function continueCheckout() {
+      if (flashDialog) {
+        flashDialog.hidden = true;
+        flashDialog.setAttribute('aria-hidden', 'true');
+      }
+      unlockPage();
+      window.location.href = window.catakorStore.checkoutUrl;
+    }
+
     document.addEventListener('click', function (event) {
       var openButton = event.target.closest('[data-cart-open], #cart-icon-bubble, .menu-drawer__topbar-icon--cart');
       var closeButton = event.target.closest('[data-cart-close]');
       var quantityButton = event.target.closest('[data-cart-quantity]');
       var removeButton = event.target.closest('[data-cart-remove]');
+      var checkoutButton = event.target.closest('[data-start-checkout]');
+      var flashButton = event.target.closest('[data-accept-flash]');
+      var flashContinue = event.target.closest('[data-flash-continue]');
 
       if (openButton) {
         event.preventDefault();
@@ -128,6 +223,33 @@
         changeCartLine(button, quantity)
           .catch(function (error) { window.console.error(error); })
           .finally(function () { setCartBusy(false); });
+        return;
+      }
+      if (checkoutButton) {
+        event.preventDefault();
+        checkoutButton.disabled = true;
+        checkoutButton.textContent = 'PREPARING…';
+        showFlashOffers()
+          .catch(function (error) {
+            window.console.error(error);
+            checkoutButton.textContent = 'PLEASE TRY AGAIN';
+          })
+          .finally(function () { checkoutButton.disabled = false; });
+        return;
+      }
+      if (flashButton) {
+        event.preventDefault();
+        acceptFlashOffer(Number(flashButton.dataset.acceptFlash), flashButton)
+          .catch(function (error) {
+            window.console.error(error);
+            flashButton.disabled = false;
+            flashButton.textContent = 'PLEASE TRY AGAIN';
+          });
+        return;
+      }
+      if (flashContinue) {
+        event.preventDefault();
+        continueCheckout();
       }
     });
 
