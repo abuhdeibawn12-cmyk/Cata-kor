@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.4.3' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.4.4' );
 
 /** Supply the Catakor browser-tab mark when WordPress has no Site Icon set. */
 function catakor_original_favicon() {
@@ -750,6 +750,70 @@ function catakor_original_enable_customer_accounts() {
 	update_option( 'woocommerce_registration_generate_password', 'yes' );
 }
 add_action( 'after_switch_theme', 'catakor_original_enable_customer_accounts' );
+
+/** Keep checkout delivery to the single service offered by Catakor. */
+function catakor_original_usa_free_shipping_rate( $rates, $package ) {
+	$country = strtoupper( (string) ( $package['destination']['country'] ?? '' ) );
+	if ( $country && 'US' !== $country ) {
+		return array();
+	}
+
+	$rate = new WC_Shipping_Rate(
+		'catakor_free_shipping',
+		__( 'FREE USA SHIPPING · 5–8 BUSINESS DAYS', 'catakor-original' ),
+		0,
+		array(),
+		'catakor_free_shipping',
+		0
+	);
+	return array( 'catakor_free_shipping' => $rate );
+}
+add_filter( 'woocommerce_package_rates', 'catakor_original_usa_free_shipping_rate', 100, 2 );
+
+/** Invalidate stored package rates when this storefront version is activated. */
+function catakor_original_refresh_shipping_rates() {
+	if ( class_exists( 'WC_Cache_Helper' ) ) {
+		WC_Cache_Helper::get_transient_version( 'shipping', true );
+	}
+}
+add_action( 'after_switch_theme', 'catakor_original_refresh_shipping_rates' );
+
+/** Use concise product names in the checkout totals card. */
+function catakor_original_checkout_item_name( $name, $cart_item ) {
+	$is_checkout_context = is_checkout() || ( defined( 'WOOCOMMERCE_CHECKOUT' ) && WOOCOMMERCE_CHECKOUT );
+	if ( ! $is_checkout_context || is_wc_endpoint_url( 'order-received' ) || empty( $cart_item['data'] ) ) {
+		return $name;
+	}
+	$product = catakor_original_parent_product( $cart_item['data'] );
+	$config  = catakor_original_bundle_config( $product );
+	if ( $config ) {
+		return esc_html( $config['title'] );
+	}
+	$names = array(
+		'nad'         => __( 'LIPOSOMAL NAD+', 'catakor-original' ),
+		'nmn'         => __( 'NMN 4-IN-1 NAD+ SUPPORT', 'catakor-original' ),
+		'glutathione' => __( 'LIPOSOMAL GLUTATHIONE', 'catakor-original' ),
+	);
+	$role = catakor_original_product_role( $product );
+	return isset( $names[ $role ] ) ? esc_html( $names[ $role ] ) : $name;
+}
+add_filter( 'woocommerce_cart_item_name', 'catakor_original_checkout_item_name', 20, 2 );
+
+/** Short, clear privacy wording for the final payment card. */
+function catakor_original_checkout_privacy_text( $text, $type ) {
+	if ( 'checkout' !== $type ) {
+		return $text;
+	}
+	$url = get_privacy_policy_url();
+	if ( ! $url ) {
+		return __( 'Secure checkout. Your information is used only to process and support your order.', 'catakor-original' );
+	}
+	return sprintf(
+		wp_kses_post( __( 'Secure checkout. Your information is used only to process and support your order. See our <a href="%s" target="_blank">privacy policy</a>.', 'catakor-original' ) ),
+		esc_url( $url )
+	);
+}
+add_filter( 'woocommerce_get_privacy_policy_text', 'catakor_original_checkout_privacy_text', 20, 2 );
 
 /** Exact NMN check used by the product template. */
 function catakor_original_is_nmn_product( $product ) {

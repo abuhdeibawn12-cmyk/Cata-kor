@@ -540,13 +540,21 @@ body.woocommerce-checkout {
   width: 100%;
 }
 
+/* Products already appear with imagery in the bag card above. Keep this panel
+   focused on the final totals, delivery promise and payment. */
+.woocommerce-checkout .woocommerce-checkout-review-order-table thead,
+.woocommerce-checkout .woocommerce-checkout-review-order-table tbody {
+  display: none;
+}
+
 .woocommerce-checkout .woocommerce-checkout-review-order-table th,
 .woocommerce-checkout .woocommerce-checkout-review-order-table td {
   border: 0;
   border-bottom: 1px solid #e7ebe5;
   color: #28382d;
-  font-size: 12px;
-  padding: 17px 24px;
+  font-size: 14px;
+  line-height: 1.45;
+  padding: 17px 26px;
   text-align: left;
 }
 
@@ -569,13 +577,55 @@ body.woocommerce-checkout {
   font-weight: 700;
 }
 
+.woocommerce-checkout .woocommerce-checkout-review-order-table tfoot th {
+  color: #627067;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+
+.woocommerce-checkout .woocommerce-checkout-review-order-table tfoot td {
+  color: #1c3122;
+  font-weight: 700;
+}
+
+.woocommerce-checkout .woocommerce-checkout-review-order-table .shipping td {
+  background: #f4f8ed;
+  color: var(--checkout-forest);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.woocommerce-checkout .woocommerce-shipping-methods {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.woocommerce-checkout .woocommerce-shipping-methods li {
+  margin: 0;
+}
+
+.woocommerce-checkout .woocommerce-shipping-methods label {
+  color: var(--checkout-forest);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .02em;
+}
+
+.woocommerce-checkout .woocommerce-shipping-methods input[type="radio"] {
+  accent-color: var(--checkout-forest);
+  margin-right: 7px;
+}
+
 .woocommerce-checkout .woocommerce-checkout-review-order-table .order-total th,
 .woocommerce-checkout .woocommerce-checkout-review-order-table .order-total td {
   border-bottom: 0;
   color: var(--checkout-forest-deep);
-  font-size: 17px;
-  padding-bottom: 20px;
-  padding-top: 20px;
+  font-size: 22px;
+  padding-bottom: 24px;
+  padding-top: 24px;
 }
 
 .woocommerce-checkout #payment {
@@ -593,10 +643,10 @@ body.woocommerce-checkout {
   color: #78857b;
   content: "PAYMENT METHOD";
   display: block;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 900;
   letter-spacing: .14em;
-  padding: 23px 24px 10px;
+  padding: 26px 26px 12px;
 }
 
 .woocommerce-checkout #payment ul.payment_methods {
@@ -604,7 +654,7 @@ body.woocommerce-checkout {
   display: grid;
   gap: 10px;
   margin: 0;
-  padding: 0 18px 18px;
+  padding: 0 22px 20px;
 }
 
 .woocommerce-checkout #payment ul.payment_methods > li {
@@ -635,10 +685,10 @@ body.woocommerce-checkout {
   color: #1a2d20;
   cursor: pointer;
   display: flex;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
-  min-height: 54px;
-  padding: 11px 14px 11px 40px;
+  min-height: 62px;
+  padding: 13px 16px 13px 44px;
   width: 100%;
 }
 
@@ -656,9 +706,10 @@ body.woocommerce-checkout {
 .woocommerce-checkout #payment div.payment_box {
   background: transparent;
   color: #546259;
-  font-size: 11px;
+  font-size: 13px;
+  line-height: 1.55;
   margin: 0;
-  padding: 0 15px 16px;
+  padding: 0 18px 20px;
 }
 
 .woocommerce-checkout #payment div.payment_box::before {
@@ -698,9 +749,10 @@ body.woocommerce-checkout {
   align-items: center;
   color: #69766d;
   display: flex;
-  font-size: 10px;
+  font-size: 12px;
   gap: 8px;
-  margin: 12px 2px 0;
+  line-height: 1.5;
+  margin: 14px 2px 0;
 }
 
 .woocommerce-checkout #payment .woocommerce-SavedPaymentMethods-saveNew input {
@@ -709,14 +761,14 @@ body.woocommerce-checkout {
 
 .woocommerce-checkout #payment .place-order {
   margin: 0;
-  padding: 0 18px 22px;
+  padding: 0 22px 26px;
 }
 
 .woocommerce-checkout #payment .woocommerce-privacy-policy-text {
   color: #778179;
-  font-size: 10px;
-  line-height: 1.55;
-  margin: 3px 2px 14px;
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 4px 2px 18px;
 }
 
 .woocommerce-checkout #payment .woocommerce-privacy-policy-text a {
