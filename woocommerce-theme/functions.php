@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.4.5' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.4.6' );
 
 /** Supply the Catakor browser-tab mark when WordPress has no Site Icon set. */
 function catakor_original_favicon() {
@@ -769,6 +769,30 @@ function catakor_original_usa_free_shipping_rate( $rates, $package ) {
 	return array( 'catakor_free_shipping' => $rate );
 }
 add_filter( 'woocommerce_package_rates', 'catakor_original_usa_free_shipping_rate', 100, 2 );
+
+/** Catakor currently sells and delivers to the United States only. */
+function catakor_original_usa_only_countries( $countries ) {
+	$usa = isset( $countries['US'] ) ? $countries['US'] : __( 'United States (US)', 'woocommerce' );
+	return array( 'US' => $usa );
+}
+add_filter( 'woocommerce_countries_allowed_countries', 'catakor_original_usa_only_countries', 100 );
+add_filter( 'woocommerce_countries_shipping_countries', 'catakor_original_usa_only_countries', 100 );
+
+/** Prevent a saved international profile from masking the USA-only delivery rate. */
+function catakor_original_checkout_country_value( $value, $input ) {
+	if ( in_array( $input, array( 'billing_country', 'shipping_country' ), true ) ) {
+		return 'US';
+	}
+	return $value;
+}
+add_filter( 'woocommerce_checkout_get_value', 'catakor_original_checkout_country_value', 100, 2 );
+
+/** Replace WooCommerce's long generic delivery error with the store rule. */
+function catakor_original_usa_shipping_message() {
+	return __( 'FREE USA SHIPPING · 5–8 BUSINESS DAYS. Enter a valid US delivery address to continue.', 'catakor-original' );
+}
+add_filter( 'woocommerce_cart_no_shipping_available_html', 'catakor_original_usa_shipping_message' );
+add_filter( 'woocommerce_no_shipping_available_html', 'catakor_original_usa_shipping_message' );
 
 /** Keep the single free-delivery promise visible before the address is complete. */
 function catakor_original_show_shipping_before_address() {
