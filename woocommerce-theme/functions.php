@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATAKOR_ORIGINAL_VERSION', '1.4.0' );
+define( 'CATAKOR_ORIGINAL_VERSION', '1.4.1' );
 
 /** Supply the Catakor browser-tab mark when WordPress has no Site Icon set. */
 function catakor_original_favicon() {
@@ -721,20 +721,35 @@ function catakor_original_flash_order_item_meta( $item, $cart_item_key, $values 
 }
 add_action( 'woocommerce_checkout_create_order_line_item', 'catakor_original_flash_order_item_meta', 10, 3 );
 
-/** Restore the original CATA15 rule when the coupon has not yet been created. */
+/** Keep the original CATA15 rule aligned with the public offer. */
 function catakor_original_ensure_cata15_coupon() {
-	if ( ! class_exists( 'WC_Coupon' ) || wc_get_coupon_id_by_code( 'CATA15' ) ) {
+	if ( ! class_exists( 'WC_Coupon' ) ) {
 		return;
 	}
-	$coupon = new WC_Coupon();
+	$coupon_id = wc_get_coupon_id_by_code( 'CATA15' );
+	if ( $coupon_id && '1.4.1' === get_option( 'catakor_cata15_coupon_version' ) ) {
+		return;
+	}
+	$coupon = $coupon_id ? new WC_Coupon( $coupon_id ) : new WC_Coupon();
 	$coupon->set_code( 'CATA15' );
 	$coupon->set_discount_type( 'percent' );
 	$coupon->set_amount( 15 );
 	$coupon->set_description( '15% off regular Catakor items. Private Flash Sale items are excluded.' );
 	$coupon->set_individual_use( false );
 	$coupon->save();
+	update_option( 'catakor_cata15_coupon_version', '1.4.1', false );
 }
 add_action( 'init', 'catakor_original_ensure_cata15_coupon', 40 );
+
+/** Enable WooCommerce customer sign-in and account creation. */
+function catakor_original_enable_customer_accounts() {
+	update_option( 'woocommerce_enable_myaccount_registration', 'yes' );
+	update_option( 'woocommerce_enable_checkout_login_reminder', 'yes' );
+	update_option( 'woocommerce_enable_signup_and_login_from_checkout', 'yes' );
+	update_option( 'woocommerce_registration_generate_username', 'yes' );
+	update_option( 'woocommerce_registration_generate_password', 'yes' );
+}
+add_action( 'after_switch_theme', 'catakor_original_enable_customer_accounts' );
 
 /** Exact NMN check used by the product template. */
 function catakor_original_is_nmn_product( $product ) {
@@ -828,7 +843,7 @@ function catakor_original_checkout_bag() {
 		return;
 	}
 	?>
-	<section class="catakor-checkout-bag" aria-labelledby="catakor-checkout-bag-title">
+	<section class="catakor-checkout-bag" data-checkout-bag aria-labelledby="catakor-checkout-bag-title">
 		<header><div><span><?php esc_html_e( 'Your shopping bag', 'catakor-original' ); ?></span><h2 id="catakor-checkout-bag-title"><?php esc_html_e( 'Review your items', 'catakor-original' ); ?></h2></div><button type="button" data-cart-open><?php esc_html_e( 'Edit bag', 'catakor-original' ); ?></button></header>
 		<div class="catakor-checkout-bag-items">
 			<?php foreach ( WC()->cart->get_cart() as $cart_item ) : $item_product = $cart_item['data']; if ( ! $item_product || ! $item_product->exists() || $cart_item['quantity'] < 1 ) { continue; } ?>
@@ -845,6 +860,13 @@ function catakor_original_checkout_bag() {
 		</form>
 	</section>
 	<?php
+}
+
+/** Return the checkout bag as an AJAX-safe fragment. */
+function catakor_original_checkout_bag_markup() {
+	ob_start();
+	catakor_original_checkout_bag();
+	return (string) ob_get_clean();
 }
 
 /**
@@ -881,6 +903,7 @@ function catakor_original_cart_content() {
 		</div>
 		<?php
 	else :
+		$has_flash_offer = ! empty( catakor_original_flash_offers() );
 		?>
 		<div class="global-cart-items" data-cart-items>
 			<?php foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) : ?>
@@ -914,8 +937,15 @@ function catakor_original_cart_content() {
 				</article>
 			<?php endforeach; ?>
 		</div>
+		<?php if ( $has_flash_offer ) : ?>
+			<div class="global-cart-offer-hint" role="note">
+				<span><?php esc_html_e( '⚡ Limited One-Time Offer', 'catakor-original' ); ?></span>
+				<strong><?php esc_html_e( 'A Private Flash Deal Is Waiting', 'catakor-original' ); ?></strong>
+				<p><?php esc_html_e( 'Use the checkout button below to reveal it. No code required.', 'catakor-original' ); ?></p>
+			</div>
+		<?php endif; ?>
 		<div class="global-cart-summary"><span><?php esc_html_e( 'SUBTOTAL', 'catakor-original' ); ?></span><strong data-cart-total><?php echo wp_kses_post( WC()->cart->get_cart_subtotal() ); ?></strong></div>
-		<button class="global-cart-checkout" type="button" data-start-checkout><?php esc_html_e( 'CHECKOUT', 'catakor-original' ); ?></button>
+		<button class="global-cart-checkout" type="button" data-start-checkout><?php echo $has_flash_offer ? esc_html__( 'CHECKOUT & REVEAL OFFER →', 'catakor-original' ) : esc_html__( 'CHECKOUT', 'catakor-original' ); ?></button>
 		<button class="global-cart-continue" type="button" data-cart-close><?php esc_html_e( 'CONTINUE SHOPPING', 'catakor-original' ); ?></button>
 		<p class="global-cart-note"><?php esc_html_e( 'CATA15 can be applied to regular items at checkout.', 'catakor-original' ); ?></p>
 		<?php
@@ -981,15 +1011,20 @@ function catakor_original_ajax_update_cart() {
 		}
 	}
 
-	WC()->cart->set_quantity( $key, $quantity, true );
+	if ( 0 === $quantity ) {
+		WC()->cart->remove_cart_item( $key );
+	} else {
+		WC()->cart->set_quantity( $key, $quantity, true );
+	}
 	WC()->cart->calculate_totals();
 	WC()->cart->set_session();
 	WC()->cart->maybe_set_cart_cookies();
 	wp_send_json_success(
 		array(
-			'content' => catakor_original_cart_content(),
-			'summary' => catakor_original_cart_summary(),
-			'count'   => WC()->cart->get_cart_contents_count(),
+			'content'      => catakor_original_cart_content(),
+			'summary'      => catakor_original_cart_summary(),
+			'count'        => WC()->cart->get_cart_contents_count(),
+			'checkout_bag' => catakor_original_checkout_bag_markup(),
 		)
 	);
 }

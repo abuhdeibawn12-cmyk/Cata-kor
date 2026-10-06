@@ -91,6 +91,23 @@
       if (content && typeof payload.content === 'string') content.innerHTML = payload.content;
       if (summary && payload.summary) summary.textContent = payload.summary;
       updateCount(payload.count);
+
+      if (typeof payload.checkout_bag === 'string') {
+        var currentBag = document.querySelector('[data-checkout-bag]');
+        var template = document.createElement('template');
+        template.innerHTML = payload.checkout_bag.trim();
+        var nextBag = template.content.firstElementChild;
+        if (currentBag && nextBag) currentBag.replaceWith(nextBag);
+        else if (currentBag && !nextBag) currentBag.remove();
+        else if (!currentBag && nextBag) {
+          var checkoutPage = document.querySelector('.catakor-checkout-page');
+          if (checkoutPage) checkoutPage.before(nextBag);
+        }
+      }
+
+      if (document.body.classList.contains('woocommerce-checkout') && window.jQuery) {
+        window.jQuery(document.body).trigger('update_checkout');
+      }
     }
 
     function setCartBusy(busy) {

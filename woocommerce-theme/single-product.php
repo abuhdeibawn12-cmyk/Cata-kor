@@ -156,6 +156,11 @@ while ( have_posts() ) :
 				<form class="cart" action="<?php echo esc_url( $product->get_permalink() ); ?>" method="post" data-woo-product-form><input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>"><input type="hidden" name="product_id" value="<?php echo esc_attr( $product->get_id() ); ?>"><input type="number" name="quantity" value="1" min="1" max="<?php echo esc_attr( $product->get_max_purchase_quantity() ); ?>"><button class="secondary-add-button" type="submit"><span data-add-label>Add to Cart</span> <strong><?php echo wp_kses_post( $product->get_price_html() ); ?></strong></button></form>
 			<?php endif; ?>
 
+			<div class="product-flash-hint" role="note">
+				<span class="product-flash-hint__icon" aria-hidden="true">⚡</span>
+				<span><strong><?php esc_html_e( 'Limited One-Time Offer Available', 'catakor-original' ); ?></strong><small><?php esc_html_e( 'Continue to checkout to reveal your private flash deal.', 'catakor-original' ); ?></small></span>
+			</div>
+
 			<div class="secondary-delivery"><span>● Free tracked delivery</span><span>🇺🇸 FREE Shipping to USA</span></div>
 			<div class="secondary-guarantee"><span aria-hidden="true">◎</span><b>Less than 1%</b> of customers claim our Money Back Guarantee.</div>
 
