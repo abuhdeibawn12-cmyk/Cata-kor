@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Catakor Shopify Order Migrator
  * Description: One-time, no-email migration of Shopify order history into WooCommerce with CWILL tracking support.
- * Version: 1.0.14
+ * Version: 1.0.15
  * Author: Catakor
  * Requires Plugins: woocommerce
  * Text Domain: catakor-order-migrator
@@ -743,6 +743,15 @@ final class Catakor_Shopify_Order_Migrator
         if (!$page instanceof WP_Post || $page->post_name !== 'parcel-panel') {
             return $content;
         }
+
+        // ParcelPanel's shortcode runs before this late content override and queues
+        // its React application. The custom Catakor tracker does not render the
+        // expected #pp-root mount point, so leaving that bundle queued produces a
+        // React createRoot error on an otherwise functional tracking page.
+        wp_dequeue_script('pp-user-track-page-new');
+        wp_deregister_script('pp-user-track-page-new');
+        wp_dequeue_style('pp-user-track-page-new');
+        wp_deregister_style('pp-user-track-page-new');
 
         $tracking_number = isset($_GET['nums'])
             ? strtoupper(preg_replace('/[^A-Za-z0-9_-]/', '', (string) wp_unslash($_GET['nums'])))
