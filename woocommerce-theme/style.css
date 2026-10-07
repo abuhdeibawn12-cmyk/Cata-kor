@@ -3,7 +3,7 @@ Theme Name: Catakor Original for WooCommerce
 Theme URI: https://getcatakor.com/
 Author: Catakor
 Description: A faithful WooCommerce port of the original Catakor Shopify storefront.
-Version: 1.5.0
+Version: 1.5.1
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: catakor-original
@@ -62,6 +62,20 @@ body.catakor-original.is-locked {
 
 .catakor-original .menu-drawer .list-social {
   display: none !important;
+}
+
+.catakor-original .header__inline-menu .list-menu--inline,
+.catakor-original .menu-drawer__menu {
+  display: flex !important;
+}
+
+.catakor-original .menu-drawer__menu {
+  flex-direction: column;
+}
+
+.catakor-original .header__inline-menu li:has(#HeaderMenu-track-order),
+.catakor-original .menu-drawer__menu li:has(#HeaderDrawer-track-order) {
+  order: 999;
 }
 
 .catakor-original .menu-drawer__topbar-icon--cart {
